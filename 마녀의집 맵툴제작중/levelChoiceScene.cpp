@@ -84,19 +84,19 @@ void levelChoiceScene::render()
 {
 	//D2DRenderer::FillRectangle(_rc, D2D1::ColorF::White, _alpha);
 
-	D2DINS->GetInstance()->DrawRectangle(_rc, D2D1::ColorF::White, _alpha, 1.0f);
+	_D2DRenderer->DrawRectangle(_rc, D2D1::ColorF::White, _alpha, 1.0f);
 
 
 	if (!_isChoice)
 	{
-		D2DINS->GetInstance()->RenderTextField(WINSIZEX / 2 - 30, WINSIZEY / 2 - 155, L"Easy", 30, 120, 60, D2DRenderer::DefaultBrush::Blue);
-		D2DINS->GetInstance()->RenderTextField(WINSIZEX / 2 - 45, WINSIZEY / 2 + 25, L"Nomal", 30, 120, 60, D2DRenderer::DefaultBrush::Green);
-		D2DINS->GetInstance()->RenderTextField(WINSIZEX / 2 - 20, WINSIZEY / 2 + 210, L"???", 30, 120, 60, D2DRenderer::DefaultBrush::Red);
+		_D2DRenderer->RenderTextField(WINSIZEX / 2 - 30, WINSIZEY / 2 - 155, L"Easy", 30, 120, 60, D2DRenderer::DefaultBrush::Blue);
+		_D2DRenderer->RenderTextField(WINSIZEX / 2 - 45, WINSIZEY / 2 + 25, L"Nomal", 30, 120, 60, D2DRenderer::DefaultBrush::Green);
+		_D2DRenderer->RenderTextField(WINSIZEX / 2 - 20, WINSIZEY / 2 + 210, L"???", 30, 120, 60, D2DRenderer::DefaultBrush::Red);
 	}
 	if (_isChoice)
 	{
-		D2DINS->GetInstance()->RenderTextField(WINSIZEX / 2 - 30, WINSIZEY / 2 - 155, L"결정", 30, 120, 60, D2DRenderer::DefaultBrush::White);
-		D2DINS->GetInstance()->RenderText(WINSIZEX / 2 - 90, WINSIZEY / 2 + 25, L"역시 그만둔다", 30, D2DRenderer::DefaultBrush::White);
+		_D2DRenderer->RenderTextField(WINSIZEX / 2 - 30, WINSIZEY / 2 - 155, L"결정", 30, 120, 60, D2DRenderer::DefaultBrush::White);
+		_D2DRenderer->RenderText(WINSIZEX / 2 - 90, WINSIZEY / 2 + 25, L"역시 그만둔다", 30, D2DRenderer::DefaultBrush::White);
 	}
 
 
