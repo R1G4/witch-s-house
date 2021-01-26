@@ -19,6 +19,7 @@ HRESULT mapTool::init()
 	setButton();
 	setup();
 	_crtSelect = CTRL_TERRAINDRAW;
+	sampleSelec = RectMakePivot(Vector2(_sampleTile[0].rcTile.left+1, _sampleTile[0].rcTile.top+1), Vector2(46, 46), Pivot::LeftTop);
 	return S_OK;
 }
 
@@ -29,6 +30,10 @@ void mapTool::release()
 void mapTool::update()
 {
 	setCtrl();
+	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))sampleSelec.Move(Vector2(48, 0));
+	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))sampleSelec.Move(Vector2(-48, 0));
+	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))sampleSelec.Move(Vector2(0, 48));
+	if (KEYMANAGER->isOnceKeyDown(VK_UP))sampleSelec.Move(Vector2(0, -48));
 	switch (_crtSelect)
 	{
 	case CTRL_SAVE:
@@ -51,7 +56,10 @@ void mapTool::update()
 	case CTRL_END:
 		break;
 	}
-	
+	if (IntersectRectToRect(&_sampleTile[0].rcTile, &sampleSelec))
+	{
+		cout << "dd";
+	}
 	//setMap();
 }
 
@@ -93,7 +101,8 @@ void mapTool::render()
 	Next.img->Render(Vector2(Next.frc.left+72, Next.frc.top+24));
 	terrain.img->Render(Vector2(terrain.frc.left+72, terrain.frc.top+24));
 	Object.img->Render(Vector2(Object.frc.left+72, Object.frc.top+24));
-
+	//_D2DRenderer->DrawRectangle(Save.frc,D2DRenderer::DefaultBrush::White);
+	_D2DRenderer->DrawRectangle(sampleSelec,D2DRenderer::DefaultBrush::White);
 }
 
 void mapTool::setButton()
@@ -166,7 +175,7 @@ void mapTool::setMap()
 		{
 			for (int j = 0; j < SAMPLETILEX; j++)
 			{
-				if (Vector2InRect(&_sampleTile[i*SAMPLETILEX + j].rcTile, &Vector2(_ptMouse)))
+				if (IntersectRectToRect(&_sampleTile[i*SAMPLETILEX + j].rcTile, &sampleSelec))
 				{
 
 					_currentTile.x = _sampleTile[i*SAMPLETILEX + j].terrainFrameX;

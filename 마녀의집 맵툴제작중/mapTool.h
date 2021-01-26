@@ -68,6 +68,7 @@ private:
 	tagSampleTile _sampleTile[SAMPLETILEX*SAMPLETILEY];
 	tagTile _tiles[TILEX*TILEY];
 	int _crtSelect;
+	FloatRect sampleSelec;
 public:
 	mapTool();
 	~mapTool();
