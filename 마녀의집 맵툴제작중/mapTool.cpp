@@ -161,23 +161,26 @@ void mapTool::render()
 		}
 	}
 	//IMAGEMANAGER->FindImage("TerrainSample")->Render(Vector2(800, 100));
-	Save.img->Render(Vector2(Save.frc.left + 72, Save.frc.top + 24));
-	Load.img->Render(Vector2(Load.frc.left + 72, Load.frc.top + 24));
-	Erase.img->Render(Vector2(Erase.frc.left + 72, Erase.frc.top + 24));
-	Prev.img->Render(Vector2(Prev.frc.left + 72, Prev.frc.top + 24));
-	Next.img->Render(Vector2(Next.frc.left + 72, Next.frc.top + 24));
-	terrain.img->Render(Vector2(terrain.frc.left + 72, terrain.frc.top + 24));
-	Object.img->Render(Vector2(Object.frc.left + 72, Object.frc.top + 24));
-	Collider.img->Render(Vector2(Collider.frc.left + 72, Collider.frc.top + 24));
-	Player.img->SetSize(Vector2(144, 48));
-	Player.img->Render(Vector2(Player.frc.left + 72, Player.frc.top + 24));
-	_D2DRenderer->RenderTextField(Player.frc.left , Player.frc.top-5 , L"Player", 30, 144, 48, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_CENTER);
-	Enemy.img->SetSize(Vector2(144, 48));
-	Enemy.img->Render(Vector2(Enemy.frc.left + 72, Enemy.frc.top + 24));
-	_D2DRenderer->RenderTextField(Enemy.frc.left , Enemy.frc.top -5, L"Enemy", 30, 144, 48, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_CENTER);
-	FrameObj.img->SetSize(Vector2(144, 48));
-	FrameObj.img->Render(Vector2(FrameObj.frc.left + 72, FrameObj.frc.top + 24));
-	_D2DRenderer->RenderTextField(FrameObj.frc.left , FrameObj.frc.top-5, L"FrameObj", 30, 144, 48, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_CENTER);
+	if (tabOpen)
+	{
+		Save.img->Render(Vector2(Save.frc.left + 72, Save.frc.top + 24));
+		Load.img->Render(Vector2(Load.frc.left + 72, Load.frc.top + 24));
+		Erase.img->Render(Vector2(Erase.frc.left + 72, Erase.frc.top + 24));
+		Prev.img->Render(Vector2(Prev.frc.left + 72, Prev.frc.top + 24));
+		Next.img->Render(Vector2(Next.frc.left + 72, Next.frc.top + 24));
+		terrain.img->Render(Vector2(terrain.frc.left + 72, terrain.frc.top + 24));
+		Object.img->Render(Vector2(Object.frc.left + 72, Object.frc.top + 24));
+		Collider.img->Render(Vector2(Collider.frc.left + 72, Collider.frc.top + 24));
+		Player.img->SetSize(Vector2(144, 48));
+		Player.img->Render(Vector2(Player.frc.left + 72, Player.frc.top + 24));
+		_D2DRenderer->RenderTextField(Player.frc.left, Player.frc.top - 5, L"Player", 30, 144, 48, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_CENTER);
+		Enemy.img->SetSize(Vector2(144, 48));
+		Enemy.img->Render(Vector2(Enemy.frc.left + 72, Enemy.frc.top + 24));
+		_D2DRenderer->RenderTextField(Enemy.frc.left, Enemy.frc.top - 5, L"Enemy", 30, 144, 48, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_CENTER);
+		FrameObj.img->SetSize(Vector2(144, 48));
+		FrameObj.img->Render(Vector2(FrameObj.frc.left + 72, FrameObj.frc.top + 24));
+		_D2DRenderer->RenderTextField(FrameObj.frc.left, FrameObj.frc.top - 5, L"FrameObj", 30, 144, 48, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_CENTER);
+	}
 	if (tabOpen == true)
 		Close.img->Render(Vector2(Close.frc.left + 72, Close.frc.top + 24));
 	else
@@ -186,7 +189,7 @@ void mapTool::render()
 	_D2DRenderer->FillRectangle(_enemy.rc, D2D1::ColorF::Black, 0.7);
 
 	if(tabOpen)_D2DRenderer->DrawRectangle(sampleSelec, D2DRenderer::DefaultBrush::White);
-	_D2DRenderer->DrawRectangle(MapRC, D2DRenderer::DefaultBrush::White);
+	//_D2DRenderer->DrawRectangle(MapRC, D2DRenderer::DefaultBrush::White);
 	if(!tabOpen)_D2DRenderer->FillRectangle(tileSelec, D2D1::ColorF::Enum::LightYellow, 0.5);
 	
 }
