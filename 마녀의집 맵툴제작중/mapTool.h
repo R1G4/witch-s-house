@@ -8,8 +8,8 @@
 #define TILESIZEY TILEY*TILESIZE
 #define SAMPLETILEX 7
 #define SAMPLETILEY 2
-#define SAMPLEOBJECTX 8
-#define SAMPLEOBJECTY 3
+#define SAMPLEOBJECTX 3 // 그림변환시 변환 필요
+#define SAMPLEOBJECTY 8 // 그림변환시 변환 필요
 
 
 enum CTRL
@@ -56,6 +56,7 @@ struct tagSampleObj
 	FloatRect rc;
 	int objFrameX;
 	int objFrameY;
+	int realNum;	// 각 타일의 실제 부여번호
 };
 
 struct tagCurrentTile
@@ -74,6 +75,7 @@ private:
 	bool tabOpen;
 	D2DRenderer* d2d;
 	vector<Image*>_vSampleMap;
+
 	tagButton Save;
 	tagButton Load;
 	tagButton Prev;
@@ -83,9 +85,14 @@ private:
 	tagButton Erase;
 	tagButton Open;
 	tagButton Close;
+
 	tagCurrentTile _currentTile;
 	tagSampleTile _sampleTile[SAMPLETILEX*SAMPLETILEY];
 	tagSampleObj _sampleObj[SAMPLEOBJECTX*SAMPLEOBJECTY];
+
+	int _change_num;		// 큰틀을 넘기기 위한 변수
+	int _realNum;			// 각 오브젝트의 실제번호 부여를 위한 변수
+	bool _change_number;	// 클릭시 틀을 한번 씩만 넘기기위한 불값
 
 	tagTile _tiles[TILEX*TILEY];
 	int _crtSelect;
@@ -97,17 +104,23 @@ private:
 public:
 	mapTool();
 	~mapTool();
+
 	HRESULT init();
 	void release();
 	void update();
 	void render();
+
 	void setButton();
 	void setup();
 	void setMap();
 	void setCtrl();
+
 	void save();
 	void load();
 	void erase();
+	void previous();
+	void next();
+
 	TERRAIN terrainSelect(int frameX, int frameY);
 	OBJECT objSelect(int frameX, int frameY);
 };

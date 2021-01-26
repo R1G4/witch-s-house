@@ -15,7 +15,8 @@ mapTool::~mapTool()
 HRESULT mapTool::init()
 {
 	IMAGEMANAGER->AddFrameImage("TerrainSample", L"Image/mapTool/타일.png", 7, 2);
-	IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/오브젝트타일.png", 8, 3);
+	IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/bar4.png", 3, 8);	// 그림 변환시 변환 필요
+	//IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/오브젝트타일.png", 8, 3);
 	//IMAGEMANAGER->AddImage("temp", L"Image/mapTool/타일.png");
 	setButton();
 	setup();
@@ -36,6 +37,7 @@ void mapTool::update()
 	setCtrl();
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))_leftButtonDown = true;
 	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))_leftButtonDown = false;
+	if (KEYMANAGER->isOnceKeyUp(VK_F2)) _change_number = false;	// (prev next) f2키에서 떼면 순서 변환완료
 	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 	{
 		camera.x += 48;
@@ -112,8 +114,12 @@ void mapTool::update()
 		setMap();
 		break;
 	case CTRL_PREV:
+		previous();
+		setMap();
 		break;
 	case CTRL_NEXT:
+		next();
+		setMap();
 		break;
 	case CTRL_END:
 		break;
@@ -175,7 +181,7 @@ void mapTool::render()
 			}
 		}
 		if (!isterrain) {
-			for (int i = 0; i < SAMPLEOBJECTY; i++)
+			/*for (int i = 0; i < SAMPLEOBJECTY; i++)
 			{
 				for (int j = 0; j < SAMPLEOBJECTX; j++)
 				{
@@ -184,6 +190,20 @@ void mapTool::render()
 					if (KEYMANAGER->isToggleKey(VK_TAB))
 					{
 						_D2DRenderer->DrawRectangle(_sampleObj[i*SAMPLEOBJECTX + j].rc, D2DRenderer::DefaultBrush::White);
+					}
+				}
+			}*/
+			int resetNum = _change_num;	// 같은 줄에 렉트랑 이미지를 고정시키기 위해 필요한 변수
+			// 변형시켜야하는 랜더
+			for (int i = _change_num; i < _change_num + 2; i++)
+			{
+				for (int j = 0; j < SAMPLEOBJECTX; j++)
+				{
+					IMAGEMANAGER->FindImage("ObjectSample")->FrameRender(Vector2(750 + j * SAMPLETILESIZE, 100 + (i - resetNum) * SAMPLETILESIZE), j, i);
+
+					if (KEYMANAGER->isToggleKey(VK_TAB))
+					{
+						_D2DRenderer->DrawRectangle(_sampleObj[(i - resetNum)*SAMPLEOBJECTX + j].rc, D2DRenderer::DefaultBrush::White);
 					}
 				}
 			}
@@ -256,7 +276,7 @@ void mapTool::setup()
 				Vector2(750 + j * SAMPLETILESIZE, 100 + i * SAMPLETILESIZE), Vector2(SAMPLETILESIZE, SAMPLETILESIZE), Pivot::Center);
 		}
 	}
-	for (int i = 0; i < SAMPLEOBJECTY; ++i)//y
+	/*for (int i = 0; i < SAMPLEOBJECTY; ++i)//y
 	{
 		for (int j = 0; j < SAMPLEOBJECTX; ++j)//x
 		{
@@ -267,7 +287,25 @@ void mapTool::setup()
 			_sampleObj[i * SAMPLEOBJECTX + j].rc = RectMakePivot(
 				Vector2(750 + j * SAMPLETILESIZE, 100 + i * SAMPLETILESIZE), Vector2(SAMPLETILESIZE, SAMPLETILESIZE), Pivot::Center);
 		}
+	}*/
+	// 변형시켜야할 오브젝트 이닛
+	for (int i = 0; i < SAMPLEOBJECTY; ++i)//y
+	{
+		for (int j = 0; j < SAMPLEOBJECTX; ++j)//x
+		{
+			_sampleObj[i * SAMPLEOBJECTX + j].objFrameX = j;//0~5->1번 줄 6~11->2번줄 12~17->3번줄
+			_sampleObj[i * SAMPLEOBJECTX + j].objFrameY = i;
+
+			//RectMake, RectMakeCenter
+			_sampleObj[i * SAMPLEOBJECTX + j].rc = RectMakePivot(
+				Vector2(750 + j * SAMPLETILESIZE, 100 + i * SAMPLETILESIZE), Vector2(SAMPLETILESIZE, SAMPLETILESIZE), Pivot::Center);
+
+			// 리얼 넘버
+			_sampleObj[i * SAMPLEOBJECTX + j].realNum = _realNum;
+			_realNum++;
+		}
 	}
+
 	//우리가 쓸 타일맵 제작
 	for (int i = 0; i < TILEY; ++i)
 	{
@@ -311,7 +349,7 @@ void mapTool::setMap()
 				}
 			}
 		}
-		for (int i = 0; i < SAMPLEOBJECTY; i++)
+		/*for (int i = 0; i < SAMPLEOBJECTY; i++)
 		{
 			for (int j = 0; j < SAMPLEOBJECTX; j++)
 			{
@@ -321,6 +359,27 @@ void mapTool::setMap()
 					_currentTile.y = _sampleObj[i * SAMPLEOBJECTX + j].objFrameY;
 					sampleSelec = RectMakePivot(Vector2(_sampleObj[i * SAMPLEOBJECTX + j].rc.left, _sampleObj[i * SAMPLEOBJECTX + j].rc.top), Vector2(48, 48), Pivot::LeftTop);
 					//cout << _currentTile.x << endl << _currentTile.y << endl;
+				}
+			}
+		}*/
+		// 변형시켜야할 오브젝트 업데이트
+		int resetNum = _change_num;	// 같은 줄에 렉트랑 이미지를 고정시키기 위해 필요한 변수
+		for (int i = _change_num; i < _change_num + 2; i++)	// 이전이나 이후 버튼으로 가져오는 2줄
+		{
+			for (int j = 0; j < SAMPLEOBJECTX; j++)	// 가로줄이니 안바꿔도됨
+			{
+				if (Vector2InRect(&_sampleObj[(i - resetNum) * SAMPLEOBJECTX + j].rc, &Vector2(_ptMouse.x, _ptMouse.y)) && !isterrain)
+				{
+					_currentTile.x = _sampleObj[i * SAMPLEOBJECTX + j].objFrameX;
+					_currentTile.y = _sampleObj[i * SAMPLEOBJECTX + j].objFrameY;
+					sampleSelec = RectMakePivot(Vector2(_sampleObj[i * SAMPLEOBJECTX + j].rc.left, _sampleObj[i * SAMPLEOBJECTX + j].rc.top), Vector2(48, 48), Pivot::LeftTop);
+					//cout << _currentTile.x << endl << _currentTile.y << endl;
+
+					_sampleObj[i * SAMPLEOBJECTX + j].rc = RectMakePivot(
+						Vector2(750 + j * SAMPLETILESIZE, 100 + (i - resetNum) * SAMPLETILESIZE), Vector2(SAMPLETILESIZE, SAMPLETILESIZE), Pivot::Center);
+
+					cout << _sampleObj[i * SAMPLEOBJECTX + j].realNum << endl;
+					_crtSelect = CTRL_OBJDRAW;
 				}
 			}
 		}
@@ -410,6 +469,32 @@ void mapTool::erase()
 {
 }
 
+void mapTool::previous()
+{
+	// 변형시켜야할 이전 세트
+	if (!_change_number)
+	{
+		_change_number = true;
+		if (_change_num == 0)
+			_change_num = SAMPLEOBJECTY - 2;
+		else
+			_change_num = _change_num - 2;
+	}
+}
+
+void mapTool::next()
+{
+	// 변형시켜야할 이전 세트
+	if (!_change_number)
+	{
+		_change_number = true;
+		if (_change_num == SAMPLEOBJECTY - 2)
+			_change_num = 0;
+		else
+			_change_num = _change_num + 2;
+	}
+}
+
 TERRAIN mapTool::terrainSelect(int frameX, int frameY)
 {
 	if ((frameX <= 2 && frameX >= 0) && (frameY <= 1)) return TR_FLOOR;
@@ -426,6 +511,6 @@ OBJECT mapTool::objSelect(int frameX, int frameY)
 	/*if ((frameX <= 2 && frameX >= 0) && (frameY <= 1)) return OBJ_LOOK;
 	if ((frameX <= 3 && frameX >= 2) && (frameY <= 1)) return OBJ_LOOK;
 	if ((frameX <= 6 && frameX >= 5) && (frameY <= 1)) return OBJ_LOOK;*/
-	if (frameX <= 3 && frameY <= 2)return OBJ_LOOK;
+	if (frameX <= SAMPLEOBJECTX && frameY <= SAMPLEOBJECTY)return OBJ_LOOK;		// 오브젝트 선택범위 확장을 위해 변환 필요
 	return OBJ_NONE;
 }
