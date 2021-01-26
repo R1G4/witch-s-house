@@ -17,15 +17,17 @@ enum CTRL
 	CTRL_ERASER,		//지우개 버튼
 	CTRL_PREV,
 	CTRL_NEXT,
-	CTRL_END
+	CTRL_END,
+	CTRL_OPEN,			//타일리스트 열기
+	CTRL_CLOSE			//타일리스트 닫기
 };
 enum TERRAIN
 {
-	TR_GRASS,TR_FLOOR,TR_STONE,TR_WATER
+	TR_GRASS, TR_FLOOR, TR_STONE, TR_WATER
 };
 enum OBJECT
 {
-	OBJ_UNMOVE,OBJ_PUSH,OBJ_LOOK,OBJ_CORELATION,OBJ_NONE
+	OBJ_UNMOVE, OBJ_PUSH, OBJ_LOOK, OBJ_CORELATION, OBJ_NONE
 };
 struct tagTile
 {
@@ -58,6 +60,7 @@ class mapTool :
 	public gameNode
 {
 private:
+	bool tabOpen;
 	D2DRenderer* d2d;
 	vector<Image*>_vSampleMap;
 	tagButton Save;
@@ -67,6 +70,8 @@ private:
 	tagButton terrain;
 	tagButton Object;
 	tagButton Erase;
+	tagButton Open;
+	tagButton Close;
 	tagCurrentTile _currentTile;
 	tagSampleTile _sampleTile[SAMPLETILEX*SAMPLETILEY];
 	tagTile _tiles[TILEX*TILEY];
@@ -89,7 +94,7 @@ public:
 	void save();
 	void load();
 	void erase();
-	TERRAIN terrainSelect(int frameX,int frameY);
+	TERRAIN terrainSelect(int frameX, int frameY);
 	OBJECT objSelect(int frameX, int frameY);
 };
 
