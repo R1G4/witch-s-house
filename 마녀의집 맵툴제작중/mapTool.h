@@ -1,8 +1,9 @@
 #pragma once
 #include "gameNode.h"
+#define SAMPLETILESIZE 48
 #define TILESIZE 48
-#define TILEX 15
-#define TILEY 15
+#define TILEX 30
+#define TILEY 30
 #define TILESIZEX TILEX*TILESIZE
 #define TILESIZEY TILEY*TILESIZE
 #define SAMPLETILEX 7
@@ -35,6 +36,8 @@ struct tagTile
 	int terrainFrameY;
 	int objFrameX;			//오브젝트 번호 (위와 같다)
 	int objFrameY;
+	bool isMapOn;
+
 };
 struct tagSampleTile
 {
@@ -69,6 +72,9 @@ private:
 	tagTile _tiles[TILEX*TILEY];
 	int _crtSelect;
 	FloatRect sampleSelec;
+	bool _leftButtonDown;
+	FloatRect MapRC;
+	POINT camera;
 public:
 	mapTool();
 	~mapTool();

@@ -19,7 +19,8 @@ HRESULT mapTool::init()
 	setButton();
 	setup();
 	_crtSelect = CTRL_TERRAINDRAW;
-	sampleSelec = RectMakePivot(Vector2(_sampleTile[0].rcTile.left+1, _sampleTile[0].rcTile.top+1), Vector2(46, 46), Pivot::LeftTop);
+	MapRC = RectMakePivot(Vector2(0, 0), Vector2(710, 710), Pivot::LeftTop);
+	camera = PointMake(0, 0);
 	return S_OK;
 }
 
@@ -30,10 +31,64 @@ void mapTool::release()
 void mapTool::update()
 {
 	setCtrl();
-	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))sampleSelec.Move(Vector2(48, 0));
-	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))sampleSelec.Move(Vector2(-48, 0));
-	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))sampleSelec.Move(Vector2(0, 48));
-	if (KEYMANAGER->isOnceKeyDown(VK_UP))sampleSelec.Move(Vector2(0, -48));
+	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))_leftButtonDown = true;
+	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))_leftButtonDown = false;
+	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+	{
+		camera.x += 48;
+		for (int i = 0; i < TILEY; i++)
+		{
+			for (int j = 0; j < TILEY; j++)
+			{
+				_tiles[i*TILEX + j].rc.Move(Vector2(48,0));
+			}
+		}
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+	{
+		camera.x -= 48;
+		for (int i = 0; i < TILEY; i++)
+		{
+			for (int j = 0; j < TILEY; j++)
+			{
+				_tiles[i*TILEX + j].rc.Move(Vector2(-48, 0));
+			}
+		}
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
+	{
+		camera.y -= 48;
+		for (int i = 0; i < TILEY; i++)
+		{
+			for (int j = 0; j < TILEY; j++)
+			{
+				_tiles[i*TILEX + j].rc.Move(Vector2(0, 48));
+			}
+		}
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_UP))
+	{
+		camera.y += 48;
+		for (int i = 0; i < TILEY; i++)
+		{
+			for (int j = 0; j < TILEY; j++)
+			{
+				_tiles[i*TILEX + j].rc.Move(Vector2(0,-48));
+			}
+		}
+	}
+	MapRC = RectMakePivot(Vector2( 0,  0), Vector2(710, 710), Pivot::LeftTop);
+	for (int i = 0; i < TILEY; i++)
+	{
+		for (int j = 0; j < TILEX; j++)
+		{
+			if (IntersectRectToRect(&_tiles[i*TILEX + j].rc, &MapRC))
+			{
+				_tiles[i*TILEX+j].isMapOn = true;
+			}
+			else _tiles[i*TILEX + j].isMapOn = false;
+		}
+	}
 	switch (_crtSelect)
 	{
 	case CTRL_SAVE:
@@ -56,11 +111,6 @@ void mapTool::update()
 	case CTRL_END:
 		break;
 	}
-	if (IntersectRectToRect(&_sampleTile[0].rcTile, &sampleSelec))
-	{
-		cout << "dd";
-	}
-	//setMap();
 }
 
 void mapTool::render()
@@ -69,20 +119,28 @@ void mapTool::render()
 	{
 		for (int j = 0; j < SAMPLETILEX; j++)
 		{
-			IMAGEMANAGER->FindImage("TerrainSample")->FrameRender(Vector2(750+j*TILESIZE, 100+i*TILESIZE), j, i);
-			//if (KEYMANAGER->isToggleKey(VK_TAB))d2d->DrawRectangle(_sampleTile[i*SAMPLETILEX + j].rcTile);
-
+			IMAGEMANAGER->FindImage("TerrainSample")->FrameRender(Vector2(750+j* SAMPLETILESIZE, 100+i* SAMPLETILESIZE), j, i);
+			if (KEYMANAGER->isToggleKey(VK_TAB))
+			{
+				_D2DRenderer->DrawRectangle(_sampleTile[i*SAMPLETILEX+j].rcTile, D2DRenderer::DefaultBrush::White);
+			}
 		}
 	}
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
+			if (!_tiles[i*TILEX + j].isMapOn)continue;
 			IMAGEMANAGER->FindImage("TerrainSample")->FrameRender(
 				Vector2(_tiles[i*TILEX+j].rc.left+TILESIZE/2,_tiles[i*TILEX + j].rc.top + TILESIZE / 2),
 				_tiles[i*TILEX + j].terrainFrameX, _tiles[i*TILEX + j].terrainFrameY);
+			if (KEYMANAGER->isToggleKey(VK_TAB))
+			{
+				_D2DRenderer->DrawRectangle(_tiles[i*TILEX + j].rc, D2DRenderer::DefaultBrush::White);
+			}
 		}
 	}
+
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
@@ -101,8 +159,8 @@ void mapTool::render()
 	Next.img->Render(Vector2(Next.frc.left+72, Next.frc.top+24));
 	terrain.img->Render(Vector2(terrain.frc.left+72, terrain.frc.top+24));
 	Object.img->Render(Vector2(Object.frc.left+72, Object.frc.top+24));
-	//_D2DRenderer->DrawRectangle(Save.frc,D2DRenderer::DefaultBrush::White);
 	_D2DRenderer->DrawRectangle(sampleSelec,D2DRenderer::DefaultBrush::White);
+	_D2DRenderer->DrawRectangle(MapRC, D2DRenderer::DefaultBrush::White);
 }
 
 void mapTool::setButton()
@@ -142,7 +200,7 @@ void mapTool::setup()
 
 			//RectMake, RectMakeCenter
 			_sampleTile[i*SAMPLETILEX + j].rcTile = RectMakePivot(
-				Vector2(750 + j * TILESIZE, 100 + i *TILESIZE), Vector2(TILESIZE,TILESIZE), Pivot::Center);
+				Vector2(750 + j * SAMPLETILESIZE, 100 + i * SAMPLETILESIZE), Vector2(SAMPLETILESIZE, SAMPLETILESIZE), Pivot::Center);
 		}
 	}
 	//우리가 쓸 타일맵 제작
@@ -150,8 +208,8 @@ void mapTool::setup()
 	{
 		for (int j = 0; j < TILEX; ++j)
 		{
-			//_tiles[i*TILEX + j].rc = RectMakePivot(Vector2(j*TILESIZE, i*TILESIZE), Vector2(j*TILESIZE + TILESIZE, i*TILESIZE + TILESIZE),Pivot::Center);
-			_tiles[i*TILEX + j].rc = RectMakePivot(Vector2(j*TILESIZE+TILESIZE/2, i*TILESIZE+TILESIZE/2), Vector2(TILESIZE,TILESIZE), Pivot::Center);
+			//_tiles[i*TILEX + j].rc = RectMakePivot(Vector2(j*TILESIZE, i*TILESIZE), Vector2(j*TILESIZE, i*TILESIZE),Pivot::Center);
+			_tiles[i*TILEX + j].rc = RectMakePivot(Vector2(j*TILESIZE+TILESIZE/2-camera.x, i*TILESIZE+TILESIZE/2-camera.y), Vector2(TILESIZE,TILESIZE), Pivot::Center);
 		}
 	}
 	cout << _tiles[0].rc.left << endl << _tiles[0].rc.top << endl;
@@ -169,30 +227,33 @@ void mapTool::setup()
 
 void mapTool::setMap()
 {
-	if (KEYMANAGER->isOnceKeyDown(VK_F1))
+	if (_leftButtonDown)
 	{
 		for (int i = 0; i < SAMPLETILEY; i++)
 		{
 			for (int j = 0; j < SAMPLETILEX; j++)
 			{
-				if (IntersectRectToRect(&_sampleTile[i*SAMPLETILEX + j].rcTile, &sampleSelec))
+				/*if (IntersectRectToRect(&_tiles[i*TILEX + j].rc, &MapRC))
 				{
-
+					_tiles[i*TILEX+j].isMapOn = true;
+				}*/
+				if (Vector2InRect(&_sampleTile[i*SAMPLETILEX + j].rcTile, &Vector2(_ptMouse.x, _ptMouse.y)))
+				{
 					_currentTile.x = _sampleTile[i*SAMPLETILEX + j].terrainFrameX;
 					_currentTile.y = _sampleTile[i*SAMPLETILEX + j].terrainFrameY;
-					cout << _currentTile.x << endl << _currentTile.y << endl;
+					sampleSelec = RectMakePivot(Vector2(_sampleTile[i*SAMPLETILEX + j].rcTile.left , _sampleTile[i*SAMPLETILEX + j].rcTile.top ), Vector2(48, 48), Pivot::LeftTop);
 
 				}
 			}
 		}
 	}
-	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))
+	if (_leftButtonDown/*&&KEYMANAGER->isOnceKeyDown(VK_LBUTTON)*/)
 	{
 		for (int i = 0; i < TILEY; ++i)
 		{
 			for (int j = 0; j < TILEX; ++j)
 			{
-				if (Vector2InRect(&_tiles[i*TILEX + j].rc, &Vector2(_ptMouse.x, _ptMouse.y)))
+				if (Vector2InRect(&_tiles[i*TILEX + j].rc, &Vector2(_ptMouse.x, _ptMouse.y)) && _tiles[i*TILEX + j].isMapOn)
 				{
 					if (_crtSelect == CTRL_TERRAINDRAW)
 					{
