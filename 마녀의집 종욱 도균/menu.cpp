@@ -59,7 +59,7 @@ void menu::update()
 		_contents = (CONTENTS)(_contents == NEW ? 3 : (int)_contents - 1);
 
 
-	if (KEYMANAGER->isOnceKeyDown('Z'))
+	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		_isClick = true;
 
 	//선택된 메뉴(항목)에 렉트 위치 변경
@@ -87,8 +87,8 @@ void menu::update()
 	//선택 키를 눌렀다면 백그라운드 및 이미지 투명도 조절
 	else
 	{
-		
-		if(sceneAlphaChange())
+
+		if (sceneAlphaChange())
 			SCENEMANAGER->changeScene("레벨선택");
 		//투명도 조절 후 다음씬으로 휙
 	}

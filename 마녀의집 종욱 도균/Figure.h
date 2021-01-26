@@ -22,19 +22,19 @@ namespace Figure
 		FloatRect result;
 		switch (pivot)
 		{
-		case Pivot::LeftTop:
+		case Pivot::LeftTop://RectMake
 			result.left = pos.x;
 			result.top = pos.y;
 			result.right = pos.x + size.x;
 			result.bottom = pos.y + size.y;
 			return result;
-		case Pivot::Center:
+		case Pivot::Center://RectMakeCenter
 			result.left = pos.x - size.x / 2.f;
 			result.top = pos.y - size.y / 2.f;
 			result.right = pos.x + size.x / 2.f;
 			result.bottom = pos.y + size.y / 2.f;
 			return result;
-		case Pivot::Bottom:
+		case Pivot::Bottom://새로운무언가
 			result.left = pos.x - size.x / 2.f;
 			result.top = pos.y - size.y;
 			result.right = pos.x + size.x / 2.f;
@@ -244,6 +244,7 @@ namespace Figure
 	@@ FloatRect* rc : 렉트
 	@@ Vector2* pt : 좌표
 	*****************************************************************************************************/
+	//메우 중요해보임
 	inline bool Vector2InRect(const FloatRect * const rc, const Vector2 * const pt)
 	{
 		if (rc->left > pt->x)return false;

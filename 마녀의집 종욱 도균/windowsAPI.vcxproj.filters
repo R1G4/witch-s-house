@@ -43,8 +43,11 @@
     <Filter Include="2DGameFramework\txtData">
       <UniqueIdentifier>{431e51a5-80a3-453e-b6b4-0a46c07862b8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="playGround\scene">
-      <UniqueIdentifier>{36f3be7f-8aab-45f9-9ac7-162efd91c3cb}</UniqueIdentifier>
+    <Filter Include="playGround\scense">
+      <UniqueIdentifier>{426fb165-a329-4ada-b57f-1168590a3b52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="playGround\player">
+      <UniqueIdentifier>{622a4c89-3118-4da1-b6c3-2968c6b8d9ba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -65,9 +68,6 @@
     </ClInclude>
     <ClInclude Include="gameNode.h">
       <Filter>2DGameFramework</Filter>
-    </ClInclude>
-    <ClInclude Include="playGround.h">
-      <Filter>playGround</Filter>
     </ClInclude>
     <ClInclude Include="singletonBase.h">
       <Filter>2DGameFramework\SingletonBase</Filter>
@@ -129,11 +129,23 @@
     <ClInclude Include="Math.h">
       <Filter>2DGameFramework\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="playGround.h">
+      <Filter>playGround</Filter>
+    </ClInclude>
+    <ClInclude Include="mapTool.h">
+      <Filter>playGround</Filter>
+    </ClInclude>
     <ClInclude Include="levelChoiceScene.h">
-      <Filter>playGround\scene</Filter>
+      <Filter>playGround\scense</Filter>
+    </ClInclude>
+    <ClInclude Include="garDen.h">
+      <Filter>playGround\scense</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>playGround\player</Filter>
     </ClInclude>
     <ClInclude Include="menu.h">
-      <Filter>playGround\scene</Filter>
+      <Filter>playGround\scense</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -203,11 +215,20 @@
     <ClCompile Include="Math.cpp">
       <Filter>2DGameFramework\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="mapTool.cpp">
+      <Filter>playGround</Filter>
+    </ClCompile>
     <ClCompile Include="levelChoiceScene.cpp">
-      <Filter>playGround\scene</Filter>
+      <Filter>playGround\scense</Filter>
+    </ClCompile>
+    <ClCompile Include="garDen.cpp">
+      <Filter>playGround\scense</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>playGround\player</Filter>
     </ClCompile>
     <ClCompile Include="menu.cpp">
-      <Filter>playGround\scene</Filter>
+      <Filter>playGround\scense</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

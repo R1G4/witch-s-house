@@ -14,7 +14,7 @@ namespace Figure
 		FloatRect();
 		explicit FloatRect(const float& left, const float& top, const float& right, const float& bottom);
 		explicit FloatRect(const int& left, const int& top, const int& right, const int& bottom);
-		explicit FloatRect(const Vector2& pos, const Vector2& size, const Pivot& pivot);
+		explicit FloatRect(const Vector2& pos, const Vector2& size, const Pivot& pivot);//시작좌표, 너비높이,기준
 		explicit FloatRect(const RECT& rc);
 
 		const RECT GetRect();

@@ -61,6 +61,7 @@ void D2DRenderer::CreateFactory()
 	HRESULT hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &mD2DFactory);
 	assert(SUCCEEDED(hr));
 	//2) DWriteFactory 생성
+	//멀티쓰레드 삘이난다. 근데 안쓸거같다.
 	hr = DWriteCreateFactory(
 		DWRITE_FACTORY_TYPE_SHARED,
 		__uuidof(*&mDWFactory),
@@ -77,7 +78,7 @@ void D2DRenderer::CreateRenderTarget()
 {
 	//렌더타겟이란 백버퍼의 역할을 하는 클래스이자 여러 렌더링을 위한 유틸적인 것들이 들어있는 클래스다
 	//해서 화면에 뭔가 렌더링을 요청하려면 렌더타겟을 통해서만 가능하다
-
+	//우리에게 친숙한 DC영역이다.
 	HRESULT hr;
 	//1) 윈도우 핸들을 통해서 화면 Rect를 받아온다 (GetClientRect)
 	RECT clientRect;
@@ -87,7 +88,7 @@ void D2DRenderer::CreateRenderTarget()
 	//mD2DFactory->GetDesktopDpi(&dpiX, &dpiY)
 
 	//2) 디바이스의 DPI정보를 받아온다. (WinAPI 함수)
-	FLOAT dpiX = GetDeviceCaps(_hdc, LOGPIXELSX);
+	FLOAT dpiX = GetDeviceCaps(_hdc, LOGPIXELSX);//해상도/디바이스사이즈
 	FLOAT dpiY = GetDeviceCaps(_hdc, LOGPIXELSY);
 
 	//3) 렌더타겟을 생성하기 위한 속성값들 초기화
@@ -111,6 +112,7 @@ void D2DRenderer::CreateRenderTarget()
 *******************************************************/
 void D2DRenderer::CreateDefaultBrush()
 {
+	//1.0f==255
 	this->mD2DRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black, 1.0f), &mDefaultBrushList[(UINT)DefaultBrush::Black]);
 	this->mD2DRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White, 1.0f), &mDefaultBrushList[(UINT)DefaultBrush::White]);
 	this->mD2DRenderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Yellow, 1.0f), &mDefaultBrushList[(UINT)DefaultBrush::Yellow]);

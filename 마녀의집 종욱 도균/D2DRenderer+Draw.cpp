@@ -20,7 +20,7 @@ void D2DRenderer::RenderText(const int x, const int y, const wstring& text, cons
 	const DefaultBrush& defaultBrush, const DWRITE_TEXT_ALIGNMENT& align,const wstring& font)
 {
 	Vector2 pos(x, y);
-
+	//텍스트 상자를만들었다
 	IDWriteTextLayout* layout = nullptr;
 	HRESULT hr = this->mDWFactory->CreateTextLayout
 	(
@@ -29,6 +29,7 @@ void D2DRenderer::RenderText(const int x, const int y, const wstring& text, cons
 		this->mFontList[font],
 		(float)text.length() * size,
 		(float)size,
+		//텍스트상자에 넣었다 글씨를
 		&layout
 	);
 	assert(SUCCEEDED(hr));
@@ -269,6 +270,7 @@ void D2DRenderer::DrawRectangle(const FloatRect& rc, const DefaultBrush& default
 
 	mD2DRenderTarget->DrawRectangle(D2D1::RectF((float)rect.left, (float)rect.top, (float)rect.right, (float)rect.bottom),
 		mDefaultBrushList[(UINT)defaultBrush], strokeWidth);
+
 }
 /**********************************************************************************************
 ## DrawEllipse ##

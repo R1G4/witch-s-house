@@ -42,11 +42,11 @@ namespace Direction
 }
 
 
-#include "LibraryHeader.h"
+#include "LibraryHeader.h"//d2d라이브러리 헤더
 
 #include "Vector2.h"
 #include "Math.h"
-#include "FloatRect.h"
+#include "FloatRect.h"//실수형 렉트 만들기
 #include "Figure.h"
 
 using namespace Figure;
@@ -68,28 +68,30 @@ using namespace Figure;
 
 // 여기서 프로그램에 필요한 추가 헤더를 참조합니다.
 #define WINNAME (LPCTSTR)(TEXT("뜨웨니 원~"))
-#define WINSTARTX	50
-#define WINSTARTY	50
+#define WINSTARTX	100
+#define WINSTARTY	100
 #define WINSIZEX	1280		
 #define WINSIZEY	720
 #define WINSTYLE	WS_CAPTION | WS_SYSMENU
 
 #define RND randomFunction::getSingleton()
 #define KEYMANAGER keyManager::getSingleton()
-#define IMAGEMANAGER imageManager::getSingleton()
+#define IMAGEMANAGER ImageManager::GetInstance()
 #define TIMEMANAGER timeManager::getSingleton()
 #define EFFECTMANAGER effectManager::getSingleton()
 #define SOUNDMANAGER soundManager::getSingleton()
 #define SCENEMANAGER sceneManager::getSingleton()
-//#define KEYANIMANAGER keyAniManager::getSingleton()
 #define TXTDATA txtData::getSingleton()
-#define OBJECTMANAGER ObjectManager::getSingleton()
-#define D2DINS D2DRenderer::GetInstance()
 
+
+
+#define D2DINS D2DRenderer::GetInstance()
+#define OBJECTMANAGER ObjectManager::getSingleton()
 #define SAFE_DELETE(p)		{if(p) {delete(p); (p) = NULL;}}
 #define SAFE_RELEASE(p)		{if(p) {(p)->release(); (p) = NULL;}}
 #define SAFE_DELETE_ARRAY(p) {if(p) {delete[](p); (p) = NULL;}}
 #define NEW_SAFE_RELEASE(p) {if(p){p->Release(); (p) = NULL;}}
+
 #define Synthesize(ValueType,ValueName,FuncName) \
 protected: ValueType ValueName;\
 public: inline ValueType Get##FuncName(void) const{return ValueName;}\

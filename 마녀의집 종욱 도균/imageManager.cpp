@@ -147,3 +147,4 @@ void ImageManager::DeleteAll()
 	}
 	mImageList.clear();
 }
+

@@ -39,7 +39,7 @@ private:
 	void CreateDefaultBrush();
 public:
 	void AddTextFormat(const wstring& font, const float& defaultSize = 1.f);
-	inline ID2D1RenderTarget* const GetRenderTarget()const { return this->mD2DRenderTarget; }
+	inline ID2D1RenderTarget* const GetRenderTarget()const { return this->mD2DRenderTarget; }//getDc?
 public:
 	//텍스트 출력(기본 브러쉬 사용) 
 	void RenderText(const int x, const int y, const wstring& text, const int size,
@@ -83,4 +83,4 @@ public:
 	void DrawRotationFillRectangle(const FloatRect& rc, const  D2D1::ColorF& color, const float angle);
 };
 
-#define _D2DRenderer D2DRenderer::GetInstance()
+#define _D2DRenderer D2DRenderer::GetInstance()//싱글톤화 ㅇㅇ maybe
