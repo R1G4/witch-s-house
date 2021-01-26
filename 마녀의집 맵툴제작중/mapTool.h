@@ -8,8 +8,10 @@
 #define TILESIZEY TILEY*TILESIZE
 #define SAMPLETILEX 7
 #define SAMPLETILEY 2
-#define SAMPLEOBJECTX 3
-#define SAMPLEOBJECTY 2
+#define SAMPLEOBJECTX 8
+#define SAMPLEOBJECTY 3
+
+
 enum CTRL
 {
 	CTRL_SAVE,			//세이브 버튼 인식

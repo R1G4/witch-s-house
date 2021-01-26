@@ -135,6 +135,9 @@
     <ClInclude Include="levelChoiceScene.h">
       <Filter>playGround\scense</Filter>
     </ClInclude>
+    <ClInclude Include="garDen.h">
+      <Filter>playGround\scense</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -207,6 +210,9 @@
       <Filter>playGround</Filter>
     </ClCompile>
     <ClCompile Include="levelChoiceScene.cpp">
+      <Filter>playGround\scense</Filter>
+    </ClCompile>
+    <ClCompile Include="garDen.cpp">
       <Filter>playGround\scense</Filter>
     </ClCompile>
   </ItemGroup>

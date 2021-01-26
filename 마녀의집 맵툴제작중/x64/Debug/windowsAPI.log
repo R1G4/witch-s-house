@@ -1,48 +1,6 @@
-﻿  stdafx.cpp
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의집 맵툴제작중\imagemanager.h(22): warning C4099: 'IWICImagingFactory': 처음에는 'struct'을(를) 사용하여 형식 이름을 표시했는데 이제는 'class'을(를) 사용하여 표시합니다.
-  c:\program files (x86)\windows kits\10\include\10.0.17763.0\um\wincodec.h(6261): note: 'IWICImagingFactory' 선언을 참조하십시오.
-  animation.cpp
-  D2DRenderer+Draw.cpp
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의집 맵툴제작중\d2drenderer+draw.cpp(34): warning C4267: '인수': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의집 맵툴제작중\d2drenderer+draw.cpp(39): warning C4267: '=': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의집 맵툴제작중\d2drenderer+draw.cpp(79): warning C4267: '인수': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의집 맵툴제작중\d2drenderer+draw.cpp(84): warning C4267: '=': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의집 맵툴제작중\d2drenderer+draw.cpp(127): warning C4267: '인수': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의집 맵툴제작중\d2drenderer+draw.cpp(132): warning C4267: '=': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의집 맵툴제작중\d2drenderer+draw.cpp(172): warning C4267: '인수': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의집 맵툴제작중\d2drenderer+draw.cpp(177): warning C4267: '=': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  D2DRenderer.cpp
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의집 맵툴제작중\d2drenderer.cpp(91): warning C4244: '초기화 중': 'int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의집 맵툴제작중\d2drenderer.cpp(92): warning C4244: '초기화 중': 'int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Figure.cpp
-  FloatEllipse.cpp
-  FloatRect.cpp
-  gameNode.cpp
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의집 맵툴제작중\gamenode.cpp(92): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의집 맵툴제작중\gamenode.cpp(93): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의집 맵툴제작중\gamenode.cpp(86): warning C4101: 'hdc' :참조되지 않은 지역 변수입니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의집 맵툴제작중\gamenode.cpp(85): warning C4101: 'ps' :참조되지 않은 지역 변수입니다.
-  image.cpp
-  imageManager.cpp
-  keyManager.cpp
-  Line.cpp
+﻿  garDen.cpp
   mapTool.cpp
-  Math.cpp
   playGround.cpp
-  sceneManager.cpp
-  soundManager.cpp
-  timeManager.cpp
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의집 맵툴제작중\timemanager.cpp(49): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의집 맵툴제작중\timemanager.cpp(52): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의집 맵툴제작중\timemanager.cpp(55): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  timer.cpp
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의집 맵툴제작중\timer.cpp(61): warning C4244: '=': 'float'에서 'unsigned long'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Triangle.cpp
-  txtData.cpp
-  코드를 생성하고 있습니다...
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의집 맵툴제작중\txtdata.cpp(58): warning C4172: 지역 변수 또는 임시: str의 주소를 반환하고 있습니다.
-  컴파일하고 있습니다...
-  Vector2.cpp
   windowsAPI.cpp
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의집 맵툴제작중\windowsapi.cpp(96): warning C4244: 'return': 'WPARAM'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   코드를 생성하고 있습니다...

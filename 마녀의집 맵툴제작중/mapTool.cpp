@@ -15,12 +15,13 @@ mapTool::~mapTool()
 HRESULT mapTool::init()
 {
 	IMAGEMANAGER->AddFrameImage("TerrainSample", L"Image/mapTool/타일.png", 7, 2);
-	IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/bar2.png", 3, 2);
+	IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/오브젝트타일.png", 8, 3);
 	//IMAGEMANAGER->AddImage("temp", L"Image/mapTool/타일.png");
 	setButton();
 	setup();
+	//load();
 	_crtSelect = CTRL_TERRAINDRAW;
-	MapRC = RectMakePivot(Vector2(0, 0), Vector2(710, 710), Pivot::LeftTop);
+	MapRC = RectMakePivot(Vector2(0, 0), Vector2(1270, 710), Pivot::LeftTop);
 	camera = PointMake(0, 0);
 	tabOpen = true;
 	return S_OK;
@@ -79,7 +80,7 @@ void mapTool::update()
 			}
 		}
 	}
-	MapRC = RectMakePivot(Vector2(0, 0), Vector2(710, 710), Pivot::LeftTop);
+	MapRC = RectMakePivot(Vector2(0, 0), Vector2(1270, 710), Pivot::LeftTop);
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
@@ -173,12 +174,12 @@ void mapTool::render()
 				}
 			}
 		}
-	if(!isterrain) {
+		if (!isterrain) {
 			for (int i = 0; i < SAMPLEOBJECTY; i++)
 			{
 				for (int j = 0; j < SAMPLEOBJECTX; j++)
 				{
-				
+
 					IMAGEMANAGER->FindImage("ObjectSample")->FrameRender(Vector2(750 + j * SAMPLETILESIZE, 100 + i * SAMPLETILESIZE), j, i);
 					if (KEYMANAGER->isToggleKey(VK_TAB))
 					{
@@ -291,7 +292,7 @@ void mapTool::setup()
 
 void mapTool::setMap()
 {
-	if (_leftButtonDown)
+	if (_leftButtonDown && tabOpen)
 	{
 		for (int i = 0; i < SAMPLETILEY; i++)
 		{
@@ -301,7 +302,7 @@ void mapTool::setMap()
 				{
 					_tiles[i*TILEX+j].isMapOn = true;
 				}*/
-				if (Vector2InRect(&_sampleTile[i*SAMPLETILEX + j].rcTile, &Vector2(_ptMouse.x, _ptMouse.y))&&isterrain)
+				if (Vector2InRect(&_sampleTile[i*SAMPLETILEX + j].rcTile, &Vector2(_ptMouse.x, _ptMouse.y)) && isterrain)
 				{
 					_currentTile.x = _sampleTile[i*SAMPLETILEX + j].terrainFrameX;
 					_currentTile.y = _sampleTile[i*SAMPLETILEX + j].terrainFrameY;
