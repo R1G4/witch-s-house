@@ -82,6 +82,8 @@ using namespace Figure;
 #define SOUNDMANAGER soundManager::getSingleton()
 #define SCENEMANAGER sceneManager::getSingleton()
 #define TXTDATA txtData::getSingleton()
+
+#define D2DINS D2DRenderer::GetInstance()
 #define OBJECTMANAGER ObjectManager::getSingleton()
 #define SAFE_DELETE(p)		{if(p) {delete(p); (p) = NULL;}}
 #define SAFE_RELEASE(p)		{if(p) {(p)->release(); (p) = NULL;}}

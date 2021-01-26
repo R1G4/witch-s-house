@@ -43,6 +43,9 @@
     <Filter Include="2DGameFramework\txtData">
       <UniqueIdentifier>{431e51a5-80a3-453e-b6b4-0a46c07862b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\scense">
+      <UniqueIdentifier>{426fb165-a329-4ada-b57f-1168590a3b52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -129,6 +132,9 @@
     <ClInclude Include="mapTool.h">
       <Filter>playGround</Filter>
     </ClInclude>
+    <ClInclude Include="levelChoiceScene.h">
+      <Filter>playGround\scense</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -199,6 +205,9 @@
     </ClCompile>
     <ClCompile Include="mapTool.cpp">
       <Filter>playGround</Filter>
+    </ClCompile>
+    <ClCompile Include="levelChoiceScene.cpp">
+      <Filter>playGround\scense</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
