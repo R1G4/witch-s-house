@@ -8,6 +8,8 @@
 #define TILESIZEY TILEY*TILESIZE
 #define SAMPLETILEX 7
 #define SAMPLETILEY 2
+#define SAMPLEOBJECTX 3
+#define SAMPLEOBJECTY 2
 enum CTRL
 {
 	CTRL_SAVE,			//세이브 버튼 인식
@@ -47,6 +49,13 @@ struct tagSampleTile
 	int terrainFrameX;
 	int terrainFrameY;
 };
+struct tagSampleObj
+{
+	FloatRect rc;
+	int objFrameX;
+	int objFrameY;
+};
+
 struct tagCurrentTile
 {
 	int x, y;
@@ -74,12 +83,15 @@ private:
 	tagButton Close;
 	tagCurrentTile _currentTile;
 	tagSampleTile _sampleTile[SAMPLETILEX*SAMPLETILEY];
+	tagSampleObj _sampleObj[SAMPLEOBJECTX*SAMPLEOBJECTY];
+
 	tagTile _tiles[TILEX*TILEY];
 	int _crtSelect;
 	FloatRect sampleSelec;
 	bool _leftButtonDown;
 	FloatRect MapRC;
 	POINT camera;
+	bool isterrain;
 public:
 	mapTool();
 	~mapTool();

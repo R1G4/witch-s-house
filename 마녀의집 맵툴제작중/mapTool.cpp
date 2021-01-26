@@ -15,6 +15,7 @@ mapTool::~mapTool()
 HRESULT mapTool::init()
 {
 	IMAGEMANAGER->AddFrameImage("TerrainSample", L"Image/mapTool/타일.png", 7, 2);
+	IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/bar2.png", 3, 2);
 	//IMAGEMANAGER->AddImage("temp", L"Image/mapTool/타일.png");
 	setButton();
 	setup();
@@ -93,13 +94,17 @@ void mapTool::update()
 	switch (_crtSelect)
 	{
 	case CTRL_SAVE:
+		save();
 		break;
 	case CTRL_LOAD:
+		load();
 		break;
 	case CTRL_TERRAINDRAW:
+		isterrain = true;
 		setMap();
 		break;
 	case CTRL_OBJDRAW:
+		isterrain = false;
 		setMap();
 		break;
 	case CTRL_ERASER:
@@ -128,22 +133,6 @@ void mapTool::update()
 
 void mapTool::render()
 {
-	if (tabOpen == true)
-	{
-		for (int i = 0; i < 2; i++)
-		{
-			for (int j = 0; j < SAMPLETILEX; j++)
-			{
-				IMAGEMANAGER->FindImage("TerrainSample")->FrameRender(Vector2(750 + j * SAMPLETILESIZE, 100 + i * SAMPLETILESIZE), j, i);
-				if (KEYMANAGER->isToggleKey(VK_TAB))
-				{
-					_D2DRenderer->DrawRectangle(_sampleTile[i*SAMPLETILEX + j].rcTile, D2DRenderer::DefaultBrush::White);
-				}
-			}
-		}
-	}
-	else {}
-
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
@@ -158,15 +147,45 @@ void mapTool::render()
 			}
 		}
 	}
-
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
 			if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
-			IMAGEMANAGER->FindImage("TerrainSample")->FrameRender(
+			IMAGEMANAGER->FindImage("ObjectSample")->FrameRender(
 				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top + TILESIZE / 2),
 				_tiles[i*TILEX + j].objFrameX, _tiles[i*TILEX + j].objFrameY);
+		}
+	}
+	if (tabOpen)
+	{
+		if (isterrain)
+		{
+			for (int i = 0; i < SAMPLETILEY; i++)
+			{
+				for (int j = 0; j < SAMPLETILEX; j++)
+				{
+					IMAGEMANAGER->FindImage("TerrainSample")->FrameRender(Vector2(750 + j * SAMPLETILESIZE, 100 + i * SAMPLETILESIZE), j, i);
+					if (KEYMANAGER->isToggleKey(VK_TAB))
+					{
+						_D2DRenderer->DrawRectangle(_sampleTile[i*SAMPLETILEX + j].rcTile, D2DRenderer::DefaultBrush::White);
+					}
+				}
+			}
+		}
+	if(!isterrain) {
+			for (int i = 0; i < SAMPLEOBJECTY; i++)
+			{
+				for (int j = 0; j < SAMPLEOBJECTX; j++)
+				{
+				
+					IMAGEMANAGER->FindImage("ObjectSample")->FrameRender(Vector2(750 + j * SAMPLETILESIZE, 100 + i * SAMPLETILESIZE), j, i);
+					if (KEYMANAGER->isToggleKey(VK_TAB))
+					{
+						_D2DRenderer->DrawRectangle(_sampleObj[i*SAMPLEOBJECTX + j].rc, D2DRenderer::DefaultBrush::White);
+					}
+				}
+			}
 		}
 	}
 	//IMAGEMANAGER->FindImage("TerrainSample")->Render(Vector2(800, 100));
@@ -236,6 +255,18 @@ void mapTool::setup()
 				Vector2(750 + j * SAMPLETILESIZE, 100 + i * SAMPLETILESIZE), Vector2(SAMPLETILESIZE, SAMPLETILESIZE), Pivot::Center);
 		}
 	}
+	for (int i = 0; i < SAMPLEOBJECTY; ++i)//y
+	{
+		for (int j = 0; j < SAMPLEOBJECTX; ++j)//x
+		{
+			_sampleObj[i * SAMPLEOBJECTX + j].objFrameX = j;//0~19->1번 줄 20~39->2번줄
+			_sampleObj[i * SAMPLEOBJECTX + j].objFrameY = i;
+
+			//RectMake, RectMakeCenter
+			_sampleObj[i * SAMPLEOBJECTX + j].rc = RectMakePivot(
+				Vector2(750 + j * SAMPLETILESIZE, 100 + i * SAMPLETILESIZE), Vector2(SAMPLETILESIZE, SAMPLETILESIZE), Pivot::Center);
+		}
+	}
 	//우리가 쓸 타일맵 제작
 	for (int i = 0; i < TILEY; ++i)
 	{
@@ -270,7 +301,7 @@ void mapTool::setMap()
 				{
 					_tiles[i*TILEX+j].isMapOn = true;
 				}*/
-				if (Vector2InRect(&_sampleTile[i*SAMPLETILEX + j].rcTile, &Vector2(_ptMouse.x, _ptMouse.y)))
+				if (Vector2InRect(&_sampleTile[i*SAMPLETILEX + j].rcTile, &Vector2(_ptMouse.x, _ptMouse.y))&&isterrain)
 				{
 					_currentTile.x = _sampleTile[i*SAMPLETILEX + j].terrainFrameX;
 					_currentTile.y = _sampleTile[i*SAMPLETILEX + j].terrainFrameY;
@@ -279,10 +310,23 @@ void mapTool::setMap()
 				}
 			}
 		}
+		for (int i = 0; i < SAMPLEOBJECTY; i++)
+		{
+			for (int j = 0; j < SAMPLEOBJECTX; j++)
+			{
+				if (Vector2InRect(&_sampleObj[i * SAMPLEOBJECTX + j].rc, &Vector2(_ptMouse.x, _ptMouse.y)) && !isterrain)
+				{
+					_currentTile.x = _sampleObj[i * SAMPLEOBJECTX + j].objFrameX;
+					_currentTile.y = _sampleObj[i * SAMPLEOBJECTX + j].objFrameY;
+					sampleSelec = RectMakePivot(Vector2(_sampleObj[i * SAMPLEOBJECTX + j].rc.left, _sampleObj[i * SAMPLEOBJECTX + j].rc.top), Vector2(48, 48), Pivot::LeftTop);
+					//cout << _currentTile.x << endl << _currentTile.y << endl;
+				}
+			}
+		}
 	}
 	if (tabOpen == false)
 	{
-		if (_leftButtonDown/*&&KEYMANAGER->isOnceKeyDown(VK_LBUTTON)*/)
+		if (_leftButtonDown)
 		{
 			for (int i = 0; i < TILEY; ++i)
 			{
@@ -339,10 +383,26 @@ void mapTool::setCtrl()
 
 void mapTool::save()
 {
+	HANDLE file;
+	DWORD write;
+	file = CreateFile("saveMap1.map", GENERIC_WRITE, NULL, NULL,
+		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
+
+	CloseHandle(file);
 }
 
 void mapTool::load()
 {
+	HANDLE file;
+	DWORD read;
+	file = CreateFile("saveMap1.map", GENERIC_READ, NULL, NULL,
+		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
+
+	CloseHandle(file);
 }
 
 void mapTool::erase()
@@ -362,8 +422,9 @@ TERRAIN mapTool::terrainSelect(int frameX, int frameY)
 
 OBJECT mapTool::objSelect(int frameX, int frameY)
 {
-	if ((frameX <= 2 && frameX >= 0) && (frameY <= 1)) return OBJ_LOOK;
+	/*if ((frameX <= 2 && frameX >= 0) && (frameY <= 1)) return OBJ_LOOK;
 	if ((frameX <= 3 && frameX >= 2) && (frameY <= 1)) return OBJ_LOOK;
-	if ((frameX <= 6 && frameX >= 5) && (frameY <= 1)) return OBJ_LOOK;
+	if ((frameX <= 6 && frameX >= 5) && (frameY <= 1)) return OBJ_LOOK;*/
+	if (frameX <= 3 && frameY <= 2)return OBJ_LOOK;
 	return OBJ_NONE;
 }
