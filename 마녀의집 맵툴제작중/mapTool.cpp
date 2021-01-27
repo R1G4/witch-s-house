@@ -515,21 +515,6 @@ void mapTool::setCtrl()
 		if (KEYMANAGER->isOnceKeyDown('C'))_crtSelect = CTRL_COLLIDER;
 		if (KEYMANAGER->isOnceKeyDown('F'))_crtSelect = CTRL_SETFRAMETILE;
 	}
-	if (KEYMANAGER->isOnceKeyDown(VK_F1))
-	{
-		_crtSelect = CTRL_SETFRAMETILE;
-		FrAtt = PLAYER;
-	}
-	if (KEYMANAGER->isOnceKeyDown(VK_F2))
-	{
-		_crtSelect = CTRL_SETFRAMETILE;
-		FrAtt = ENEMY;
-	}
-	if (KEYMANAGER->isOnceKeyDown(VK_F3))
-	{
-		_crtSelect = CTRL_SETFRAMETILE;
-		FrAtt = OBJ;
-	}
 	//if (KEYMANAGER->isOnceKeyDown('P'))
 	//{
 	//	_crtSelect = CTRL_PREV;
@@ -554,6 +539,11 @@ void mapTool::mapMove()
 				_tiles[i*TILEX + j].rc.Move(Vector2(48, 0));
 			}
 		}
+		for (int i = 0; i < _vFrameTile.size(); i++)
+		{
+			_vFrameTile[i].rc.Move(Vector2(48, 0));
+		}
+		
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 	{
@@ -565,6 +555,10 @@ void mapTool::mapMove()
 				_tiles[i*TILEX + j].rc.Move(Vector2(-48, 0));
 			}
 		}
+		for (int i = 0; i < _vFrameTile.size(); i++)
+		{
+			_vFrameTile[i].rc.Move(Vector2(-48, 0));
+		}
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
 	{
@@ -575,6 +569,10 @@ void mapTool::mapMove()
 			{
 				_tiles[i*TILEX + j].rc.Move(Vector2(0, 48));
 			}
+		}	
+		for (int i = 0; i < _vFrameTile.size(); i++)
+		{
+			_vFrameTile[i].rc.Move(Vector2(0, 48));
 		}
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_UP))
@@ -586,6 +584,10 @@ void mapTool::mapMove()
 			{
 				_tiles[i*TILEX + j].rc.Move(Vector2(0, -48));
 			}
+		}
+		for (int i = 0; i < _vFrameTile.size(); i++)
+		{
+			_vFrameTile[i].rc.Move(Vector2(0, -48));
 		}
 	}
 	MapRC = RectMakePivot(Vector2(0, 0), Vector2(1270, 710), Pivot::LeftTop);
@@ -814,7 +816,6 @@ bool mapTool::addFrameTile(tagFrameTile _frameTile)
 	//프레임 이미지를 추가한다.
 	//이미지를 배치 및 랜더하는 백터
 	_vFrameTile.push_back(_frameTile);
-
 	//false를 반환 할 경우 저장 및 로드용 타일에서는 제거되지 않는다.
 	return false;
 }
