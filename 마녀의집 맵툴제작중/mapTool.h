@@ -1,6 +1,10 @@
 #pragma once
 #include "gameNode.h"
 #define SAMPLETILESIZE 48
+
+#define SAMPLEOBJTILESIZEX 300
+#define SAMPLEOBJTILESIZEY 200
+
 #define TILESIZE 48
 #define TILEX 30
 #define TILEY 30
@@ -122,7 +126,9 @@ private:
 	FRAMEATTRIBUTE FrAtt;
 	int _change_num;		// 큰틀을 넘기기 위한 변수
 	int _realNum;			// 각 오브젝트의 실제번호 부여를 위한 변수
+	int _y_rect_num;		// y축 렉트갯수를 변환시키기 위한 변수?		
 	bool _change_number;	// 클릭시 틀을 한번 씩만 넘기기위한 불값
+
 	//맵타일
 	tagTile _tiles[TILEX*TILEY];
 	int _crtSelect;

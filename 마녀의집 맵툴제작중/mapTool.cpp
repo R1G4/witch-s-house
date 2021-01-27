@@ -19,6 +19,9 @@ HRESULT mapTool::init()
 	//IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/오브젝트타일.png", 8, 3);
 	//IMAGEMANAGER->AddImage("temp", L"Image/mapTool/타일.png");
 	setButton();
+	_realNum = _change_num = 0;
+	_y_rect_num = 1;	// png파일 변환시 y축의 약수여야함
+
 	setup();
 	//load();
 	_crtSelect = CTRL_TERRAINDRAW;
@@ -38,7 +41,7 @@ void mapTool::update()
 	setCtrl();
 	if (KEYMANAGER->isOnceKeyDown(VK_LBUTTON))_leftButtonDown = true;
 	if (KEYMANAGER->isOnceKeyUp(VK_LBUTTON))_leftButtonDown = false;
-	if (KEYMANAGER->isOnceKeyUp('P')|| KEYMANAGER->isOnceKeyUp('N')) _change_number = false;	// (prev next) f2키에서 떼면 순서 변환완료
+	//if (KEYMANAGER->isOnceKeyUp('P')|| KEYMANAGER->isOnceKeyUp('N')) _change_number = false;	// (prev next) f2키에서 떼면 순서 변환완료
 	mapMove();
 	tileSelect();
 	switch (_crtSelect)
@@ -99,7 +102,7 @@ void mapTool::render()
 				_tiles[i*TILEX + j].terrainFrameX, _tiles[i*TILEX + j].terrainFrameY);
 			if (KEYMANAGER->isToggleKey(VK_TAB))
 			{
-				_D2DRenderer->DrawRectangle(_tiles[i*TILEX + j].rc, D2DRenderer::DefaultBrush::White);
+				//_D2DRenderer->DrawRectangle(_tiles[i*TILEX + j].rc, D2DRenderer::DefaultBrush::White);
 			}
 			if (_tiles[i*TILEX + j].isCollider)_D2DRenderer->FillRectangle(_tiles[i*TILEX + j].rc, D2D1::ColorF::Red, 0.4);
 		}
@@ -110,7 +113,7 @@ void mapTool::render()
 		{
 			if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
 			IMAGEMANAGER->FindImage("ObjectSample")->FrameRender(
-				Vector2(_tiles[i*TILEX + j].rc.left+TILESIZE/2, _tiles[i*TILEX + j].rc.top ),
+				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE, _tiles[i*TILEX + j].rc.top ),	// 보정값 바꿈
 				_tiles[i*TILEX + j].objFrameX, _tiles[i*TILEX + j].objFrameY);
 		}//보정값 필요할지도 모름
 	}
@@ -146,11 +149,11 @@ void mapTool::render()
 			}*/
 			int resetNum = _change_num;	// 같은 줄에 렉트랑 이미지를 고정시키기 위해 필요한 변수
 			// 변형시켜야하는 랜더
-			for (int i = _change_num; i < _change_num + 2; i++)
+			for (int i = _change_num; i < _change_num + _y_rect_num; i++)
 			{
 				for (int j = 0; j < SAMPLEOBJECTX; j++)
 				{
-					IMAGEMANAGER->FindImage("ObjectSample")->FrameRender(Vector2(750 + j * SAMPLETILESIZE, 100 + (i - resetNum) * SAMPLETILESIZE), j, i);
+					IMAGEMANAGER->FindImage("ObjectSample")->FrameRender(Vector2(750 + j * SAMPLEOBJTILESIZEX, 100 + (i - resetNum) * SAMPLEOBJTILESIZEY), j, i);
 
 					if (KEYMANAGER->isToggleKey(VK_TAB))
 					{
@@ -272,7 +275,7 @@ void mapTool::setup()
 
 			//RectMake, RectMakeCenter
 			_sampleObj[i * SAMPLEOBJECTX + j].rc = RectMakePivot(
-				Vector2(750 + j * SAMPLETILESIZE, 100 + i * SAMPLETILESIZE), Vector2(SAMPLETILESIZE, SAMPLETILESIZE), Pivot::Center);
+				Vector2(750 + j * SAMPLEOBJTILESIZEX, 100 + i * SAMPLEOBJTILESIZEY), Vector2(SAMPLEOBJTILESIZEX, SAMPLEOBJTILESIZEY), Pivot::Center);
 
 			// 리얼 넘버
 			_sampleObj[i * SAMPLEOBJECTX + j].realNum = _realNum;
@@ -338,7 +341,7 @@ void mapTool::setMap()
 		}*/
 		// 변형시켜야할 오브젝트 업데이트
 		int resetNum = _change_num;	// 같은 줄에 렉트랑 이미지를 고정시키기 위해 필요한 변수
-		for (int i = _change_num; i < _change_num + 2; i++)	// 이전이나 이후 버튼으로 가져오는 2줄
+		for (int i = _change_num; i < _change_num + _y_rect_num; i++)	// 이전이나 이후 버튼으로 가져오는 2줄
 		{
 			for (int j = 0; j < SAMPLEOBJECTX; j++)	// 가로줄이니 안바꿔도됨
 			{
@@ -350,7 +353,7 @@ void mapTool::setMap()
 					//cout << _currentTile.x << endl << _currentTile.y << endl;
 
 					_sampleObj[i * SAMPLEOBJECTX + j].rc = RectMakePivot(
-						Vector2(750 + j * SAMPLETILESIZE, 100 + (i - resetNum) * SAMPLETILESIZE), Vector2(SAMPLETILESIZE, SAMPLETILESIZE), Pivot::Center);
+						Vector2(750 + j * SAMPLEOBJTILESIZEX, 100 + (i - resetNum) * SAMPLEOBJTILESIZEY), Vector2(SAMPLEOBJTILESIZEX, SAMPLEOBJTILESIZEY), Pivot::Center);
 
 					cout << _sampleObj[i * SAMPLEOBJECTX + j].realNum << endl;
 					_crtSelect = CTRL_OBJDRAW;
@@ -419,8 +422,8 @@ void mapTool::setCtrl()
 		if (KEYMANAGER->isOnceKeyDown('S'))_crtSelect = CTRL_SAVE;
 		if (KEYMANAGER->isOnceKeyDown('L'))_crtSelect = CTRL_LOAD;
 		if (KEYMANAGER->isOnceKeyDown('E'))_crtSelect = CTRL_ERASER;
-		if (KEYMANAGER->isOnceKeyDown('P'))_crtSelect = CTRL_PREV;
-		if (KEYMANAGER->isOnceKeyDown('N'))_crtSelect = CTRL_NEXT;
+		if (KEYMANAGER->isOnceKeyDown('P')) { _crtSelect = CTRL_PREV; _change_number = false; }
+		if (KEYMANAGER->isOnceKeyDown('N')) { _crtSelect = CTRL_NEXT; _change_number = false; }
 		if (KEYMANAGER->isOnceKeyDown('T'))_crtSelect = CTRL_TERRAINDRAW;
 		if (KEYMANAGER->isOnceKeyDown('O'))_crtSelect = CTRL_OBJDRAW;
 		if (KEYMANAGER->isOnceKeyDown('C'))_crtSelect = CTRL_COLLIDER;
@@ -560,10 +563,10 @@ void mapTool::previous()
 	if (!_change_number)
 	{
 		_change_number = true;
-		if (_change_num == 0)
-			_change_num = SAMPLEOBJECTY - 2;
-		else
-			_change_num = _change_num - 2;
+
+		_change_num = _change_num - _y_rect_num;
+		if (_change_num < 0)
+			_change_num = SAMPLEOBJECTY - _y_rect_num;
 	}
 }
 
@@ -573,10 +576,10 @@ void mapTool::next()
 	if (!_change_number)
 	{
 		_change_number = true;
-		if (_change_num == SAMPLEOBJECTY - 2)
+
+		_change_num = _change_num + _y_rect_num;
+		if (_change_num > SAMPLEOBJECTY - _y_rect_num)
 			_change_num = 0;
-		else
-			_change_num = _change_num + 2;
 	}
 }
 
