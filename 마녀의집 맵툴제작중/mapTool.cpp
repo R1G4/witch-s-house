@@ -622,24 +622,78 @@ void mapTool::save()
 {
 	HANDLE file;
 	DWORD write;
-	file = CreateFile("saveMap1.map", GENERIC_WRITE, NULL, NULL,
-		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
+	OPENFILENAME openFileName;
+	static char strFileTitle[MAX_PATH], strFileExtension[10], strFilePath[100];
+	TCHAR curDirectoryPath[256];
 
-	CloseHandle(file);
+	GetCurrentDirectory(256, curDirectoryPath);
+
+	ZeroMemory(&openFileName, sizeof(OPENFILENAME));    // 구조체를 0으로 셋업
+	openFileName.lStructSize = sizeof(OPENFILENAME);
+	openFileName.hwndOwner = _hWnd;
+	openFileName.lpstrTitle = "저장";
+	openFileName.lpstrFileTitle = strFileTitle; // strFileTitle
+	openFileName.lpstrFilter = "Every File(*.*)\0*.*\0Text File\0*.txt;*.doc\0";
+	openFileName.lpstrFile = strFilePath; // strFilePath
+	openFileName.nMaxFile = MAX_PATH;
+	openFileName.nMaxFileTitle = MAX_PATH;
+
+	if (GetSaveFileName(&openFileName) != 0)    // 인덱스가 1부터 시작하기 때문에 지정
+	{
+		switch (openFileName.nFilterIndex)
+		{
+		case 1:
+			file = CreateFile(strFilePath, GENERIC_WRITE, NULL, NULL,
+				CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+			WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
+			CloseHandle(file);
+			break;
+		default:
+			break;
+		}
+	}
+	SetCurrentDirectory(curDirectoryPath);  // 변경된 경로를 원래 경로로 설정
+
+	_crtSelect = CTRL_TERRAINDRAW;
 }
 
 void mapTool::load()
 {
 	HANDLE file;
 	DWORD read;
-	file = CreateFile("saveMap1.map", GENERIC_READ, NULL, NULL,
-		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
+	OPENFILENAME openFileName;
+	static char strFileTitle[MAX_PATH], strFileExtension[10], strFilePath[100];
+	TCHAR curDirectoryPath[256];
 
-	CloseHandle(file);
+	GetCurrentDirectory(256, curDirectoryPath);         // GetOpenFileName 호출하면 기본 경로명이 바뀌기 때문에 기본 경로명 미리 저장
+
+	ZeroMemory(&openFileName, sizeof(openFileName));    // 구조체를 0으로 셋업
+	openFileName.lStructSize = sizeof(openFileName);
+	openFileName.hwndOwner = _hWnd;
+	openFileName.lpstrTitle = "로드";
+	openFileName.lpstrFileTitle = strFileTitle;
+	openFileName.lpstrFile = strFilePath;
+	openFileName.lpstrFilter = "Every File(*.*)\0*.*\0Text File\0*.txt;*.doc\0";
+	openFileName.nMaxFile = MAX_PATH;
+	openFileName.nMaxFileTitle = MAX_PATH;
+
+	if (GetOpenFileName(&openFileName) != 0)    // 인덱스가 1부터 시작하기 때문에 지정
+	{
+		switch (openFileName.nFilterIndex)
+		{
+		case 1:
+			file = CreateFile(strFilePath, GENERIC_READ, NULL, NULL,
+				OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+			ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
+			CloseHandle(file);
+			break;
+		}
+	}
+	SetCurrentDirectory(curDirectoryPath);  // 변경된 경로를 원래 경로로 설정
+	_crtSelect = CTRL_TERRAINDRAW;
 }
 
 void mapTool::getFrameTile()
