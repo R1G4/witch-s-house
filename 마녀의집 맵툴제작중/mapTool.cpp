@@ -257,6 +257,16 @@ void mapTool::render()
 			IMAGEMANAGER->FindImage(_sampleFrameImg[_frameSelected].keyName)->FrameRender(Vector2((950), 150), 0, 0);
 			_D2DRenderer->DrawRectangle(Vector2(950, 150), Vector2(220, 220), Pivot::Center, D2D1::ColorF::Enum::DarkGray, 1.0f, 5);
 
+			D2DINS->RenderText
+			(
+				950 - 30,
+				268,
+				_sampleFrameImg[_frameSelected].kinds == PLAYER ? L"Player" :
+				_sampleFrameImg[_frameSelected].kinds == ENEMY ? L"Enemy" : L"Object",
+				22
+				//폰트 아직 모르겟숴..
+			);
+
 			IMAGEMANAGER->FindImage("화살표")->SetScale(0.65f);
 			IMAGEMANAGER->FindImage("화살표")->Render(Vector2(950, 260));
 		}
