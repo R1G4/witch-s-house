@@ -2,7 +2,7 @@
 /****************************************************************************
 ## D2DRenderer ##
 *****************************************************************************/
-class D2DRenderer final 
+class D2DRenderer final
 {
 public:
 	static D2DRenderer* GetInstance()
@@ -44,16 +44,16 @@ public:
 	//텍스트 출력(기본 브러쉬 사용) 
 	void RenderText(const int x, const int y, const wstring& text, const int size,
 		const DefaultBrush& defaultBrush = DefaultBrush::Black,
-		const DWRITE_TEXT_ALIGNMENT& align = DWRITE_TEXT_ALIGNMENT_LEADING, 
+		const DWRITE_TEXT_ALIGNMENT& align = DWRITE_TEXT_ALIGNMENT_LEADING,
 		const wstring& font = L"맑은고딕");
 	//텍스트 출력 (원하는 색상과 알파값으로 브러쉬 생성해서 출력)
 	void RenderText(const int x, const int y, const wstring& text, const COLORREF& color, const float alpha, const int size,
-		const DWRITE_TEXT_ALIGNMENT& align = DWRITE_TEXT_ALIGNMENT_LEADING, 
+		const DWRITE_TEXT_ALIGNMENT& align = DWRITE_TEXT_ALIGNMENT_LEADING,
 		const wstring& font = L"맑은고딕");
 	//텍스트 필드 출력 (기본 브러쉬 사용) 
 	void RenderTextField(const int x, const int y, const wstring& text, const int size, const int width, const int height,
 		const DefaultBrush& defaultBrush = DefaultBrush::Black,
-		const DWRITE_TEXT_ALIGNMENT& align = DWRITE_TEXT_ALIGNMENT_LEADING, 
+		const DWRITE_TEXT_ALIGNMENT& align = DWRITE_TEXT_ALIGNMENT_LEADING,
 		const wstring& font = L"맑은고딕");
 	//텍스트 필드 출려(원하는 색상과 알파값으로 브러쉬 생성해서 출력)
 	void RenderTextField(const int x, const int y, const wstring& text, const COLORREF& color,
@@ -63,23 +63,29 @@ public:
 		const wstring& font = L"맑은고딕");
 
 	void DrawLine(const Vector2& start, const Vector2& end, const D2D1::ColorF::Enum& color, const float alpha,
-	 const float strokeWidth = 1.f);
+		const float strokeWidth = 1.f);
 	void DrawLine(const Vector2& start, const Vector2& end, const DefaultBrush& defaultBrush = DefaultBrush::Black,
-	 const float strokeWidth = 1.f);
+		const float strokeWidth = 1.f);
 	void DrawRectangle(const FloatRect& rc, const D2D1::ColorF::Enum& color, const float alpha,
 		const float strokeWidth = 1.f);
 	void DrawRectangle(const FloatRect& rc, const DefaultBrush& defaultBrush = DefaultBrush::Black,
 		const float strokeWidth = 1.f);
+	void DrawRectangle(const Vector2 & pos, const Vector2 & size, const Pivot & pivot = Pivot::Center, const DefaultBrush & defaultBrush = DefaultBrush::Black, const float strokeWidth = 1.f);
+	void DrawRectangle(const Vector2 & pos, const Vector2 & size, const Pivot & pivot, const D2D1::ColorF::Enum & color, const float alpha = 1.f, const float strokeWidth = 1.f);
+	//void DrawMakeRectangle(const Vector2 & pos, const Vector2 & size, const Pivot & pivot, D2D1::ColorF::Enum& color, const float alpha, const float strokeWidth = 1.f);
+	//(const Vector2& pos, const Vector2& size, const Pivot& pivot, const D2D1::ColorF::Enum& color, const float alpha, const float strokeWidth)
 	void DrawEllipse(const Vector2& origin, const float radius, const DefaultBrush& defaultBrush = DefaultBrush::Black,
-		 const float strokeWidth = 1.f);
+		const float strokeWidth = 1.f);
 	void DrawEllipse(const Vector2& origin, const float radius, const D2D1::ColorF::Enum& color, const float alpha,
-		 const float strokeWidth = 1.f);
+		const float strokeWidth = 1.f);
 	void FillRectangle(const FloatRect& rc, const  D2D1::ColorF::Enum& color, const float alpha);
+	void FillRectangle(const Vector2 &pos, const Vector2 & size, const Pivot & pivot, const D2D1::ColorF::Enum & color, const float alpha);
 	void FillRectangle(const FloatRect& rc, const DefaultBrush& defaultBrush = DefaultBrush::Black);
+	void FillRectangle(const Vector2 & pos, const Vector2 & size, const Pivot & pivot, const DefaultBrush & defaultBrush);
 	void FiilEllipse(const Vector2& origin, const float radius, const D2D1::ColorF::Enum& color, const float alpha);
 	void FiilEllipse(const Vector2& origin, const float radius, const DefaultBrush& brush = DefaultBrush::Black);
 
-	void DrawRotationNullRectangle(const FloatRect& rc, const D2D1::ColorF::Enum& color, const float alpha, const float angle,const float strokeWidth = 1.f);
+	void DrawRotationNullRectangle(const FloatRect& rc, const D2D1::ColorF::Enum& color, const float alpha, const float angle, const float strokeWidth = 1.f);
 	void DrawRotationFillRectangle(const FloatRect& rc, const  D2D1::ColorF& color, const float angle);
 };
 

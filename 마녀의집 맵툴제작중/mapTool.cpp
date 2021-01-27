@@ -24,6 +24,7 @@ HRESULT mapTool::init()
 	IMAGEMANAGER->AddFrameImage("눈깔", L"Image/tempFrameImg/눈깔.png", 3, 4);
 	IMAGEMANAGER->AddFrameImage("해골", L"Image/tempFrameImg/해골.png", 3, 4);
 	IMAGEMANAGER->AddFrameImage("액자", L"Image/tempFrameImg/액자1.png", 1, 4);
+	IMAGEMANAGER->AddImage("화살표", L"Image/mapTool/화살표.png");
 #pragma endregion
 
 	setSampleFrame();	//샘플 프레임 이미지 정보 초기화
@@ -205,9 +206,50 @@ void mapTool::render()
 				}
 			}
 		}
+		//샘플 프레임 이미지 보여주기
+		//옛날 아이팟 플레이리스트 구현하고 싶었음
 		if (_crtSelect == CTRL_SETFRAMETILE)
 		{
+			int previous2 = _frameSelected + 2;
+			int	next2 = _frameSelected - 2;
+			int previous = _frameSelected + 1;
+			int	next = _frameSelected - 1;
+
+			if (next < 0)
+				next = _sampleFrameImg.size() - 1;
+			if (previous > _sampleFrameImg.size() - 1)
+				previous = 0;
+			if (next2 < 0)
+				next2 = _sampleFrameImg.size() - 2;
+			if (previous2 > _sampleFrameImg.size() - 2)
+				previous2 = 0;
+
+			_D2DRenderer->FillRectangle(Vector2(720, 150), Vector2(140, 140), Pivot::Center, D2D1::ColorF::Enum::White, 1.0f);
+			IMAGEMANAGER->FindImage(_sampleFrameImg[next2].keyName)->SetScale(0.61);
+			IMAGEMANAGER->FindImage(_sampleFrameImg[next2].keyName)->FrameRender(Vector2((720), 150), 0, 0);
+			_D2DRenderer->DrawRectangle(Vector2(720, 150), Vector2(140, 140), Pivot::Center, D2D1::ColorF::Enum::DarkGray, 1.0f, 5);
+
+			_D2DRenderer->FillRectangle(Vector2(820, 150), Vector2(180, 180), Pivot::Center, D2D1::ColorF::Enum::White, 1.0f);
+			IMAGEMANAGER->FindImage(_sampleFrameImg[next].keyName)->SetScale(0.82);
+			IMAGEMANAGER->FindImage(_sampleFrameImg[next].keyName)->FrameRender(Vector2((820), 150), 0, 0);
+			_D2DRenderer->DrawRectangle(Vector2(820, 150), Vector2(180, 180), Pivot::Center, D2D1::ColorF::Enum::DarkGray, 1.0f, 5);
+
+			_D2DRenderer->FillRectangle(Vector2(1180, 150), Vector2(140, 140), Pivot::Center, D2D1::ColorF::Enum::White, 1.0f);
+			IMAGEMANAGER->FindImage(_sampleFrameImg[previous2].keyName)->SetScale(0.61);
+			IMAGEMANAGER->FindImage(_sampleFrameImg[previous2].keyName)->FrameRender(Vector2((1180), 150), 0, 0);
+			_D2DRenderer->DrawRectangle(Vector2(1180, 150), Vector2(140, 140), Pivot::Center, D2D1::ColorF::Enum::DarkGray, 1.0f, 5);
+
+			_D2DRenderer->FillRectangle(Vector2(1100, 150), Vector2(180, 180), Pivot::Center, D2D1::ColorF::Enum::White, 1.0f);
+			IMAGEMANAGER->FindImage(_sampleFrameImg[previous].keyName)->SetScale(0.82);
+			IMAGEMANAGER->FindImage(_sampleFrameImg[previous].keyName)->FrameRender(Vector2((1100), 150), 0, 0);
+			_D2DRenderer->DrawRectangle(Vector2(1100, 150), Vector2(180, 180), Pivot::Center, D2D1::ColorF::Enum::DarkGray, 1.0f, 5);
+
+			_D2DRenderer->FillRectangle(Vector2(950, 150), Vector2(220, 220), Pivot::Center, D2D1::ColorF::Enum::White, 1.0f);
 			IMAGEMANAGER->FindImage(_sampleFrameImg[_frameSelected].keyName)->FrameRender(Vector2((950), 150), 0, 0);
+			_D2DRenderer->DrawRectangle(Vector2(950, 150), Vector2(220, 220), Pivot::Center, D2D1::ColorF::Enum::DarkGray, 1.0f, 5);
+
+			IMAGEMANAGER->FindImage("화살표")->SetScale(0.65f);
+			IMAGEMANAGER->FindImage("화살표")->Render(Vector2(950, 260));
 		}
 	}
 	//IMAGEMANAGER->FindImage("TerrainSample")->Render(Vector2(800, 100));

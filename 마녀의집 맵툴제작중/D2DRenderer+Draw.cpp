@@ -17,7 +17,7 @@
 기본 정의해둔 브러쉬로 텍스트 렌더링
 ************************************************************************************************/
 void D2DRenderer::RenderText(const int x, const int y, const wstring& text, const int size,
-	const DefaultBrush& defaultBrush, const DWRITE_TEXT_ALIGNMENT& align,const wstring& font)
+	const DefaultBrush& defaultBrush, const DWRITE_TEXT_ALIGNMENT& align, const wstring& font)
 {
 	Vector2 pos(x, y);
 	//텍스트 상자를만들었다
@@ -273,6 +273,47 @@ void D2DRenderer::DrawRectangle(const FloatRect& rc, const DefaultBrush& default
 
 }
 /**********************************************************************************************
+## DrawRectangle ##
+@@ FloatRect rc : 렉트 생성하고 그리기
+@@ DefaultBrush brush : 그릴 브러쉬
+@@ float stroke : 선 굵기
+@@ make: by PJU 바로 생성하고 랜더하기
+************************************************************************************************/
+void D2DRenderer::DrawRectangle(const Vector2& pos, const Vector2& size, const Pivot& pivot, const DefaultBrush& defaultBrush, const float strokeWidth)
+{
+	FloatRect rect = RectMakePivot(pos, size, pivot);
+
+	mD2DRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+
+	mD2DRenderTarget->DrawRectangle(D2D1::RectF((float)rect.left, (float)rect.top, (float)rect.right, (float)rect.bottom),
+		mDefaultBrushList[(UINT)defaultBrush], strokeWidth);
+
+}
+
+/**********************************************************************************************
+## DrawRectangle ##
+@@ FloatRect rc : 렉트 생성하고 그리기
+@@ DefaultBrush brush : 그릴 브러쉬
+@@ bool isRelative : 카메라 보정 여부
+@@ float stroke : 선 굵기
+@@ make: by PJU 바로 생성하고 랜더하기
+************************************************************************************************/
+void D2DRenderer::DrawRectangle(const Vector2& pos, const Vector2& size, const Pivot& pivot, const D2D1::ColorF::Enum& color, const float alpha, const float strokeWidth)
+{
+	FloatRect rect = RectMakePivot(pos, size, pivot);
+
+	ID2D1SolidColorBrush* brush;
+	mD2DRenderTarget->CreateSolidColorBrush(D2D1::ColorF(color, alpha), &brush);
+
+	mD2DRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+
+	mD2DRenderTarget->DrawRectangle(D2D1::RectF((float)rect.left, (float)rect.top, (float)rect.right, (float)rect.bottom),
+		brush, strokeWidth);
+
+	NEW_SAFE_RELEASE(brush);
+}
+
+/**********************************************************************************************
 ## DrawEllipse ##
 @@ Vector2 origin : 중점
 @@ flaot radius : 반지름
@@ -344,6 +385,25 @@ void D2DRenderer::FillRectangle(const FloatRect& rc, const D2D1::ColorF::Enum& c
 	NEW_SAFE_RELEASE(brush);
 }
 /**********************************************************************************************
+## FillRectagle ##
+@@ FloatRect rc : 그릴 렉트
+@@ D2D1::ColorF::Enum color : D2D컬러
+@@ float alpha  : 알파 값
+@@ bool isRelative : 카메라 보정 여부
+@@ make: by PJU 바로 생성하고 랜더하기
+************************************************************************************************/
+void D2DRenderer::FillRectangle(const Vector2& pos, const Vector2& size, const Pivot& pivot, const D2D1::ColorF::Enum& color, const float alpha)
+{
+	FloatRect rect = RectMakePivot(pos, size, pivot);
+
+	ID2D1SolidColorBrush* brush;
+	mD2DRenderTarget->CreateSolidColorBrush(D2D1::ColorF(color, alpha), &brush);
+	mD2DRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+	mD2DRenderTarget->FillRectangle(D2D1::RectF((float)rect.left, (float)rect.top, (float)rect.right, (float)rect.bottom), brush);
+
+	NEW_SAFE_RELEASE(brush);
+}
+/**********************************************************************************************
 ## FillRectangle  ##
 @@ FloatRec rc : 크릴 렉트
 @@ DefaultBrush brush : 브러쉬
@@ -359,6 +419,22 @@ void D2DRenderer::FillRectangle(const FloatRect& rc, const DefaultBrush& default
 		mDefaultBrushList[(UINT)defaultBrush]);
 }
 /**********************************************************************************************
+## FillRectangle  ##
+@@ FloatRec rc : 크릴 렉트
+@@ DefaultBrush brush : 브러쉬
+@@ bool isRelative : 카메라 보정여부
+@@ make: by PJU 바로 생성하고 랜더하기
+************************************************************************************************/
+void D2DRenderer::FillRectangle(const Vector2& pos, const Vector2& size, const Pivot& pivot, const DefaultBrush& defaultBrush)
+{
+	FloatRect rect = RectMakePivot(pos, size, pivot);
+
+	mD2DRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+
+	mD2DRenderTarget->FillRectangle(D2D1::RectF((float)rect.left, (float)rect.top, (float)rect.right, (float)rect.bottom),
+		mDefaultBrushList[(UINT)defaultBrush]);
+}
+/**********************************************************************************************
 ## FillEllipse ##
 @@ Vector2 origin : 중점 좌표
 @@ flaot radius : 반지름
@@ -366,7 +442,7 @@ void D2DRenderer::FillRectangle(const FloatRect& rc, const DefaultBrush& default
 @@ float alpha : 알파 값
 @@ bool isRelative : 카메라 보정 여부
 ************************************************************************************************/
-void D2DRenderer::FiilEllipse(const Vector2& origin, const float radius, const D2D1::ColorF::Enum& color,const float alpha)
+void D2DRenderer::FiilEllipse(const Vector2& origin, const float radius, const D2D1::ColorF::Enum& color, const float alpha)
 {
 	FloatRect rc = RectMakePivot(origin, Vector2(radius, radius), Pivot::Center);
 	Vector2 pos = origin;
@@ -409,7 +485,7 @@ void D2DRenderer::FiilEllipse(const Vector2& origin, const float radius, const D
 }
 
 void D2DRenderer::DrawRotationNullRectangle(const FloatRect& rc, const D2D1::ColorF::Enum& color,
-	const float alpha, const float angle,  const float strokeWidth)
+	const float alpha, const float angle, const float strokeWidth)
 {
 	FloatRect rect = rc;
 
