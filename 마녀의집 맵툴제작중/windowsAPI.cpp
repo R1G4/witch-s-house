@@ -7,7 +7,7 @@ HINSTANCE _hInstance;
 HWND	  _hWnd;
 HDC		  _hdc;
 
-LPCTSTR _lpszClass = TEXT("뜨웨니~원");
+LPCTSTR _lpszClass = TEXT("R1G4 마녀의집");
 
 POINT _ptMouse;
 

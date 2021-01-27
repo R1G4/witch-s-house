@@ -25,6 +25,7 @@ HRESULT mapTool::init()
 	IMAGEMANAGER->AddFrameImage("해골", L"Image/tempFrameImg/해골.png", 3, 4);
 	IMAGEMANAGER->AddFrameImage("액자", L"Image/tempFrameImg/액자1.png", 1, 4);
 	IMAGEMANAGER->AddImage("화살표", L"Image/mapTool/화살표.png");
+
 #pragma endregion
 
 	setSampleFrame();	//샘플 프레임 이미지 정보 초기화
@@ -117,6 +118,12 @@ void mapTool::update()
 		if (KEYMANAGER->isOnceKeyDown('N'))
 			_frameSelected = _frameSelected >= _sampleFrameImg.size() - 1 ? 0 : _frameSelected += 1;
 		break;
+	case CTRL_SETCORRELATION:
+		setMap();
+		break;
+	case CTRL_SETTRIGGER:
+		setMap();
+		break;
 	}
 
 
@@ -146,6 +153,7 @@ void mapTool::render()
 				//_D2DRenderer->DrawRectangle(_tiles[i*TILEX + j].rc, D2DRenderer::DefaultBrush::White);
 			}
 			if (_tiles[i*TILEX + j].isCollider)_D2DRenderer->FillRectangle(_tiles[i*TILEX + j].rc, D2D1::ColorF::Red, 0.4);
+			if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)_D2DRenderer->FillRectangle(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
 		}
 	}
 	for (int i = 0; i < TILEY; i++)
@@ -156,6 +164,7 @@ void mapTool::render()
 			IMAGEMANAGER->FindImage("ObjectSample")->FrameRender(
 				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE, _tiles[i*TILEX + j].rc.top ),	// 보정값 바꿈
 				_tiles[i*TILEX + j].objFrameX, _tiles[i*TILEX + j].objFrameY);
+			if (_tiles[i*TILEX + j].obj == OBJ_CORELATION)_D2DRenderer->FillRectangle(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aquamarine, 0.5);
 		}//보정값 필요할지도 모름
 	}
 	if(tabOpen)_D2DRenderer->FillRectangle(sampleBack, D2D1::ColorF::Aquamarine, 0.7);
@@ -272,6 +281,13 @@ void mapTool::render()
 		FrameObj.img->SetSize(Vector2(144, 48));
 		FrameObj.img->Render(Vector2(FrameObj.frc.left + 72, FrameObj.frc.top + 24));
 		_D2DRenderer->RenderTextField(FrameObj.frc.left, FrameObj.frc.top - 5, L"FrameObj", 30, 144, 48, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_CENTER);
+		setCor.img->SetSize(Vector2(144, 48));
+		setCor.img->Render(Vector2(setCor.frc.left + 72, setCor.frc.top + 24));
+		_D2DRenderer->RenderTextField(setCor.frc.left, setCor.frc.top - 5, L"SetCorrelation", 20, 144, 48, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_CENTER);
+		setTri.img->SetSize(Vector2(144, 48));
+		setTri.img->Render(Vector2(setTri.frc.left + 72, setTri.frc.top + 24));
+		_D2DRenderer->RenderTextField(setTri.frc.left, setTri.frc.top - 5, L"SetTrigger", 30, 144, 48, D2DRenderer::DefaultBrush::White, DWRITE_TEXT_ALIGNMENT_CENTER);
+
 	}
 	if (tabOpen == true)
 		Close.img->Render(Vector2(Close.frc.left + 72, Close.frc.top + 24));
@@ -325,6 +341,12 @@ void mapTool::setFrameIndex()
 		}
 	}
 }
+void mapTool::setCorrelation()
+{
+}
+void mapTool::setTrigger()
+{
+}
 void mapTool::setButton()
 {
 	IMAGEMANAGER->AddImage("Save", L"Image/mapTool/Save.png");
@@ -351,6 +373,8 @@ void mapTool::setButton()
 	Player.img = IMAGEMANAGER->FindImage("Bar");
 	Enemy.img = IMAGEMANAGER->FindImage("Bar");
 	FrameObj.img = IMAGEMANAGER->FindImage("Bar");
+	setCor.img = IMAGEMANAGER->FindImage("Bar");
+	setTri.img = IMAGEMANAGER->FindImage("Bar");
 
 	Save.frc = RectMakePivot(Vector2(0+72+48, 660), Vector2(144, 48), Pivot::Center);
 	Load.frc = RectMakePivot(Vector2(144 + 10+72+48, 660), Vector2(144, 48), Pivot::Center);
@@ -365,6 +389,9 @@ void mapTool::setButton()
 	Player.frc = RectMakePivot(Vector2(144 + 10 + 72 + 48, 600), Vector2(144, 48), Pivot::Center);
 	Enemy.frc = RectMakePivot(Vector2(288 + 10 + 72 + 48, 600), Vector2(144, 48), Pivot::Center);
 	FrameObj.frc = RectMakePivot(Vector2(432 + 10 + 72 + 48, 600), Vector2(144, 48), Pivot::Center);
+	setCor.frc = RectMakePivot(Vector2(576 + 10 + 72 + 48, 600), Vector2(144, 48), Pivot::Center);
+	setTri.frc = RectMakePivot(Vector2(720 + 10 + 72 + 48, 600), Vector2(144, 48), Pivot::Center);
+
 }
 
 void mapTool::setup()
@@ -532,6 +559,19 @@ void mapTool::setMap()
 								_leftButtonDown=false;
 							}
 						}
+						else if (_crtSelect == CTRL_SETCORRELATION)
+						{
+							if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
+							if(_tiles[i*TILEX+j].obj!=OBJ_CORELATION)_tiles[i*TILEX + j].obj = OBJ_CORELATION;
+							else if (_tiles[i*TILEX + j].obj == OBJ_CORELATION)_tiles[i*TILEX + j].obj = OBJ_LOOK;
+							
+							_leftButtonDown = false;
+						}
+						else if (_crtSelect == CTRL_SETTRIGGER)
+						{
+							_tiles[i*TILEX + j].terrain = TR_TRIGGER;
+							_leftButtonDown = false;
+						}
 						InvalidateRect(_hWnd, NULL, false);
 						break;
 					}
@@ -556,6 +596,12 @@ void mapTool::setCtrl()
 		if (KEYMANAGER->isOnceKeyDown('O'))_crtSelect = CTRL_OBJDRAW;
 		if (KEYMANAGER->isOnceKeyDown('C'))_crtSelect = CTRL_COLLIDER;
 		if (KEYMANAGER->isOnceKeyDown('F'))_crtSelect = CTRL_SETFRAMETILE;
+	}
+	if (KEYMANAGER->isStayKeyDown(VK_SHIFT))
+	{
+		if (KEYMANAGER->isOnceKeyDown('C'))_crtSelect = CTRL_SETCORRELATION;
+		if (KEYMANAGER->isOnceKeyDown('T'))_crtSelect = CTRL_SETTRIGGER;
+
 	}
 	//if (KEYMANAGER->isOnceKeyDown('P'))
 	//{

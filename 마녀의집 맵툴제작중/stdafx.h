@@ -69,7 +69,7 @@ using namespace Figure;
 
 
 // 여기서 프로그램에 필요한 추가 헤더를 참조합니다.
-#define WINNAME (LPCTSTR)(TEXT("뜨웨니 원~"))
+#define WINNAME (LPCTSTR)(TEXT("R1G4 마녀의집"))
 #define WINSTARTX	100
 #define WINSTARTY	100
 #define WINSIZEX	1280		

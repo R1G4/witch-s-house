@@ -29,7 +29,9 @@ enum CTRL
 	CTRL_OPEN,			//타일리스트 열기
 	CTRL_CLOSE,			//타일리스트 닫기
 	CTRL_COLLIDER, //충돌 타일 설정하기
-	CTRL_SETFRAMETILE
+	CTRL_SETFRAMETILE,
+	CTRL_SETTRIGGER,
+	CTRL_SETCORRELATION
 };
 enum FRAMEATTRIBUTE
 {
@@ -37,11 +39,11 @@ enum FRAMEATTRIBUTE
 };
 enum TERRAIN
 {
-	TR_GRASS, TR_FLOOR, TR_STONE, TR_WATER
+	TR_GRASS, TR_FLOOR, TR_STONE, TR_TRIGGER
 };
 enum OBJECT
 {
-	OBJ_UNMOVE, OBJ_PUSH, OBJ_LOOK, OBJ_CORELATION, OBJ_NONE
+	OBJ_PUSH, OBJ_LOOK, OBJ_CORELATION, OBJ_NONE
 };
 struct tagTile
 {
@@ -119,6 +121,8 @@ private:
 	tagButton Player;
 	tagButton Enemy;
 	tagButton FrameObj;
+	tagButton setTri;
+	tagButton setCor;
 	
 	//현재 타일
 	tagCurrentTile _currentTile;
@@ -175,6 +179,8 @@ public:
 	bool addFrameTile(tagFrameTile _frameTile);
 	void getFrameTile();			// Load후 실제 프레임 실제로 배치
 	void setFrameIndex();			// 배치된 프레임 이미지의 인덱스 설정 
+	void setCorrelation();
+	void setTrigger();
 	TERRAIN terrainSelect(int frameX, int frameY);
 	OBJECT objSelect(int frameX, int frameY);
 };
