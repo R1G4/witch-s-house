@@ -147,6 +147,9 @@
     <ClInclude Include="menu.h">
       <Filter>playGround\scense</Filter>
     </ClInclude>
+    <ClInclude Include="continueScene.h">
+      <Filter>playGround\scense</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -228,6 +231,9 @@
       <Filter>playGround\player</Filter>
     </ClCompile>
     <ClCompile Include="menu.cpp">
+      <Filter>playGround\scense</Filter>
+    </ClCompile>
+    <ClCompile Include="continueScene.cpp">
       <Filter>playGround\scense</Filter>
     </ClCompile>
   </ItemGroup>

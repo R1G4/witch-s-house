@@ -15,9 +15,6 @@ HRESULT menu::init()
 	_contents = NEW;
 	_isClick = false;
 
-	//백그라운드 초기화
-	ImageManager::GetInstance()->AddImage("menu", L"image/menu.png");
-
 	//선택 렉트 초기화
 	_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2 - 10, WINSIZEY / 2 + 65), Vector2(220, 60), Pivot::Center);
 
@@ -26,6 +23,14 @@ HRESULT menu::init()
 	_rcAlpha = 1.f;
 	_rcAlphaChange = 0.03f;
 
+	//각 메뉴의 컨텐츠 정보 초기화
+	setText();
+
+	return S_OK;
+}
+
+void menu::setText()
+{	
 	//메뉴 텍스트 정보 초기화
 	tagText textInfo;
 	textInfo.x = WINSIZEX / 2 - 10;
@@ -42,7 +47,6 @@ HRESULT menu::init()
 
 	textInfo.text = L"끝내기";
 	_mText.insert(pair<CONTENTS, tagText>(END, textInfo));
-	return S_OK;
 }
 
 void menu::release()
@@ -58,39 +62,46 @@ void menu::update()
 	if (!_isClick && KEYMANAGER->isOnceKeyDown(VK_UP))
 		_contents = (CONTENTS)(_contents == NEW ? 3 : (int)_contents - 1);
 
-
-	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-		_isClick = true;
+	//선택 키를 누르지 않았다면 렉트 반짝 효과
+	if (!_isClick)	rcAlphaChange();
 
 	//선택된 메뉴(항목)에 렉트 위치 변경
 	switch (_contents)
 	{
-	case menu::NEW:
-		_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2 - 10, WINSIZEY / 2 + 55), Vector2(220, 60), Pivot::Center);
-		break;
-	case menu::CONTINUE:
-		_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2 - 10, WINSIZEY / 2 + 125), Vector2(220, 60), Pivot::Center);
-		break;
-	case menu::OPTION:
-		_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2 - 10, WINSIZEY / 2 + 195), Vector2(220, 60), Pivot::Center);
-		break;
-	case menu::END:
-		_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2 - 10, WINSIZEY / 2 + 265), Vector2(220, 60), Pivot::Center);
-		break;
-	}
+		case menu::NEW:
+			_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2 - 10, WINSIZEY / 2 + 55), Vector2(220, 60), Pivot::Center);
+			if (_isClick)
+			{
+				if (sceneAlphaChange())
+					SCENEMANAGER->changeScene("레벨선택");
+			}
+			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+				_isClick = true;
+			break;
 
-	//선택 키를 누르지 않았다면 렉트 반짝 효과
-	if (!_isClick)
-	{
-		rcAlphaChange();
-	}
-	//선택 키를 눌렀다면 백그라운드 및 이미지 투명도 조절
-	else
-	{
+		case menu::CONTINUE:
+			_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2 - 10, WINSIZEY / 2 + 125), Vector2(220, 60), Pivot::Center);
+			if (_isClick)
+				SCENEMANAGER->changeScene("계속하기");
 
-		if (sceneAlphaChange())
-			SCENEMANAGER->changeScene("레벨선택");
-		//투명도 조절 후 다음씬으로 휙
+			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+				_isClick = true;
+			break;
+
+		case menu::OPTION:
+			_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2 - 10, WINSIZEY / 2 + 195), Vector2(220, 60), Pivot::Center);
+			break;
+
+		case menu::END:
+			_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2 - 10, WINSIZEY / 2 + 265), Vector2(220, 60), Pivot::Center);
+			if (_isClick)
+			{
+				if (sceneAlphaChange())
+					PostQuitMessage(0);
+			}
+			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+				_isClick = true;
+			break;
 	}
 }
 

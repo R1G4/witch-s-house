@@ -1,44 +1,41 @@
 #pragma once
 #include "gameNode.h"
 
-class menu : public gameNode
+class continueScene : public gameNode
 {
-	//콜백함수
-	typedef void(*CALLBACK_FUNCTION_)(void);
-
-	enum CONTENTS
+	enum SAVE
 	{
-		NEW = 0,
-		CONTINUE,
-		OPTION,
-		END
+		FIRST = 0,
+		SECOND,
+		THIRD,
+		FOURTH,
+		FIFTH
 	};
 
 	struct tagText
 	{
-		wstring text;
+		int count;
+		int level;
 		float x;
 		float y;
-		float size;
+		wstring location;
 	};
 
-	map<CONTENTS, tagText> _mText;	//컨텐츠 정보 맵에 담아둠
-	CONTENTS _contents;			//해당 컨텐츠
+	SAVE _selectedLoad;			//해당 컨텐츠
+	vector<tagText> _vText;
 	FloatRect _rcSelected;		//선택된 메뉴(컨텐츠)를 렉트로 보여줌
 	float _rcAlpha;				//렉트 투명도
 	float _rcAlphaChange;		//렉트 조절용
-	float _sceneAlpha;			//씬 투명도
 	bool _isClick;				//선택키(Z)를 눌렀는지?
 public:
-
-	menu();
-	~menu();
+	continueScene();
+	~continueScene();
 
 	virtual HRESULT init();
-	virtual void setText();
 	virtual void release();
+	void loadInfo();
 	virtual void update();
 	virtual void rcAlphaChange();
-	bool sceneAlphaChange();
 	virtual void render();
 };
+
