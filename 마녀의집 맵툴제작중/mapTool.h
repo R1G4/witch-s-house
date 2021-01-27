@@ -47,7 +47,8 @@ struct tagTile
 {
 	TERRAIN terrain;		//지형
 	OBJECT obj;				//오브젝트
-	FloatRect rc;				//렉트
+	FloatRect rc;			//렉트
+	string frameKeyName;	//타일에 배치된 이미지가 프레임 이미지일 경우 키값을 저장한다.
 	int terrainFrameX;		//타일 번호(애니메이션 프레임 번호 생각하면됨)
 	int terrainFrameY;
 	int objFrameX;			//오브젝트 번호 (위와 같다)
@@ -68,12 +69,21 @@ struct tagSampleObj
 	int objFrameY;
 	int realNum;	// 각 타일의 실제 부여번호
 };
-struct FrameTile
+struct tagSampleFrameInfo
 {
-	Image* img;
-	FloatRect rc;
-	int indexX;
-	int indexY;
+	string keyName;			//키값(이미지)
+	FloatRect rc;			//렉트
+	FRAMEATTRIBUTE kinds;	//프레임 이미지 종류
+};
+struct tagFrameTile
+{
+	Image* img;				//키값에서 받은 이미지
+	FloatRect rc;			//렉트
+	FRAMEATTRIBUTE kinds;	//프레임 이미지 종류
+	int frameX;				//프레임 x축 인덱스
+	int frameY;				//프레임 y축 인덱스
+	int indexX;				//배치된 타일의 x축 인덱스
+	int indexY;				//배치된 타일의 y축 인덱스
 };
 struct tagCurrentTile
 {
@@ -116,17 +126,17 @@ private:
 	tagSampleTile _sampleTile[SAMPLETILEX*SAMPLETILEY];
 	//샘플 오브젝트
 	tagSampleObj _sampleObj[SAMPLEOBJECTX*SAMPLEOBJECTY];
-	//플레이어 타일
-	FrameTile _player;
-	//에너미 타일
-	FrameTile _enemy;
-	//오브젝트 타일
-	vector<FrameTile> _vFrameObj;
+	//샘플 프레임 이미지 정보
+	vector<tagSampleFrameInfo> _sampleFrameImg;
+	//프레임 이미지(플레이어, 에너미, 오브젝트) 타일
+	vector<tagFrameTile> _vFrameTile;
 
 	FRAMEATTRIBUTE FrAtt;
 	int _change_num;		// 큰틀을 넘기기 위한 변수
 	int _realNum;			// 각 오브젝트의 실제번호 부여를 위한 변수
 	int _y_rect_num;		// y축 렉트갯수를 변환시키기 위한 변수?		
+	int _frameSelected;		// 샘플 프레임 백터의 인덱스며 이전과 다음 기능에서 사용된다.
+	int _frameInterval;		// 프레임의 인덱스 설정의 간격
 	bool _change_number;	// 클릭시 틀을 한번 씩만 넘기기위한 불값
 
 	//맵타일
@@ -139,7 +149,7 @@ private:
 	//맵 툴의 일정 부분만 출력시키기 위한 렉트
 	FloatRect MapRC;
 	POINT camera;//만들었지만 필요없음
-	bool isterrain;
+	//bool isterrain;	by pju 이넘으로 대체해야 할듯...
 public:
 	mapTool();
 	~mapTool();
@@ -160,7 +170,11 @@ public:
 	void erase();
 	void previous();
 	void next();
-	void setFrameTile();
+	void setSampleFrame();			//샘플 프레임 이미지 정보 초기화
+	void setFrameTile();		
+	bool addFrameTile(tagFrameTile _frameTile);
+	void getFrameTile();			// Load후 실제 프레임 실제로 배치
+	void setFrameIndex();			// 배치된 프레임 이미지의 인덱스 설정 
 	TERRAIN terrainSelect(int frameX, int frameY);
 	OBJECT objSelect(int frameX, int frameY);
 };

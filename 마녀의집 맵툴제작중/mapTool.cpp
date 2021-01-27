@@ -16,9 +16,19 @@ HRESULT mapTool::init()
 {
 	IMAGEMANAGER->AddFrameImage("TerrainSample", L"Image/mapTool/타일.png", 7, 2);
 	IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/objSample.png", 2, 3);	// 그림 변환시 변환 필요
-	//IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/오브젝트타일.png", 8, 3);
-	//IMAGEMANAGER->AddImage("temp", L"Image/mapTool/타일.png");
+
+#pragma region 이미지 추가(수정예정)
+	//추후 로딩씬 혹은 플레이어 그라운드에서 넣을것
+	IMAGEMANAGER->AddFrameImage("플레이어", L"Image/tempFrameImg/player.png", 16, 4);
+	IMAGEMANAGER->AddFrameImage("곰", L"Image/tempFrameImg/곰.png", 1, 4);
+	IMAGEMANAGER->AddFrameImage("눈깔", L"Image/tempFrameImg/눈깔.png", 3, 4);
+	IMAGEMANAGER->AddFrameImage("해골", L"Image/tempFrameImg/해골.png", 3, 4);
+	IMAGEMANAGER->AddFrameImage("액자", L"Image/tempFrameImg/액자1.png", 1, 4);
+#pragma endregion
+
+	setSampleFrame();	//샘플 프레임 이미지 정보 초기화
 	setButton();
+	_frameInterval = 0;	//프레임 인덱스 간격 초기화
 	_realNum = _change_num = 0;
 	_y_rect_num = 1;	// png파일 변환시 y축의 약수여야함
 
@@ -36,6 +46,27 @@ void mapTool::release()
 {
 }
 
+void mapTool::setSampleFrame()
+{
+	//keyName이 존재하지 않으면 분명 터질것
+	tagSampleFrameInfo temp;
+	temp.kinds = PLAYER;		//해당 샘플 종류
+	temp.keyName = "플레이어";	//키값(이미지 키값)
+	_sampleFrameImg.push_back(temp);
+
+	temp.kinds = ENEMY;
+	temp.keyName = "곰";
+	_sampleFrameImg.push_back(temp);
+	temp.keyName = "눈깔";
+	_sampleFrameImg.push_back(temp);
+	temp.keyName = "해골";
+	_sampleFrameImg.push_back(temp);
+
+	temp.kinds = OBJ;
+	temp.keyName = "액자";
+	_sampleFrameImg.push_back(temp);
+}
+
 void mapTool::update()
 {
 	setCtrl();
@@ -50,14 +81,16 @@ void mapTool::update()
 		save();
 		break;
 	case CTRL_LOAD:
-		load();
+		load(); //불러오기
+		getFrameTile();	//불러온 데이터의 토대로 프레임 타일 배치
+		_crtSelect = CTRL_TERRAINDRAW;	//키를 입력 받지 않는 이상 계속 로드하기에 강제로 상태 초기화
 		break;
 	case CTRL_TERRAINDRAW:
-		isterrain = true;
+		//isterrain = true; by pju 이넘으로 대체하기 위해
 		setMap();
 		break;
 	case CTRL_OBJDRAW:
-		isterrain = false;
+		//isterrain = false; by pju 이넘으로 대체하기 위해
 		setMap();
 		break;
 	case CTRL_ERASER:
@@ -78,6 +111,10 @@ void mapTool::update()
 		break;
 	case CTRL_SETFRAMETILE:
 		setFrameTile();
+		if (KEYMANAGER->isOnceKeyDown('P'))
+			_frameSelected = _frameSelected <= 0 ? _sampleFrameImg.size() - 1 : _frameSelected -= 1;
+		if (KEYMANAGER->isOnceKeyDown('N'))
+			_frameSelected = _frameSelected >= _sampleFrameImg.size() - 1 ? 0 : _frameSelected += 1;
 		break;
 	}
 
@@ -88,6 +125,9 @@ void mapTool::update()
 
 		else tabOpen = false;
 	}
+
+	// 배치된 프레임 이미지의 인덱스 설정 
+	setFrameIndex();
 }
 
 void mapTool::render()
@@ -120,7 +160,8 @@ void mapTool::render()
 	if(tabOpen)_D2DRenderer->FillRectangle(sampleBack, D2D1::ColorF::Aquamarine, 0.7);
 	if (tabOpen)
 	{
-		if (isterrain)
+		if (_crtSelect == CTRL_TERRAINDRAW) 
+		//if (isterrain)by pju 일단 isterrain제거를 위해 주석
 		{
 			for (int i = 0; i < SAMPLETILEY; i++)
 			{
@@ -134,7 +175,9 @@ void mapTool::render()
 				}
 			}
 		}
-		if (!isterrain) {
+		if(_crtSelect == CTRL_OBJDRAW)
+		{
+		//if (!isterrain) { by pju 일단 이넘으로 대체하기 위해
 			/*for (int i = 0; i < SAMPLEOBJECTY; i++)
 			{
 				for (int j = 0; j < SAMPLEOBJECTX; j++)
@@ -162,6 +205,10 @@ void mapTool::render()
 				}
 			}
 		}
+		if (_crtSelect == CTRL_SETFRAMETILE)
+		{
+			IMAGEMANAGER->FindImage(_sampleFrameImg[_frameSelected].keyName)->FrameRender(Vector2((950), 150), 0, 0);
+		}
 	}
 	//IMAGEMANAGER->FindImage("TerrainSample")->Render(Vector2(800, 100));
 	if (tabOpen)
@@ -188,15 +235,54 @@ void mapTool::render()
 		Close.img->Render(Vector2(Close.frc.left + 72, Close.frc.top + 24));
 	else
 		Open.img->Render(Vector2(Open.frc.left + 72, Open.frc.top + 24));
-	_D2DRenderer->FillRectangle(_player.rc, D2D1::ColorF::Blue, 0.7);
-	_D2DRenderer->FillRectangle(_enemy.rc, D2D1::ColorF::Black, 0.7);
 
+	//타일에 프레임 이미지 배치 랜더
+	for (int i = 0; i < _vFrameTile.size(); i++)
+	{
+		if (_vFrameTile[i].kinds == PLAYER)  _D2DRenderer->FillRectangle(_vFrameTile[i].rc, D2D1::ColorF::Blue, 0.7);
+		if (_vFrameTile[i].kinds == ENEMY)  _D2DRenderer->FillRectangle(_vFrameTile[i].rc, D2D1::ColorF::Black, 0.7);
+		_vFrameTile[i].img->FrameRender(Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2,  _vFrameTile[i].rc.bottom  - _vFrameTile[i].img->GetSize().y / 2),
+			_vFrameTile[i].frameX, _vFrameTile[i].frameY);
+	}
 	if(tabOpen)_D2DRenderer->DrawRectangle(sampleSelec, D2DRenderer::DefaultBrush::White);
 	//_D2DRenderer->DrawRectangle(MapRC, D2DRenderer::DefaultBrush::White);
 	if(!tabOpen)_D2DRenderer->FillRectangle(tileSelec, D2D1::ColorF::Enum::LightYellow, 0.5);
 	
 }
 
+void mapTool::setFrameIndex()
+{
+	//예외) 타일에 배치된 프레임이 없을 경우
+	if (_vFrameTile.size() <= 0)
+		return;
+
+	//예외) 프레임 수정 간격 만족 못할 시
+	_frameInterval++;
+	if (_frameInterval % 9)
+		return;
+
+	_frameInterval = 0;
+	for (int i = 0; i < _vFrameTile.size(); i++)
+	{
+		//아래 프레임 변화는 나중에 수정 될 수 있음
+		switch (_vFrameTile[i].kinds)
+		{
+			case PLAYER:
+				//대부분 가로 기준이므로 프레임 X설정
+				_vFrameTile[i].frameX = _vFrameTile[i].frameX + 1;
+				if (_vFrameTile[i].frameX > _vFrameTile[i].img->GetMaxFrameX() - 1)
+					_vFrameTile[i].frameX = 0;
+				break;
+			case ENEMY:
+			case OBJ:
+				//대부분 가로 기준이므로 프레임 Y설정
+				_vFrameTile[i].frameY++;
+				if (_vFrameTile[i].frameY > _vFrameTile[i].img->GetMaxFrameY() - 1)
+					_vFrameTile[i].frameY = 0;
+				break;
+		}
+	}
+}
 void mapTool::setButton()
 {
 	IMAGEMANAGER->AddImage("Save", L"Image/mapTool/Save.png");
@@ -317,7 +403,7 @@ void mapTool::setMap()
 				{
 					_tiles[i*TILEX+j].isMapOn = true;
 				}*/
-				if (Vector2InRect(&_sampleTile[i*SAMPLETILEX + j].rcTile, &Vector2(_ptMouse.x, _ptMouse.y)) && isterrain)
+				if (Vector2InRect(&_sampleTile[i*SAMPLETILEX + j].rcTile, &Vector2(_ptMouse.x, _ptMouse.y)) && _crtSelect == CTRL_TERRAINDRAW) //&& isterrain) by pju 이넘으로 대체하기 위해
 				{
 					_currentTile.x = _sampleTile[i*SAMPLETILEX + j].terrainFrameX;
 					_currentTile.y = _sampleTile[i*SAMPLETILEX + j].terrainFrameY;
@@ -345,7 +431,7 @@ void mapTool::setMap()
 		{
 			for (int j = 0; j < SAMPLEOBJECTX; j++)	// 가로줄이니 안바꿔도됨
 			{
-				if (Vector2InRect(&_sampleObj[(i - resetNum) * SAMPLEOBJECTX + j].rc, &Vector2(_ptMouse.x, _ptMouse.y)) && !isterrain)
+				if (Vector2InRect(&_sampleObj[(i - resetNum) * SAMPLEOBJECTX + j].rc, &Vector2(_ptMouse.x, _ptMouse.y)) && _crtSelect == CTRL_OBJDRAW)// !isterrain) by pju 이넘으로 대체하기 위해
 				{
 					_currentTile.x = _sampleObj[i * SAMPLEOBJECTX + j].objFrameX;
 					_currentTile.y = _sampleObj[i * SAMPLEOBJECTX + j].objFrameY;
@@ -427,6 +513,7 @@ void mapTool::setCtrl()
 		if (KEYMANAGER->isOnceKeyDown('T'))_crtSelect = CTRL_TERRAINDRAW;
 		if (KEYMANAGER->isOnceKeyDown('O'))_crtSelect = CTRL_OBJDRAW;
 		if (KEYMANAGER->isOnceKeyDown('C'))_crtSelect = CTRL_COLLIDER;
+		if (KEYMANAGER->isOnceKeyDown('F'))_crtSelect = CTRL_SETFRAMETILE;
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_F1))
 	{
@@ -553,6 +640,36 @@ void mapTool::load()
 	CloseHandle(file);
 }
 
+void mapTool::getFrameTile()
+{
+	for (int i = 0; i < TILEY; i++)
+	{
+		for (int j = 0; j < TILEX; j++)
+		{
+			for (int k = 0; k < _sampleFrameImg.size(); k++)
+			{
+				//불러온 타일의 키값이 샘플프레임이미지 백터에 존재하는 이미지일 경우
+				if (_sampleFrameImg[k].keyName == _tiles[i*TILEX + j].frameKeyName)
+				{
+					//렉트 생성
+					FloatRect rc;
+					rc = RectMakePivot(Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top + TILESIZE / 2), Vector2(TILESIZE, TILESIZE), Pivot::Center);
+
+					tagFrameTile temp;
+					temp.rc = rc;
+					temp.kinds = _sampleFrameImg[k].kinds;
+					temp.indexX = i;
+					temp.indexY = j;
+					temp.frameX = 0;
+					temp.frameY = 0;
+					temp.img = IMAGEMANAGER->FindImage(_sampleFrameImg[k].keyName);	//이미지를 찾아서 넣는당
+					addFrameTile(temp);	//타일에 프레임 이미지 배치
+				}
+			}
+		}
+	}
+}
+
 void mapTool::erase()
 {
 }
@@ -585,31 +702,121 @@ void mapTool::next()
 
 void mapTool::setFrameTile()
 {
-	
+	//예외 탭이 켜져있거나 혹은 마우스 왼쪽버튼 클릭 상태가 아닐 시
+	if (tabOpen || !_leftButtonDown)
+		return;
+
+	//왼쪽버튼 한번 눌렀을대 설정이 되어야 하기에 초기화 해준다.
+	_leftButtonDown = false;
+
+	//삭제 여부
+	bool isDel = false;		
+	FloatRect rc;
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			switch (FrAtt)
+			//해당 타일의 인덱스가 마우스와 충돌한 경우(타일에 배치 시도한 경우)
+			if (Vector2InRect(&_tiles[i*TILEX + j].rc, &Vector2(_ptMouse)))
 			{
-			case PLAYER:
-				if (Vector2InRect(&_tiles[i*TILEX + j].rc, &Vector2(_ptMouse)) && !tabOpen&&_leftButtonDown)
-				{
-					_player.rc = RectMakePivot(Vector2(_tiles[i*TILEX + j].rc.left+TILESIZE/2, _tiles[i*TILEX + j].rc.top+TILESIZE/2), Vector2(TILESIZE, TILESIZE), Pivot::Center);
-				}
-				break;
-			case ENEMY:
-				if (Vector2InRect(&_tiles[i*TILEX + j].rc, &Vector2(_ptMouse)) && !tabOpen&&_leftButtonDown)
-				{
-					_enemy.rc = RectMakePivot(Vector2(_tiles[i*TILEX + j].rc.left+TILESIZE/2, _tiles[i*TILEX + j].rc.top+TILESIZE/2), Vector2(TILESIZE, TILESIZE), Pivot::Center);
-				}
-				break;
-			case OBJ:
+				//렉트 생성
+				rc = RectMakePivot(Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top + TILESIZE / 2), Vector2(TILESIZE, TILESIZE), Pivot::Center);
 
-				break;
+				tagFrameTile temp;
+				temp.rc = rc;
+				temp.kinds = _sampleFrameImg[_frameSelected].kinds;
+				temp.indexX = i;
+				temp.indexY = j;
+				temp.frameX = 0;
+				temp.frameY = 0;
+				temp.img = IMAGEMANAGER->FindImage(_sampleFrameImg[_frameSelected].keyName);	//프레임 이미지 백터에서 키값을 넣어서 이미지를 넣는당
+
+				//이미 존재하는 타입의 프레임 이미지를 배치 시도한 경우 addFrameTile함수에서 true를 반환
+				isDel = addFrameTile(temp);
+
+				//제거되어야 하는 상태
+				if (isDel)	//해당 타일의 프레임 키값을 초기화 해준다.
+					_tiles[i*TILEX + j].frameKeyName = "";
+				else	   //해당 타일의 프레임 키값을 넣어준다.
+					_tiles[i*TILEX + j].frameKeyName = _sampleFrameImg[_frameSelected].keyName;
+			}
+			//충돌하지 않은 경우
+			else
+			{
+				//플레이어는 중복 배치가 불가능
+				if (_sampleFrameImg[_frameSelected].kinds == PLAYER)
+				{
+					for (int k = 0; k < _sampleFrameImg.size(); k++)
+					{
+						//이미 타일에는 플레이어 타입이 존재하는 경우 기존 타일에 프레임 이미지 키값을 제거한다.
+						if (_sampleFrameImg[k].kinds == PLAYER && _sampleFrameImg[k].keyName == _tiles[i*TILEX + j].frameKeyName)
+							_tiles[i*TILEX + j].frameKeyName = "";
+					}
+				}
 			}
 		}
 	}
+}
+
+bool mapTool::addFrameTile(tagFrameTile _frameTile)
+{
+	switch (_frameTile.kinds)
+	{
+		case PLAYER:
+			for (int i = 0; i < _vFrameTile.size(); i++)
+			{
+				//이미 존재하는 타일이 존재하는 경우
+				if (_vFrameTile[i].kinds == _frameTile.kinds &&
+					_vFrameTile[i].indexX == _frameTile.indexX &&
+					_vFrameTile[i].indexY == _frameTile.indexY)
+				{
+					//배치된 타일의 프레임 이미지를 제거한다.
+					_vFrameTile.erase(_vFrameTile.begin() + i);
+					//true를 반환하면 그 후 저장 및 로드용 타일에서도 제거한다.
+					return true;
+				}
+				//그렇지 않을 경우 2개 이상의 플레이어는 존재하지 못하므로
+				//기존의 배치된 타일의 프레임 이미지를 제거한다.
+				else if (_vFrameTile[i].kinds == _frameTile.kinds)
+					_vFrameTile.erase(_vFrameTile.begin() + i);
+			}
+			break;
+		case ENEMY:
+			for (int i = 0; i < _vFrameTile.size(); i++)
+			{
+				if (_vFrameTile[i].kinds == _frameTile.kinds &&
+					_vFrameTile[i].indexX == _frameTile.indexX &&
+					_vFrameTile[i].indexY == _frameTile.indexY)
+				{
+					//배치된 타일의 프레임 이미지를 제거한다.
+					_vFrameTile.erase(_vFrameTile.begin() + i);
+					//true를 반환하면 그 후 저장 및 로드용 타일에서도 제거한다.
+					return true;
+				}
+			}
+			break;
+		case OBJ:
+			for (int i = 0; i < _vFrameTile.size(); i++)
+			{
+				if (_vFrameTile[i].kinds == _frameTile.kinds &&
+					_vFrameTile[i].indexX == _frameTile.indexX &&
+					_vFrameTile[i].indexY == _frameTile.indexY)
+				{
+					//배치된 타일의 프레임 이미지를 제거한다.
+					_vFrameTile.erase(_vFrameTile.begin() + i);
+					//true를 반환하면 그 후 저장 및 로드용 타일에서도 제거한다.
+					return true;
+				}
+			}
+			break;
+	}
+
+	//프레임 이미지를 추가한다.
+	//이미지를 배치 및 랜더하는 백터
+	_vFrameTile.push_back(_frameTile);
+
+	//false를 반환 할 경우 저장 및 로드용 타일에서는 제거되지 않는다.
+	return false;
 }
 
 TERRAIN mapTool::terrainSelect(int frameX, int frameY)
