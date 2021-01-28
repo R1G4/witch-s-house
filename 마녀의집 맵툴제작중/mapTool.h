@@ -6,8 +6,8 @@
 #define SAMPLEOBJTILESIZEY 200
 
 #define TILESIZE 48
-#define TILEX 30
-#define TILEY 30
+#define TILEX 40
+#define TILEY 40
 #define TILESIZEX TILEX*TILESIZE
 #define TILESIZEY TILEY*TILESIZE
 #define SAMPLETILEX 7
@@ -107,7 +107,8 @@ private:
 	bool tabOpen;
 	D2DRenderer* d2d;
 	vector<Image*>_vSampleMap;
-
+//	int TILEX;
+//	int TILEY;
 	tagButton Save;
 	tagButton Load;
 	tagButton Prev;

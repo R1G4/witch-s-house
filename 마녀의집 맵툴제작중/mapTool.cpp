@@ -16,7 +16,7 @@ HRESULT mapTool::init()
 {
 	IMAGEMANAGER->AddFrameImage("TerrainSample", L"Image/mapTool/타일.png", 7, 2);
 	IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/objSample.png", 2, 3);	// 그림 변환시 변환 필요
-
+	IMAGEMANAGER->AddImage("배경", L"Image/mapTool/001.png");
 #pragma region 이미지 추가(수정예정)
 	//추후 로딩씬 혹은 플레이어 그라운드에서 넣을것
 	IMAGEMANAGER->AddFrameImage("플레이어", L"Image/tempFrameImg/player.png", 16, 4);
@@ -27,17 +27,18 @@ HRESULT mapTool::init()
 	IMAGEMANAGER->AddImage("화살표", L"Image/mapTool/화살표.png");
 
 #pragma endregion
-
+	//tilex = IMAGEMANAGER->FindImage("배경")->GetWidth() / 48;
 	setSampleFrame();	//샘플 프레임 이미지 정보 초기화
 	setButton();
 	_frameInterval = 0;	//프레임 인덱스 간격 초기화
 	_realNum = _change_num = 0;
 	_y_rect_num = 1;	// png파일 변환시 y축의 약수여야함
-
+//	TILEX = IMAGEMANAGER->FindImage("배경")->GetWidth() / TILESIZE;
+//	TILEY = IMAGEMANAGER->FindImage("배경")->GetHeight() / TILESIZE;
 	setup();
 	//load();
 	_crtSelect = CTRL_TERRAINDRAW;
-	MapRC = RectMakePivot(Vector2(0, 0), Vector2(1270, 710), Pivot::LeftTop);
+	//MapRC = RectMakePivot(Vector2(0, 0), Vector2(1270, 710), Pivot::LeftTop);
 	camera = PointMake(0, 0);
 	tabOpen = true;
 	sampleBack = RectMakePivot(Vector2(600, 0), Vector2(1280-600, 300), Pivot::LeftTop);
@@ -156,6 +157,21 @@ void mapTool::render()
 			if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)_D2DRenderer->FillRectangle(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
 		}
 	}
+
+	IMAGEMANAGER->FindImage("배경")->Render(Vector2(720-camera.x,648-camera.y));
+	for (int i = 0; i < TILEY; i++)
+	{
+		for (int j = 0; j < TILEX; j++)
+		{
+			//if (!_tiles[i*TILEX + j].isMapOn)continue;
+			if (KEYMANAGER->isToggleKey(VK_TAB))
+			{
+				_D2DRenderer->DrawRectangle(_tiles[i*TILEX + j].rc, D2DRenderer::DefaultBrush::White);
+			}
+			if (_tiles[i*TILEX + j].isCollider)_D2DRenderer->FillRectangle(_tiles[i*TILEX + j].rc, D2D1::ColorF::Red, 0.4);
+			if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)_D2DRenderer->FillRectangle(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
+		}
+	}
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
@@ -167,6 +183,7 @@ void mapTool::render()
 			if (_tiles[i*TILEX + j].obj == OBJ_CORELATION)_D2DRenderer->FillRectangle(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aquamarine, 0.5);
 		}//보정값 필요할지도 모름
 	}
+	
 	if(tabOpen)_D2DRenderer->FillRectangle(sampleBack, D2D1::ColorF::Aquamarine, 0.7);
 	if (tabOpen)
 	{
@@ -256,16 +273,6 @@ void mapTool::render()
 			_D2DRenderer->FillRectangle(Vector2(950, 150), Vector2(220, 220), Pivot::Center, D2D1::ColorF::Enum::White, 1.0f);
 			IMAGEMANAGER->FindImage(_sampleFrameImg[_frameSelected].keyName)->FrameRender(Vector2((950), 150), 0, 0);
 			_D2DRenderer->DrawRectangle(Vector2(950, 150), Vector2(220, 220), Pivot::Center, D2D1::ColorF::Enum::DarkGray, 1.0f, 5);
-
-			D2DINS->RenderText
-			(
-				950 - 30,
-				268,
-				_sampleFrameImg[_frameSelected].kinds == PLAYER ? L"Player" :
-				_sampleFrameImg[_frameSelected].kinds == ENEMY ? L"Enemy" : L"Object",
-				22
-				//폰트 아직 모르겟숴..
-			);
 
 			IMAGEMANAGER->FindImage("화살표")->SetScale(0.65f);
 			IMAGEMANAGER->FindImage("화살표")->Render(Vector2(950, 260));
@@ -629,7 +636,7 @@ void mapTool::mapMove()
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 	{
-		camera.x += 48;
+		camera.x-= 48;
 		for (int i = 0; i < TILEY; i++)
 		{
 			for (int j = 0; j < TILEY; j++)
@@ -645,7 +652,7 @@ void mapTool::mapMove()
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 	{
-		camera.x -= 48;
+		camera.x += 48;
 		for (int i = 0; i < TILEY; i++)
 		{
 			for (int j = 0; j < TILEY; j++)
@@ -658,7 +665,7 @@ void mapTool::mapMove()
 			_vFrameTile[i].rc.Move(Vector2(-48, 0));
 		}
 	}
-	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
+	if (KEYMANAGER->isOnceKeyDown(VK_UP))
 	{
 		camera.y -= 48;
 		for (int i = 0; i < TILEY; i++)
@@ -673,7 +680,7 @@ void mapTool::mapMove()
 			_vFrameTile[i].rc.Move(Vector2(0, 48));
 		}
 	}
-	if (KEYMANAGER->isOnceKeyDown(VK_UP))
+	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
 	{
 		camera.y += 48;
 		for (int i = 0; i < TILEY; i++)
@@ -688,7 +695,7 @@ void mapTool::mapMove()
 			_vFrameTile[i].rc.Move(Vector2(0, -48));
 		}
 	}
-	MapRC = RectMakePivot(Vector2(0, 0), Vector2(1270, 710), Pivot::LeftTop);
+	/*MapRC = RectMakePivot(Vector2(0, 0), Vector2(1270, 710), Pivot::LeftTop);
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
@@ -699,7 +706,7 @@ void mapTool::mapMove()
 			}
 			else _tiles[i*TILEX + j].isMapOn = false;
 		}
-	}
+	}*/
 }
 
 void mapTool::tileSelect()

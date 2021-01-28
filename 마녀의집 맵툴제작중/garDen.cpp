@@ -28,7 +28,7 @@ void garDen::release()
 
 void garDen::render()
 {
-	for (int i = 0; i < TILEY; i++)
+	/*for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
@@ -51,7 +51,7 @@ void garDen::render()
 				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top + TILESIZE / 2),
 				_tiles[i*TILEX + j].objFrameX, _tiles[i*TILEX + j].objFrameY);
 		}
-	}
+	}*/
 }
 
 void garDen::load()
@@ -61,7 +61,7 @@ void garDen::load()
 	file = CreateFile("saveMap1.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
+//	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 
 	CloseHandle(file);
 }

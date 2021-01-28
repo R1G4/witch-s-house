@@ -5,9 +5,9 @@
 class garDen : public gameNode
 {
 private:
-	tagTile _tiles[TILEX*TILEY];
+	//tagTile _tiles[TILEX*TILEY];
 
-	DWORD _attribute[TILEX*TILEY];
+	//DWORD _attribute[TILEX*TILEY];
 
 	int _pos[2];
 public:
