@@ -61,6 +61,7 @@ using namespace Figure;
 #include "timeManager.h"
 #include "soundManager.h"
 #include "sceneManager.h"
+#include "dictionaryManager.h"
 #include "txtData.h"
 
 
@@ -83,6 +84,7 @@ using namespace Figure;
 #define EFFECTMANAGER effectManager::getSingleton()
 #define SOUNDMANAGER soundManager::getSingleton()
 #define SCENEMANAGER sceneManager::getSingleton()
+#define DICTIONARYMANAGER dictionaryManager::getSingleton()
 #define TXTDATA txtData::getSingleton()
 
 #define D2DINS D2DRenderer::GetInstance()

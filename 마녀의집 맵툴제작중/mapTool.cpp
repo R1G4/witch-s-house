@@ -17,18 +17,8 @@ HRESULT mapTool::init()
 	IMAGEMANAGER->AddFrameImage("TerrainSample", L"Image/mapTool/타일.png", 7, 2);
 	IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/objSample.png", 2, 3);	// 그림 변환시 변환 필요
 	IMAGEMANAGER->AddImage("배경", L"Image/mapTool/001.png");
-#pragma region 이미지 추가(수정예정)
-	//추후 로딩씬 혹은 플레이어 그라운드에서 넣을것
-	IMAGEMANAGER->AddFrameImage("플레이어", L"Image/tempFrameImg/player.png", 16, 4);
-	IMAGEMANAGER->AddFrameImage("곰", L"Image/tempFrameImg/곰.png", 1, 4);
-	IMAGEMANAGER->AddFrameImage("눈깔", L"Image/tempFrameImg/눈깔.png", 3, 4);
-	IMAGEMANAGER->AddFrameImage("해골", L"Image/tempFrameImg/해골.png", 3, 4);
-	IMAGEMANAGER->AddFrameImage("액자", L"Image/tempFrameImg/액자1.png", 1, 4);
-	IMAGEMANAGER->AddImage("화살표", L"Image/mapTool/화살표.png");
 
-#pragma endregion
 	//tilex = IMAGEMANAGER->FindImage("배경")->GetWidth() / 48;
-	setSampleFrame();	//샘플 프레임 이미지 정보 초기화
 	setButton();
 	_frameInterval = 0;	//프레임 인덱스 간격 초기화
 	_realNum = _change_num = 0;
@@ -47,27 +37,6 @@ HRESULT mapTool::init()
 
 void mapTool::release()
 {
-}
-
-void mapTool::setSampleFrame()
-{
-	//keyName이 존재하지 않으면 분명 터질것
-	tagSampleFrameInfo temp;
-	temp.kinds = PLAYER;		//해당 샘플 종류
-	temp.keyName = "플레이어";	//키값(이미지 키값)
-	_sampleFrameImg.push_back(temp);
-
-	temp.kinds = ENEMY;
-	temp.keyName = "곰";
-	_sampleFrameImg.push_back(temp);
-	temp.keyName = "눈깔";
-	_sampleFrameImg.push_back(temp);
-	temp.keyName = "해골";
-	_sampleFrameImg.push_back(temp);
-
-	temp.kinds = OBJ;
-	temp.keyName = "액자";
-	_sampleFrameImg.push_back(temp);
 }
 
 void mapTool::update()
@@ -115,9 +84,9 @@ void mapTool::update()
 	case CTRL_SETFRAMETILE:
 		setFrameTile();
 		if (KEYMANAGER->isOnceKeyDown('P'))
-			_frameSelected = _frameSelected <= 0 ? _sampleFrameImg.size() - 1 : _frameSelected -= 1;
+			_frameSelected = _frameSelected <= 0 ? DICTIONARYMANAGER->getTotalFrameImg().size() - 1 : _frameSelected -= 1;
 		if (KEYMANAGER->isOnceKeyDown('N'))
-			_frameSelected = _frameSelected >= _sampleFrameImg.size() - 1 ? 0 : _frameSelected += 1;
+			_frameSelected = _frameSelected >= DICTIONARYMANAGER->getTotalFrameImg().size() - 1 ? 0 : _frameSelected += 1;
 		break;
 	case CTRL_SETCORRELATION:
 		setMap();
@@ -243,36 +212,36 @@ void mapTool::render()
 			int	next = _frameSelected - 1;
 
 			if (next < 0)
-				next = _sampleFrameImg.size() - 1;
-			if (previous > _sampleFrameImg.size() - 1)
+				next = DICTIONARYMANAGER->getTotalFrameImg().size() - 1;
+			if (previous > DICTIONARYMANAGER->getTotalFrameImg().size() - 1)
 				previous = 0;
 			if (next2 < 0)
-				next2 = _sampleFrameImg.size() - 2;
-			if (previous2 > _sampleFrameImg.size() - 2)
+				next2 = DICTIONARYMANAGER->getTotalFrameImg().size() - 2;
+			if (previous2 > DICTIONARYMANAGER->getTotalFrameImg().size() - 2)
 				previous2 = 0;
 
 			_D2DRenderer->FillRectangle(Vector2(720, 150), Vector2(140, 140), Pivot::Center, D2D1::ColorF::Enum::White, 1.0f);
-			IMAGEMANAGER->FindImage(_sampleFrameImg[next2].keyName)->SetScale(0.61);
-			IMAGEMANAGER->FindImage(_sampleFrameImg[next2].keyName)->FrameRender(Vector2((720), 150), 0, 0);
+			IMAGEMANAGER->FindImage(DICTIONARYMANAGER->getTotalFrameImg()[next2].keyName)->SetScale(0.61);
+			IMAGEMANAGER->FindImage(DICTIONARYMANAGER->getTotalFrameImg()[next2].keyName)->FrameRender(Vector2((720), 150), 0, 0);
 			_D2DRenderer->DrawRectangle(Vector2(720, 150), Vector2(140, 140), Pivot::Center, D2D1::ColorF::Enum::DarkGray, 1.0f, 5);
 
 			_D2DRenderer->FillRectangle(Vector2(820, 150), Vector2(180, 180), Pivot::Center, D2D1::ColorF::Enum::White, 1.0f);
-			IMAGEMANAGER->FindImage(_sampleFrameImg[next].keyName)->SetScale(0.82);
-			IMAGEMANAGER->FindImage(_sampleFrameImg[next].keyName)->FrameRender(Vector2((820), 150), 0, 0);
+			IMAGEMANAGER->FindImage(DICTIONARYMANAGER->getTotalFrameImg()[next].keyName)->SetScale(0.82);
+			IMAGEMANAGER->FindImage(DICTIONARYMANAGER->getTotalFrameImg()[next].keyName)->FrameRender(Vector2((820), 150), 0, 0);
 			_D2DRenderer->DrawRectangle(Vector2(820, 150), Vector2(180, 180), Pivot::Center, D2D1::ColorF::Enum::DarkGray, 1.0f, 5);
 
 			_D2DRenderer->FillRectangle(Vector2(1180, 150), Vector2(140, 140), Pivot::Center, D2D1::ColorF::Enum::White, 1.0f);
-			IMAGEMANAGER->FindImage(_sampleFrameImg[previous2].keyName)->SetScale(0.61);
-			IMAGEMANAGER->FindImage(_sampleFrameImg[previous2].keyName)->FrameRender(Vector2((1180), 150), 0, 0);
+			IMAGEMANAGER->FindImage(DICTIONARYMANAGER->getTotalFrameImg()[previous2].keyName)->SetScale(0.61);
+			IMAGEMANAGER->FindImage(DICTIONARYMANAGER->getTotalFrameImg()[previous2].keyName)->FrameRender(Vector2((1180), 150), 0, 0);
 			_D2DRenderer->DrawRectangle(Vector2(1180, 150), Vector2(140, 140), Pivot::Center, D2D1::ColorF::Enum::DarkGray, 1.0f, 5);
 
 			_D2DRenderer->FillRectangle(Vector2(1100, 150), Vector2(180, 180), Pivot::Center, D2D1::ColorF::Enum::White, 1.0f);
-			IMAGEMANAGER->FindImage(_sampleFrameImg[previous].keyName)->SetScale(0.82);
-			IMAGEMANAGER->FindImage(_sampleFrameImg[previous].keyName)->FrameRender(Vector2((1100), 150), 0, 0);
+			IMAGEMANAGER->FindImage(DICTIONARYMANAGER->getTotalFrameImg()[previous].keyName)->SetScale(0.82);
+			IMAGEMANAGER->FindImage(DICTIONARYMANAGER->getTotalFrameImg()[previous].keyName)->FrameRender(Vector2((1100), 150), 0, 0);
 			_D2DRenderer->DrawRectangle(Vector2(1100, 150), Vector2(180, 180), Pivot::Center, D2D1::ColorF::Enum::DarkGray, 1.0f, 5);
 
 			_D2DRenderer->FillRectangle(Vector2(950, 150), Vector2(220, 220), Pivot::Center, D2D1::ColorF::Enum::White, 1.0f);
-			IMAGEMANAGER->FindImage(_sampleFrameImg[_frameSelected].keyName)->FrameRender(Vector2((950), 150), 0, 0);
+			IMAGEMANAGER->FindImage(DICTIONARYMANAGER->getTotalFrameImg()[_frameSelected].keyName)->FrameRender(Vector2((950), 150), 0, 0);
 			_D2DRenderer->DrawRectangle(Vector2(950, 150), Vector2(220, 220), Pivot::Center, D2D1::ColorF::Enum::DarkGray, 1.0f, 5);
 
 			IMAGEMANAGER->FindImage("화살표")->SetScale(0.65f);
@@ -815,10 +784,10 @@ void mapTool::getFrameTile()
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			for (int k = 0; k < _sampleFrameImg.size(); k++)
+			for (int k = 0; k < DICTIONARYMANAGER->getTotalFrameImg().size(); k++)
 			{
 				//불러온 타일의 키값이 샘플프레임이미지 백터에 존재하는 이미지일 경우
-				if (_sampleFrameImg[k].keyName == _tiles[i*TILEX + j].frameKeyName)
+				if (DICTIONARYMANAGER->getTotalFrameImg()[k].keyName == _tiles[i*TILEX + j].frameKeyName)
 				{
 					//렉트 생성
 					FloatRect rc;
@@ -826,12 +795,12 @@ void mapTool::getFrameTile()
 
 					tagFrameTile temp;
 					temp.rc = rc;
-					temp.kinds = _sampleFrameImg[k].kinds;
+					temp.kinds = DICTIONARYMANAGER->getTotalFrameImg()[k].kinds;
 					temp.indexX = i;
 					temp.indexY = j;
 					temp.frameX = 0;
 					temp.frameY = 0;
-					temp.img = IMAGEMANAGER->FindImage(_sampleFrameImg[k].keyName);	//이미지를 찾아서 넣는당
+					temp.img = IMAGEMANAGER->FindImage(DICTIONARYMANAGER->getTotalFrameImg()[k].keyName);	//이미지를 찾아서 넣는당
 					addFrameTile(temp);	//타일에 프레임 이미지 배치
 				}
 			}
@@ -893,12 +862,12 @@ void mapTool::setFrameTile()
 
 				tagFrameTile temp;
 				temp.rc = rc;
-				temp.kinds = _sampleFrameImg[_frameSelected].kinds;
+				temp.kinds = DICTIONARYMANAGER->getTotalFrameImg()[_frameSelected].kinds;
 				temp.indexX = i;
 				temp.indexY = j;
 				temp.frameX = 0;
 				temp.frameY = 0;
-				temp.img = IMAGEMANAGER->FindImage(_sampleFrameImg[_frameSelected].keyName);	//프레임 이미지 백터에서 키값을 넣어서 이미지를 넣는당
+				temp.img = IMAGEMANAGER->FindImage(DICTIONARYMANAGER->getTotalFrameImg()[_frameSelected].keyName);	//프레임 이미지 백터에서 키값을 넣어서 이미지를 넣는당
 
 				//이미 존재하는 타입의 프레임 이미지를 배치 시도한 경우 addFrameTile함수에서 true를 반환
 				isDel = addFrameTile(temp);
@@ -907,18 +876,18 @@ void mapTool::setFrameTile()
 				if (isDel)	//해당 타일의 프레임 키값을 초기화 해준다.
 					_tiles[i*TILEX + j].frameKeyName = "";
 				else	   //해당 타일의 프레임 키값을 넣어준다.
-					_tiles[i*TILEX + j].frameKeyName = _sampleFrameImg[_frameSelected].keyName;
+					_tiles[i*TILEX + j].frameKeyName = DICTIONARYMANAGER->getTotalFrameImg()[_frameSelected].keyName;
 			}
 			//충돌하지 않은 경우
 			else
 			{
 				//플레이어는 중복 배치가 불가능
-				if (_sampleFrameImg[_frameSelected].kinds == PLAYER)
+				if (DICTIONARYMANAGER->getTotalFrameImg()[_frameSelected].kinds == PLAYER)
 				{
-					for (int k = 0; k < _sampleFrameImg.size(); k++)
+					for (int k = 0; k < DICTIONARYMANAGER->getTotalFrameImg().size(); k++)
 					{
 						//이미 타일에는 플레이어 타입이 존재하는 경우 기존 타일에 프레임 이미지 키값을 제거한다.
-						if (_sampleFrameImg[k].kinds == PLAYER && _sampleFrameImg[k].keyName == _tiles[i*TILEX + j].frameKeyName)
+						if (DICTIONARYMANAGER->getTotalFrameImg()[k].kinds == PLAYER && DICTIONARYMANAGER->getTotalFrameImg()[k].keyName == _tiles[i*TILEX + j].frameKeyName)
 							_tiles[i*TILEX + j].frameKeyName = "";
 					}
 				}

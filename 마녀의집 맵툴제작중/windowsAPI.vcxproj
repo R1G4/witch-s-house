@@ -150,6 +150,7 @@
     <ClInclude Include="animation.h" />
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="D2DRenderer.h" />
+    <ClInclude Include="dictionaryManager.h" />
     <ClInclude Include="Figure.h" />
     <ClInclude Include="FloatEllipse.h" />
     <ClInclude Include="FloatRect.h" />
@@ -183,6 +184,7 @@
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="D2DRenderer+Draw.cpp" />
     <ClCompile Include="D2DRenderer.cpp" />
+    <ClCompile Include="dictionaryManager.cpp" />
     <ClCompile Include="Figure.cpp" />
     <ClCompile Include="FloatEllipse.cpp" />
     <ClCompile Include="FloatRect.cpp" />

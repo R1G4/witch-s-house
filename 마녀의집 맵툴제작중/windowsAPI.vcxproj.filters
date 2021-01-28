@@ -144,6 +144,9 @@
     <ClInclude Include="garDenUnder.h">
       <Filter>playGround\scense\garDen</Filter>
     </ClInclude>
+    <ClInclude Include="dictionaryManager.h">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -223,6 +226,9 @@
     </ClCompile>
     <ClCompile Include="garDenUnder.cpp">
       <Filter>playGround\scense\garDen</Filter>
+    </ClCompile>
+    <ClCompile Include="dictionaryManager.cpp">
+      <Filter>2DGameFramework\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -15,6 +15,11 @@ HRESULT playGround::init()
 {
 	gameNode::init(true);
 
+
+#pragma region  »èÁ¦ÇØ¾ßÇÏ³ª? È¤½Ã¸ô¶ó¼­ ³¿°ÜµÒ
+
+
+
 	//ImageManager::GetInstance()->AddImage("TestObject", L"TrapObject.png");
 	//ImageManager::GetInstance()->AddFrameImage("violaIdle", L"violaIdle.png",16,4);
 	//ImageManager::GetInstance()->AddFrameImage("TestFrameObject",
@@ -26,6 +31,25 @@ HRESULT playGround::init()
 	//pt.x = WINSIZEX / 2;
 	//pt.y = WINSIZEY / 2;
 	//camera = PointMake(0, 0);
+#pragma endregion
+
+#pragma region ·Îµù¾À Ãß°¡ÇÏ¸é °Å±â¿¡ ¿Å±â±â 
+	IMAGEMANAGER->AddFrameImage("ÇÃ·¹ÀÌ¾î", L"Image/tempFrameImg/player.png", 16, 4);
+	IMAGEMANAGER->AddFrameImage("°õ", L"Image/tempFrameImg/°õ.png", 1, 4);
+	IMAGEMANAGER->AddFrameImage("´«±ò", L"Image/tempFrameImg/´«±ò.png", 3, 4);
+	IMAGEMANAGER->AddFrameImage("ÇØ°ñ", L"Image/tempFrameImg/ÇØ°ñ.png", 3, 4);
+	IMAGEMANAGER->AddFrameImage("¾×ÀÚ", L"Image/tempFrameImg/¾×ÀÚ1.png", 1, 4);
+	IMAGEMANAGER->AddImage("È­»ìÇ¥", L"Image/mapTool/È­»ìÇ¥.png");
+
+	//ÇÁ·¹ÀÓ ÀÌ¹ÌÁö »ùÇÃ·Î »ç¿ëÇÒ·Á¸é ¾Æ·¡ ¸Å´ÏÀú¿¡ Ãß°¡ÇÒ °Í
+	DICTIONARYMANAGER->addTotalFrameImg("ÇÃ·¹ÀÌ¾î", PLAYER);
+	DICTIONARYMANAGER->addTotalFrameImg("°õ", ENEMY);
+	DICTIONARYMANAGER->addTotalFrameImg("´«±ò", ENEMY);
+	DICTIONARYMANAGER->addTotalFrameImg("ÇØ°ñ", ENEMY);
+	DICTIONARYMANAGER->addTotalFrameImg("¾×ÀÚ", OBJ);
+#pragma endregion
+
+
 	SCENEMANAGER->addScene("MapToolScene", new mapTool);
 	//SCENEMANAGER->changeScene("MapToolScene");
 
