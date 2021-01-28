@@ -309,9 +309,29 @@ void mapTool::setFrameIndex()
 	_frameInterval = 0;
 	for (int i = 0; i < _vFrameTile.size(); i++)
 	{
-		//아래 프레임 변화는 나중에 수정 될 수 있음
-		switch (_vFrameTile[i].kinds)
+		//프레임 증가 관련 룰 추가
+		//보통 가로, 세로로 한줄로 정렬하는 이미지가 많기에 자동으로 x축 혹은 y축 증가함
+		//가로줄의 최대 프레임이 1이하라면 프레임 y축을 증가시킴
+		if (_vFrameTile[i].img->GetMaxFrameX() <= 1)
 		{
+			_vFrameTile[i].frameY = _vFrameTile[i].frameY + 1;
+			if (_vFrameTile[i].frameY > _vFrameTile[i].img->GetMaxFrameY() - 1)
+				_vFrameTile[i].frameY = 0;
+
+		}
+		//세로줄의 최대 프레임이 1이하라면 프레임 x축을 증가시킴
+		else if (_vFrameTile[i].img->GetMaxFrameY() <= 1)
+		{
+			_vFrameTile[i].frameX = _vFrameTile[i].frameX + 1;
+			if (_vFrameTile[i].frameX > _vFrameTile[i].img->GetMaxFrameX() - 1)
+				_vFrameTile[i].frameX = 0;
+		}
+		//그외의 경우
+		else
+		{
+			//아래 프레임 변화는 나중에 수정 될 수 있음
+			switch (_vFrameTile[i].kinds)
+			{
 			case PLAYER:
 				//대부분 가로 기준이므로 프레임 X설정
 				_vFrameTile[i].frameX = _vFrameTile[i].frameX + 1;
@@ -325,9 +345,11 @@ void mapTool::setFrameIndex()
 				if (_vFrameTile[i].frameY > _vFrameTile[i].img->GetMaxFrameY() - 1)
 					_vFrameTile[i].frameY = 0;
 				break;
+			}
 		}
 	}
 }
+
 void mapTool::setCorrelation()
 {
 }
