@@ -141,22 +141,22 @@ void mapTool::update()
 
 void mapTool::render()
 {
-	for (int i = 0; i < TILEY; i++)
-	{
-		for (int j = 0; j < TILEX; j++)
-		{
-			if (!_tiles[i*TILEX + j].isMapOn)continue;
-			IMAGEMANAGER->FindImage("TerrainSample")->FrameRender(
-				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top + TILESIZE / 2),
-				_tiles[i*TILEX + j].terrainFrameX, _tiles[i*TILEX + j].terrainFrameY);
-			if (KEYMANAGER->isToggleKey(VK_TAB))
-			{
-				//_D2DRenderer->DrawRectangle(_tiles[i*TILEX + j].rc, D2DRenderer::DefaultBrush::White);
-			}
-			if (_tiles[i*TILEX + j].isCollider)_D2DRenderer->FillRectangle(_tiles[i*TILEX + j].rc, D2D1::ColorF::Red, 0.4);
-			if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)_D2DRenderer->FillRectangle(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
-		}
-	}
+	//for (int i = 0; i < TILEY; i++)
+	//{
+	//	for (int j = 0; j < TILEX; j++)
+	//	{
+	//		if (!_tiles[i*TILEX + j].isMapOn)continue;
+	//		IMAGEMANAGER->FindImage("TerrainSample")->FrameRender(
+	//			Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top + TILESIZE / 2),
+	//			_tiles[i*TILEX + j].terrainFrameX, _tiles[i*TILEX + j].terrainFrameY);
+	//		if (KEYMANAGER->isToggleKey(VK_TAB))
+	//		{
+	//			//_D2DRenderer->DrawRectangle(_tiles[i*TILEX + j].rc, D2DRenderer::DefaultBrush::White);
+	//		}
+	//		if (_tiles[i*TILEX + j].isCollider)_D2DRenderer->FillRectangle(_tiles[i*TILEX + j].rc, D2D1::ColorF::Red, 0.4);
+	//		if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)_D2DRenderer->FillRectangle(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
+	//	}
+	//}
 
 	IMAGEMANAGER->FindImage("배경")->Render(Vector2(720-camera.x,648-camera.y));
 	for (int i = 0; i < TILEY; i++)
@@ -180,6 +180,7 @@ void mapTool::render()
 			IMAGEMANAGER->FindImage("ObjectSample")->FrameRender(
 				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE, _tiles[i*TILEX + j].rc.top ),	// 보정값 바꿈
 				_tiles[i*TILEX + j].objFrameX, _tiles[i*TILEX + j].objFrameY);
+			cout << "ddd";
 			if (_tiles[i*TILEX + j].obj == OBJ_CORELATION)_D2DRenderer->FillRectangle(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aquamarine, 0.5);
 		}//보정값 필요할지도 모름
 	}
@@ -494,7 +495,6 @@ void mapTool::setMap()
 					_currentTile.x = _sampleTile[i*SAMPLETILEX + j].terrainFrameX;
 					_currentTile.y = _sampleTile[i*SAMPLETILEX + j].terrainFrameY;
 					sampleSelec = RectMakePivot(Vector2(_sampleTile[i*SAMPLETILEX + j].rcTile.left, _sampleTile[i*SAMPLETILEX + j].rcTile.top), Vector2(48, 48), Pivot::LeftTop);
-
 				}
 			}
 		}
@@ -541,7 +541,7 @@ void mapTool::setMap()
 			{
 				for (int j = 0; j < TILEX; ++j)
 				{
-					if (Vector2InRect(&_tiles[i*TILEX + j].rc, &Vector2(_ptMouse.x, _ptMouse.y)) && _tiles[i*TILEX + j].isMapOn)
+					if (Vector2InRect(&_tiles[i*TILEX + j].rc, &Vector2(_ptMouse.x, _ptMouse.y)))
 					{
 						if (_crtSelect == CTRL_TERRAINDRAW)
 						{
@@ -552,6 +552,7 @@ void mapTool::setMap()
 						}
 						else if (_crtSelect == CTRL_OBJDRAW)
 						{
+
 							_tiles[i*TILEX + j].objFrameX = _currentTile.x;
 							_tiles[i*TILEX + j].objFrameY = _currentTile.y;
 
@@ -578,7 +579,11 @@ void mapTool::setMap()
 						}
 						else if (_crtSelect == CTRL_SETCORRELATION)
 						{
-							if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
+							if (_tiles[i*TILEX + j].obj == OBJ_NONE)
+							{
+								_tiles[i*TILEX + j].terrain = TR_CORELATION;
+								_tiles[i*TILEX + j].obj = OBJ_NONE;
+							}
 							if(_tiles[i*TILEX+j].obj!=OBJ_CORELATION)_tiles[i*TILEX + j].obj = OBJ_CORELATION;
 							else if (_tiles[i*TILEX + j].obj == OBJ_CORELATION)_tiles[i*TILEX + j].obj = OBJ_LOOK;
 							
@@ -602,23 +607,24 @@ void mapTool::setMap()
 
 void mapTool::setCtrl()
 {
-	if (KEYMANAGER->isStayKeyDown(VK_CONTROL))
+	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 	{
-		if (KEYMANAGER->isOnceKeyDown('S'))_crtSelect = CTRL_SAVE;
-		if (KEYMANAGER->isOnceKeyDown('L'))_crtSelect = CTRL_LOAD;
-		if (KEYMANAGER->isOnceKeyDown('E'))_crtSelect = CTRL_ERASER;
-		if (KEYMANAGER->isOnceKeyDown('P')) { _crtSelect = CTRL_PREV; _change_number = false; }
-		if (KEYMANAGER->isOnceKeyDown('N')) { _crtSelect = CTRL_NEXT; _change_number = false; }
-		if (KEYMANAGER->isOnceKeyDown('T'))_crtSelect = CTRL_TERRAINDRAW;
-		if (KEYMANAGER->isOnceKeyDown('O'))_crtSelect = CTRL_OBJDRAW;
-		if (KEYMANAGER->isOnceKeyDown('C'))_crtSelect = CTRL_COLLIDER;
-		if (KEYMANAGER->isOnceKeyDown('F'))_crtSelect = CTRL_SETFRAMETILE;
+		if (Vector2InRect(&Save.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_SAVE;
+		if (Vector2InRect(&Load.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_LOAD;
+		if (Vector2InRect(&Erase.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_ERASER;
+		if (Vector2InRect(&Prev.frc,&Vector2(_ptMouse))) { _crtSelect = CTRL_PREV; _change_number = false; }
+		if (Vector2InRect(&Next.frc,&Vector2(_ptMouse))) { _crtSelect = CTRL_NEXT; _change_number = false; }
+		if (Vector2InRect(&terrain.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_TERRAINDRAW;
+		if (Vector2InRect(&Object.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_OBJDRAW;
+		if (Vector2InRect(&Collider.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_COLLIDER;
+		if (Vector2InRect(&FrameObj.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_SETFRAMETILE;
+		if (Vector2InRect(&setCor.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_SETCORRELATION;
+		if (Vector2InRect(&setTri.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_SETTRIGGER;
+
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_SHIFT))
 	{
-		if (KEYMANAGER->isOnceKeyDown('C'))_crtSelect = CTRL_SETCORRELATION;
-		if (KEYMANAGER->isOnceKeyDown('T'))_crtSelect = CTRL_SETTRIGGER;
-
+		
 	}
 	//if (KEYMANAGER->isOnceKeyDown('P'))
 	//{
