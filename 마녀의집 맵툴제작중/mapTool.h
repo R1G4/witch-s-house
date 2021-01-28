@@ -57,6 +57,7 @@ struct tagTile
 	int objFrameY;
 	bool isMapOn;
 	bool isCollider;
+	POINT camera;
 };
 struct tagSampleTile
 {

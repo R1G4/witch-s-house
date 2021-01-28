@@ -755,6 +755,7 @@ void mapTool::save()
 		switch (openFileName.nFilterIndex)
 		{
 		case 1:
+			_tiles->camera = camera;
 			file = CreateFile(strFilePath, GENERIC_WRITE, NULL, NULL,
 				CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 			WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);
@@ -799,6 +800,7 @@ void mapTool::load()
 				OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
 			ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
+			camera = _tiles->camera;
 			CloseHandle(file);
 			break;
 		}
