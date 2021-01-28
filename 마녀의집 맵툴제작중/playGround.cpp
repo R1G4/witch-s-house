@@ -30,7 +30,8 @@ HRESULT playGround::init()
 	//SCENEMANAGER->changeScene("MapToolScene");
 
 	SCENEMANAGER->addScene("garDenScene", new garDen);
-	SCENEMANAGER->changeScene("garDenScene");
+	SCENEMANAGER->addScene("garDenUnderScene", new garDenUnder);
+	SCENEMANAGER->changeScene("garDenUnderScene");
 	return S_OK;
 }
 

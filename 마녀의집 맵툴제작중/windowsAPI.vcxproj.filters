@@ -46,6 +46,9 @@
     <Filter Include="playGround\scense">
       <UniqueIdentifier>{426fb165-a329-4ada-b57f-1168590a3b52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\scense\garDen">
+      <UniqueIdentifier>{b7c537e1-9ef4-4ffe-9d0d-48c4ad38b56a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -136,7 +139,10 @@
       <Filter>playGround\scense</Filter>
     </ClInclude>
     <ClInclude Include="garDen.h">
-      <Filter>playGround\scense</Filter>
+      <Filter>playGround\scense\garDen</Filter>
+    </ClInclude>
+    <ClInclude Include="garDenUnder.h">
+      <Filter>playGround\scense\garDen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -213,7 +219,10 @@
       <Filter>playGround\scense</Filter>
     </ClCompile>
     <ClCompile Include="garDen.cpp">
-      <Filter>playGround\scense</Filter>
+      <Filter>playGround\scense\garDen</Filter>
+    </ClCompile>
+    <ClCompile Include="garDenUnder.cpp">
+      <Filter>playGround\scense\garDen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
