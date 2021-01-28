@@ -27,7 +27,9 @@ HRESULT playGround::init()
 	//pt.y = WINSIZEY / 2;
 	//camera = PointMake(0, 0);
 	SCENEMANAGER->addScene("MapToolScene", new mapTool);
-	SCENEMANAGER->changeScene("MapToolScene");
+	//SCENEMANAGER->changeScene("MapToolScene");
+	SCENEMANAGER->addScene("실험", new garDen);
+	SCENEMANAGER->changeScene("실험");
 	return S_OK;
 }
 
