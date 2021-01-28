@@ -25,6 +25,8 @@ private:
 	tagButton FrameObj;
 	tagButton setTri;
 	tagButton setCor;
+	tagButton prevArrow;
+	tagButton nextArrow;
 	
 	//현재 타일
 	tagCurrentTile _currentTile;

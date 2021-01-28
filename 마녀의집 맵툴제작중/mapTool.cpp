@@ -16,7 +16,7 @@ HRESULT mapTool::init()
 {
 	IMAGEMANAGER->AddFrameImage("TerrainSample", L"Image/mapTool/타일.png", 7, 2);
 	IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/objSample.png", 2, 3);	// 그림 변환시 변환 필요
-	IMAGEMANAGER->AddImage("배경", L"Image/mapTool/001.png");
+	IMAGEMANAGER->AddImage("배경", L"Image/mapTool/stageMap/008.png");
 
 	//tilex = IMAGEMANAGER->FindImage("배경")->GetWidth() / 48;
 	setButton();
@@ -244,8 +244,30 @@ void mapTool::render()
 			IMAGEMANAGER->FindImage(DICTIONARYMANAGER->getTotalFrameImg()[_frameSelected].keyName)->FrameRender(Vector2((950), 150), 0, 0);
 			_D2DRenderer->DrawRectangle(Vector2(950, 150), Vector2(220, 220), Pivot::Center, D2D1::ColorF::Enum::DarkGray, 1.0f, 5);
 
+			//이전
+			_D2DRenderer->FillRectangle(prevArrow.frc, D2D1::ColorF::Enum::LightGreen, 0.95f);
+			IMAGEMANAGER->FindImage("화살표왼쪽")->SetScale(0.65f);
+			IMAGEMANAGER->FindImage("화살표왼쪽")->Render(Vector2(634, 150));
+
+			//이후
+			IMAGEMANAGER->FindImage("화살표오른쪽")->SetScale(0.65f);
+			IMAGEMANAGER->FindImage("화살표오른쪽")->Render(Vector2(1265, 150));
+			_D2DRenderer->FillRectangle(nextArrow.frc, D2D1::ColorF::Enum::LightGreen, 0.95f);
+
+			//선택 이미지 표시
 			IMAGEMANAGER->FindImage("화살표")->SetScale(0.65f);
 			IMAGEMANAGER->FindImage("화살표")->Render(Vector2(950, 260));
+
+			//선택 이미지 종류
+			D2DINS->RenderText
+			(
+				950 - 30,
+				268,
+				DICTIONARYMANAGER->getTotalFrameImg()[_frameSelected].kinds == PLAYER ? L"Player" :
+				DICTIONARYMANAGER->getTotalFrameImg()[_frameSelected].kinds == ENEMY ? L"Enemy" : L"Object",
+				22
+				//폰트 아직 모르겟숴..
+			);
 		}
 	}
 	//IMAGEMANAGER->FindImage("TerrainSample")->Render(Vector2(800, 100));
@@ -384,6 +406,8 @@ void mapTool::setButton()
 	FrameObj.img = IMAGEMANAGER->FindImage("Bar");
 	setCor.img = IMAGEMANAGER->FindImage("Bar");
 	setTri.img = IMAGEMANAGER->FindImage("Bar");
+	setCor.img = IMAGEMANAGER->FindImage("화살표왼쪽");
+	setTri.img = IMAGEMANAGER->FindImage("화살표오른쪽");
 
 	Save.frc = RectMakePivot(Vector2(0+72+48, 660), Vector2(144, 48), Pivot::Center);
 	Load.frc = RectMakePivot(Vector2(144 + 10+72+48, 660), Vector2(144, 48), Pivot::Center);
@@ -400,7 +424,8 @@ void mapTool::setButton()
 	FrameObj.frc = RectMakePivot(Vector2(432 + 10 + 72 + 48, 600), Vector2(144, 48), Pivot::Center);
 	setCor.frc = RectMakePivot(Vector2(576 + 10 + 72 + 48, 600), Vector2(144, 48), Pivot::Center);
 	setTri.frc = RectMakePivot(Vector2(720 + 10 + 72 + 48, 600), Vector2(144, 48), Pivot::Center);
-
+	prevArrow.frc = RectMakePivot(Vector2(637, 150), Vector2(33, 33), Pivot::Center);
+	nextArrow.frc = RectMakePivot(Vector2(1262, 150), Vector2(33, 33), Pivot::Center);
 }
 
 void mapTool::setup()
@@ -592,8 +617,6 @@ void mapTool::setMap()
 			}
 		}
 	}
-
-
 }
 
 void mapTool::setCtrl()
@@ -611,7 +634,10 @@ void mapTool::setCtrl()
 		if (Vector2InRect(&FrameObj.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_SETFRAMETILE;
 		if (Vector2InRect(&setCor.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_SETCORRELATION;
 		if (Vector2InRect(&setTri.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_SETTRIGGER;
-
+		if (Vector2InRect(&prevArrow.frc, &Vector2(_ptMouse)) && tabOpen)
+			_frameSelected = _frameSelected <= 0 ? DICTIONARYMANAGER->getTotalFrameImg().size() - 1 : _frameSelected -= 1;
+		if (Vector2InRect(&nextArrow.frc, &Vector2(_ptMouse)) && tabOpen)
+			_frameSelected = _frameSelected >= DICTIONARYMANAGER->getTotalFrameImg().size() - 1 ? 0 : _frameSelected += 1;
 	}
 	if (KEYMANAGER->isStayKeyDown(VK_SHIFT))
 	{
@@ -899,20 +925,17 @@ void mapTool::setFrameTile()
 					_tiles[i*TILEX + j].frameKeyName = "";
 				else	   //해당 타일의 프레임 키값을 넣어준다.
 					_tiles[i*TILEX + j].frameKeyName = DICTIONARYMANAGER->getTotalFrameImg()[_frameSelected].keyName;
+
+				//아래 불필요한 연산은 제외한다.
+				if (DICTIONARYMANAGER->getTotalFrameImg()[_frameSelected].kinds != PLAYER)
+					break;
 			}
-			//충돌하지 않은 경우
-			else
+			//충돌하지 않은 경우 플레이어는 중복 배치가 불가능
+			else if (DICTIONARYMANAGER->getTotalFrameImg()[_frameSelected].kinds == PLAYER)
 			{
-				//플레이어는 중복 배치가 불가능
-				if (DICTIONARYMANAGER->getTotalFrameImg()[_frameSelected].kinds == PLAYER)
-				{
-					for (int k = 0; k < DICTIONARYMANAGER->getTotalFrameImg().size(); k++)
-					{
-						//이미 타일에는 플레이어 타입이 존재하는 경우 기존 타일에 프레임 이미지 키값을 제거한다.
-						if (DICTIONARYMANAGER->getTotalFrameImg()[k].kinds == PLAYER && DICTIONARYMANAGER->getTotalFrameImg()[k].keyName == _tiles[i*TILEX + j].frameKeyName)
-							_tiles[i*TILEX + j].frameKeyName = "";
-					}
-				}
+				//이미 타일에는 플레이어 타입이 존재하는 경우 기존 타일에 프레임 이미지 키값을 제거한다.
+				if (DICTIONARYMANAGER->getTotalFrameImg()[_frameSelected].keyName == _tiles[i*TILEX + j].frameKeyName)
+					_tiles[i*TILEX + j].frameKeyName = "";
 			}
 		}
 	}

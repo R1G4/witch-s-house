@@ -40,6 +40,8 @@ HRESULT playGround::init()
 	IMAGEMANAGER->AddFrameImage("해골", L"Image/tempFrameImg/해골.png", 3, 4);
 	IMAGEMANAGER->AddFrameImage("액자", L"Image/tempFrameImg/액자1.png", 1, 4);
 	IMAGEMANAGER->AddImage("화살표", L"Image/mapTool/화살표.png");
+	IMAGEMANAGER->AddImage("화살표왼쪽", L"Image/mapTool/화살표왼쪽.png");
+	IMAGEMANAGER->AddImage("화살표오른쪽", L"Image/mapTool/화살표오른쪽.png");
 
 	//프레임 이미지 샘플로 사용할려면 아래 매니저에 추가할 것
 	DICTIONARYMANAGER->addTotalFrameImg("플레이어", PLAYER);
@@ -55,7 +57,7 @@ HRESULT playGround::init()
 
 	SCENEMANAGER->addScene("garDenScene", new garDen);
 	SCENEMANAGER->addScene("garDenUnderScene", new garDenUnder);
-	SCENEMANAGER->changeScene("garDenUnderScene");
+	SCENEMANAGER->changeScene("MapToolScene");
 	return S_OK;
 }
 
