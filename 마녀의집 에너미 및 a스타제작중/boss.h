@@ -1,6 +1,8 @@
 #pragma once
 #include "gameNode.h"
 
+class garDen;
+
 enum BOSSDIRECTION
 {
 	BOSSDIRECTION_LEFT,
@@ -12,6 +14,9 @@ enum BOSSDIRECTION
 class boss : public gameNode
 {
 private:
+	garDen* _gardenMap;
+
+
 	Image* _image;						//프레임 이미지 
 	BOSSDIRECTION _direction;			// 상태
 	FloatRect _rc;							// 충돌렉트
@@ -24,10 +29,12 @@ private:
 public:
 	HRESULT init();
 	HRESULT init(float x, float y);
-	void update(POINT camera);
+	void update();
 	void release();
-	void render(POINT camera);
+	void render();
 
+	void setMapMemoryAddressLink(garDen* gm) { _gardenMap = gm; }
 
+	FloatRect getRect() { return _rc; }
 };
 

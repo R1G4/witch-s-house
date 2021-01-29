@@ -49,6 +49,9 @@
     <Filter Include="playGround\enemy">
       <UniqueIdentifier>{e4684141-29d3-4232-a63f-fcf269776547}</UniqueIdentifier>
     </Filter>
+    <Filter Include="2DGameFramework\astar">
+      <UniqueIdentifier>{347cb043-df49-4af3-a39e-d0fb9af976df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -150,6 +153,12 @@
     <ClInclude Include="skul.h">
       <Filter>playGround\enemy</Filter>
     </ClInclude>
+    <ClInclude Include="CameraManager.h">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="astarTile.h">
+      <Filter>2DGameFramework\astar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -235,6 +244,12 @@
     </ClCompile>
     <ClCompile Include="skul.cpp">
       <Filter>playGround\enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraManager.cpp">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="astarTile.cpp">
+      <Filter>2DGameFramework\astar</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

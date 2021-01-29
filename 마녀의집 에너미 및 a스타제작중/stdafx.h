@@ -69,7 +69,7 @@ using namespace Figure;
 #include "soundManager.h"
 #include "sceneManager.h"
 #include "txtData.h"
-
+#include "CameraManager.h"
 
 //MS VS버전이 올라가면서 기존의 문자열 함수의 안정성을 올리기위해
 //_s를 붙인 함수를 사용하게끔 경고하는 메시지를 무시해준다
@@ -91,7 +91,7 @@ using namespace Figure;
 #define SOUNDMANAGER soundManager::getSingleton()
 #define SCENEMANAGER sceneManager::getSingleton()
 #define TXTDATA txtData::getSingleton()
-
+#define CAMERAMANAGER CameraManager::getSingleton()
 #define D2DINS D2DRenderer::GetInstance()
 #define OBJECTMANAGER ObjectManager::getSingleton()
 #define SAFE_DELETE(p)		{if(p) {delete(p); (p) = NULL;}}

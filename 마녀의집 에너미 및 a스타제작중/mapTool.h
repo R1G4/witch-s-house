@@ -52,7 +52,7 @@ struct tagTile
 	int objFrameY;
 	bool isMapOn;
 	bool isCollider;
-	POINT camera;
+	Vector2 camera;
 };
 struct tagSampleTile
 {
@@ -149,7 +149,7 @@ private:
 	bool _leftButtonDown;
 	//맵 툴의 일정 부분만 출력시키기 위한 렉트
 	FloatRect MapRC;
-	POINT camera;//만들었지만 필요없음
+	Vector2 camera;//만들었지만 필요없음
 	//bool isterrain;	by pju 이넘으로 대체해야 할듯...
 public:
 	mapTool();

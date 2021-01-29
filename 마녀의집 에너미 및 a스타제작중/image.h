@@ -49,7 +49,7 @@ public:
 	void SetAlpha(const float alpha) { this->mAlpha = alpha; }
 	void SetScale(const float scale) { this->mScale = scale; }
 	void SetAngle(const float angle) { this->mAngle = angle; }
-
+	
 	const int GetMaxFrameX()const{ return mMaxFrameX; }
 	const int GetMaxFrameY()const{ return mMaxFrameY; }
 	const string GetKey() const { return this->mLoadInfo.key; }
