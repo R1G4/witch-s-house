@@ -35,11 +35,11 @@ public:
 	void update();
 
 	//이미지매니저에 할당되지 않을 경우 이 함수를 통해 할당 가능하며 해당 매니저 정보를 추가한다.
-	//key, 이미지 경로(~.png), 프레임 x축, 프레임 y축, 프레임 이미지 속성(종류), 프레임이 바뀌는 간격?,  트리거 발동 시 index(1 이상이라면 트리거 존재 간주), 반복 유무, 
+		//key, 이미지 경로(~.png), 프레임 x축, 프레임 y축, 속성(종류), 프레임이 바뀌는 간격?, 트리거 유무, 트리거 시작되는 프레임 인덱스, 반복 유무 
 	void AddFrameInfo(const string& key, const wstring& path, const int maxFrameX, const int maxFrameY, FRAMEATTRIBUTE kinds, int frameInterval = 8, bool isTrigger = false, int triggerIndex = 0, bool isLoop = true);
 
 	//이미 할당되었다는 가정하에 해당 매니저에 정보를 추가한다.
-	//key, 프레임 이미지 속성(종류), 바뀌는 간격?, 트리거 발동 시 index(1 이상이라면 트리거 존재 간주), 반복 유무
+	//key, 속성(종류), 프레임이 바뀌는 간격?, 트리거 유무, 트리거 시작되는 프레임 인덱스, 반복 유무 
 	void AddFrameInfo(const string& key, FRAMEATTRIBUTE kinds, int frameInterval, int triggerIndex, bool isTrigger = false, bool isLoop = true);
 	
 	//index를 기준으로 이미지를 반환한다.(부정확 할 수 있음)

@@ -22,7 +22,7 @@ HRESULT playGround::init()
 	IMAGEMANAGER->AddImage("1층스타트", L"Image/mapTool/stageMap/008.png");
 
 	//아래 매니저에서도 프레임 이미지를 추가 가능하다.
-	//key, path, Frame x, Frame y, Frame 속성(plyer,enemy,obj), 트리거 Frame의 인덱스(0이 아니라면 트리거 존재한다고 간주)
+	//key, 이미지 경로(~.png), 프레임 x축, 프레임 y축, 속성(종류), 프레임이 바뀌는 간격?, 트리거 유무, 트리거 시작되는 프레임 인덱스, 반복 유무 
 	FRAMEINFOMANAGER->AddFrameInfo("플레이어", L"Image/tempFrameImg/player.png", 16, 4, PLAYER);
 	FRAMEINFOMANAGER->AddFrameInfo("곰", L"Image/tempFrameImg/곰.png", 1, 4, ENEMY);
 	FRAMEINFOMANAGER->AddFrameInfo("눈깔", L"Image/tempFrameImg/눈깔.png", 3, 4, ENEMY);
