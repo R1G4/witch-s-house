@@ -2,6 +2,7 @@
 #include "gameNode.h"
 #include "mapTool.h"
 #include "garDen.h"
+#include "garDenUnder.h"
 #include "stage1_1.h"
 #include "menu.h"
 #include "levelChoiceScene.h"

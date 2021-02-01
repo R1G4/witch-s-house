@@ -183,6 +183,9 @@
     <ClInclude Include="menu.h">
       <Filter>playGround</Filter>
     </ClInclude>
+    <ClInclude Include="garDenUnder.h">
+      <Filter>playGround\scense</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -292,6 +295,9 @@
     </ClCompile>
     <ClCompile Include="menu.cpp">
       <Filter>playGround</Filter>
+    </ClCompile>
+    <ClCompile Include="garDenUnder.cpp">
+      <Filter>playGround\scense</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

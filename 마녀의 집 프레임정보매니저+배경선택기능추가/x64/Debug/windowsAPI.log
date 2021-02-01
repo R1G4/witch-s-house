@@ -1,2 +1,7 @@
-﻿  image.cpp
+﻿  garDenUnder.cpp
+c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 프레임정보매니저+배경선택기능추가\gardenunder.cpp(76): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+  playGround.cpp
+  windowsAPI.cpp
+c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 프레임정보매니저+배경선택기능추가\windowsapi.cpp(96): warning C4244: 'return': 'WPARAM'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다...
   windowsAPI.vcxproj -> C:\Users\clxlz\OneDrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 프레임정보매니저+배경선택기능추가\x64\Debug\windowsAPI.exe

@@ -56,7 +56,8 @@ HRESULT playGround::init()
 	SCENEMANAGER->addScene("stage1_1", _firstFloorStage);
 
 	SCENEMANAGER->addScene("실험", new garDen);
-	SCENEMANAGER->changeScene("실험");
+	SCENEMANAGER->addScene("실험2", new garDenUnder);
+	SCENEMANAGER->changeScene("실험2");
 	//SCENEMANAGER->changeScene("stage1_1");
 	
 	/////////////////UI 일단 주석처리/////////////
