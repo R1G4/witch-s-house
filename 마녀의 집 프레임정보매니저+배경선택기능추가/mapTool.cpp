@@ -85,9 +85,9 @@ void mapTool::update()
 	case CTRL_SETFRAMETILE:
 		setFrameTile();
 		if (KEYMANAGER->isOnceKeyDown('P'))
-			_frameSelected = _frameSelected <= 0 ? _sampleFrameImg.size() - 1 : _frameSelected -= 1;
+			_frameSelected = _frameSelected <= 0 ? FRAMEINFOMANAGER->GetSize() - 1 : _frameSelected -= 1;
 		if (KEYMANAGER->isOnceKeyDown('N'))
-			_frameSelected = _frameSelected >= _sampleFrameImg.size() - 1 ? 0 : _frameSelected += 1;
+			_frameSelected = _frameSelected >= FRAMEINFOMANAGER->GetSize() - 1 ? 0 : _frameSelected += 1;
 		break;
 	case CTRL_SETCORRELATION:
 		setMap();
