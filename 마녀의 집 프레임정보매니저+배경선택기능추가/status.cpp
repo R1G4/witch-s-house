@@ -11,6 +11,7 @@ status::~status()
 
 HRESULT status::init()
 {
+	//플레이어 생기면 참조해가서 써야할것
 	_status = IMAGEMANAGER->AddImage("status", L"image/UI/status2.png");
 	_menu = IMAGEMANAGER->AddImage("playerMenu", L"image/UI/bar7.png");
 	_load = IMAGEMANAGER->AddImage("load", L"image/UI/bar99.png");

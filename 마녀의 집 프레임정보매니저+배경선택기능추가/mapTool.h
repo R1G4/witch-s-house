@@ -1,11 +1,9 @@
 #pragma once
 #include "gameNode.h"
-#include "status.h"
 class mapTool :
 	public gameNode
 {
 private:
-	status* _status;
 	bool tabOpen;
 	Image* _backGround;
 	vector<Image*>_vSampleMap;

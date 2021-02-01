@@ -151,6 +151,7 @@
     <ClInclude Include="bear.h" />
     <ClInclude Include="boss.h" />
     <ClInclude Include="CameraManager.h" />
+    <ClInclude Include="characterState.h" />
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="D2DRenderer.h" />
     <ClInclude Include="dictionary.h" />
@@ -170,6 +171,7 @@
     <ClInclude Include="mapTool.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="menu.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="playGround.h" />
     <ClInclude Include="randomFunction.h" />
     <ClInclude Include="Resource.h" />
@@ -193,6 +195,7 @@
     <ClCompile Include="bear.cpp" />
     <ClCompile Include="boss.cpp" />
     <ClCompile Include="CameraManager.cpp" />
+    <ClCompile Include="characterState.cpp" />
     <ClCompile Include="D2DRenderer+Draw.cpp" />
     <ClCompile Include="D2DRenderer.cpp" />
     <ClCompile Include="Figure.cpp" />
@@ -210,6 +213,7 @@
     <ClCompile Include="mapTool.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="menu.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="playGround.cpp" />
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="skul.cpp" />
