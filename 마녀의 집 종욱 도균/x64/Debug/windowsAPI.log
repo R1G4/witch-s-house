@@ -1,0 +1,5 @@
+﻿  playerMenu.cpp
+c:\users\id4dk\onedrive\바탕 화면\팀포폴 마녀의집 2주동안 할거\마녀의 집 프레임정보매니저+배경선택기능추가\playermenu.cpp(180): warning C4244: '인수': 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\id4dk\onedrive\바탕 화면\팀포폴 마녀의집 2주동안 할거\마녀의 집 프레임정보매니저+배경선택기능추가\playermenu.cpp(203): warning C4244: '인수': 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\id4dk\onedrive\바탕 화면\팀포폴 마녀의집 2주동안 할거\마녀의 집 프레임정보매니저+배경선택기능추가\playermenu.cpp(246): warning C4244: '인수': 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  windowsAPI.vcxproj -> C:\Users\id4dk\OneDrive\바탕 화면\팀포폴 마녀의집 2주동안 할거\마녀의 집 프레임정보매니저+배경선택기능추가\x64\Debug\windowsAPI.exe
