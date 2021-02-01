@@ -11,6 +11,9 @@ menu::~menu()
 
 HRESULT menu::init()
 {
+	//SOUNDMANAGER->addSound("main", "sound/main.OGG", false,false);
+	//SOUNDMANAGER->play("main",_volume);
+	_volume = 0.5f;
 	//해당 컨텐츠는 처음부터
 	_contents = NEW;
 	_isClick = false;
@@ -51,16 +54,31 @@ void menu::release()
 
 void menu::update()
 {
+	SOUNDMANAGER->setVolume(_volume);
 	//방향키 조작
 	if (!_isClick && KEYMANAGER->isOnceKeyDown(VK_DOWN))
+	{
 		_contents = (CONTENTS)(_contents == END ? 0 : (int)_contents + 1);
+		SOUNDMANAGER->play("cursor", 0.5f);
+	}	
 
 	if (!_isClick && KEYMANAGER->isOnceKeyDown(VK_UP))
+	{
 		_contents = (CONTENTS)(_contents == NEW ? 3 : (int)_contents - 1);
-
+		SOUNDMANAGER->play("cursor", 0.5f);
+	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+	{
+
 		_isClick = true;
+		SOUNDMANAGER->play("click", 0.5f);
+		
+	}
+	if (_isClick)
+	{
+		
+	}
 
 	//선택된 메뉴(항목)에 렉트 위치 변경
 	switch (_contents)
@@ -87,9 +105,11 @@ void menu::update()
 	//선택 키를 눌렀다면 백그라운드 및 이미지 투명도 조절
 	else
 	{
-
+		
 		if (sceneAlphaChange())
+		{
 			SCENEMANAGER->changeScene("레벨선택");
+		}
 		//투명도 조절 후 다음씬으로 휙
 	}
 }

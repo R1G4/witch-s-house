@@ -18,15 +18,11 @@ private:
 	Image* _itemTop;
 	FloatRect _rc;
 	FloatRect _rcMenu[3];
-	FloatRect _rc1;
-	FloatRect _rc2;
-	FloatRect _rc3;
 	FloatRect _rcLoad[5];
 	FloatRect _rcLoadChoice;
 	FloatRect _rcSettingChoice;
-	FloatRect _rcSettings[6];
+	FloatRect _rcSettings[7];
 	char _fileName[256];
-	TCHAR str[128];
 	float _x, _y;
 	float _x2, _y2;
 	float _x3, _y3;
@@ -35,6 +31,18 @@ private:
 	bool _isMenu;
 	bool _isCheck;
 	bool _isLoad;
+	float _volume;
+	float _bgv;
+	char str[128];
+	int _percent;	//string 값 바꿔줄 변수
+	int _bgvPercent;
+
+	string mv;
+	wstring mv_w = L"";
+	
+	string bgv;
+	wstring bgv_w = L"";
+	
 
 public:
 	playerMenu();

@@ -27,6 +27,7 @@ class menu : public gameNode
 	float _rcAlphaChange;		//렉트 조절용
 	float _sceneAlpha;			//씬 투명도
 	bool _isClick;				//선택키(Z)를 눌렀는지?
+	float _volume;
 public:
 
 	menu();
