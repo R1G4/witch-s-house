@@ -49,13 +49,14 @@ HRESULT playGround::init()
 	addBackGroundImage();
 
 	SCENEMANAGER->addScene("MapToolScene", new mapTool);
-	SCENEMANAGER->changeScene("MapToolScene");
+	
 
 	firstFloorStage* _firstFloorStage;
 	_firstFloorStage = new stage1_1;
 	SCENEMANAGER->addScene("stage1_1", _firstFloorStage);
 
 	SCENEMANAGER->addScene("실험", new garDen);
+	SCENEMANAGER->changeScene("실험");
 	//SCENEMANAGER->changeScene("stage1_1");
 	
 	/////////////////UI 일단 주석처리/////////////

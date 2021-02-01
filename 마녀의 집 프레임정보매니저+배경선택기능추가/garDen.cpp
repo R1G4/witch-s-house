@@ -13,6 +13,8 @@ HRESULT garDen::init()
 {
 	IMAGEMANAGER->AddFrameImage("TerrainSample", L"Image/mapTool/타일.png", 7, 2);
 	IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/objSample.png", 2, 3);
+	IMAGEMANAGER->AddFrameImage("SavePoint", L"Image/mapTool/saveCat.png", 16, 4);
+	IMAGEMANAGER->AddImage("나무", L"Image/mapTool/tileset/001_tr.png");
 	//IMAGEMANAGER->AddImage("배경001", L"Image/mapTool/001.png");
 	camera = Vector2(0, 0);
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
@@ -20,13 +22,22 @@ HRESULT garDen::init()
 	_boss = new boss;
 	_boss->init(15, 13);
 
-	
+	frame = 0;
 	load();
 	return S_OK;
 }
 
 void garDen::update()
 {
+	count++;
+	if (count % 4 == 0)
+	{
+		frame++;
+		if (frame > 15)
+		{
+			frame = 0;
+		}
+	}
 	CAMERAMANAGER->setCamera(camera);
 	cameraMove();
 	_boss->update();
@@ -36,9 +47,9 @@ void garDen::update()
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (Vector2InRect(&_tiles[i*TILEX + j].rc,&CAMERAMANAGER->getWorldMouse())&&_tiles[i*TILEX+j].isCollider)
+			if (Vector2InRect(&_tiles[i*TILEX + j].rc, &CAMERAMANAGER->getWorldMouse()) && _tiles[i*TILEX + j].isCollider)
 			{
-				cout<<"ㅇㅇㅇㅇㅇ"<<endl;
+				cout << "ㅇㅇㅇㅇㅇ" << endl;
 			}
 		}
 	}
@@ -50,14 +61,15 @@ void garDen::release()
 
 void garDen::render()
 {
-	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("배경1"), Vector2(720, 648));
+	CAMERAMANAGER->render(_backGround, Vector2(720 + 480, 648));
+
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
 			if (KEYMANAGER->isToggleKey(VK_TAB))
 			{
-				CAMERAMANAGER->renderRc(_tiles[i*TILEX + j].rc,D2D1::ColorF::White,1,1);
+				CAMERAMANAGER->renderRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::White, 1, 1);
 				if (_tiles[i*TILEX + j].isCollider)
 				{
 					CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Red, 0.4);
@@ -77,7 +89,10 @@ void garDen::render()
 		}
 	}
 
+
 	_boss->render();
+	CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("SavePoint"), Vector2(1035, 755), frame, 2);
+	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("나무"), Vector2(720 + 480, 648));
 }
 
 void garDen::cameraMove()
@@ -107,7 +122,7 @@ void garDen::load()
 {
 	HANDLE file;
 	DWORD read;
-	file = CreateFile("save/save2.map", GENERIC_READ, NULL, NULL,
+	file = CreateFile("Stage/gardenstage.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	camera = _tiles->camera;

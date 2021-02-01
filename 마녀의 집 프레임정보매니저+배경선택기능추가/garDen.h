@@ -8,6 +8,9 @@ class garDen : public gameNode
 private:
 	tagTile _tiles[TILEX*TILEY];
 
+	int frame;
+	int count;
+
 	boss* _boss;
 	Image* _backGround;
 	DWORD _attribute[TILEX*TILEY];
