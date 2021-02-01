@@ -138,9 +138,6 @@
     <ClInclude Include="playGround.h">
       <Filter>playGround</Filter>
     </ClInclude>
-    <ClInclude Include="mapTool.h">
-      <Filter>playGround</Filter>
-    </ClInclude>
     <ClInclude Include="levelChoiceScene.h">
       <Filter>playGround\scense</Filter>
     </ClInclude>
@@ -197,6 +194,9 @@
     </ClInclude>
     <ClInclude Include="StringHelper.h">
       <Filter>2DGameFramework\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="mapTool.h">
+      <Filter>playGround</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -266,9 +266,6 @@
     <ClCompile Include="Math.cpp">
       <Filter>2DGameFramework\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="mapTool.cpp">
-      <Filter>playGround</Filter>
-    </ClCompile>
     <ClCompile Include="levelChoiceScene.cpp">
       <Filter>playGround\scense</Filter>
     </ClCompile>
@@ -322,6 +319,9 @@
     </ClCompile>
     <ClCompile Include="StringHelper.cpp">
       <Filter>2DGameFramework\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="mapTool.cpp">
+      <Filter>playGround</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
