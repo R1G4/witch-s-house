@@ -3,7 +3,8 @@
 #include "mapTool.h"
 #include "garDen.h"
 #include "stage1_1.h"
-
+#include "menu.h"
+#include "levelChoiceScene.h"
 class playGround : public gameNode
 {
 private:
@@ -23,5 +24,6 @@ public:
 	virtual void update();
 	virtual void render();
 	void addBackGroundImage();
+	void addScene();
 };
 

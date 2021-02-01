@@ -52,6 +52,9 @@
     <Filter Include="playGround\scense\FirstFloor">
       <UniqueIdentifier>{8699fed1-34ab-48d0-b379-7b2b0eb2e147}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\player">
+      <UniqueIdentifier>{701fd887-b02f-4772-bab2-3f33a83b0ed9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -168,6 +171,12 @@
     <ClInclude Include="firstFloorStage.h">
       <Filter>playGround\scense\FirstFloor</Filter>
     </ClInclude>
+    <ClInclude Include="menu.h">
+      <Filter>playGround\scense</Filter>
+    </ClInclude>
+    <ClInclude Include="status.h">
+      <Filter>playGround\player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -265,6 +274,12 @@
     </ClCompile>
     <ClCompile Include="firstFloorStage.cpp">
       <Filter>playGround\scense\FirstFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="menu.cpp">
+      <Filter>playGround\scense</Filter>
+    </ClCompile>
+    <ClCompile Include="status.cpp">
+      <Filter>playGround\player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

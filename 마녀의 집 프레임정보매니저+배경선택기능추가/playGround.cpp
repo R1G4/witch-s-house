@@ -58,6 +58,11 @@ HRESULT playGround::init()
 	SCENEMANAGER->addScene("실험", new garDen);
 	//SCENEMANAGER->changeScene("stage1_1");
 	
+	/////////////////UI 일단 주석처리/////////////
+	//addScene();
+	//SCENEMANAGER->changeScene("시작화면");
+	/////////////////////////////////////////////
+
 	return S_OK;
 }
 
@@ -77,7 +82,7 @@ void playGround::update()
 
 //그리기 전용
 void playGround::render()
-{	
+{
 	//백버퍼 초기화
 	D2DRenderer::GetInstance()->BeginRender(D2D1::ColorF::Black);
 	{
@@ -107,7 +112,7 @@ void playGround::render()
 
 void playGround::addBackGroundImage()
 {
-	wstring backName_w=L"";
+	wstring backName_w = L"";
 	string backName;
 	for (int i = 1; i < 94; i++)
 	{
@@ -116,4 +121,11 @@ void playGround::addBackGroundImage()
 		backName_w.assign(backName.begin(), backName.end());
 		IMAGEMANAGER->AddImage("배경" + to_string(i), backName_w);
 	}
+}
+
+void playGround::addScene()
+{
+	SCENEMANAGER->addScene("시작화면", new menu);
+	SCENEMANAGER->addScene("레벨선택", new levelChoiceScene);
+	SCENEMANAGER->addScene("MapToolScene", new mapTool);
 }

@@ -33,6 +33,10 @@ HRESULT mapTool::init()
 	sampleBack = RectMakePivot(Vector2(600, 0), Vector2(1280-600, 300), Pivot::LeftTop);
 	backCount = 1;
 	backName = "배경";
+
+	_status = new status;
+	_status->init();
+
 	return S_OK;
 }
 
@@ -42,6 +46,7 @@ void mapTool::release()
 
 void mapTool::update()
 {
+	_status->update();
 	mapMove();
 	setCtrl();
 	CAMERAMANAGER->setWorldMouse(_ptMouse);//Vector2InRect써서 뭔가 검증해야하면 만들어줘야함.(ptInrect써야한다면 반드시)
@@ -373,6 +378,8 @@ void mapTool::render()
 	//_D2DRenderer->DrawRectangle(MapRC, D2DRenderer::DefaultBrush::White);
 	if(!tabOpen)_D2DRenderer->FillRectangle(tileSelec, D2D1::ColorF::Enum::LightYellow, 0.5);
 	
+	_status->render();
+
 }
 
 //desc: 프레임 인덱스를 매니저를 이용하여 수정 date: 2021/1/29 by pju
