@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "garDen.h"
-#include "boss.h"
 
 garDen::garDen()
 {
@@ -14,6 +13,7 @@ HRESULT garDen::init()
 {
 	_playerTile = new astarTile;
 	_enemyTile = new astarTile;
+	_triggerTile = new astarTile;
 	for (int i = 0; i < TILEX*TILEY; i++)
 	{
 		_objTile[i] = new astarTile;
@@ -30,8 +30,14 @@ HRESULT garDen::init()
 
 	load();
 
-	_boss = new boss;
-	_boss->init(11, 14);
+	//_boss = new boss;
+	//_boss->init(11, 14);
+
+	//_skul = new skul;
+	//_skul->init(11, 14);
+
+	_bear = new bear;
+	_bear->init(11, 14);
 
 	_p_x = camera.x;
 	_p_y = camera.y;
@@ -39,7 +45,7 @@ HRESULT garDen::init()
 	objectLocation();	// 카메라 적용이 되야 정상적인 자리에 입력이 가능할듯
 
 	_setTile = false;
-
+	_isTrigger = false;
 	return S_OK;
 }
 
@@ -47,7 +53,9 @@ void garDen::update()
 {
 	CAMERAMANAGER->setCamera(camera);
 	cameraMove();
-	_boss->update();
+	//_boss->update();
+	//_skul->update();
+	_bear->update();
 	CAMERAMANAGER->setWorldMouse(_ptMouse);
 
 	_p_x = camera.x + WINSIZEX / 2;
@@ -64,19 +72,26 @@ void garDen::update()
 		_setTile = true;
 	}
 
-	_follow_count++;
-	if (_follow_count >= 10)
+	if (_isTrigger)
 	{
-		resetEverything();
-		_currentTile = _playerTile;
-		while (_numCount == 0 && !_stop) pathFinder(_currentTile);
-		if (Math::GetDistance(_playerTile->getIdx(), _playerTile->getIdy(), _enemyTile->getIdx(), _enemyTile->getIdy()) < 1.5f)
+		_follow_count++;
+		if (_follow_count >= 10)
 		{
-			_stop = true;
-			return;
+			resetEverything();
+			_currentTile = _playerTile;
+			while (_numCount == 0 && !_stop) pathFinder(_currentTile);
+			if (Math::GetDistance(_playerTile->getIdx(), _playerTile->getIdy(), _enemyTile->getIdx(), _enemyTile->getIdy()) < 1.5f)
+			{
+				_stop = true;
+				return;
+			}
+			_follow_count = 0;
 		}
-		_follow_count = 0;
 	}
+
+	RECT temp;
+	if(IntersectRect(&temp, &_playerTile->getRect(), &_triggerTile->getRect()))
+		_isTrigger = true;
 }
 
 void garDen::release()
@@ -121,7 +136,10 @@ void garDen::render()
 		}
 	}
 
-	_boss->render();
+	//_boss->render();
+	//_skul->render();
+	if(_isTrigger)
+		_bear->render();
 }
 
 void garDen::cameraMove()
@@ -173,11 +191,14 @@ void garDen::playerLocation()	// 플레이어 타일 셋팅
 
 void garDen::enemyLocation()	// 적 타일 셋팅
 {
-	b_left = _boss->getRect().left / TILESIZE;	// 에너미 있는 타일자리
-	b_top = _boss->getRect().top / TILESIZE;	// 에너미 있는 타일자리
-	_enemyTile->init(b_left, b_top);			// astar타일로 지속적인 적용
-	_enemyTile->setAttribute("enemy");			// astar타일로 에너미 적용
-
+	//b_left = _boss->getRect().left / TILESIZE;			// 에너미 있는 타일자리
+	//b_top = _boss->getRect().top / TILESIZE;				// 에너미 있는 타일자리
+	//b_left = _skul->getRect().left / TILESIZE;			// 에너미 있는 타일자리
+	//b_top = _skul->getRect().top / TILESIZE;				// 에너미 있는 타일자리
+	b_left = _bear->getRect().left / TILESIZE;				// 에너미 있는 타일자리
+	b_top = _bear->getRect().top / TILESIZE;				// 에너미 있는 타일자리
+	_enemyTile->init(b_left, b_top);						// astar타일로 지속적인 적용
+	_enemyTile->setAttribute("enemy");						// astar타일로 에너미 적용
 }
 
 void garDen::objectLocation()	// 오브젝트 타일 셋팅
@@ -189,12 +210,21 @@ void garDen::objectLocation()	// 오브젝트 타일 셋팅
 			_objTile[MaxIndex]->init(_tiles[i].rc.left / TILESIZE, _tiles[i].rc.top / TILESIZE);
 			MaxIndex++;
 		}
+		if (_tiles[i].terrain == TR_TRIGGER)	// 트리거 타일 세팅
+		{
+			cout << i << endl;
+			_triggerTile->init(_tiles[i].rc.left / TILESIZE, _tiles[i].rc.top / TILESIZE);
+		}
 	}
 
 	for (int i = 0; i < MaxIndex; i++)
 	{
 		_objTile[i]->setAttribute("wall");
 	}
+}
+
+void garDen::getTrigger()
+{
 }
 
 void garDen::setAstarTile()
@@ -415,9 +445,13 @@ void garDen::pathFinder(astarTile * currentTile)
 				_vTotalList[b_top*TILEX + b_left]->setAttribute("enemy");
 				_vTotalList[b_top*TILEX + b_left]->setColor(D2D1::ColorF::Red);
 				_enemyTile = _vTotalList[b_top*TILEX + b_left];
-				//_boss->setRect(FloatRect(_enemyTile->getRect()));
-				_boss->setX(_enemyTile->getRect().left);			// 에너미 움직임 X
-				_boss->setY(_enemyTile->getRect().top);				// 에너미 움직임 Y
+
+				//_boss->setX(_enemyTile->getRect().left);					// 에너미 움직임 X
+				//_boss->setY(_enemyTile->getRect().top);					// 에너미 움직임 Y
+				//_skul->setX(_enemyTile->getRect().left);					// 에너미 움직임 X
+				//_skul->setY(_enemyTile->getRect().top);					// 에너미 움직임 Y
+				_bear->setX(_enemyTile->getRect().left);					// 에너미 움직임 X
+				_bear->setY(_enemyTile->getRect().top);						// 에너미 움직임 Y
 			}
 			_currentTile = _currentTile->getParentNode();
 		}
