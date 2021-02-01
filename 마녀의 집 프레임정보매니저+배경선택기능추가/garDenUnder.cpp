@@ -13,7 +13,7 @@ HRESULT garDenUnder::init()
 {
 	IMAGEMANAGER->AddFrameImage("TerrainSample", L"Image/mapTool/鸥老.png", 7, 2);
 	IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/objSample.png", 2, 3);
-	//IMAGEMANAGER->AddImage("唱公", L"Image/mapTool/003_tr.png");
+	IMAGEMANAGER->AddImage("唱公", L"Image/mapTool/tileset/003_tr.png");
 	camera = Vector2(0, 0);
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
 	load();
@@ -89,7 +89,7 @@ void garDenUnder::render()
 				_tiles[i*TILEX + j].objFrameX, _tiles[i*TILEX + j].objFrameY);
 		}
 	}
-
+	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("唱公"), Vector2(720 + 432, 648 - 96));
 }
 
 void garDenUnder::load()
