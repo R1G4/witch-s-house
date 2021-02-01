@@ -27,6 +27,7 @@ HRESULT mapTool::init()
 	//load();
 	_crtSelect = CTRL_TERRAINDRAW;
 	camera = Vector2(0,0);
+	
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY );
 	tabOpen = true;
 	sampleBack = RectMakePivot(Vector2(600, 0), Vector2(1280-600, 300), Pivot::LeftTop);
@@ -98,7 +99,12 @@ void mapTool::update()
 		setBack();
 		break;
 	}
-
+	/*if (_backGround != NULL)
+	{
+		CAMERAMANAGER->setConfig(0 - _backGround->GetWidth() / 2, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
+		
+	}*/
+	
 	if (KEYMANAGER->isOnceKeyDown('M'))
 	{
 		if (tabOpen == false) tabOpen = true;
@@ -308,7 +314,7 @@ void mapTool::render()
 		}
 	}
 	//배경 샘플 랜딩하려는 부분
-	if (_crtSelect == CTRL_BACKGROUND)
+	if (_crtSelect == CTRL_BACKGROUND&&tabOpen)
 	{
 		IMAGEMANAGER->FindImage(backName + to_string(backCount))->SetSize(Vector2(600, 270));
 		IMAGEMANAGER->FindImage(backName + to_string(backCount))->Render(Vector2(950,150));
@@ -750,6 +756,7 @@ void mapTool::save()
 		{
 		case 1:
 			_tiles->camera = camera;
+			_tiles->backGroundName = backName+to_string(backCount);
 			cout << _tiles->camera.x;
 			file = CreateFile(strFilePath, GENERIC_WRITE, NULL, NULL,
 				CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -796,6 +803,7 @@ void mapTool::load()
 
 			ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 			camera = _tiles->camera;
+			_backGround = IMAGEMANAGER->FindImage(_tiles->backGroundName);
 			CAMERAMANAGER->setCamera(camera);
 			CloseHandle(file);
 			break;
@@ -808,6 +816,7 @@ void mapTool::load()
 //desc: 백터에서 매니저의 map에서 조회 date: 2020/1/29 by pju
 void mapTool::getFrameTile()
 {
+	_vFrameTile.clear();
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)

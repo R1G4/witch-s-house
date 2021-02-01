@@ -36,7 +36,7 @@ private:
 	//샘플 오브젝트
 	tagSampleObj _sampleObj[SAMPLEOBJECTX*SAMPLEOBJECTY];
 	//샘플 프레임 이미지 정보
-	vector<tagSampleFrameInfo> _sampleFrameImg;
+
 	//프레임 이미지(플레이어, 에너미, 오브젝트) 타일
 	vector<tagFrameTile> _vFrameTile;
 

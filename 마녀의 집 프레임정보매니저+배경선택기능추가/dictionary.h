@@ -61,6 +61,7 @@ struct tagTile
 	bool isCollider;
 	Vector2 camera;
 	FRAMEATTRIBUTE attribute;
+	string backGroundName;
 };
 struct tagSampleTile
 {
