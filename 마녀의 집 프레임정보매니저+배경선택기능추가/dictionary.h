@@ -15,7 +15,7 @@
 #define SAMPLETILEY 2
 #define SAMPLEOBJECTX 2 // 그림변환시 변환 필요
 #define SAMPLEOBJECTY 3 // 그림변환시 변환 필요
-
+#define OBJSIZE 6 // 오브젝트 추가 시 변환 필요
 
 enum CTRL
 {
@@ -52,11 +52,9 @@ struct tagTile
 	TERRAIN terrain;		//지형
 	OBJECT obj;				//오브젝트
 	FloatRect rc;			//렉트
-	string frameKeyName;	//타일에 배치된 이미지가 프레임 이미지일 경우 키값을 저장한다.
+	string keyName;	//타일에 배치된 이미지가 프레임 이미지일 경우 키값을 저장한다.
 	int terrainFrameX;		//타일 번호(애니메이션 프레임 번호 생각하면됨)
 	int terrainFrameY;
-	int objFrameX;			//오브젝트 번호 (위와 같다)
-	int objFrameY;
 	bool isMapOn;
 	bool isCollider;
 	Vector2 camera;

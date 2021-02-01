@@ -24,7 +24,7 @@ public:
 	virtual void release();
 	virtual void update();
 	virtual void render();
-	void addBackGroundImage();
+	void addAutoImage();
 	void addScene();
 };
 

@@ -19,12 +19,17 @@ HRESULT mapTool::init()
 	//IMAGEMANAGER->AddImage("배경", L"Image/mapTool/stageMap/008.png");
 
 	setButton();
-	_frameInterval = 0;	//프레임 인덱스 간격 초기화
-	_realNum = _change_num = 0;
-	_y_rect_num = 1;	// png파일 변환시 y축의 약수여야함
+	// png파일 변환시 y축의 약수여야함
+	_y_rect_num = 1;	
+
+	//프레임 이미지 간격 초기화
+	_frameInterval = 0;	 
+
+	//선택된 이미지(샘플 및 타일 삽입용)
+	_frameSelected = 0;	 
+	_objSelected = 1;
 
 	setup();
-	//load();
 	_crtSelect = CTRL_TERRAINDRAW;
 	camera = Vector2(0,0);
 	
@@ -33,7 +38,7 @@ HRESULT mapTool::init()
 	sampleBack = RectMakePivot(Vector2(600, 0), Vector2(1280-600, 300), Pivot::LeftTop);
 	backCount = 1;
 	backName = "배경";
-
+	onjName = "obj";
 
 	return S_OK;
 }
@@ -65,18 +70,21 @@ void mapTool::update()
 	case CTRL_TERRAINDRAW:
 		setMap();
 		break;
-	case CTRL_OBJDRAW:
-		setMap();
+	case CTRL_OBJDRAW:	
+		setObjTile();
+		//단축키로 오브젝트의 순서를 바꿀수있다.
+		if (KEYMANAGER->isOnceKeyDown('P'))
+			_objSelected = _objSelected <= 0 ? OBJSIZE : _objSelected -= 1;
+		if (KEYMANAGER->isOnceKeyDown('N'))
+			_objSelected = _objSelected >= OBJSIZE ? 0 : _objSelected += 1;
 		break;
 	case CTRL_ERASER:
 		setMap();
 		break;
 	case CTRL_PREV:
-		previous();
 		setMap();
 		break;
 	case CTRL_NEXT:
-		next();
 		setMap();
 		break;
 	case CTRL_END:
@@ -85,7 +93,9 @@ void mapTool::update()
 		setMap();
 		break;
 	case CTRL_SETFRAMETILE:
+		//프레임이미지 배치
 		setFrameTile();
+		//단축키로 프레임이미지의 순서를 바꿀수있다.
 		if (KEYMANAGER->isOnceKeyDown('P'))
 			_frameSelected = _frameSelected <= 0 ? FRAMEINFOMANAGER->GetSize() - 1 : _frameSelected -= 1;
 		if (KEYMANAGER->isOnceKeyDown('N'))
@@ -101,12 +111,6 @@ void mapTool::update()
 		setBack();
 		break;
 	}
-	/*if (_backGround != NULL)
-	{
-		CAMERAMANAGER->setConfig(0 - _backGround->GetWidth() / 2, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
-		
-	}*/
-	
 	if (KEYMANAGER->isOnceKeyDown('M'))
 	{
 		if (tabOpen == false) tabOpen = true;
@@ -159,18 +163,6 @@ void mapTool::render()
 			}
 		}
 	}
-	//for (int i = 0; i < TILEY; i++)
-	//{
-	//	for (int j = 0; j < TILEX; j++)
-	//	{
-	//		if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
-	//		IMAGEMANAGER->FindImage("ObjectSample")->FrameRender(
-	//			Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE, _tiles[i*TILEX + j].rc.top ),	// 보정값 바꿈
-	//			_tiles[i*TILEX + j].objFrameX, _tiles[i*TILEX + j].objFrameY);
-	//		cout << "ddd";
-	//		if (_tiles[i*TILEX + j].obj == OBJ_CORELATION)_D2DRenderer->FillRectangle(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aquamarine, 0.5);
-	//	}//보정값 필요할지도 모름
-	//}
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
@@ -191,12 +183,15 @@ void mapTool::render()
 		for (int j = 0; j < TILEX; j++)
 		{
 			if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
-			/*IMAGEMANAGER->FindImage("ObjectSample")->FrameRender(
-				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top + TILESIZE / 2),
-				_tiles[i*TILEX + j].objFrameX, _tiles[i*TILEX + j].objFrameY);*/
-			CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("ObjectSample"),
-				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top + TILESIZE / 2),
-				_tiles[i*TILEX + j].objFrameX, _tiles[i*TILEX + j].objFrameY);
+			//중간에 배치하고 싶다면 이걸쓰세요. 디폴트 센타
+			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
+				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2,
+					_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));
+
+			//오른쪽으로 붙고자 하면 이걸쓰고
+			/*CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
+				Vector2(_tiles[i*TILEX + j].rc.right,
+					_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));*/
 		}
 	}
 	
@@ -218,35 +213,40 @@ void mapTool::render()
 				}
 			}
 		}
-		if(_crtSelect == CTRL_OBJDRAW)
+		//desc: 이전으로 다음으로 추가 date 2021/2/1 by pju
+		if (_crtSelect == CTRL_OBJDRAW)
 		{
-		//if (!isterrain) { by pju 일단 이넘으로 대체하기 위해
-			/*for (int i = 0; i < SAMPLEOBJECTY; i++)
-			{
-				for (int j = 0; j < SAMPLEOBJECTX; j++)
-				{
+			int previous = _objSelected + 1;
+			int	next = _objSelected - 1;
 
-					IMAGEMANAGER->FindImage("ObjectSample")->FrameRender(Vector2(750 + j * SAMPLETILESIZE, 100 + i * SAMPLETILESIZE), j, i);
-					if (KEYMANAGER->isToggleKey(VK_TAB))
-					{
-						_D2DRenderer->DrawRectangle(_sampleObj[i*SAMPLEOBJECTX + j].rc, D2DRenderer::DefaultBrush::White);
-					}
-				}
-			}*/
-			int resetNum = _change_num;	// 같은 줄에 렉트랑 이미지를 고정시키기 위해 필요한 변수
-			// 변형시켜야하는 랜더
-			for (int i = _change_num; i < _change_num + _y_rect_num; i++)
-			{
-				for (int j = 0; j < SAMPLEOBJECTX; j++)
-				{
-					IMAGEMANAGER->FindImage("ObjectSample")->FrameRender(Vector2(750 + j * SAMPLEOBJTILESIZEX, 100 + (i - resetNum) * SAMPLEOBJTILESIZEY), j, i);
+			if (next < 1)
+				next = OBJSIZE;
+			if (previous > OBJSIZE)
+				previous = 1;
 
-					if (KEYMANAGER->isToggleKey(VK_TAB))
-					{
-						_D2DRenderer->DrawRectangle(_sampleObj[(i - resetNum)*SAMPLEOBJECTX + j].rc, D2DRenderer::DefaultBrush::White);
-					}
-				}
-			}
+			_D2DRenderer->FillRectangle(Vector2(790, 150), Vector2(245, 245), Pivot::Center, D2D1::ColorF::Enum::White, 1.0f);
+			IMAGEMANAGER->FindImage(onjName + to_string(next))->SetScale(0.82);
+			IMAGEMANAGER->FindImage(onjName + to_string(next))->Render(Vector2(790, 150));
+			_D2DRenderer->DrawRectangle(Vector2(790, 150), Vector2(245, 245), Pivot::Center, D2D1::ColorF::Enum::DarkGray, 1.0f, 5);
+
+			_D2DRenderer->FillRectangle(Vector2(1130, 150), Vector2(245, 245), Pivot::Center, D2D1::ColorF::Enum::White, 1.0f);
+			IMAGEMANAGER->FindImage(onjName + to_string(previous))->SetScale(0.82);
+			IMAGEMANAGER->FindImage(onjName + to_string(previous))->Render(Vector2(1130, 150));
+			_D2DRenderer->DrawRectangle(Vector2(1130, 150), Vector2(245, 245), Pivot::Center, D2D1::ColorF::Enum::DarkGray, 1.0f, 5);
+
+			_D2DRenderer->FillRectangle(Vector2(950, 150), Vector2(275, 280), Pivot::Center, D2D1::ColorF::Enum::White, 1.0f);
+			IMAGEMANAGER->FindImage(onjName + to_string(_objSelected))->Render(Vector2(950, 150));
+			_D2DRenderer->DrawRectangle(Vector2(950, 150), Vector2(275, 280), Pivot::Center, D2D1::ColorF::Enum::DarkGray, 1.0f, 5);
+
+
+			IMAGEMANAGER->FindImage("화살표왼쪽")->SetScale(0.65f);
+			IMAGEMANAGER->FindImage("화살표왼쪽")->Render(Vector2(634, 150));
+
+			IMAGEMANAGER->FindImage("화살표오른쪽")->SetScale(0.65f);
+			IMAGEMANAGER->FindImage("화살표오른쪽")->Render(Vector2(1265, 150));
+
+			IMAGEMANAGER->FindImage("화살표")->SetScale(0.65f);
+			IMAGEMANAGER->FindImage("화살표")->Render(Vector2(950, 280));
 		}
 
 		//desc: 이전으로 다음으로 추가 date 2021/1/29 by pju
@@ -333,8 +333,8 @@ void mapTool::render()
 		Save.img->Render(Vector2(Save.frc.left + 72, Save.frc.top + 24));
 		Load.img->Render(Vector2(Load.frc.left + 72, Load.frc.top + 24));
 		Erase.img->Render(Vector2(Erase.frc.left + 72, Erase.frc.top + 24));
-		Prev.img->Render(Vector2(Prev.frc.left + 72, Prev.frc.top + 24));
-		Next.img->Render(Vector2(Next.frc.left + 72, Next.frc.top + 24));
+		//Prev.img->Render(Vector2(Prev.frc.left + 72, Prev.frc.top + 24));
+		//Next.img->Render(Vector2(Next.frc.left + 72, Next.frc.top + 24));
 		terrain.img->Render(Vector2(terrain.frc.left + 72, terrain.frc.top + 24));
 		Object.img->Render(Vector2(Object.frc.left + 72, Object.frc.top + 24));
 		Collider.img->Render(Vector2(Collider.frc.left + 72, Collider.frc.top + 24));
@@ -366,16 +366,18 @@ void mapTool::render()
 	//타일에 프레임 이미지 배치 랜더
 	for (int i = 0; i < _vFrameTile.size(); i++)
 	{
-		if (_vFrameTile[i].kinds == PLAYER)  _D2DRenderer->FillRectangle(_vFrameTile[i].rc, D2D1::ColorF::Blue, 0.7);
-		if (_vFrameTile[i].kinds == ENEMY)  _D2DRenderer->FillRectangle(_vFrameTile[i].rc, D2D1::ColorF::Black, 0.7);
-		_vFrameTile[i].img->FrameRender(Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2,  _vFrameTile[i].rc.bottom  - _vFrameTile[i].img->GetSize().y / 2),
-			_vFrameTile[i].frameX, _vFrameTile[i].frameY);
+		if (_vFrameTile[i].kinds == PLAYER)  CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::Blue, 0.7);
+		if (_vFrameTile[i].kinds == ENEMY)  CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::Black, 0.7);
+		CAMERAMANAGER->FrameRender
+		(
+			_vFrameTile[i].img,
+			Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.bottom - _vFrameTile[i].img->GetSize().y / 2),
+			_vFrameTile[i].frameX, _vFrameTile[i].frameY
+		);
 	}
 	if(tabOpen)_D2DRenderer->DrawRectangle(sampleSelec, D2DRenderer::DefaultBrush::White);
 	//_D2DRenderer->DrawRectangle(MapRC, D2DRenderer::DefaultBrush::White);
 	if(!tabOpen)_D2DRenderer->FillRectangle(tileSelec, D2D1::ColorF::Enum::LightYellow, 0.5);
-	
-
 }
 
 //desc: 프레임 인덱스를 매니저를 이용하여 수정 date: 2021/1/29 by pju
@@ -432,8 +434,8 @@ void mapTool::setButton()
 	IMAGEMANAGER->AddImage("Bar", L"Image/mapTool/bar2.png");
 	Save.img = IMAGEMANAGER->FindImage("Save");
 	Load.img = IMAGEMANAGER->FindImage("Load");
-	Prev.img = IMAGEMANAGER->FindImage("Prev");
-	Next.img = IMAGEMANAGER->FindImage("Next");
+	//Prev.img = IMAGEMANAGER->FindImage("Prev");
+	//Next.img = IMAGEMANAGER->FindImage("Next");
 	terrain.img = IMAGEMANAGER->FindImage("Terrain");
 	Object.img = IMAGEMANAGER->FindImage("Object");
 	Erase.img = IMAGEMANAGER->FindImage("Erase");
@@ -454,8 +456,8 @@ void mapTool::setButton()
 	Erase.frc = RectMakePivot(Vector2(288 + 10+72+48, 660), Vector2(144, 48), Pivot::Center);
 	terrain.frc = RectMakePivot(Vector2(432+10+72+48, 660), Vector2(144, 48), Pivot::Center);
 	Object.frc = RectMakePivot(Vector2(576+10+72+48, 660), Vector2(144, 48), Pivot::Center);
-	Prev.frc = RectMakePivot(Vector2(720+10+72+48,660), Vector2(144, 48), Pivot::Center);
-	Next.frc = RectMakePivot(Vector2(864+10+72 +48, 660), Vector2(144, 48), Pivot::Center);
+	//Prev.frc = RectMakePivot(Vector2(720+10+72+48,660), Vector2(144, 48), Pivot::Center);
+	//Next.frc = RectMakePivot(Vector2(864+10+72 +48, 660), Vector2(144, 48), Pivot::Center);
 	Close.frc = RectMakePivot(Vector2(1008 + 10+72+48, 660), Vector2(144, 48), Pivot::Center);
 	Open.frc = RectMakePivot(Vector2(1008 + 10 + 72+48, 660), Vector2(144, 48), Pivot::Center);
 	Collider.frc = RectMakePivot(Vector2(0 + 72 + 48, 600), Vector2(144, 48), Pivot::Center);
@@ -483,35 +485,6 @@ void mapTool::setup()
 				Vector2(750 + j * SAMPLETILESIZE, 100 + i * SAMPLETILESIZE), Vector2(SAMPLETILESIZE, SAMPLETILESIZE), Pivot::Center);
 		}
 	}
-	/*for (int i = 0; i < SAMPLEOBJECTY; ++i)//y
-	{
-		for (int j = 0; j < SAMPLEOBJECTX; ++j)//x
-		{
-			_sampleObj[i * SAMPLEOBJECTX + j].objFrameX = j;//0~19->1번 줄 20~39->2번줄
-			_sampleObj[i * SAMPLEOBJECTX + j].objFrameY = i;
-
-			//RectMake, RectMakeCenter
-			_sampleObj[i * SAMPLEOBJECTX + j].rc = RectMakePivot(
-				Vector2(750 + j * SAMPLETILESIZE, 100 + i * SAMPLETILESIZE), Vector2(SAMPLETILESIZE, SAMPLETILESIZE), Pivot::Center);
-		}
-	}*/
-	// 변형시켜야할 오브젝트 이닛
-	for (int i = 0; i < SAMPLEOBJECTY; ++i)//y
-	{
-		for (int j = 0; j < SAMPLEOBJECTX; ++j)//x
-		{
-			_sampleObj[i * SAMPLEOBJECTX + j].objFrameX = j;//0~5->1번 줄 6~11->2번줄 12~17->3번줄
-			_sampleObj[i * SAMPLEOBJECTX + j].objFrameY = i;
-
-			//RectMake, RectMakeCenter
-			_sampleObj[i * SAMPLEOBJECTX + j].rc = RectMakePivot(
-				Vector2(750 + j * SAMPLEOBJTILESIZEX, 100 + i * SAMPLEOBJTILESIZEY), Vector2(SAMPLEOBJTILESIZEX, SAMPLEOBJTILESIZEY), Pivot::Center);
-
-			// 리얼 넘버
-			_sampleObj[i * SAMPLEOBJECTX + j].realNum = _realNum;
-			_realNum++;
-		}
-	}
 
 	//우리가 쓸 타일맵 제작
 	for (int i = 0; i < TILEY; ++i)
@@ -529,8 +502,6 @@ void mapTool::setup()
 	{
 		_tiles[i].terrainFrameX = 5;
 		_tiles[i].terrainFrameY = 0;
-		_tiles[i].objFrameX = 0;
-		_tiles[i].objFrameY = 0;
 		_tiles[i].terrain = terrainSelect(_tiles[i].terrainFrameX, _tiles[i].terrainFrameY);
 		_tiles[i].obj = OBJ_NONE;
 	}
@@ -552,40 +523,6 @@ void mapTool::setMap()
 				}
 			}
 		}
-		/*for (int i = 0; i < SAMPLEOBJECTY; i++)
-		{
-			for (int j = 0; j < SAMPLEOBJECTX; j++)
-			{
-				if (Vector2InRect(&_sampleObj[i * SAMPLEOBJECTX + j].rc, &Vector2(_ptMouse.x, _ptMouse.y)) && !isterrain)
-				{
-					_currentTile.x = _sampleObj[i * SAMPLEOBJECTX + j].objFrameX;
-					_currentTile.y = _sampleObj[i * SAMPLEOBJECTX + j].objFrameY;
-					sampleSelec = RectMakePivot(Vector2(_sampleObj[i * SAMPLEOBJECTX + j].rc.left, _sampleObj[i * SAMPLEOBJECTX + j].rc.top), Vector2(48, 48), Pivot::LeftTop);
-					//cout << _currentTile.x << endl << _currentTile.y << endl;
-				}
-			}
-		}*/
-		// 변형시켜야할 오브젝트 업데이트
-		int resetNum = _change_num;	// 같은 줄에 렉트랑 이미지를 고정시키기 위해 필요한 변수
-		for (int i = _change_num; i < _change_num + _y_rect_num; i++)	// 이전이나 이후 버튼으로 가져오는 2줄
-		{
-			for (int j = 0; j < SAMPLEOBJECTX; j++)	// 가로줄이니 안바꿔도됨
-			{
-				if (Vector2InRect(&_sampleObj[(i - resetNum) * SAMPLEOBJECTX + j].rc, &Vector2(_ptMouse.x, _ptMouse.y)) && _crtSelect == CTRL_OBJDRAW)// !isterrain) by pju 이넘으로 대체하기 위해
-				{
-					_currentTile.x = _sampleObj[i * SAMPLEOBJECTX + j].objFrameX;
-					_currentTile.y = _sampleObj[i * SAMPLEOBJECTX + j].objFrameY;
-					sampleSelec = RectMakePivot(Vector2(_sampleObj[i * SAMPLEOBJECTX + j].rc.left, _sampleObj[i * SAMPLEOBJECTX + j].rc.top), Vector2(48, 48), Pivot::LeftTop);
-					//cout << _currentTile.x << endl << _currentTile.y << endl;
-
-					_sampleObj[i * SAMPLEOBJECTX + j].rc = RectMakePivot(
-						Vector2(750 + j * SAMPLEOBJTILESIZEX, 100 + (i - resetNum) * SAMPLEOBJTILESIZEY), Vector2(SAMPLEOBJTILESIZEX, SAMPLEOBJTILESIZEY), Pivot::Center);
-
-					cout << _sampleObj[i * SAMPLEOBJECTX + j].realNum << endl;
-					_crtSelect = CTRL_OBJDRAW;
-				}
-			}
-		}
 	}
 	if (tabOpen == false)
 	{
@@ -604,18 +541,9 @@ void mapTool::setMap()
 
 							_tiles[i*TILEX + j].terrain = terrainSelect(_currentTile.x, _currentTile.y);
 						}
-						else if (_crtSelect == CTRL_OBJDRAW)
-						{
-
-							_tiles[i*TILEX + j].objFrameX = _currentTile.x;
-							_tiles[i*TILEX + j].objFrameY = _currentTile.y;
-
-							_tiles[i*TILEX + j].obj = objSelect(_currentTile.x, _currentTile.y);
-						}
 						else if (_crtSelect == CTRL_ERASER)
 						{
-							_tiles[i*TILEX + j].objFrameX = NULL;
-							_tiles[i*TILEX + j].objFrameY = NULL;
+							_tiles[i*TILEX + j].keyName = "";
 							_tiles[i*TILEX + j].obj = OBJ_NONE;
 						}
 						else if (_crtSelect == CTRL_COLLIDER)
@@ -657,8 +585,6 @@ void mapTool::setMap()
 			}
 		}
 	}
-
-
 }
 
 void mapTool::setCtrl()
@@ -668,34 +594,52 @@ void mapTool::setCtrl()
 		if (Vector2InRect(&Save.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_SAVE;
 		if (Vector2InRect(&Load.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_LOAD;
 		if (Vector2InRect(&Erase.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_ERASER;
-		if (Vector2InRect(&Prev.frc,&Vector2(_ptMouse))) { _crtSelect = CTRL_PREV; _change_number = false; }
-		if (Vector2InRect(&Next.frc,&Vector2(_ptMouse))) { _crtSelect = CTRL_NEXT; _change_number = false; }
+		//if (Vector2InRect(&Prev.frc,&Vector2(_ptMouse)))  _crtSelect = CTRL_PREV;
+		//if (Vector2InRect(&Next.frc,&Vector2(_ptMouse)))  _crtSelect = CTRL_NEXT; 
 		if (Vector2InRect(&terrain.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_TERRAINDRAW;
 		if (Vector2InRect(&Object.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_OBJDRAW;
 		if (Vector2InRect(&Collider.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_COLLIDER;
 		if (Vector2InRect(&FrameObj.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_SETFRAMETILE;
 		if (Vector2InRect(&setCor.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_SETCORRELATION;
 		if (Vector2InRect(&setTri.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_SETTRIGGER;
+
+		//desc : 이전 이후 인덱스 비교 date 2021/2/1 by pju
 		if (Vector2InRect(&prevArrow.frc, &Vector2(_ptMouse)) && tabOpen)
-			_frameSelected = _frameSelected <= 0 ? FRAMEINFOMANAGER->GetSize() - 1 : _frameSelected -= 1;
+		{
+			//버튼 클릭 시 이전 이미지로
+			switch (_crtSelect)
+			{
+			case CTRL_OBJDRAW:
+				_objSelected = _objSelected <= 1 ? OBJSIZE  : _objSelected -= 1;
+				break;
+			case CTRL_SETFRAMETILE:
+				_frameSelected = _frameSelected <= 0 ? FRAMEINFOMANAGER->GetSize() - 1 : _frameSelected -= 1;
+				break;
+			case CTRL_BACKGROUND:
+				backCount--;
+				if (backCount < 1)backCount = 93;
+				break;
+			}
+		}
 		if (Vector2InRect(&nextArrow.frc, &Vector2(_ptMouse)) && tabOpen)
-			_frameSelected = _frameSelected >= FRAMEINFOMANAGER->GetSize() - 1 ? 0 : _frameSelected += 1;
+		{
+			//버튼 클릭 시 이후 이미지로
+			switch (_crtSelect)
+			{
+			case CTRL_OBJDRAW:
+				_objSelected = _objSelected >= OBJSIZE ? 1 : _objSelected += 1;
+				break;
+			case CTRL_SETFRAMETILE:
+				_frameSelected = _frameSelected >= FRAMEINFOMANAGER->GetSize() - 1 ? 0 : _frameSelected += 1;
+				break;
+			case CTRL_BACKGROUND:
+				backCount++;
+				if (backCount > 93)backCount = 1;
+				break;
+			}
+		}
 		if(Vector2InRect(&BackGround.frc,&Vector2(_ptMouse)))_crtSelect=CTRL_BACKGROUND;
 	}
-	if (KEYMANAGER->isStayKeyDown(VK_SHIFT))
-	{
-		
-	}
-	//if (KEYMANAGER->isOnceKeyDown('P'))
-	//{
-	//	_crtSelect = CTRL_PREV;
-	//	cout << _change_num;
-	//}
-	//if (KEYMANAGER->isOnceKeyDown('N'))
-	//{ 
-	//	_crtSelect = CTRL_NEXT;
-	//	cout << _change_num;
-	//}
 }
 
 void mapTool::mapMove()
@@ -835,24 +779,24 @@ void mapTool::getFrameTile()
 			if (!FRAMEINFOMANAGER->GetSize())
 				return;
 
-			if (!FRAMEINFOMANAGER->KeyCheck(_tiles[i*TILEX + j].frameKeyName))
+			if (!FRAMEINFOMANAGER->KeyCheck(_tiles[i*TILEX + j].keyName))
 				continue;
 
 			//렉트 생성
 			FloatRect rc;
 			rc = RectMakePivot(Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top + TILESIZE / 2), Vector2(TILESIZE, TILESIZE), Pivot::Center);
 
-			FRAMEATTRIBUTE tempKinds = FRAMEINFOMANAGER->GetAttribute(_tiles[i*TILEX + j].frameKeyName);
+			FRAMEATTRIBUTE tempKinds = FRAMEINFOMANAGER->GetAttribute(_tiles[i*TILEX + j].keyName);
 
 			tagFrameTile temp;
 			temp.rc = rc;
 			temp.kinds = tempKinds;
-			temp.keyName = _tiles[i*TILEX + j].frameKeyName;
+			temp.keyName = _tiles[i*TILEX + j].keyName;
 			temp.indexX = i;
 			temp.indexY = j;
 			temp.frameX = 0;
 			temp.frameY = 0;
-			temp.img = FRAMEINFOMANAGER->FindImage(_tiles[i*TILEX + j].frameKeyName);
+			temp.img = FRAMEINFOMANAGER->FindImage(_tiles[i*TILEX + j].keyName);
 			addFrameTile(temp);
 		}
 	}
@@ -860,32 +804,6 @@ void mapTool::getFrameTile()
 
 void mapTool::erase()
 {
-}
-
-void mapTool::previous()
-{
-	// 변형시켜야할 이전 세트
-	if (!_change_number)
-	{
-		_change_number = true;
-
-		_change_num = _change_num - _y_rect_num;
-		if (_change_num < 0)
-			_change_num = SAMPLEOBJECTY - _y_rect_num;
-	}
-}
-
-void mapTool::next()
-{
-	// 변형시켜야할 이전 세트
-	if (!_change_number)
-	{
-		_change_number = true;
-
-		_change_num = _change_num + _y_rect_num;
-		if (_change_num > SAMPLEOBJECTY - _y_rect_num)
-			_change_num = 0;
-	}
 }
 
 void mapTool::setFrameTile()
@@ -905,7 +823,7 @@ void mapTool::setFrameTile()
 		for (int j = 0; j < TILEX; j++)
 		{
 			//해당 타일의 인덱스가 마우스와 충돌한 경우(타일에 배치 시도한 경우)
-			if (Vector2InRect(&_tiles[i*TILEX + j].rc, &Vector2(_ptMouse)))
+			if (Vector2InRect(&_tiles[i*TILEX + j].rc, &CAMERAMANAGER->getWorldMouse()))
 			{
 				//렉트 생성
 				rc = RectMakePivot(Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top + TILESIZE / 2), Vector2(TILESIZE, TILESIZE), Pivot::Center);
@@ -927,16 +845,16 @@ void mapTool::setFrameTile()
 
 				//제거되어야 하는 상태
 				if (isDel)	//해당 타일의 프레임 키값을 초기화 해준다.
-					_tiles[i*TILEX + j].frameKeyName = "";
+					_tiles[i*TILEX + j].keyName = "";
 				else	   //해당 타일의 프레임 키값을 넣어준다.
-					_tiles[i*TILEX + j].frameKeyName = FRAMEINFOMANAGER->FindKey(_frameSelected);
+					_tiles[i*TILEX + j].keyName = FRAMEINFOMANAGER->FindKey(_frameSelected);
 				//아래 불필요한 연산은 제외한다.
 
 				if (tempKinds != PLAYER)
 					break;
 			}
 			//충돌하지 않은 경우 플레이어는 중복 배치가 불가능
-			else if (FRAMEINFOMANAGER->KeyCheck(_tiles[i*TILEX + j].frameKeyName))
+			else if (FRAMEINFOMANAGER->KeyCheck(_tiles[i*TILEX + j].keyName))
 			{
 				FRAMEATTRIBUTE tempKinds = FRAMEINFOMANAGER->GetAttribute(_frameSelected);
 
@@ -944,7 +862,42 @@ void mapTool::setFrameTile()
 					continue;
 
 				//이미 타일에는 플레이어 타입이 존재하는 경우 기존 타일에 프레임 이미지 키값을 제거한다.
-				_tiles[i*TILEX + j].frameKeyName = "";
+				_tiles[i*TILEX + j].keyName = "";
+			}
+		}
+	}
+}
+
+void mapTool::setObjTile()
+{
+	//예외 탭이 켜져있거나 혹은 마우스 왼쪽버튼 클릭 상태가 아닐 시
+	if (tabOpen || !_leftButtonDown)
+		return;
+
+	//왼쪽버튼 한번 눌렀을대 설정이 되어야 하기에 초기화 해준다.
+	_leftButtonDown = false;
+
+	//삭제 여부
+	bool isDel = false;
+	//FloatRect rc;
+	for (int i = 0; i < TILEY; i++)
+	{
+		for (int j = 0; j < TILEX; j++)
+		{
+			//해당 타일의 인덱스가 마우스와 충돌한 경우(타일에 배치 시도한 경우)
+			if (Vector2InRect(&_tiles[i*TILEX + j].rc, &CAMERAMANAGER->getWorldMouse()))
+			{
+				//렉트 생성
+				//rc = RectMakePivot(Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top + TILESIZE / 2), Vector2(TILESIZE, TILESIZE), Pivot::Center);
+
+				//제거되어야 하는 상태
+				if (isDel)	//해당 타일의 프레임 키값을 초기화 해준다.
+					_tiles[i*TILEX + j].obj = OBJ_NONE;
+				else	   //해당 타일의 프레임 키값을 넣어준다.
+				{
+					_tiles[i*TILEX + j].keyName = onjName + to_string(_objSelected);
+					_tiles[i*TILEX + j].obj = OBJ_LOOK;
+				}
 			}
 		}
 	}

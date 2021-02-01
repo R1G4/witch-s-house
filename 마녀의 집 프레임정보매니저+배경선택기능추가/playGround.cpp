@@ -46,7 +46,7 @@ HRESULT playGround::init()
 	//pt.y = WINSIZEY / 2;
 	//camera = PointMake(0, 0);
 
-	addBackGroundImage();
+	addAutoImage();
 
 	SCENEMANAGER->addScene("MapToolScene", new mapTool);
 	
@@ -55,9 +55,16 @@ HRESULT playGround::init()
 	_firstFloorStage = new stage1_1;
 	SCENEMANAGER->addScene("stage1_1", _firstFloorStage);
 
+#pragma region 동현이형 파일 수정 읽고 지우십시오
+	//동현이형 가든 맵 다시만들어야 할수도..
+	//일단 에러안나게 랜더부분 수정하였음
+	//구조체 타일에 인덱스 변수를 삭제하고 키값(image)으로 대체하였음
+	//수정한 형식과 비슷하게 하시면 될 것같음
+#pragma endregion
+
 	SCENEMANAGER->addScene("실험", new garDen);
 	SCENEMANAGER->addScene("실험2", new garDenUnder);
-	SCENEMANAGER->changeScene("실험2");
+	SCENEMANAGER->changeScene("MapToolScene");
 	//SCENEMANAGER->changeScene("stage1_1");
 	
 	/////////////////UI 일단 주석처리/////////////
@@ -112,7 +119,7 @@ void playGround::render()
 	D2DRenderer::GetInstance()->EndRender();
 }
 
-void playGround::addBackGroundImage()
+void playGround::addAutoImage()
 {
 	wstring backName_w = L"";
 	string backName;
@@ -122,6 +129,13 @@ void playGround::addBackGroundImage()
 		backName_w = L"";
 		backName_w.assign(backName.begin(), backName.end());
 		IMAGEMANAGER->AddImage("배경" + to_string(i), backName_w);
+	}
+	for (int i = 1; i <= OBJSIZE; i++)
+	{
+		backName = "Image/obj/0" + to_string(i) + ".png";
+		backName_w = L"";
+		backName_w.assign(backName.begin(), backName.end());
+		IMAGEMANAGER->AddImage("obj" + to_string(i), backName_w);
 	}
 }
 

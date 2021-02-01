@@ -49,10 +49,9 @@ void firstFloorStage::render()
 			//if (!_tiles[i*TILEX + j].isMapOn)continue;
 			if (KEYMANAGER->isToggleKey(VK_TAB))
 			{
-				_D2DRenderer->DrawRectangle(_tiles[i*TILEX + j].rc, D2DRenderer::DefaultBrush::White);
+				CAMERAMANAGER->renderRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::White, 1, 1);
 			}
-			if (_tiles[i*TILEX + j].isCollider)_D2DRenderer->FillRectangle(_tiles[i*TILEX + j].rc, D2D1::ColorF::Red, 0.4);
-			if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)_D2DRenderer->FillRectangle(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
+			if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
 		}
 	}
 	for (int i = 0; i < TILEY; i++)
@@ -60,24 +59,33 @@ void firstFloorStage::render()
 		for (int j = 0; j < TILEX; j++)
 		{
 			if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
-			IMAGEMANAGER->FindImage("ObjectSample")->FrameRender(
-				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE, _tiles[i*TILEX + j].rc.top),	// 보정값 바꿈
-				_tiles[i*TILEX + j].objFrameX, _tiles[i*TILEX + j].objFrameY);
-			camera = _tiles->camera;
-			if (_tiles[i*TILEX + j].obj == OBJ_CORELATION)_D2DRenderer->FillRectangle(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aquamarine, 0.5);
-		}//보정값 필요할지도 모름
+
+			//중간에 배치하고 싶다면 이걸쓰세요. 디폴트 센타
+			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
+				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2,
+					_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));
+
+			//오른쪽으로 붙고자 하면 이걸쓰고
+			/*CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
+				Vector2(_tiles[i*TILEX + j].rc.right,
+					_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));*/
+
+			//if (_tiles[i*TILEX + j].obj == OBJ_CORELATION)_D2DRenderer->FillRectangle(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aquamarine, 0.5);
+		}
 	}
 
 	//타일에 프레임 이미지 배치 랜더
 	for (int i = 0; i < _vFrameTile.size(); i++)
 	{
-
-  		if (_vFrameTile[i].kinds == PLAYER)  _D2DRenderer->FillRectangle(_vFrameTile[i].rc, D2D1::ColorF::Blue, 0.7);
-		else if (_vFrameTile[i].kinds == ENEMY)  _D2DRenderer->FillRectangle(_vFrameTile[i].rc, D2D1::ColorF::Black, 0.7);
-		else  _D2DRenderer->FillRectangle(_vFrameTile[i].rc, D2D1::ColorF::White, 0.7);
-
-		_vFrameTile[i].img->FrameRender(Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.bottom - _vFrameTile[i].img->GetSize().y / 2),
-			_vFrameTile[i].frameX, _vFrameTile[i].frameY);
+		if (_vFrameTile[i].kinds == PLAYER)  CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::Blue, 0.7);
+		else if (_vFrameTile[i].kinds == ENEMY)  CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::Black, 0.7);
+		else CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::White, 0.7);
+		CAMERAMANAGER->FrameRender
+		(
+			_vFrameTile[i].img,
+			Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.bottom - _vFrameTile[i].img->GetSize().y / 2),
+			_vFrameTile[i].frameX, _vFrameTile[i].frameY
+		);
 	}
 }
 
@@ -91,24 +99,24 @@ void firstFloorStage::getFrameTile()
 			if (!FRAMEINFOMANAGER->GetSize())
 				return;
 
-			if (!FRAMEINFOMANAGER->KeyCheck(_tiles[i*TILEX + j].frameKeyName))
+			if (!FRAMEINFOMANAGER->KeyCheck(_tiles[i*TILEX + j].keyName))
 				continue;
 
 			//렉트 생성
 			FloatRect rc;
 			rc = RectMakePivot(Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top + TILESIZE / 2), Vector2(TILESIZE, TILESIZE), Pivot::Center);
 
-			FRAMEATTRIBUTE tempKinds = FRAMEINFOMANAGER->GetAttribute(_tiles[i*TILEX + j].frameKeyName);
+			FRAMEATTRIBUTE tempKinds = FRAMEINFOMANAGER->GetAttribute(_tiles[i*TILEX + j].keyName);
 
 			tagFrameTile temp;
 			temp.rc = rc;
 			temp.kinds = tempKinds;
-			temp.keyName = _tiles[i*TILEX + j].frameKeyName;
+			temp.keyName = _tiles[i*TILEX + j].keyName;
 			temp.indexX = i;
 			temp.indexY = j;
 			temp.frameX = 0;
 			temp.frameY = 0;
-			temp.img = FRAMEINFOMANAGER->FindImage(_tiles[i*TILEX + j].frameKeyName);
+			temp.img = FRAMEINFOMANAGER->FindImage(_tiles[i*TILEX + j].keyName);
 			addFrameTile(temp);
 		}
 	}

@@ -83,13 +83,18 @@ void garDen::render()
 		for (int j = 0; j < TILEX; j++)
 		{
 			if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
-			CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("ObjectSample"),
-				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top + TILESIZE / 2),
-				_tiles[i*TILEX + j].objFrameX, _tiles[i*TILEX + j].objFrameY);
+
+			//중간에 배치하고 싶다면 이걸쓰세요. 디폴트 센타
+			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
+				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2,
+					_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));
+
+			//오른쪽으로 붙고자 하면 이걸쓰고
+			/*CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
+				Vector2(_tiles[i*TILEX + j].rc.right,
+					_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));*/
 		}
 	}
-
-
 	_boss->render();
 	CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("SavePoint"), Vector2(1035, 755), frame, 2);
 	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("나무"), Vector2(720 + 480, 648));
