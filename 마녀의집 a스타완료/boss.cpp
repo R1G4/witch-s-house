@@ -28,25 +28,25 @@ void boss::update()
 		switch (_direction)
 		{
 		case BOSSDIRECTION_LEFT:
-			if (_currentFrameX >= 7) _currentFrameX = 0;
+			if (_currentFrameX >= 7) _currentFrameX = -1;
 			_currentFrameY = 1;
 			_x = _x - _speed;
 			_currentFrameX++;
 			break;
 		case BOSSDIRECTION_RIGHT:
-			if (_currentFrameX >= 7) _currentFrameX = 0;
+			if (_currentFrameX >= 7) _currentFrameX = -1;
 			_currentFrameY = 2;
 			_x = _x + _speed;
 			_currentFrameX++;
 			break;
 		case BOSSDIRECTION_UP:
-			if (_currentFrameX >= 7) _currentFrameX = 0;
+			if (_currentFrameX >= 7) _currentFrameX = -1;
 			_currentFrameY = 3;
 			_y = _y - _speed;
 			_currentFrameX++;
 			break;
 		case BOSSDIRECTION_DOWN:
-			if (_currentFrameX >= 7) _currentFrameX = 0;
+			if (_currentFrameX >= 7) _currentFrameX = -1;
 			_currentFrameY = 0;
 			_y = _y + _speed;
 			_currentFrameX++;
@@ -63,7 +63,6 @@ void boss::update()
 	_rc = RectMakePivot(Vector2(_x + TILESIZE / 2, _y + TILESIZE / 2), Vector2(TILESIZE, TILESIZE), Pivot::Center);
 	_sub_rc = RectMakePivot(Vector2(_x + TILESIZE / 2, _y + TILESIZE / 2), Vector2(1, 1), Pivot::Center);
 
-	
 	if (previous_rc.top > _sub_rc.top)
 		_direction = BOSSDIRECTION_UP;
 	if (previous_rc.bottom < _sub_rc.bottom)
@@ -72,10 +71,6 @@ void boss::update()
 		_direction = BOSSDIRECTION_LEFT;
 	if (previous_rc.right < _sub_rc.right)
 		_direction = BOSSDIRECTION_RIGHT;
-
-	if (Math::GetAngle(previous_rc.left, previous_rc.top, _rc.left, _rc.top))
-	{
-	}
 }
 
 void boss::release()

@@ -2,8 +2,9 @@
 #include "gameNode.h"
 #include "mapTool.h"
 #include "astarTile.h"
-
-class boss;
+#include "skul.h"
+#include "boss.h"
+#include "bear.h"
 
 class garDen : public gameNode
 {
@@ -40,6 +41,8 @@ private:
 
 
 	boss* _boss;
+	skul* _skul;
+	bear* _bear;
 	int b_left;		// 보스 타일 x
 	int b_top;		// 보스 타일 y
 	int p_left;		// 임시 플레이어 타일 x
@@ -47,6 +50,8 @@ private:
 
 	float _p_x, _p_y;	// 임시 플레이어 위치
 
+	bool _isTrigger;
+	astarTile* _triggerTile;				// 트리거 타일
 public:
 	garDen();
 	~garDen();
@@ -62,6 +67,7 @@ public:
 	void playerLocation();
 	void enemyLocation();
 	void objectLocation();
+	void getTrigger();
 
 public:
 	// astar위한 함수들
