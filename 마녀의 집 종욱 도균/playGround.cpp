@@ -14,7 +14,8 @@ playGround::~playGround()
 HRESULT playGround::init()
 {
 	gameNode::init(true);
-
+	_sound = new sound;
+	_sound->init();
 #pragma region desc: 나중에 로딩으로 옮기기 date: 2021/1/29 by pju
 	IMAGEMANAGER->AddImage("화살표", L"Image/mapTool/화살표.png");
 	IMAGEMANAGER->AddImage("화살표왼쪽", L"Image/mapTool/화살표왼쪽.png");
@@ -61,7 +62,10 @@ HRESULT playGround::init()
 	/////////////////UI 일단 주석처리/////////////
 	addScene();
 	SCENEMANAGER->changeScene("시작화면");
+	SOUNDMANAGER->play("main");
 	/////////////////////////////////////////////
+
+	
 
 	return S_OK;
 }
@@ -76,6 +80,7 @@ void playGround::release()
 void playGround::update()
 {
 	gameNode::update();
+	_sound->update();
 	SCENEMANAGER->update();
 	FRAMEINFOMANAGER->update();
 }

@@ -5,6 +5,7 @@
 #include "stage1_1.h"
 #include "menu.h"
 #include "levelChoiceScene.h"
+#include "sound.h"
 class playGround : public gameNode
 {
 private:
@@ -15,6 +16,7 @@ private:
 	POINT pt;
 	Image* viola;
 	POINT camera;
+	sound* _sound;
 public:
 	playGround();
 	~playGround();

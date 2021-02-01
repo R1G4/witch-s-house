@@ -177,6 +177,9 @@
     <ClInclude Include="playerMenu.h">
       <Filter>playGround\player</Filter>
     </ClInclude>
+    <ClInclude Include="sound.h">
+      <Filter>playGround</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -280,6 +283,9 @@
     </ClCompile>
     <ClCompile Include="playerMenu.cpp">
       <Filter>playGround\player</Filter>
+    </ClCompile>
+    <ClCompile Include="sound.cpp">
+      <Filter>playGround</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

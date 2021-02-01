@@ -17,21 +17,20 @@ HRESULT playerMenu::init()
 	_loadTop = IMAGEMANAGER->AddImage("loadTop", L"image/UI/loadTop.png");
 	_item = IMAGEMANAGER->AddImage("item", L"image/UI/item2.png");
 	_itemTop = IMAGEMANAGER->AddImage("itemTop", L"image/UI/itemTop2.png");
-	//_x = WINSIZEX / 2;
-	//_y = WINSIZEY / 2;
+
+	_volume = 0.5f;
+	_bgv = 0.5f;
+	_percent = 50;
+	_bgvPercent = 0;
 	_x = 160;
 	_y = 505;
 	_x2 = 650;
 	_y2 = 230;
-	_x3 = 630;
+	_x3 = 640;
 	_y3 = WINSIZEY/2 + 20;
 	_rcAlpha = 1.0f;
 	_rcAlphaChange = 0.03f;
 	_rc = RectMakePivot(Vector2(_x, _y), Vector2(180, 45), Pivot::Center);
-	_rc1 = RectMakePivot(Vector2(_x - 500, _y + 140), Vector2(120, 30), Pivot::Center);
-	_rc2 = RectMakePivot(Vector2(_x - 500, _y + 200), Vector2(120, 30), Pivot::Center);
-	_rc3 = RectMakePivot(Vector2(_x - 500, _y + 260), Vector2(120, 30), Pivot::Center);
-
 	_rcLoadChoice = RectMakePivot(Vector2(_x2, _y2), Vector2(600, 80), Pivot::Center);
 	_rcSettingChoice = RectMakePivot(Vector2(_x3, _y3), Vector2(400, 50), Pivot::Center);
 
@@ -45,13 +44,10 @@ HRESULT playerMenu::init()
 		_rcLoad[i] = RectMakePivot(Vector2(650, 230 + i * 90), Vector2(600, 80), Pivot::Center);
 	}
 	
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 7; i++)
 	{
-		_rcSettings[i] = RectMakePivot(Vector2(630, WINSIZEY / 2 + 20 + i * 50), Vector2(400, 50), Pivot::Center);
+		_rcSettings[i] = RectMakePivot(Vector2(630, WINSIZEY / 2 + 20 + i * 50), Vector2(400, 30), Pivot::Center);
 	}
-
-	//wsprintf(str, "파일%d", 1);
-
 
 	_isMenu = false;
 	_isCheck = false;
@@ -71,11 +67,38 @@ void playerMenu::update()
 	_rcLoadChoice = RectMakePivot(Vector2(_x2, _y2), Vector2(600, 80), Pivot::Center);
 	_rcSettingChoice = RectMakePivot(Vector2(_x3, _y3), Vector2(400, 50), Pivot::Center);
 
+	//메뉴 열려있을때 아래랑 같은건데일단 
+	//if (_isMenu)
+	//{
+	//	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
+	//	{
+	//		if (_rc.bottom <= _rcMenu[2].top)
+	//		{
+	//			_y += 50;
+	//			SOUNDMANAGER->play("cursor", 0.5f);
+	//		}
+	//	}
+	//	if (KEYMANAGER->isOnceKeyDown(VK_UP))
+	//	{
+	//		if (_rc.top >= _rcMenu[0].bottom)
+	//		{
+	//			_y -= 50;
+	//			SOUNDMANAGER->play("cursor", 0.5f);
+	//		}
+	//	}
+	//}
 
-	if (KEYMANAGER->isOnceKeyDown(VK_DOWN) && _rc.bottom <= _rcMenu[2].top && _openMenu != LOAD)
+	//메뉴 열려있을때
+	if (KEYMANAGER->isOnceKeyDown(VK_DOWN) && _rc.bottom <= _rcMenu[2].top && _isMenu)
+	{
 		_y += 50;
-	if (KEYMANAGER->isOnceKeyDown(VK_UP) && _rc.top >= _rcMenu[0].bottom && _openMenu != LOAD)
+		SOUNDMANAGER->play("cursor", 0.5f);
+	}
+	if (KEYMANAGER->isOnceKeyDown(VK_UP) && _rc.top >= _rcMenu[0].bottom && _isMenu)
+	{
 		_y -= 50;
+		SOUNDMANAGER->play("cursor", 0.5f);
+	}
 
 	//if (KEYMANAGER->isOnceKeyDown(VK_SPACE) && !_isCheck)
 	//{
@@ -85,10 +108,11 @@ void playerMenu::update()
 	//}
 
 	//아이템, 불러오기, 설정
-	if (IntersectRectToRect(&_temp, &_rc, &_rcMenu[0]))
+	if (IntersectRectToRect(&_temp, &_rc, &_rcMenu[0]) && _isMenu)
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
+			SOUNDMANAGER->play("cursor", 0.5f);
 			_openMenu = ITEM;
 		}
 	}
@@ -96,6 +120,7 @@ void playerMenu::update()
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
+			SOUNDMANAGER->play("cursor", 0.5f);
 			_openMenu = LOAD;
 		}
 	}
@@ -103,6 +128,7 @@ void playerMenu::update()
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
+			SOUNDMANAGER->play("cursor", 0.5f);
 			_openMenu = SETTINGS;
 		}
 	}
@@ -110,38 +136,81 @@ void playerMenu::update()
 	//불러오기 화면일때
 	if (_openMenu == LOAD)
 	{
-		for (int i = 0; i < 5; i++)
+		if (KEYMANAGER->isOnceKeyDown('S') && _rcLoadChoice.bottom <= _rcLoad[4].top)
 		{
-			if (KEYMANAGER->isOnceKeyDown('S') && _rcLoadChoice.bottom <= _rcLoad[4].top)
-			{
-
-				_y2 += 90;
-			}
-			if (KEYMANAGER->isOnceKeyDown('W') && _rcLoadChoice.top >= _rcLoad[0].bottom)
-			{
-
-				_y2 -= 90;
-			}
+			SOUNDMANAGER->play("cursor", 0.5f);
+			_y2 += 90;
 		}
+		if (KEYMANAGER->isOnceKeyDown('W') && _rcLoadChoice.top >= _rcLoad[0].bottom)
+		{
+			SOUNDMANAGER->play("cursor", 0.5f);
+			_y2 -= 90;
+		}
+	
 	}
 	//설정 화면일때
 	if (_openMenu == SETTINGS)
 	{
-		if (KEYMANAGER->isOnceKeyDown('S') && _rcSettingChoice.bottom <= _rcSettings[5].top)
+		if (KEYMANAGER->isOnceKeyDown('S') && _rcSettingChoice.bottom <= _rcSettings[6].top)
 		{
+			SOUNDMANAGER->play("cursor", 0.5f);
 			_y3 += 50;
 		}
 		if (KEYMANAGER->isOnceKeyDown('W') && _rcSettingChoice.top >= _rcSettings[0].bottom)
 		{
+			SOUNDMANAGER->play("cursor", 0.5f);
 			_y3 -= 50;
 		}
+
+		//볼륨 문자열 조졀하려고
+		mv = "Master Volume              " + to_string(_percent) + "%";
+		mv_w = L"";
+		mv_w.assign(mv.begin(), mv.end());
+		//마스터 볼륨 조절
+		if (IntersectRectToRect(&_temp, &_rcSettingChoice, &_rcSettings[2]))
+		{
+			if (KEYMANAGER->isOnceKeyDown('V') && _percent <= 100)
+			{
+				_percent += 5;
+				_volume += 0.05;
+				SOUNDMANAGER->setVolume(_volume);
+			}
+			if (_percent >= 105)
+			{
+				_volume = 0;
+				_percent = 0;
+				SOUNDMANAGER->setVolume(_volume);
+			}
+		}
+			
+		//기타 다른볼륨 조절은 할지말지
+		bgv = "backGround Volume     " + to_string(_bgvPercent) + "%";
+		bgv_w = L"";
+		bgv_w.assign(bgv.begin(), bgv.end());
+		if (IntersectRectToRect(&_temp, &_rcSettingChoice, &_rcSettings[3]))
+		{
+			if (KEYMANAGER->isOnceKeyDown('V') && _bgvPercent <= 100)
+			{
+				_bgvPercent += 5;
+				_bgv += 0.05;
+				SOUNDMANAGER->setVolume(_bgv);
+			}
+			if (_bgvPercent >= 105)
+			{
+				_volume = 0;
+				_bgvPercent = 0;
+				SOUNDMANAGER->setVolume(_bgv);
+			}
+		}
+
 	}
+
 	//메뉴로 돌아가기
 	if (KEYMANAGER->isOnceKeyDown(VK_BACK) && (_openMenu == LOAD || _openMenu == ITEM || _openMenu == SETTINGS) )
 	{
+		SOUNDMANAGER->play("click", 0.5f);
 		_openMenu = MENU;
 	}
-
 
 }
 
@@ -158,17 +227,13 @@ void playerMenu::rcAlphaChange()
 
 void playerMenu::render()
 {
-	//if (_isMenu)
-	
-	if (_openMenu == MENU && _openMenu != LOAD && _openMenu != ITEM && _openMenu != SETTINGS)
+	if (/*_openMenu == MENU*/_openMenu != LOAD && _openMenu != ITEM && _openMenu != SETTINGS)
 	{
 		openMenu();
 	}
-	
 
 	if (_openMenu == LOAD)
 	{
-		//cout << "lll" << endl;
 		_load = IMAGEMANAGER->FindImage("load");
 		_load->Render(Vector2(650, 400));
 		_loadTop = IMAGEMANAGER->FindImage("loadTop");
@@ -187,20 +252,22 @@ void playerMenu::render()
 	
 	if (_openMenu == SETTINGS)
 	{
-		//for (int i = 0; i < 6; i++)
+		//for (int i = 0; i < 7; i++)
 		//{
 		//	D2DINS->GetInstance()->DrawRectangle(_rcSettings[i], D2D1::ColorF::White, _rcAlpha, 1.0f);
 		//	D2DINS->FillRectangle(_rcSettings[i], D2D1::ColorF::Enum::WhiteSmoke, _rcAlpha / 5.5);
 		//}
 
-		D2DINS->GetInstance()->RenderText(470, WINSIZEY/2 , L"항시 달리기        OFF", 30, D2DRenderer::DefaultBrush::White);
-		D2DINS->GetInstance()->RenderText(470, WINSIZEY/2 + 50, L"전체 화면으로 기동      OFF", 30, D2DRenderer::DefaultBrush::White);
-		D2DINS->GetInstance()->RenderText(470, WINSIZEY/2 + 100, L"마스터 음량      50%", 30, D2DRenderer::DefaultBrush::White);
-		D2DINS->GetInstance()->RenderText(470, WINSIZEY/2 + 150, L"배경음 음량      50%", 30, D2DRenderer::DefaultBrush::White);
-		D2DINS->GetInstance()->RenderText(470, WINSIZEY/2 + 200, L"환경음 음량      50%", 30, D2DRenderer::DefaultBrush::White);
-		D2DINS->GetInstance()->RenderText(470, WINSIZEY/2 + 250, L"효과음 음량      50%", 30, D2DRenderer::DefaultBrush::White);
+		D2DINS->GetInstance()->RenderText(450, WINSIZEY / 2, L"항시 달리기                  OFF", 30, D2DRenderer::DefaultBrush::White);
+		D2DINS->GetInstance()->RenderText(450, WINSIZEY / 2 + 50, L"전체 화면으로 기동      OFF", 30, D2DRenderer::DefaultBrush::White);
+		D2DINS->GetInstance()->RenderText(450, WINSIZEY / 2 + 100, mv_w, 30, D2DRenderer::DefaultBrush::White);
+		D2DINS->GetInstance()->RenderText(450, WINSIZEY / 2 + 150, bgv_w, 30, D2DRenderer::DefaultBrush::White);
+		D2DINS->GetInstance()->RenderText(450, WINSIZEY / 2 + 200, L"환경음 음량      50%", 30, D2DRenderer::DefaultBrush::White);
+		D2DINS->GetInstance()->RenderText(450, WINSIZEY / 2 + 250, L"효과음 음량      50%", 30, D2DRenderer::DefaultBrush::White);
+		D2DINS->GetInstance()->RenderText(450, WINSIZEY / 2 + 300, L"타이틀 화면으로 돌아가기", 30, D2DRenderer::DefaultBrush::White);
 		D2DINS->GetInstance()->DrawRectangle(_rcSettingChoice, D2D1::ColorF::White, _rcAlpha, 1.0f);
 		D2DINS->FillRectangle(_rcSettingChoice, D2D1::ColorF::Enum::WhiteSmoke, _rcAlpha / 5.5);
+
 	}
 
 	if (_openMenu == ITEM)
@@ -257,5 +324,7 @@ void playerMenu::openMenu()
 
 	}
 
-	
 }
+
+
+

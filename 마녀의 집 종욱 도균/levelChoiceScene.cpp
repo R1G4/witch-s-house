@@ -19,9 +19,12 @@ HRESULT levelChoiceScene::init()
 	_rc2 = RectMakePivot(Vector2(_x, _y + 60), Vector2(120, 60), Pivot::Center);
 	_rc3 = RectMakePivot(Vector2(_x, _y + 240), Vector2(120, 60), Pivot::Center);
 	_isChoice = false;
+	_volume = 0.5f;
 	_sceneAlpha = 1.0f;
 	_rcAlpha = 1.0f;
 	_rcAlphaChange = 0.03f;
+
+
 
 	return S_OK;
 }
@@ -45,6 +48,8 @@ void levelChoiceScene::rcAlphaChange()
 
 void levelChoiceScene::update()
 {
+ 	
+
 	rcAlphaChange();
 
 	FloatRect _temp;
@@ -52,35 +57,49 @@ void levelChoiceScene::update()
 
 	if (!_isChoice)
 	{
+		
 		_rc = RectMakePivot(Vector2(_x, _y - 120), Vector2(120, 60), Pivot::Center);
 		if (KEYMANAGER->isOnceKeyDown(VK_DOWN) && _rc.bottom <= WINSIZEY / 2 + 210)
+		{
 			_y += 180;
+			SOUNDMANAGER->play("cursor", 0.5f);
+		}
 		if (KEYMANAGER->isOnceKeyDown(VK_UP) && _rc.top >= WINSIZEY / 2 - 120)
+		{
 			_y -= 180;
-
+			SOUNDMANAGER->play("cursor", 0.5f);
+		}
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
 			_isChoice = true;
 			_x = WINSIZEX / 2;
 			_y = WINSIZEY / 2;
+			SOUNDMANAGER->play("click", 0.5f);
 		}
-
-
-
 	}
 
 	if (_isChoice)
 	{
 		_rc = RectMakePivot(Vector2(_x, _y + 50), Vector2(220, 80), Pivot::Center);
 		if (KEYMANAGER->isOnceKeyDown(VK_DOWN) && _rc.bottom <= WINSIZEY / 2)
+		{
 			_y += 180;
+			SOUNDMANAGER->play("cursor", 0.5f);
+		}
 		if (KEYMANAGER->isOnceKeyDown(VK_UP) && _rc.top >= WINSIZEY / 2 - 120)
+		{
 			_y -= 180;
+			SOUNDMANAGER->play("cursor", 0.5f);
+		}
 
 		if (IntersectRectToRect(&_temp, &_rc, &_rc2))
 		{
 			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+			{
+				SOUNDMANAGER->play("click", 0.5f);
 				_isChoice = false;
+			}
+				
 		}
 	}
 
@@ -89,7 +108,14 @@ void levelChoiceScene::update()
 	{
 		//게임화면으로 가기 전에 애니메이션이든 뭐 넣어야 할듯
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+		{
+			SOUNDMANAGER->stop("main");
+			SOUNDMANAGER->play("firstMap");
+			SOUNDMANAGER->play("wind");
 			SCENEMANAGER->changeScene("MapToolScene");
+			SOUNDMANAGER->play("click", 0.5f);
+			SOUNDMANAGER->setVolume(_volume);
+		}
 	}
 
 }
