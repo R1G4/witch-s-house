@@ -138,7 +138,7 @@ void mapTool::render()
 
 	//IMAGEMANAGER->FindImage("배경")->Render(Vector2(720-camera.x,648-camera.y));
 	//CAMERAMANAGER->render(IMAGEMANAGER->FindImage("배경1"), Vector2(IMAGEMANAGER->FindImage("배경1")->GetSize().x/2, IMAGEMANAGER->FindImage("배경1")->GetSize().y/2));
-	if (_backGround != NULL)CAMERAMANAGER->render(_backGround, Vector2(_backGround->GetSize().x / 2, _backGround->GetSize().y / 2));
+	if (_backGround != NULL)CAMERAMANAGER->render(_backGround, Vector2(_backGround->GetSize().x / 2+480, _backGround->GetSize().y / 2));
 	else{
 		for (int i = 0; i < TILEY; i++)
 		{

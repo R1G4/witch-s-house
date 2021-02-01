@@ -9,7 +9,7 @@ private:
 	tagTile _tiles[TILEX*TILEY];
 
 	boss* _boss;
-
+	Image* _backGround;
 	DWORD _attribute[TILEX*TILEY];
 	Vector2 camera;
 	int _pos[2];
