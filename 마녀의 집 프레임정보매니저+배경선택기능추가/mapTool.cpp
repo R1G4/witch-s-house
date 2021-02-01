@@ -192,6 +192,8 @@ void mapTool::render()
 			/*CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
 				Vector2(_tiles[i*TILEX + j].rc.right,
 					_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));*/
+
+			if (_tiles[i*TILEX + j].obj == OBJ_CORELATION)CAMERAMANAGER->renderFillRc(_tiles[i*TILEY + j].rc, D2D1::ColorF::Yellow, 0.5);
 		}
 	}
 	
@@ -563,19 +565,14 @@ void mapTool::setMap()
 						}
 						else if (_crtSelect == CTRL_SETCORRELATION)
 						{
-							if (_tiles[i*TILEX + j].obj == OBJ_NONE)
-							{
-								_tiles[i*TILEX + j].terrain = TR_CORELATION;
-								_tiles[i*TILEX + j].obj = OBJ_NONE;
-							}
-							if(_tiles[i*TILEX+j].obj!=OBJ_CORELATION)_tiles[i*TILEX + j].obj = OBJ_CORELATION;
+							if (_tiles[i*TILEX + j].obj == OBJ_LOOK)_tiles[i*TILEX + j].obj = OBJ_CORELATION;
 							else if (_tiles[i*TILEX + j].obj == OBJ_CORELATION)_tiles[i*TILEX + j].obj = OBJ_LOOK;
-							
 							_leftButtonDown = false;
 						}
 						else if (_crtSelect == CTRL_SETTRIGGER)
 						{
-							_tiles[i*TILEX + j].terrain = TR_TRIGGER;
+							if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)_tiles[i*TILEX + j].terrain = TR_GRASS;
+							else _tiles[i*TILEX + j].terrain = TR_TRIGGER; 
 							_leftButtonDown = false;
 						}
 						InvalidateRect(_hWnd, NULL, false);
@@ -845,11 +842,17 @@ void mapTool::setFrameTile()
 
 				//제거되어야 하는 상태
 				if (isDel)	//해당 타일의 프레임 키값을 초기화 해준다.
+				{
 					_tiles[i*TILEX + j].keyName = "";
+					_tiles[i*TILEX + j].attribute = NONE;
+				}
 				else	   //해당 타일의 프레임 키값을 넣어준다.
+				{
 					_tiles[i*TILEX + j].keyName = FRAMEINFOMANAGER->FindKey(_frameSelected);
-				//아래 불필요한 연산은 제외한다.
+					_tiles[i*TILEX + j].attribute = FRAMEINFOMANAGER->GetAttribute(_frameSelected);
+				}
 
+				//아래 불필요한 연산은 제외한다.
 				if (tempKinds != PLAYER)
 					break;
 			}
@@ -863,6 +866,7 @@ void mapTool::setFrameTile()
 
 				//이미 타일에는 플레이어 타입이 존재하는 경우 기존 타일에 프레임 이미지 키값을 제거한다.
 				_tiles[i*TILEX + j].keyName = "";
+				_tiles[i*TILEX + j].attribute = NONE;
 			}
 		}
 	}
