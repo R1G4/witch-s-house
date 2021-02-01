@@ -6,6 +6,7 @@
 #include "stage1_1.h"
 #include "menu.h"
 #include "levelChoiceScene.h"
+#include "bossStage.h"
 class playGround : public gameNode
 {
 private:
@@ -26,5 +27,6 @@ public:
 	virtual void render();
 	void addAutoImage();
 	void addScene();
+	void addFrameImg();
 };
 

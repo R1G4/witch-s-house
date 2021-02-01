@@ -11,7 +11,7 @@ HRESULT Player::init()
 	cout << _player.x << " " << _player.y << endl;
 	_player.speed = 5.0f;
 	setState(CHR_IDLE);
-	_player.isDash = true;
+//	_player.isDash = true;
 	return S_OK;
 }
 
@@ -24,7 +24,7 @@ void Player::update()
 
 	chr_State->updateState();
 	_player.frameY = (int)_player.direc;
-	_player.rc = RectMakePivot(Vector2(_player.x, _player.y), Vector2(TILESIZE, TILESIZE), Pivot::LeftTop);
+	_player.rc = RectMakePivot(Vector2(_player.x, _player.y), Vector2(TILESIZE-1, TILESIZE-1), Pivot::LeftTop);
 	framePlay();
 }
 

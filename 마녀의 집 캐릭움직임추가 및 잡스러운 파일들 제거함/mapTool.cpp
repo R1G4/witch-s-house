@@ -20,22 +20,22 @@ HRESULT mapTool::init()
 
 	setButton();
 	// png파일 변환시 y축의 약수여야함
-	_y_rect_num = 1;
+	_y_rect_num = 1;	
 
 	//프레임 이미지 간격 초기화
-	_frameInterval = 0;
+	_frameInterval = 0;	 
 
 	//선택된 이미지(샘플 및 타일 삽입용)
-	_frameSelected = 0;
+	_frameSelected = 0;	 
 	_objSelected = 1;
 
 	setup();
 	_crtSelect = CTRL_TERRAINDRAW;
-	camera = Vector2(0, 0);
-
-	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
+	camera = Vector2(0,0);
+	
+	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY );
 	tabOpen = true;
-	sampleBack = RectMakePivot(Vector2(600, 0), Vector2(1280 - 600, 300), Pivot::LeftTop);
+	sampleBack = RectMakePivot(Vector2(600, 0), Vector2(1280-600, 300), Pivot::LeftTop);
 	backCount = 1;
 	backName = "배경";
 	onjName = "obj";
@@ -63,15 +63,14 @@ void mapTool::update()
 		save();
 		break;
 	case CTRL_LOAD:
-		setMap();
-		load(); //불러오기setMap()
+		load(); //불러오기
 		getFrameTile();	//불러온 데이터의 토대로 프레임 타일 배치
 		_crtSelect = CTRL_TERRAINDRAW;	//키를 입력 받지 않는 이상 계속 로드하기에 강제로 상태 초기화
 		break;
 	case CTRL_TERRAINDRAW:
 		setMap();
 		break;
-	case CTRL_OBJDRAW:
+	case CTRL_OBJDRAW:	
 		setObjTile();
 		//단축키로 오브젝트의 순서를 바꿀수있다.
 		if (KEYMANAGER->isOnceKeyDown('P'))
@@ -145,8 +144,8 @@ void mapTool::render()
 
 	//IMAGEMANAGER->FindImage("배경")->Render(Vector2(720-camera.x,648-camera.y));
 	//CAMERAMANAGER->render(IMAGEMANAGER->FindImage("배경1"), Vector2(IMAGEMANAGER->FindImage("배경1")->GetSize().x/2, IMAGEMANAGER->FindImage("배경1")->GetSize().y/2));
-	if (_backGround != NULL)CAMERAMANAGER->render(_backGround, Vector2(_backGround->GetSize().x / 2 + 480, _backGround->GetSize().y / 2));
-	else {
+	if (_backGround != NULL)CAMERAMANAGER->render(_backGround, Vector2(_backGround->GetSize().x / 2+480, _backGround->GetSize().y / 2));
+	else{
 		for (int i = 0; i < TILEY; i++)
 		{
 			for (int j = 0; j < TILEX; j++)
@@ -174,7 +173,7 @@ void mapTool::render()
 				CAMERAMANAGER->renderRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::White, 1.0f, 1.0f);
 			}
 			//if (_tiles[i*TILEX + j].isCollider)_D2DRenderer->FillRectangle(_tiles[i*TILEX + j].rc, D2D1::ColorF::Red, 0.4);
-			if (_tiles[i*TILEX + j].isCollider)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Red, 0.4);
+			if (_tiles[i*TILEX + j].isCollider)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc,  D2D1::ColorF::Red,0.4);
 			//if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)_D2DRenderer->FillRectangle(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
 			if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
 		}
@@ -183,30 +182,26 @@ void mapTool::render()
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			//오브젝트는 제외한다.
 			if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
-
-			//오브젝트 랜딩방식
-			//1. 중간에 배치하고 싶다면 이걸쓰세요. 디폴트 센타
+			//중간에 배치하고 싶다면 이걸쓰세요. 디폴트 센타
 			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
 				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2,
 					_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));
 
-			//2. 오른쪽으로 붙고자 하면 이걸쓰고
+			//오른쪽으로 붙고자 하면 이걸쓰고
 			/*CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
 				Vector2(_tiles[i*TILEX + j].rc.right,
 					_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));*/
 
-			if (_tiles[i*TILEX + j].obj == OBJ_CORELATION)CAMERAMANAGER->renderFillRc(_tiles[i*TILEY + j].rc, D2D1::ColorF::WhiteSmoke, 0.6);
-			else if (_tiles[i*TILEX + j].obj == OBJ_CORELATION)CAMERAMANAGER->renderFillRc(_tiles[i*TILEY + j].rc, D2D1::ColorF::Yellow, 0.5);
+			if (_tiles[i*TILEX + j].obj == OBJ_CORELATION)CAMERAMANAGER->renderFillRc(_tiles[i*TILEY + j].rc, D2D1::ColorF::Yellow, 0.5);
 		}
 	}
-
-	if (tabOpen)_D2DRenderer->FillRectangle(sampleBack, D2D1::ColorF::Aquamarine, 0.7);
+	
+	if(tabOpen)_D2DRenderer->FillRectangle(sampleBack, D2D1::ColorF::Aquamarine, 0.7);
 	if (tabOpen)
 	{
-		if (_crtSelect == CTRL_TERRAINDRAW)
-			//if (isterrain)by pju 일단 isterrain제거를 위해 주석
+		if (_crtSelect == CTRL_TERRAINDRAW) 
+		//if (isterrain)by pju 일단 isterrain제거를 위해 주석
 		{
 			for (int i = 0; i < SAMPLETILEY; i++)
 			{
@@ -323,10 +318,10 @@ void mapTool::render()
 		}
 	}
 	//배경 샘플 랜딩하려는 부분
-	if (_crtSelect == CTRL_BACKGROUND && tabOpen)
+	if (_crtSelect == CTRL_BACKGROUND&&tabOpen)
 	{
 		IMAGEMANAGER->FindImage(backName + to_string(backCount))->SetSize(Vector2(600, 270));
-		IMAGEMANAGER->FindImage(backName + to_string(backCount))->Render(Vector2(950, 150));
+		IMAGEMANAGER->FindImage(backName + to_string(backCount))->Render(Vector2(950,150));
 		IMAGEMANAGER->FindImage("화살표왼쪽")->SetScale(0.65f);
 		IMAGEMANAGER->FindImage("화살표왼쪽")->Render(Vector2(634, 150));
 
@@ -374,22 +369,17 @@ void mapTool::render()
 	for (int i = 0; i < _vFrameTile.size(); i++)
 	{
 		if (_vFrameTile[i].kinds == PLAYER)  CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::Blue, 0.7);
-		else if (_vFrameTile[i].kinds == ENEMY)  CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::Black, 0.7);
-		else CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::White, 0.7);
+		if (_vFrameTile[i].kinds == ENEMY)  CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::Black, 0.7);
 		CAMERAMANAGER->FrameRender
 		(
 			_vFrameTile[i].img,
-			//프레임 이미지 랜딩방식
-			//1. y축을 타일 가운대에 위치하고 싶을때
-			//Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.bottom - _vFrameTile[i].img->GetSize().y / 2),
-			//2. y축을 바텀의 기준으로 잡고 싶을때
-			Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.top),
+			Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.bottom - _vFrameTile[i].img->GetSize().y / 2),
 			_vFrameTile[i].frameX, _vFrameTile[i].frameY
 		);
 	}
-	if (tabOpen)_D2DRenderer->DrawRectangle(sampleSelec, D2DRenderer::DefaultBrush::White);
+	if(tabOpen)_D2DRenderer->DrawRectangle(sampleSelec, D2DRenderer::DefaultBrush::White);
 	//_D2DRenderer->DrawRectangle(MapRC, D2DRenderer::DefaultBrush::White);
-	if (!tabOpen)_D2DRenderer->FillRectangle(tileSelec, D2D1::ColorF::Enum::LightYellow, 0.5);
+	if(!tabOpen)_D2DRenderer->FillRectangle(tileSelec, D2D1::ColorF::Enum::LightYellow, 0.5);
 }
 
 //desc: 프레임 인덱스를 매니저를 이용하여 수정 date: 2021/1/29 by pju
@@ -419,7 +409,7 @@ void mapTool::setBack()
 	if (KEYMANAGER->isOnceKeyDown('P'))
 	{
 		backCount--;
-		if (backCount < 1)backCount = 93;
+		if (backCount <1)backCount = 93;
 	}
 	if (KEYMANAGER->isOnceKeyDown('N'))
 	{
@@ -439,7 +429,7 @@ void mapTool::setButton()
 	IMAGEMANAGER->AddImage("Prev", L"Image/mapTool/Prev.png");
 	IMAGEMANAGER->AddImage("Next", L"Image/mapTool/Next.png");
 	IMAGEMANAGER->AddImage("Terrain", L"Image/mapTool/Terrain.png");
-	IMAGEMANAGER->AddImage("Object", L"Image/mapTool/Object.png");
+	IMAGEMANAGER->AddImage("Object", L"Image/mapTool/Object.png"); 
 	IMAGEMANAGER->AddImage("Collider", L"Image/mapTool/Collider.png");
 	IMAGEMANAGER->AddImage("Close", L"Image/mapTool/Close.png");
 	IMAGEMANAGER->AddImage("Open", L"Image/mapTool/Open.png");
@@ -463,15 +453,15 @@ void mapTool::setButton()
 	setTri.img = IMAGEMANAGER->FindImage("화살표오른쪽");
 	BackGround.img = IMAGEMANAGER->FindImage("Bar");
 
-	Save.frc = RectMakePivot(Vector2(0 + 72 + 48, 660), Vector2(144, 48), Pivot::Center);
-	Load.frc = RectMakePivot(Vector2(144 + 10 + 72 + 48, 660), Vector2(144, 48), Pivot::Center);
-	Erase.frc = RectMakePivot(Vector2(288 + 10 + 72 + 48, 660), Vector2(144, 48), Pivot::Center);
-	terrain.frc = RectMakePivot(Vector2(432 + 10 + 72 + 48, 660), Vector2(144, 48), Pivot::Center);
-	Object.frc = RectMakePivot(Vector2(576 + 10 + 72 + 48, 660), Vector2(144, 48), Pivot::Center);
+	Save.frc = RectMakePivot(Vector2(0+72+48, 660), Vector2(144, 48), Pivot::Center);
+	Load.frc = RectMakePivot(Vector2(144 + 10+72+48, 660), Vector2(144, 48), Pivot::Center);
+	Erase.frc = RectMakePivot(Vector2(288 + 10+72+48, 660), Vector2(144, 48), Pivot::Center);
+	terrain.frc = RectMakePivot(Vector2(432+10+72+48, 660), Vector2(144, 48), Pivot::Center);
+	Object.frc = RectMakePivot(Vector2(576+10+72+48, 660), Vector2(144, 48), Pivot::Center);
 	//Prev.frc = RectMakePivot(Vector2(720+10+72+48,660), Vector2(144, 48), Pivot::Center);
 	//Next.frc = RectMakePivot(Vector2(864+10+72 +48, 660), Vector2(144, 48), Pivot::Center);
-	Close.frc = RectMakePivot(Vector2(1008 + 10 + 72 + 48, 660), Vector2(144, 48), Pivot::Center);
-	Open.frc = RectMakePivot(Vector2(1008 + 10 + 72 + 48, 660), Vector2(144, 48), Pivot::Center);
+	Close.frc = RectMakePivot(Vector2(1008 + 10+72+48, 660), Vector2(144, 48), Pivot::Center);
+	Open.frc = RectMakePivot(Vector2(1008 + 10 + 72+48, 660), Vector2(144, 48), Pivot::Center);
 	Collider.frc = RectMakePivot(Vector2(0 + 72 + 48, 600), Vector2(144, 48), Pivot::Center);
 	Player.frc = RectMakePivot(Vector2(144 + 10 + 72 + 48, 600), Vector2(144, 48), Pivot::Center);
 	Enemy.frc = RectMakePivot(Vector2(288 + 10 + 72 + 48, 600), Vector2(144, 48), Pivot::Center);
@@ -480,7 +470,7 @@ void mapTool::setButton()
 	setTri.frc = RectMakePivot(Vector2(720 + 10 + 72 + 48, 600), Vector2(144, 48), Pivot::Center);
 	prevArrow.frc = RectMakePivot(Vector2(637, 150), Vector2(33, 33), Pivot::Center);
 	nextArrow.frc = RectMakePivot(Vector2(1262, 150), Vector2(33, 33), Pivot::Center);
-	BackGround.frc = RectMakePivot(Vector2(864 + 10 + 72 + 48, 600), Vector2(144, 48), Pivot::Center);
+	BackGround.frc= RectMakePivot(Vector2(864 + 10 + 72 + 48, 600), Vector2(144, 48), Pivot::Center);
 }
 
 void mapTool::setup()
@@ -505,7 +495,7 @@ void mapTool::setup()
 		{
 			//_tiles[i*TILEX + j].rc = RectMakePivot(Vector2(j*TILESIZE, i*TILESIZE), Vector2(j*TILESIZE, i*TILESIZE),Pivot::Center);
 			//_tiles[i*TILEX + j].rc = RectMakePivot(Vector2(j*TILESIZE + TILESIZE / 2 - camera.x, i*TILESIZE + TILESIZE / 2 - camera.y), Vector2(TILESIZE, TILESIZE), Pivot::Center);
-			_tiles[i*TILEX + j].rc = RectMakePivot(Vector2(j*TILESIZE + TILESIZE / 2, i*TILESIZE + TILESIZE / 2), Vector2(TILESIZE, TILESIZE), Pivot::Center);
+			_tiles[i*TILEX + j].rc = RectMakePivot(Vector2(j*TILESIZE + TILESIZE / 2 , i*TILESIZE + TILESIZE / 2 ), Vector2(TILESIZE, TILESIZE), Pivot::Center);
 		}
 	}
 	cout << _tiles[0].rc.left << endl << _tiles[0].rc.top << endl;
@@ -561,16 +551,16 @@ void mapTool::setMap()
 						else if (_crtSelect == CTRL_COLLIDER)
 						{
 							if (!_tiles[i*TILEX + j].isCollider)
-							{
+							{						
 								_tiles[i*TILEX + j].isCollider = true;
 								_leftButtonDown = false;
-								cout << _tiles[i*TILEX + j].isCollider << endl;
+								cout << _tiles[i*TILEX + j].isCollider<<endl;
 							}
-
-							else
-							{
-								_tiles[i*TILEX + j].isCollider = false;
-								_leftButtonDown = false;
+							
+							else 
+							{ 
+								_tiles[i*TILEX + j].isCollider = false; 
+								_leftButtonDown=false;
 							}
 						}
 						else if (_crtSelect == CTRL_SETCORRELATION)
@@ -582,7 +572,7 @@ void mapTool::setMap()
 						else if (_crtSelect == CTRL_SETTRIGGER)
 						{
 							if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)_tiles[i*TILEX + j].terrain = TR_GRASS;
-							else _tiles[i*TILEX + j].terrain = TR_TRIGGER;
+							else _tiles[i*TILEX + j].terrain = TR_TRIGGER; 
 							_leftButtonDown = false;
 						}
 						InvalidateRect(_hWnd, NULL, false);
@@ -598,17 +588,17 @@ void mapTool::setCtrl()
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 	{
-		if (Vector2InRect(&Save.frc, &Vector2(_ptMouse)))_crtSelect = CTRL_SAVE;
-		if (Vector2InRect(&Load.frc, &Vector2(_ptMouse)))_crtSelect = CTRL_LOAD;
-		if (Vector2InRect(&Erase.frc, &Vector2(_ptMouse)))_crtSelect = CTRL_ERASER;
+		if (Vector2InRect(&Save.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_SAVE;
+		if (Vector2InRect(&Load.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_LOAD;
+		if (Vector2InRect(&Erase.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_ERASER;
 		//if (Vector2InRect(&Prev.frc,&Vector2(_ptMouse)))  _crtSelect = CTRL_PREV;
 		//if (Vector2InRect(&Next.frc,&Vector2(_ptMouse)))  _crtSelect = CTRL_NEXT; 
-		if (Vector2InRect(&terrain.frc, &Vector2(_ptMouse)))_crtSelect = CTRL_TERRAINDRAW;
-		if (Vector2InRect(&Object.frc, &Vector2(_ptMouse)))_crtSelect = CTRL_OBJDRAW;
-		if (Vector2InRect(&Collider.frc, &Vector2(_ptMouse)))_crtSelect = CTRL_COLLIDER;
-		if (Vector2InRect(&FrameObj.frc, &Vector2(_ptMouse)))_crtSelect = CTRL_SETFRAMETILE;
-		if (Vector2InRect(&setCor.frc, &Vector2(_ptMouse)))_crtSelect = CTRL_SETCORRELATION;
-		if (Vector2InRect(&setTri.frc, &Vector2(_ptMouse)))_crtSelect = CTRL_SETTRIGGER;
+		if (Vector2InRect(&terrain.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_TERRAINDRAW;
+		if (Vector2InRect(&Object.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_OBJDRAW;
+		if (Vector2InRect(&Collider.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_COLLIDER;
+		if (Vector2InRect(&FrameObj.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_SETFRAMETILE;
+		if (Vector2InRect(&setCor.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_SETCORRELATION;
+		if (Vector2InRect(&setTri.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_SETTRIGGER;
 
 		//desc : 이전 이후 인덱스 비교 date 2021/2/1 by pju
 		if (Vector2InRect(&prevArrow.frc, &Vector2(_ptMouse)) && tabOpen)
@@ -617,7 +607,7 @@ void mapTool::setCtrl()
 			switch (_crtSelect)
 			{
 			case CTRL_OBJDRAW:
-				_objSelected = _objSelected <= 1 ? OBJSIZE : _objSelected -= 1;
+				_objSelected = _objSelected <= 1 ? OBJSIZE  : _objSelected -= 1;
 				break;
 			case CTRL_SETFRAMETILE:
 				_frameSelected = _frameSelected <= 0 ? FRAMEINFOMANAGER->GetSize() - 1 : _frameSelected -= 1;
@@ -645,7 +635,7 @@ void mapTool::setCtrl()
 				break;
 			}
 		}
-		if (Vector2InRect(&BackGround.frc, &Vector2(_ptMouse)))_crtSelect = CTRL_BACKGROUND;
+		if(Vector2InRect(&BackGround.frc,&Vector2(_ptMouse)))_crtSelect=CTRL_BACKGROUND;
 	}
 }
 
@@ -653,7 +643,7 @@ void mapTool::mapMove()
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 	{
-		camera.x += 48;
+		camera.x+= 48;
 		cout << camera.x << endl;
 
 	}
@@ -666,7 +656,7 @@ void mapTool::mapMove()
 	if (KEYMANAGER->isOnceKeyDown(VK_UP))
 	{
 		camera.y -= 48;
-		cout << camera.y << endl;
+		cout << camera.y<<endl;
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
 	{
@@ -710,15 +700,14 @@ void mapTool::save()
 	openFileName.lpstrFile = strFilePath; // strFilePath
 	openFileName.nMaxFile = MAX_PATH;
 	openFileName.nMaxFileTitle = MAX_PATH;
-	string temp;
+
 	if (GetSaveFileName(&openFileName) != 0)    // 인덱스가 1부터 시작하기 때문에 지정
 	{
 		switch (openFileName.nFilterIndex)
 		{
 		case 1:
 			_tiles->camera = camera;
-			temp = backName + to_string(backCount);
-			_tiles->backGroundName = temp;
+			_tiles->backGroundName = backName+to_string(backCount);
 			cout << _tiles->camera.x;
 			file = CreateFile(strFilePath, GENERIC_WRITE, NULL, NULL,
 				CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -755,7 +744,6 @@ void mapTool::load()
 	openFileName.nMaxFile = MAX_PATH;
 	openFileName.nMaxFileTitle = MAX_PATH;
 
-	string temp;
 	if (GetOpenFileName(&openFileName) != 0)    // 인덱스가 1부터 시작하기 때문에 지정
 	{
 		switch (openFileName.nFilterIndex)
@@ -767,35 +755,6 @@ void mapTool::load()
 			ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 			camera = _tiles->camera;
 			_backGround = IMAGEMANAGER->FindImage(_tiles->backGroundName);
-
-			//로드할 시 현재 백그라운드 카운터를 추출해낸다.
-			//string 백그라운드의 사이즈를 구한다.
-			switch (sizeof(_tiles->backGroundName))
-			{
-			case 3:
-				//사이즈 3일 경우 3번째 자리부터 자르기
-				temp = _tiles->backGroundName.substr(3);
-				//int형으로 변환
-				backCount = atoi(temp.c_str());
-				break;
-			case 4:
-				//사이즈 4일 경우 4번째 자리부터 자르기
-				temp = _tiles->backGroundName.substr(4);
-				//int형으로 변환
-				backCount = atoi(temp.c_str());
-				break;
-			case 5:
-				//사이즈 5일 경우 5번째 자리부터 자르기
-				temp = _tiles->backGroundName.substr(5);
-				//int형으로 변환
-				backCount = atoi(temp.c_str());
-				break;
-			default:
-				//기본 첫번째 배경
-				backCount = 1;
-				break;
-			}
-
 			CAMERAMANAGER->setCamera(camera);
 			CloseHandle(file);
 			break;
@@ -924,7 +883,6 @@ void mapTool::setObjTile()
 
 	//삭제 여부
 	bool isDel = false;
-	string temp;
 	//FloatRect rc;
 	for (int i = 0; i < TILEY; i++)
 	{
@@ -941,8 +899,7 @@ void mapTool::setObjTile()
 					_tiles[i*TILEX + j].obj = OBJ_NONE;
 				else	   //해당 타일의 프레임 키값을 넣어준다.
 				{
-					temp = onjName + to_string(_objSelected);
-					_tiles[i*TILEX + j].keyName = temp;
+					_tiles[i*TILEX + j].keyName = onjName + to_string(_objSelected);
 					_tiles[i*TILEX + j].obj = OBJ_LOOK;
 				}
 			}

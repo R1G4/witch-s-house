@@ -23,15 +23,6 @@ HRESULT playGround::init()
 
 	//아래 매니저에서도 프레임 이미지를 추가 가능하다.
 	//key, 이미지 경로(~.png), 프레임 x축, 프레임 y축, 속성(종류), 프레임이 바뀌는 간격?, 트리거 유무, 트리거 시작되는 프레임 인덱스, 반복 유무 
-	FRAMEINFOMANAGER->AddFrameInfo("플레이어", L"Image/tempFrameImg/player.png", 16, 4, PLAYER);
-	FRAMEINFOMANAGER->AddFrameInfo("곰", L"Image/tempFrameImg/곰.png", 1, 4, ENEMY);
-	FRAMEINFOMANAGER->AddFrameInfo("눈깔", L"Image/tempFrameImg/눈깔.png", 3, 4, ENEMY);
-	FRAMEINFOMANAGER->AddFrameInfo("해골", L"Image/tempFrameImg/해골.png", 3, 4, ENEMY);
-	FRAMEINFOMANAGER->AddFrameInfo("액자", L"Image/tempFrameImg/액자1.png", 1, 4, OBJ, 8, true, 1, false);
-	FRAMEINFOMANAGER->AddFrameInfo("꽃병프레임", L"Image/tempFrameImg/꽃병프레임.png", 1, 4, OBJ, 10, true, 1, true);
-	FRAMEINFOMANAGER->AddFrameInfo("켜진초", L"Image/tempFrameImg/켜진초.png", 3, 1, OBJ);
-	FRAMEINFOMANAGER->AddFrameInfo("꺼진초", L"Image/tempFrameImg/꺼진초.png", 3, 1, OBJ);
-	FRAMEINFOMANAGER->AddFrameInfo("켜진초꺼진초", L"Image/tempFrameImg/켜진초꺼진초.png", 6, 1, OBJ, 10, true, 3, false);
 #pragma endregion
 
 	//ImageManager::GetInstance()->AddImage("TestObject", L"TrapObject.png");
@@ -45,9 +36,9 @@ HRESULT playGround::init()
 	//pt.x = WINSIZEX / 2;
 	//pt.y = WINSIZEY / 2;
 	//camera = PointMake(0, 0);
-
+	addScene();
 	addAutoImage();
-
+	addFrameImg();
 	SCENEMANAGER->addScene("MapToolScene", new mapTool);
 	
 
@@ -64,7 +55,7 @@ HRESULT playGround::init()
 
 	SCENEMANAGER->addScene("실험", new garDen);
 	SCENEMANAGER->addScene("실험2", new garDenUnder);
-	SCENEMANAGER->changeScene("MapToolScene");
+	SCENEMANAGER->changeScene("BossStage");
 	//SCENEMANAGER->changeScene("stage1_1");
 	
 	/////////////////UI 일단 주석처리/////////////
@@ -144,4 +135,23 @@ void playGround::addScene()
 	SCENEMANAGER->addScene("시작화면", new menu);
 	SCENEMANAGER->addScene("레벨선택", new levelChoiceScene);
 	SCENEMANAGER->addScene("MapToolScene", new mapTool);
+	SCENEMANAGER->addScene("BossStage", new bossStage);
+}
+
+void playGround::addFrameImg()
+{
+	FRAMEINFOMANAGER->AddFrameInfo("플레이어", L"Image/tempFrameImg/player.png", 16, 4, PLAYER);
+	FRAMEINFOMANAGER->AddFrameInfo("곰", L"Image/tempFrameImg/곰.png", 1, 4, ENEMY);
+	FRAMEINFOMANAGER->AddFrameInfo("눈깔", L"Image/tempFrameImg/눈깔.png", 3, 4, ENEMY);
+	FRAMEINFOMANAGER->AddFrameInfo("해골", L"Image/tempFrameImg/해골.png", 3, 4, ENEMY);
+	FRAMEINFOMANAGER->AddFrameInfo("액자", L"Image/tempFrameImg/액자1.png", 1, 4, OBJ, 8, true, 1, false);
+	FRAMEINFOMANAGER->AddFrameInfo("꽃병프레임", L"Image/tempFrameImg/꽃병프레임.png", 1, 4, OBJ, 10, true, 1, true);
+	FRAMEINFOMANAGER->AddFrameInfo("켜진초", L"Image/tempFrameImg/켜진초.png", 3, 1, OBJ);
+	FRAMEINFOMANAGER->AddFrameInfo("꺼진초", L"Image/tempFrameImg/꺼진초.png", 3, 1, OBJ);
+	FRAMEINFOMANAGER->AddFrameInfo("켜진초꺼진초", L"Image/tempFrameImg/켜진초꺼진초.png", 6, 1, OBJ, 10, true, 3, false);
+
+	//캐릭터 이미지 추가
+	FRAMEINFOMANAGER->AddFrameInfo("violaIdle", L"Image/violaFrameImg/violaIdle.png", 16, 4, PLAYER);
+	FRAMEINFOMANAGER->AddFrameInfo("violaWalk", L"Image/violaFrameImg/violaWalk.png", 16, 4, PLAYER);
+	FRAMEINFOMANAGER->AddFrameInfo("violaDash", L"Image/violaFrameImg/violaDash.png", 16, 4, PLAYER);
 }

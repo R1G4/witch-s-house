@@ -18,7 +18,7 @@ private:
 	float _x, _y;							// 초기위치를 위한 변수
 	float _speed;						// 추격속도
 	float _currentFrameX, _currentFrameY;	// 현재 프레임 이미지
-
+	
 	int count;
 
 public:

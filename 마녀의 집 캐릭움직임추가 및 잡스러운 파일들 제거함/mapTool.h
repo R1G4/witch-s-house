@@ -30,7 +30,7 @@ private:
 	tagSampleTile _sampleTile[SAMPLETILEX*SAMPLETILEY];
 	//프레임 이미지(플레이어, 에너미, 오브젝트) 타일
 	vector<tagFrameTile> _vFrameTile;
-
+	
 	bool _leftButtonDown;
 	int _y_rect_num;		// y축 렉트갯수를 변환시키기 위한 변수?		
 	int _frameSelected;		// 샘플 프레임 백터의 인덱스며 이전과 다음 기능에서 사용된다.
