@@ -13,39 +13,37 @@ HRESULT garDenUnder::init()
 {
 	IMAGEMANAGER->AddFrameImage("TerrainSample", L"Image/mapTool/타일.png", 7, 2);
 	IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/objSample.png", 2, 3);
-	IMAGEMANAGER->AddImage("장미", L"Image/mapTool/tileset/003_tr.png");
+	IMAGEMANAGER->AddImage("나무", L"Image/mapTool/tileset/003_tr.png");
+	camera = Vector2(0, 0);
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
-
-	_player = new Player;
 	load();
-	_player->init();
-	_player->setDirec(CHRDIREC_UP);
-	camera.x = _player->getPlayerLocX();
-	camera.y = _player->getPlayerLocY();
-	CAMERAMANAGER->setCamera(camera);
-	return S_OK;
-	frame = 0;
-
 	return S_OK;
 }
 
 void garDenUnder::update()
 {
-	count++;
-	if (count % 4 == 0)
-	{
-		frame++;
-		if (frame > 15)
-		{
-			frame = 0;
-		}
-	}
-	camera.x = _player->getPlayerLocX();
-	camera.y = _player->getPlayerLocY();
+	CAMERAMANAGER->setCamera(camera);
+	CAMERAMANAGER->setWorldMouse(_ptMouse);
 
-	CAMERAMANAGER->setCamera(Vector2(camera.x - WINSIZEX / 2, camera.y - WINSIZEY / 2));
-	_player->update();
-	tileCollision();
+
+
+	if (KEYMANAGER->isStayKeyDown(VK_UP))
+	{
+		camera.y -= 5;
+	}
+	if (KEYMANAGER->isStayKeyDown(VK_DOWN))
+	{
+		camera.y += 5;
+	}
+	if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
+	{
+		camera.x += 5;
+
+	}
+	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
+	{
+		camera.x -= 5;
+	}
 }
 
 void garDenUnder::release()
@@ -54,7 +52,8 @@ void garDenUnder::release()
 
 void garDenUnder::render()
 {
-	CAMERAMANAGER->render(_backGround, Vector2(_backGround->GetSize().x / 2 + 480, _backGround->GetSize().y / 2));
+	CAMERAMANAGER->render(_backGround, Vector2(720 + 432, 648 - 96));
+
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
@@ -66,79 +65,40 @@ void garDenUnder::render()
 				{
 					CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Red, 0.4);
 				}
-				if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
 			}
-
+			if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
 		}
 	}
-	
-	_player->render();
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
 			if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
+
+			//중간에 배치하고 싶다면 이걸쓰세요. 디폴트 센타
 			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
-				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top + TILESIZE / 2));
+				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2,
+					_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));
+
+			//오른쪽으로 붙고자 하면 이걸쓰고
+			/*CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
+				Vector2(_tiles[i*TILEX + j].rc.right,
+					_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));*/
 		}
 	}
-
-	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("장미"), Vector2(_backGround->GetSize().x / 2 + 480, _backGround->GetSize().y / 2));
+	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("나무"), Vector2(720 + 432, 648 - 96));
 }
-
-
 
 void garDenUnder::load()
 {
 	HANDLE file;
 	DWORD read;
-	file = CreateFile("Stage/gardenscene2.map", GENERIC_READ, NULL, NULL,
+	file = CreateFile("Stage/gardenstage2.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	camera = _tiles->camera;
 	_backGround = IMAGEMANAGER->FindImage(_tiles->backGroundName);
 	cout << _tiles->camera.x;
-	for (int i = 0; i < TILEX*TILEY; i++)
-	{
-		if (_tiles[i].attribute == PLAYER)
-		{
-			_player->setStart(i%TILEX, i / TILEX);
-			break;
-		}
-
-		if (_tiles[i].attribute == OBJ)
-		{
-
-		}
-	}
-
+	CAMERAMANAGER->setCamera(camera);
 	CloseHandle(file);
-}
-
-void garDenUnder::tileCollision()
-{
-	for (int i = 0; i < TILEY; i++)
-	{
-		for (int j = 0; j < TILEX; j++)
-		{
-			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
-			{
-				switch (_player->getPdirec())
-				{
-				case CHRDIREC_DOWN:
-					_player->setPLocaY(_tiles[i*TILEX + j].rc.top - TILESIZE / 4 * 3);
-					break;
-				case CHRDIREC_LEFT:
-					_player->setPLocaX(_tiles[i*TILEX + j].rc.right + 4);
-					break;
-				case CHRDIREC_RIGHT:
-					_player->setPLocaX(_tiles[i*TILEX + j].rc.left - TILESIZE / 4 * 3);
-					break;
-				case CHRDIREC_UP:
-					_player->setPLocaY(_tiles[i*TILEX + j].rc.bottom + 4);
-					break;
-				}
-			}
-		}
-	}
 }

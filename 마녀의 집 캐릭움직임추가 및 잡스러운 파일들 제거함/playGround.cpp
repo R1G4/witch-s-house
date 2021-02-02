@@ -54,8 +54,8 @@ HRESULT playGround::init()
 #pragma endregion
 
 	
-	SCENEMANAGER->addScene("Á¤¿ø¾Æ·¡", new garDenUnder);
-	SCENEMANAGER->changeScene("Á¤¿ø¾Æ·¡");
+	SCENEMANAGER->addScene("½ÇÇè2", new garDenUnder);
+	SCENEMANAGER->changeScene("MapToolScene");
 	//SCENEMANAGER->changeScene("stage1_1");
 	//SCENEMANAGER->changeScene("MapToolScene");
 	/////////////////UI ÀÏ´Ü ÁÖ¼®Ã³¸®/////////////
@@ -151,6 +151,11 @@ void playGround::addFrameImg()
 	FRAMEINFOMANAGER->AddFrameInfo("²¨ÁøÃÊ", L"Image/tempFrameImg/²¨ÁøÃÊ.png", 3, 1, OBJ);
 	FRAMEINFOMANAGER->AddFrameInfo("ÄÑÁøÃÊ²¨ÁøÃÊ", L"Image/tempFrameImg/ÄÑÁøÃÊ²¨ÁøÃÊ.png", 6, 1, OBJ, 10, true, 3, false);
 	FRAMEINFOMANAGER->AddFrameInfo("¹®1", L"Image/tempFrameImg/¹®1.png", 1, 4, OBJ, 11, true, 1, false);
+	FRAMEINFOMANAGER->AddFrameInfo("»¡°£²É1", L"Image/tempFrameImg/»¡°£²É1.png", 1, 3, OBJ, 15);
+	FRAMEINFOMANAGER->AddFrameInfo("»¡°£²É2", L"Image/tempFrameImg/»¡°£²É2.png", 1, 4, OBJ, 15);
+	FRAMEINFOMANAGER->AddFrameInfo("»¡°£²É3", L"Image/tempFrameImg/»¡°£²É3.png", 1, 3, OBJ, 15);
+	FRAMEINFOMANAGER->AddFrameInfo("»õÀå", L"Image/tempFrameImg/»õÀå.png", 1, 4, OBJ, 5, true, 1, false);
+	FRAMEINFOMANAGER->AddFrameInfo("2ÁßÃ¶Ã¢", L"Image/tempFrameImg/2ÁßÃ¶Ã¢.png", 1, 2, OBJ, 10, true, 1, false);
 
 	//Ä³¸¯ÅÍ ÀÌ¹ÌÁö Ãß°¡
 	FRAMEINFOMANAGER->AddFrameInfo("violaIdle", L"Image/violaFrameImg/violaIdle.png", 16, 4, PLAYER);

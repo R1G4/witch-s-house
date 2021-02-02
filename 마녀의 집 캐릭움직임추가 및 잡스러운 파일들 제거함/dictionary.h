@@ -15,7 +15,7 @@
 #define SAMPLETILEY 2
 #define SAMPLEOBJECTX 2 // 그림변환시 변환 필요
 #define SAMPLEOBJECTY 3 // 그림변환시 변환 필요
-#define OBJSIZE 47 // 오브젝트 추가 시 변환 필요
+#define OBJSIZE 49 // 오브젝트 추가 시 변환 필요
 
 enum CTRL
 {
