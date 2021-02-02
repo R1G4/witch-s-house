@@ -8,10 +8,12 @@ HRESULT Player::init()
 	cout << _startPosition.x << " " << _startPosition.y << endl;
 	_player.x = _startPosition.x*TILESIZE;
 	_player.y = _startPosition.y*TILESIZE;
+
 	cout << _player.x << " " << _player.y << endl;
 	_player.speed = 5.0f;
 	setState(CHR_IDLE);
 	_player.isDash = true;
+	_player.alpha = 1;
 	return S_OK;
 }
 
@@ -24,12 +26,13 @@ void Player::update()
 
 	chr_State->updateState();
 	_player.frameY = (int)_player.direc;
-	_player.rc = RectMakePivot(Vector2(_player.x, _player.y), Vector2(TILESIZE-15, TILESIZE-15), Pivot::LeftTop);
+	_player.rc = RectMakePivot(Vector2(_player.x, _player.y+3), Vector2(TILESIZE-15, TILESIZE-18), Pivot::LeftTop);
 	framePlay();
 }
 
 void Player::render()
 {
+	_player.img->SetAlpha(_player.alpha);
 	CAMERAMANAGER->FrameRender(_player.img, Vector2(_player.x + TILESIZE/3,_player.rc.bottom-_player.img->GetFrameSize().y/2), _player.frameX, _player.frameY);
 	if (KEYMANAGER->isToggleKey(VK_TAB))
 	{

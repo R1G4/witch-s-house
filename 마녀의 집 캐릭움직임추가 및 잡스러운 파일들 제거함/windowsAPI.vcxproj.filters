@@ -58,6 +58,9 @@
     <Filter Include="playGround\scense\OutSide">
       <UniqueIdentifier>{0ffc2cbd-5c2f-4f7e-a398-6479578dc068}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\scense\BossStage">
+      <UniqueIdentifier>{ff9ab335-7db2-4d63-a749-02e57289e09f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -192,9 +195,6 @@
     <ClInclude Include="StringHelper.h">
       <Filter>2DGameFramework\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="bossStage.h">
-      <Filter>playGround\scense</Filter>
-    </ClInclude>
     <ClInclude Include="castlefront.h">
       <Filter>playGround\scense\OutSide</Filter>
     </ClInclude>
@@ -206,6 +206,15 @@
     </ClInclude>
     <ClInclude Include="levelChoiceScene.h">
       <Filter>playGround\scense</Filter>
+    </ClInclude>
+    <ClInclude Include="bossStage.h">
+      <Filter>playGround\scense\BossStage</Filter>
+    </ClInclude>
+    <ClInclude Include="astarTile.h">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="bossStage_2.h">
+      <Filter>playGround\scense\BossStage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -323,9 +332,6 @@
     <ClCompile Include="StringHelper.cpp">
       <Filter>2DGameFramework\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="bossStage.cpp">
-      <Filter>playGround\scense</Filter>
-    </ClCompile>
     <ClCompile Include="castlefront.cpp">
       <Filter>playGround\scense\OutSide</Filter>
     </ClCompile>
@@ -337,6 +343,15 @@
     </ClCompile>
     <ClCompile Include="levelChoiceScene.cpp">
       <Filter>playGround\scense</Filter>
+    </ClCompile>
+    <ClCompile Include="bossStage.cpp">
+      <Filter>playGround\scense\BossStage</Filter>
+    </ClCompile>
+    <ClCompile Include="astarTile.cpp">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="bossStage_2.cpp">
+      <Filter>playGround\scense\BossStage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

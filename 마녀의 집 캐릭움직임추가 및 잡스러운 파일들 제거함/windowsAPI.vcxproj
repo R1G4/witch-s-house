@@ -148,9 +148,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="animation.h" />
+    <ClInclude Include="astarTile.h" />
     <ClInclude Include="bear.h" />
     <ClInclude Include="boss.h" />
     <ClInclude Include="bossStage.h" />
+    <ClInclude Include="bossStage_2.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="castlefront.h" />
     <ClInclude Include="characterState.h" />
@@ -199,9 +201,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="animation.cpp" />
+    <ClCompile Include="astarTile.cpp" />
     <ClCompile Include="bear.cpp" />
     <ClCompile Include="boss.cpp" />
     <ClCompile Include="bossStage.cpp" />
+    <ClCompile Include="bossStage_2.cpp" />
     <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="castlefront.cpp" />
     <ClCompile Include="characterState.cpp" />

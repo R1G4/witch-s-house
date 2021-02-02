@@ -7,6 +7,8 @@
 #include "menu.h"
 #include "levelChoiceScene.h"
 #include "bossStage.h"
+#include "bossStage_2.h"
+#include "Player.h"
 #include "castlefront.h"
 
 class playGround : public gameNode
@@ -19,6 +21,9 @@ private:
 	POINT pt;
 	Image* viola;
 	POINT camera;
+	Player* _player;
+	bossStage* _bossStage;
+	bossStage_2* _bossStage_2;
 public:
 	playGround();
 	~playGround();
@@ -30,5 +35,7 @@ public:
 	void addAutoImage();
 	void addScene();
 	void addFrameImg();
+	void addressLink();
+
 };
 

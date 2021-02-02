@@ -26,6 +26,7 @@ struct tagPlayer
 	float speed;
 	bool isDash;
 	FloatRect searchRc;
+	float alpha;
 };
 class Player :
 	public gameNode
@@ -59,5 +60,6 @@ public:
 	CHRDIRECTION getPdirec() { return _player.direc; }
 	FloatRect getPlayerFrc() { return _player.rc; }
 	FloatRect getSearchRc() { return _player.searchRc; }
+	void setAlpha(float x) { _player.alpha = x; }
 };
 

@@ -25,17 +25,9 @@ HRESULT playGround::init()
 	//key, 이미지 경로(~.png), 프레임 x축, 프레임 y축, 속성(종류), 프레임이 바뀌는 간격?, 트리거 유무, 트리거 시작되는 프레임 인덱스, 반복 유무 
 #pragma endregion
 
-	//ImageManager::GetInstance()->AddImage("TestObject", L"TrapObject.png");
-	//ImageManager::GetInstance()->AddFrameImage("violaIdle", L"violaIdle.png",16,4);
-	//ImageManager::GetInstance()->AddFrameImage("TestFrameObject",
-	//	L"Bomb.png", 3, 1);
-	//ImageManager::GetInstance()->AddImage("background", L"background.png");
-	//viola = ImageManager::GetInstance()->FindImage("viloaIdle");
-	//_currentFrameX = 0;
-	//_currentFrameY = 0;
-	//pt.x = WINSIZEX / 2;
-	//pt.y = WINSIZEY / 2;
-	//camera = PointMake(0, 0);
+
+	addressLink();
+
 	addScene();
 	addAutoImage();
 	addFrameImg();
@@ -54,8 +46,8 @@ HRESULT playGround::init()
 #pragma endregion
 
 	
-	SCENEMANAGER->changeScene("성앞");
-
+	//SCENEMANAGER->changeScene("성앞");
+	SCENEMANAGER->changeScene("BossStage");
 
 	//SCENEMANAGER->changeScene("stage1_1");
 	//SCENEMANAGER->changeScene("MapToolScene");
@@ -88,24 +80,6 @@ void playGround::render()
 	D2DRenderer::GetInstance()->BeginRender(D2D1::ColorF::Black);
 	{
 		SCENEMANAGER->render();
-		/*for (int i = 0; i < 2; i++)
-		{
-			for (int j = 0; j < 10; j++)
-			{
-				D2DRenderer::GetInstance()->DrawRectangle(RectMakePivot(
-					Vector2(750 + j * TILESIZE, 100 + i * TILESIZE), Vector2(TILESIZE, TILESIZE), Pivot::Center));
-			}
-		}*/
-		//우리가 쓸 타일맵 제작
-		//for (int i = 0; i < TILEY; ++i)
-		//{
-		//	for (int j = 0; j < TILEX; ++j)
-		//	{
-		//		D2DRenderer::GetInstance()->DrawRectangle(RectMakePivot(Vector2(j*TILESIZE, i*TILESIZE), Vector2(j*TILESIZE + TILESIZE, i*TILESIZE + TILESIZE), Pivot::LeftTop),D2DRenderer::DefaultBrush::White);
-		//	}
-		//}
-		/*D2DRenderer::GetInstance()->DrawRectangle(RectMakePivot(Vector2(800, 550), Vector2(144, 48), Pivot::Center),D2DRenderer::DefaultBrush::White);
-		D2DRenderer::GetInstance()->DrawRectangle(RectMakePivot(Vector2(800 + 144 + 10, 550), Vector2(144, 48), Pivot::Center));*/
 	}
 	//백버퍼에 그린 내용들을 화면에 뿌려라~
 	D2DRenderer::GetInstance()->EndRender();
@@ -140,6 +114,10 @@ void playGround::addScene()
 	SCENEMANAGER->addScene("정원", new garDen);
 	SCENEMANAGER->addScene("정원아래", new garDenUnder);
 	SCENEMANAGER->addScene("성앞", new castlefront);
+
+	//보스씬 관련
+	SCENEMANAGER->addScene("BossStage", _bossStage);
+	SCENEMANAGER->addScene("Boss2", _bossStage_2);
 }
 
 void playGround::addFrameImg()
@@ -164,4 +142,14 @@ void playGround::addFrameImg()
 	FRAMEINFOMANAGER->AddFrameInfo("violaIdle", L"Image/violaFrameImg/violaIdle.png", 16, 4, PLAYER);
 	FRAMEINFOMANAGER->AddFrameInfo("violaWalk", L"Image/violaFrameImg/violaWalk.png", 16, 4, PLAYER);
 	FRAMEINFOMANAGER->AddFrameInfo("violaDash", L"Image/violaFrameImg/violaDash.png", 16, 4, PLAYER);
+}
+
+void playGround::addressLink()
+{
+	_player = new Player;
+	_bossStage = new bossStage;
+	_bossStage_2 = new bossStage_2;
+	_bossStage->addresslink(_player);
+	_bossStage_2->addresslink(_player);
+
 }
