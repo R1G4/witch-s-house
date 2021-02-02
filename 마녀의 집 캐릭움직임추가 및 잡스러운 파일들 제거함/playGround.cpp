@@ -55,7 +55,7 @@ HRESULT playGround::init()
 
 	SCENEMANAGER->addScene("실험", new garDen);
 	SCENEMANAGER->addScene("실험2", new garDenUnder);
-	SCENEMANAGER->changeScene("BossStage");
+	SCENEMANAGER->changeScene("MapToolScene");
 	//SCENEMANAGER->changeScene("stage1_1");
 	//SCENEMANAGER->changeScene("MapToolScene");
 	/////////////////UI 일단 주석처리/////////////
@@ -149,6 +149,7 @@ void playGround::addFrameImg()
 	FRAMEINFOMANAGER->AddFrameInfo("켜진초", L"Image/tempFrameImg/켜진초.png", 3, 1, OBJ);
 	FRAMEINFOMANAGER->AddFrameInfo("꺼진초", L"Image/tempFrameImg/꺼진초.png", 3, 1, OBJ);
 	FRAMEINFOMANAGER->AddFrameInfo("켜진초꺼진초", L"Image/tempFrameImg/켜진초꺼진초.png", 6, 1, OBJ, 10, true, 3, false);
+	FRAMEINFOMANAGER->AddFrameInfo("문1", L"Image/tempFrameImg/문1.png", 1, 4, OBJ, 11, true, 1, false);
 
 	//캐릭터 이미지 추가
 	FRAMEINFOMANAGER->AddFrameInfo("violaIdle", L"Image/violaFrameImg/violaIdle.png", 16, 4, PLAYER);

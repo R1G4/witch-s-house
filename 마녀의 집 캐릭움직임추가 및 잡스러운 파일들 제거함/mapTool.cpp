@@ -318,10 +318,13 @@ void mapTool::render()
 		}
 	}
 	//배경 샘플 랜딩하려는 부분
-	if (_crtSelect == CTRL_BACKGROUND&&tabOpen)
+	string temp;
+	temp = backName + to_string(backCount);
+	//배경 샘플 랜딩하려는 부분
+	if (_crtSelect == CTRL_BACKGROUND && tabOpen)
 	{
-		IMAGEMANAGER->FindImage(backName + to_string(backCount))->SetSize(Vector2(600, 270));
-		IMAGEMANAGER->FindImage(backName + to_string(backCount))->Render(Vector2(950,150));
+		IMAGEMANAGER->FindImage(temp)->SetSize(Vector2(600, 270));
+		IMAGEMANAGER->FindImage(temp)->Render(Vector2(950, 150));
 		IMAGEMANAGER->FindImage("화살표왼쪽")->SetScale(0.65f);
 		IMAGEMANAGER->FindImage("화살표왼쪽")->Render(Vector2(634, 150));
 
@@ -880,7 +883,8 @@ void mapTool::setFrameTile()
 				}
 				else	   //해당 타일의 프레임 키값을 넣어준다.
 				{
-					_tiles[i*TILEX + j].keyName = FRAMEINFOMANAGER->FindKey(_frameSelected);
+					_tiles[i*TILEX + j].keyName = temp.keyName;
+					//_tiles[i*TILEX + j].keyName = FRAMEINFOMANAGER->FindKey(_frameSelected);
 					_tiles[i*TILEX + j].attribute = FRAMEINFOMANAGER->GetAttribute(_frameSelected);
 				}
 
