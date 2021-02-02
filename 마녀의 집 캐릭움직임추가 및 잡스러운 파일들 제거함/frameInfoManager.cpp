@@ -197,7 +197,7 @@ FRAMEATTRIBUTE frameInfoManager::GetAttribute(int index)
 	return _mTotalFrameInfo.find(key)->second.kinds;
 }
 
-void frameInfoManager::setTrigger(int index, bool isTrigger)
+void frameInfoManager::setTriggerUse(int index, bool isTriggerUse)
 {
 	string key;
 
@@ -209,7 +209,7 @@ void frameInfoManager::setTrigger(int index, bool isTrigger)
 			break;
 		}
 	}
-	_mTotalFrameInfo[key].isTrigger = isTrigger;
+	_mTotalFrameInfo[key].isTriggerUse = isTriggerUse;
 	//_mTotalFrameInfo.find(key)->second.isTrigger == isTrigger;
 }
 
@@ -257,6 +257,8 @@ Vector2 frameInfoManager::FrameOperation(int index, Vector2 frameIndex, bool tri
 	isTrigger = isAllFrame == true ? false : Info.isTrigger;
 	//반복 재생을 할 것인지?
 	isLoop = isAllFrame == true ? true : Info.isLoop;
+	//트리거 발동 여부
+	trigger = trigger == true ? true : Info.isTriggerUse;
 
 	//프레임 진행 방향이 X축이라면
 	if (Info.frameSortDirection == 'Y')
@@ -332,7 +334,7 @@ Vector2 frameInfoManager::FrameOperation(int index, Vector2 frameIndex, bool tri
 	return frameIndex;
 }
 
-Vector2 frameInfoManager::FrameOperation(string key, Vector2 frameIndex,bool trigger, bool isAllFrame)
+Vector2 frameInfoManager::FrameOperation(string key, Vector2 frameIndex, bool trigger, bool isAllFrame)
 {
 	bool isTrigger;
 	bool isLoop;
@@ -352,6 +354,8 @@ Vector2 frameInfoManager::FrameOperation(string key, Vector2 frameIndex,bool tri
 	isTrigger = isAllFrame == true ? false : Info.isTrigger;
 	//반복 재생을 할 것인지?
 	isLoop = isAllFrame == true ? true : Info.isLoop;
+	//트리거 발동 여부
+	trigger = trigger == true ? true : Info.isTriggerUse;
 
 	//프레임 진행 방향이 X축이라면
 	if (Info.frameSortDirection == 'Y')
@@ -458,6 +462,8 @@ Vector2 frameInfoManager::FrameOperation(int index, Vector2 frameIndex, int inte
 	isTrigger = isAllFrame == true ? false : Info.isTrigger;
 	//반복 재생을 할 것인지?
 	isLoop = isAllFrame == true ? true : Info.isLoop;
+	//트리거 발동 여부
+	trigger = trigger == true ? true : Info.isTriggerUse;
 
 	//프레임 진행 방향이 X축이라면
 	if (Info.frameSortDirection == 'Y')
@@ -556,6 +562,8 @@ Vector2 frameInfoManager::FrameOperation(string key, Vector2 frameIndex, int int
 	isTrigger = isAllFrame == true ? false : Info.isTrigger;
 	//반복 재생을 할 것인지?
 	isLoop = isAllFrame == true ? true : Info.isLoop;
+	//트리거 발동 여부
+	trigger = trigger == true ? true : Info.isTriggerUse;
 
 	//프레임 진행 방향이 X축이라면
 	if (Info.frameSortDirection == 'Y')

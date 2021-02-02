@@ -72,8 +72,8 @@ public:
 	{
 		_mTotalFrameInfo.find(key)->second.triggerIndex = triggerIndex;
 	}
-	void setTrigger(string key, bool isTrigger) { _mTotalFrameInfo.find(key)->second.isTrigger = isTrigger; }
-	void setTrigger(int index, bool isTrigger);
+	void setTriggerUse(string key, bool isTriggerUse) { _mTotalFrameInfo.find(key)->second.isTriggerUse = isTriggerUse; }
+	void setTriggerUse(int index, bool isTriggerUse);
 	void setLoop(string key, bool isLoop) { _mTotalFrameInfo.find(key)->second.isLoop = isLoop; }
 
 	char FrameSortDirection(FRAMEATTRIBUTE Kinds, int maxFrameX, int maxFrameY);

@@ -20,34 +20,19 @@ HRESULT playGround::init()
 	IMAGEMANAGER->AddImage("화살표왼쪽", L"Image/mapTool/화살표왼쪽.png");
 	IMAGEMANAGER->AddImage("화살표오른쪽", L"Image/mapTool/화살표오른쪽.png");
 	IMAGEMANAGER->AddImage("1층스타트", L"Image/mapTool/stageMap/08.png");
-
-	//아래 매니저에서도 프레임 이미지를 추가 가능하다.
-	//key, 이미지 경로(~.png), 프레임 x축, 프레임 y축, 속성(종류), 프레임이 바뀌는 간격?, 트리거 유무, 트리거 시작되는 프레임 인덱스, 반복 유무 
 #pragma endregion
 
-
+	//클래스 생성 및 참조
 	addressLink();
-
+	//씬 추가
 	addScene();
+
 	addAutoImage();
 	addFrameImg();
 	SCENEMANAGER->addScene("MapToolScene", new mapTool);
-	
-
-	firstFloorStage* _firstFloorStage;
-	_firstFloorStage = new stage1_1;
-	SCENEMANAGER->addScene("stage1_1", _firstFloorStage);
-
-#pragma region 동현이형 파일 수정 읽고 지우십시오
-	//동현이형 가든 맵 다시만들어야 할수도..
-	//일단 에러안나게 랜더부분 수정하였음
-	//구조체 타일에 인덱스 변수를 삭제하고 키값(image)으로 대체하였음
-	//수정한 형식과 비슷하게 하시면 될 것같음
-#pragma endregion
-
-	
+		
 	//SCENEMANAGER->changeScene("성앞");
-	SCENEMANAGER->changeScene("BossStage");
+	SCENEMANAGER->changeScene("entranceFake");
 
 	//SCENEMANAGER->changeScene("stage1_1");
 	//SCENEMANAGER->changeScene("MapToolScene");
@@ -110,7 +95,6 @@ void playGround::addScene()
 	SCENEMANAGER->addScene("시작화면", new menu);
 	SCENEMANAGER->addScene("레벨선택", new levelChoiceScene);
 	SCENEMANAGER->addScene("MapToolScene", new mapTool);
-	SCENEMANAGER->addScene("BossStage", new bossStage);
 	SCENEMANAGER->addScene("정원", new garDen);
 	SCENEMANAGER->addScene("정원아래", new garDenUnder);
 	SCENEMANAGER->addScene("성앞", new castlefront);
@@ -118,10 +102,17 @@ void playGround::addScene()
 	//보스씬 관련
 	SCENEMANAGER->addScene("BossStage", _bossStage);
 	SCENEMANAGER->addScene("Boss2", _bossStage_2);
+
+	//1층
+	SCENEMANAGER->addScene("entranceFake", _entranceFakeStage);
+	SCENEMANAGER->addScene("entranceTrap", _entranceTrapStage);
+	SCENEMANAGER->addScene("entrance", _entranceStage);
+	SCENEMANAGER->addScene("hallway", _hallwayStage);
 }
 
 void playGround::addFrameImg()
-{
+{	
+	//key, 이미지 경로(~.png), 프레임 x축, 프레임 y축, 속성(종류), 프레임이 바뀌는 간격?, 트리거 유무, 트리거 시작되는 프레임 인덱스, 반복 유무 
 	FRAMEINFOMANAGER->AddFrameInfo("플레이어", L"Image/tempFrameImg/player.png", 16, 4, PLAYER);
 	FRAMEINFOMANAGER->AddFrameInfo("곰", L"Image/tempFrameImg/곰.png", 1, 4, ENEMY);
 	FRAMEINFOMANAGER->AddFrameInfo("눈깔", L"Image/tempFrameImg/눈깔.png", 3, 4, ENEMY);
@@ -132,11 +123,14 @@ void playGround::addFrameImg()
 	FRAMEINFOMANAGER->AddFrameInfo("꺼진초", L"Image/tempFrameImg/꺼진초.png", 3, 1, OBJ);
 	FRAMEINFOMANAGER->AddFrameInfo("켜진초꺼진초", L"Image/tempFrameImg/켜진초꺼진초.png", 6, 1, OBJ, 10, true, 3, false);
 	FRAMEINFOMANAGER->AddFrameInfo("문1", L"Image/tempFrameImg/문1.png", 1, 4, OBJ, 11, true, 1, false);
+	FRAMEINFOMANAGER->AddFrameInfo("문2", L"Image/tempFrameImg/문2.png", 1, 4, OBJ, 11, true, 1, false);
+	FRAMEINFOMANAGER->AddFrameInfo("문3", L"Image/tempFrameImg/문3.png", 1, 4, OBJ, 11, true, 1, false);
 	FRAMEINFOMANAGER->AddFrameInfo("빨간꽃1", L"Image/tempFrameImg/빨간꽃1.png", 1, 3, OBJ, 15);
 	FRAMEINFOMANAGER->AddFrameInfo("빨간꽃2", L"Image/tempFrameImg/빨간꽃2.png", 1, 4, OBJ, 15);
 	FRAMEINFOMANAGER->AddFrameInfo("빨간꽃3", L"Image/tempFrameImg/빨간꽃3.png", 1, 3, OBJ, 15);
 	FRAMEINFOMANAGER->AddFrameInfo("새장", L"Image/tempFrameImg/새장.png", 1, 4, OBJ, 5, true, 1, false);
 	FRAMEINFOMANAGER->AddFrameInfo("2중철창", L"Image/tempFrameImg/2중철창.png", 1, 2, OBJ, 10, true, 1, false);
+	FRAMEINFOMANAGER->AddFrameInfo("함정1", L"Image/tempFrameImg/함정1.png", 1, 5, OBJ, 6, true, 1, false);
 
 	//캐릭터 이미지 추가
 	FRAMEINFOMANAGER->AddFrameInfo("violaIdle", L"Image/violaFrameImg/violaIdle.png", 16, 4, PLAYER);
@@ -155,4 +149,12 @@ void playGround::addressLink()
 	_bossStage->addresslink(_player);
 	_bossStage_2->addresslink(_player);
 
+	_entranceFakeStage = new entranceFake;
+	_entranceTrapStage = new entranceTrap;
+	_entranceStage = new entrance;
+	_hallwayStage = new hallway;
+	_entranceFakeStage->addresslink(_player);
+	_entranceTrapStage->addresslink(_player);
+	_entranceStage->addresslink(_player);
+	_hallwayStage->addresslink(_player);
 }

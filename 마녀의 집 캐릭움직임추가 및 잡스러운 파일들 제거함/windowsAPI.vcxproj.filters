@@ -165,9 +165,6 @@
     <ClInclude Include="frameInfoManager.h">
       <Filter>2DGameFramework\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="stage1_1.h">
-      <Filter>playGround\scense\FirstFloor</Filter>
-    </ClInclude>
     <ClInclude Include="firstFloorStage.h">
       <Filter>playGround\scense\FirstFloor</Filter>
     </ClInclude>
@@ -215,6 +212,18 @@
     </ClInclude>
     <ClInclude Include="bossStage_2.h">
       <Filter>playGround\scense\BossStage</Filter>
+    </ClInclude>
+    <ClInclude Include="hallway.h">
+      <Filter>playGround\scense\FirstFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="entrance.h">
+      <Filter>playGround\scense\FirstFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="entranceFake.h">
+      <Filter>playGround\scense\FirstFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="entranceTrap.h">
+      <Filter>playGround\scense\FirstFloor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -302,9 +311,6 @@
     <ClCompile Include="frameInfoManager.cpp">
       <Filter>2DGameFramework\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="stage1_1.cpp">
-      <Filter>playGround\scense\FirstFloor</Filter>
-    </ClCompile>
     <ClCompile Include="firstFloorStage.cpp">
       <Filter>playGround\scense\FirstFloor</Filter>
     </ClCompile>
@@ -352,6 +358,18 @@
     </ClCompile>
     <ClCompile Include="bossStage_2.cpp">
       <Filter>playGround\scense\BossStage</Filter>
+    </ClCompile>
+    <ClCompile Include="hallway.cpp">
+      <Filter>playGround\scense\FirstFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="entrance.cpp">
+      <Filter>playGround\scense\FirstFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="entranceFake.cpp">
+      <Filter>playGround\scense\FirstFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="entranceTrap.cpp">
+      <Filter>playGround\scense\FirstFloor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

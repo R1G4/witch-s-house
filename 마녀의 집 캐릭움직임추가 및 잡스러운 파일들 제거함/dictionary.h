@@ -80,6 +80,7 @@ struct tagSampleFrameInfo
 	int triggerIndex = 0;			//기본 상태 (0 부터 triggerIndex 까지), 트리거 발동 상태 (triggerIndex 부터 프레임MAX 까지)
 	char frameSortDirection;		//프레임 정렬 방향
 	bool isTrigger = false;			//트리거가 존재하는 프레임인지?
+	bool isTriggerUse = false;		//트리거가 발동상태인지?
 	bool isLoop = false;			//트리거가 끝난 후 프레임 0 부터 triggerIndex 까지 루프 할지?
 	int interval = 8;				//프레임의 최대 간격
 };
@@ -93,6 +94,7 @@ struct tagFrameTile
 	int frameY;				//프레임 y축 인덱스
 	int indexX;				//배치된 타일의 x축 인덱스
 	int indexY;				//배치된 타일의 y축 인덱스
+	bool isTrigger = false;	//트리거 발동 유무(기본 false)
 };
 struct tagCurrentTile
 {

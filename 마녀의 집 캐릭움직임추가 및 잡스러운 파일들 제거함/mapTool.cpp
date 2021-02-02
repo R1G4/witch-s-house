@@ -391,11 +391,12 @@ void mapTool::render()
 		CAMERAMANAGER->FrameRender
 		(
 			_vFrameTile[i].img,
+			Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.bottom - _vFrameTile[i].img->GetSize().y / 2),
 			//문같은 경우는 가운대가 아닌 하단에 맞춰야 하기에..
-			_vFrameTile[i].keyName.find("문") != string::npos ? (_vFrameTile[i].keyName.size() <= 3 ?
+	/*		_vFrameTile[i].keyName.find("문") != string::npos ? (_vFrameTile[i].keyName.size() <= 3 ?
 				Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.top) :
 				Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.bottom - _vFrameTile[i].img->GetSize().y / 2)) :
-			Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.bottom - _vFrameTile[i].img->GetSize().y / 2),
+			Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.bottom - _vFrameTile[i].img->GetSize().y / 2),*/
 			_vFrameTile[i].frameX, _vFrameTile[i].frameY
 		);
 	}

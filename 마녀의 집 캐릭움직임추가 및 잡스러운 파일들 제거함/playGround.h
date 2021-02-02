@@ -3,13 +3,16 @@
 #include "mapTool.h"
 #include "garDen.h"
 #include "garDenUnder.h"
-#include "stage1_1.h"
 #include "menu.h"
 #include "levelChoiceScene.h"
 #include "bossStage.h"
 #include "bossStage_2.h"
 #include "Player.h"
 #include "castlefront.h"
+#include "entranceFake.h"
+#include "entranceTrap.h"
+#include "entrance.h"
+#include "hallway.h"
 
 class playGround : public gameNode
 {
@@ -24,6 +27,10 @@ private:
 	Player* _player;
 	bossStage* _bossStage;
 	bossStage_2* _bossStage_2;
+	firstFloorStage* _entranceFakeStage;
+	firstFloorStage* _entranceTrapStage;
+	firstFloorStage* _entranceStage;
+	firstFloorStage* _hallwayStage;
 public:
 	playGround();
 	~playGround();

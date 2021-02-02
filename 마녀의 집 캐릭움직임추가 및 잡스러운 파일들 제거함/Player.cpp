@@ -14,6 +14,8 @@ HRESULT Player::init()
 	setState(CHR_IDLE);
 	_player.isDash = true;
 	_player.alpha = 1;
+
+	_player.rc = RectMakePivot(Vector2(_player.x, _player.y + 3), Vector2(TILESIZE - 15, TILESIZE - 18), Pivot::LeftTop);
 	return S_OK;
 }
 
