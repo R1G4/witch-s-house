@@ -43,8 +43,9 @@ void bossStage::render()
 				{
 					CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Red, 0.4);
 				}
+				if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
 			}
-			if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
+			
 		}
 	}
 	_player->render();
@@ -82,6 +83,10 @@ void bossStage::load()
 			bossLocX = i % TILEX;
 			bossLocY = i / TILEX;
 		}
+		if (_tiles[i].attribute == OBJ)
+		{
+		
+		}
 	}
 
 	CloseHandle(file);
@@ -98,16 +103,16 @@ void bossStage::tileCollision()
 				switch (_player->getPdirec())
 				{
 				case CHRDIREC_DOWN:
-					_player->setPLocaY(_tiles[i*TILEX + j].rc.top - TILESIZE );
+					_player->setPLocaY(_tiles[i*TILEX + j].rc.top - TILESIZE/4*3 );
 					break;
 				case CHRDIREC_LEFT:
-					_player->setPLocaX(_tiles[i*TILEX + j].rc.right+1 );
+					_player->setPLocaX(_tiles[i*TILEX + j].rc.right +4);
 					break;
 				case CHRDIREC_RIGHT:
-					_player->setPLocaX(_tiles[i*TILEX + j].rc.left - TILESIZE);
+					_player->setPLocaX(_tiles[i*TILEX + j].rc.left-TILESIZE/4*3);
 					break;
 				case CHRDIREC_UP:
-					_player->setPLocaY(_tiles[i*TILEX + j].rc.bottom+1);
+					_player->setPLocaY(_tiles[i*TILEX + j].rc.bottom+4);
 					break;
 				}
 			}

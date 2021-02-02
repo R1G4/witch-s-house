@@ -11,7 +11,7 @@ HRESULT Player::init()
 	cout << _player.x << " " << _player.y << endl;
 	_player.speed = 5.0f;
 	setState(CHR_IDLE);
-//	_player.isDash = true;
+	_player.isDash = true;
 	return S_OK;
 }
 
@@ -24,13 +24,13 @@ void Player::update()
 
 	chr_State->updateState();
 	_player.frameY = (int)_player.direc;
-	_player.rc = RectMakePivot(Vector2(_player.x, _player.y), Vector2(TILESIZE-1, TILESIZE-1), Pivot::LeftTop);
+	_player.rc = RectMakePivot(Vector2(_player.x, _player.y), Vector2(TILESIZE-15, TILESIZE-15), Pivot::LeftTop);
 	framePlay();
 }
 
 void Player::render()
 {
-	CAMERAMANAGER->FrameRender(_player.img, Vector2(_player.x + _player.img->GetFrameSize().x / 2,_player.rc.bottom-_player.img->GetFrameSize().y/2), _player.frameX, _player.frameY);
+	CAMERAMANAGER->FrameRender(_player.img, Vector2(_player.x + TILESIZE/3,_player.rc.bottom-_player.img->GetFrameSize().y/2), _player.frameX, _player.frameY);
 	if (KEYMANAGER->isToggleKey(VK_TAB))CAMERAMANAGER->renderRc(_player.rc, D2D1::ColorF::Blue,1,1);
 }
 

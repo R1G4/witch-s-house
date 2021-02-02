@@ -20,5 +20,6 @@ public:
 	void render();
 	void load();
 	void tileCollision();
+//	void adresslink(Player* pla) { _player = pla; }
 };
 
