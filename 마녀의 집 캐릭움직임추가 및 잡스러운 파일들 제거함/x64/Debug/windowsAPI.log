@@ -1,8 +1,0 @@
-﻿  castlefront.cpp
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\image.h(4): error C2011: 'Image': 'class' 형식 재정의
-  c:\users\clxlz\onedrive\바탕 화면\매녀의집\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\image.h(3): note: 'Image' 선언을 참조하십시오.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\castlefront.cpp(48): error C2027: 정의되지 않은 형식 'Image'을(를) 사용했습니다.
-  c:\users\clxlz\onedrive\바탕 화면\매녀의집\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\image.h(3): note: 'Image' 선언을 참조하십시오.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\castlefront.cpp(58): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\castlefront.cpp(77): error C2027: 정의되지 않은 형식 'Image'을(를) 사용했습니다.
-  c:\users\clxlz\onedrive\바탕 화면\매녀의집\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\image.h(3): note: 'Image' 선언을 참조하십시오.
