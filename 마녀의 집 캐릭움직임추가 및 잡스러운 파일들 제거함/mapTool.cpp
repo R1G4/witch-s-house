@@ -701,13 +701,15 @@ void mapTool::save()
 	openFileName.nMaxFile = MAX_PATH;
 	openFileName.nMaxFileTitle = MAX_PATH;
 
+	string temp;
 	if (GetSaveFileName(&openFileName) != 0)    // 인덱스가 1부터 시작하기 때문에 지정
 	{
 		switch (openFileName.nFilterIndex)
 		{
 		case 1:
 			_tiles->camera = camera;
-			_tiles->backGroundName = backName+to_string(backCount);
+			temp = backName + to_string(backCount);
+			_tiles->backGroundName = temp;
 			cout << _tiles->camera.x;
 			file = CreateFile(strFilePath, GENERIC_WRITE, NULL, NULL,
 				CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -744,6 +746,7 @@ void mapTool::load()
 	openFileName.nMaxFile = MAX_PATH;
 	openFileName.nMaxFileTitle = MAX_PATH;
 
+	string temp;
 	if (GetOpenFileName(&openFileName) != 0)    // 인덱스가 1부터 시작하기 때문에 지정
 	{
 		switch (openFileName.nFilterIndex)
@@ -755,6 +758,35 @@ void mapTool::load()
 			ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 			camera = _tiles->camera;
 			_backGround = IMAGEMANAGER->FindImage(_tiles->backGroundName);
+
+			//desc: 파일의 문자에 필요한 정보 추출 date: 2021/2/2 by pju
+			//string 백그라운드의 사이즈를 구한다.
+			switch (sizeof(_tiles->backGroundName))
+			{
+			case 3:
+				//사이즈 3일 경우 3번째 자리부터 자르기
+				temp = _tiles->backGroundName.substr(3);
+				//int형으로 변환
+				backCount = atoi(temp.c_str());
+				break;
+			case 4:
+				//사이즈 4일 경우 4번째 자리부터 자르기
+				temp = _tiles->backGroundName.substr(4);
+				//int형으로 변환
+				backCount = atoi(temp.c_str());
+				break;
+			case 5:
+				//사이즈 5일 경우 5번째 자리부터 자르기
+				temp = _tiles->backGroundName.substr(5);
+				//int형으로 변환
+				backCount = atoi(temp.c_str());
+				break;
+			default:
+				//기본 첫번째 배경
+				backCount = 1;
+				break;
+			}
+
 			CAMERAMANAGER->setCamera(camera);
 			CloseHandle(file);
 			break;
@@ -883,6 +915,8 @@ void mapTool::setObjTile()
 
 	//삭제 여부
 	bool isDel = false;
+
+	string temp;
 	//FloatRect rc;
 	for (int i = 0; i < TILEY; i++)
 	{
@@ -899,7 +933,8 @@ void mapTool::setObjTile()
 					_tiles[i*TILEX + j].obj = OBJ_NONE;
 				else	   //해당 타일의 프레임 키값을 넣어준다.
 				{
-					_tiles[i*TILEX + j].keyName = onjName + to_string(_objSelected);
+					temp = onjName + to_string(_objSelected);
+					_tiles[i*TILEX + j].keyName = temp;
 					_tiles[i*TILEX + j].obj = OBJ_LOOK;
 				}
 			}
