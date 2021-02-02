@@ -15,15 +15,18 @@ HRESULT garDen::init()
 	IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/objSample.png", 2, 3);
 	IMAGEMANAGER->AddFrameImage("SavePoint", L"Image/mapTool/saveCat.png", 16, 4);
 	IMAGEMANAGER->AddImage("나무", L"Image/mapTool/tileset/001_tr.png");
-	//IMAGEMANAGER->AddImage("배경001", L"Image/mapTool/001.png");
-	camera = Vector2(0, 0);
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
-
-	_boss = new boss;
-	_boss->init(15, 13);
-
-	frame = 0;
+	
+	_player = new Player;
 	load();
+	_player->init();
+	_player->setDirec(CHRDIREC_UP);
+	camera.x = _player->getPlayerLocX();
+	camera.y = _player->getPlayerLocY();
+	CAMERAMANAGER->setCamera(camera);
+	return S_OK;
+	frame = 0;
+	
 	return S_OK;
 }
 
@@ -38,21 +41,12 @@ void garDen::update()
 			frame = 0;
 		}
 	}
-	CAMERAMANAGER->setCamera(camera);
-	cameraMove();
-	_boss->update();
-	CAMERAMANAGER->setWorldMouse(_ptMouse);
+	camera.x = _player->getPlayerLocX();
+	camera.y = _player->getPlayerLocY();
 
-	for (int i = 0; i < TILEY; i++)
-	{
-		for (int j = 0; j < TILEX; j++)
-		{
-			if (Vector2InRect(&_tiles[i*TILEX + j].rc, &CAMERAMANAGER->getWorldMouse()) && _tiles[i*TILEX + j].isCollider)
-			{
-				cout << "ㅇㅇㅇㅇㅇ" << endl;
-			}
-		}
-	}
+	CAMERAMANAGER->setCamera(Vector2(camera.x - WINSIZEX / 2, camera.y - WINSIZEY / 2));
+	_player->update();
+	tileCollision();
 }
 
 void garDen::release()
@@ -61,8 +55,7 @@ void garDen::release()
 
 void garDen::render()
 {
-	CAMERAMANAGER->render(_backGround, Vector2(720 + 480, 648));
-
+	CAMERAMANAGER->render(_backGround, Vector2(_backGround->GetSize().x / 2 + 480, _backGround->GetSize().y / 2));
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
@@ -74,65 +67,79 @@ void garDen::render()
 				{
 					CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Red, 0.4);
 				}
+				if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
 			}
-			if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
+
 		}
 	}
+	CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("SavePoint"), Vector2(1035, 755), frame, 2);
+	_player->render();
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
 			if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
-
-			//중간에 배치하고 싶다면 이걸쓰세요. 디폴트 센타
 			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
-				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2,
-					_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));
-
-			//오른쪽으로 붙고자 하면 이걸쓰고
-			/*CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
-				Vector2(_tiles[i*TILEX + j].rc.right,
-					_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));*/
+				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top + TILESIZE / 2));
 		}
 	}
-	_boss->render();
-	CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("SavePoint"), Vector2(1035, 755), frame, 2);
+	
 	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("나무"), Vector2(720 + 480, 648));
 }
 
-void garDen::cameraMove()
-{
-	//카메라를 움직였을 때 타일도 함께 움직이도록 세팅함.
-	//카메라 움직이는 방향과 타일 움직이는 방향은 반대여야함(카메라가 +면 타일은-값을, 카메라가 -값이면 타일은 +값을 줘야함)
-	if (KEYMANAGER->isStayKeyDown(VK_UP))
-	{
-		camera.y -= 5;
-	}
-	if (KEYMANAGER->isStayKeyDown(VK_DOWN))
-	{
-		camera.y += 5;
-	}
-	if (KEYMANAGER->isStayKeyDown(VK_RIGHT))
-	{
-		camera.x += 5;
 
-	}
-	if (KEYMANAGER->isStayKeyDown(VK_LEFT))
-	{
-		camera.x -= 5;
-	}
-}
 
 void garDen::load()
 {
 	HANDLE file;
 	DWORD read;
-	file = CreateFile("Stage/gardenstage.map", GENERIC_READ, NULL, NULL,
+	file = CreateFile("Stage/gardenscene.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	camera = _tiles->camera;
 	_backGround = IMAGEMANAGER->FindImage(_tiles->backGroundName);
 	cout << _tiles->camera.x;
-	CAMERAMANAGER->setCamera(camera);
+	for (int i = 0; i < TILEX*TILEY; i++)
+	{
+		if (_tiles[i].attribute == PLAYER)
+		{
+			_player->setStart(i%TILEX, i / TILEX);
+			break;
+		}
+		
+		if (_tiles[i].attribute == OBJ)
+		{
+
+		}
+	}
+
 	CloseHandle(file);
+}
+
+void garDen::tileCollision()
+{
+	for (int i = 0; i < TILEY; i++)
+	{
+		for (int j = 0; j < TILEX; j++)
+		{
+			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
+			{
+				switch (_player->getPdirec())
+				{
+				case CHRDIREC_DOWN:
+					_player->setPLocaY(_tiles[i*TILEX + j].rc.top - TILESIZE / 4 * 3);
+					break;
+				case CHRDIREC_LEFT:
+					_player->setPLocaX(_tiles[i*TILEX + j].rc.right + 4);
+					break;
+				case CHRDIREC_RIGHT:
+					_player->setPLocaX(_tiles[i*TILEX + j].rc.left - TILESIZE / 4 * 3);
+					break;
+				case CHRDIREC_UP:
+					_player->setPLocaY(_tiles[i*TILEX + j].rc.bottom + 4);
+					break;
+				}
+			}
+		}
+	}
 }

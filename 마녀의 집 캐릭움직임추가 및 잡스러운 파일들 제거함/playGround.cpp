@@ -53,9 +53,9 @@ HRESULT playGround::init()
 	//수정한 형식과 비슷하게 하시면 될 것같음
 #pragma endregion
 
-	SCENEMANAGER->addScene("실험", new garDen);
+	
 	SCENEMANAGER->addScene("실험2", new garDenUnder);
-	SCENEMANAGER->changeScene("MapToolScene");
+	SCENEMANAGER->changeScene("정원");
 	//SCENEMANAGER->changeScene("stage1_1");
 	//SCENEMANAGER->changeScene("MapToolScene");
 	/////////////////UI 일단 주석처리/////////////
@@ -136,6 +136,7 @@ void playGround::addScene()
 	SCENEMANAGER->addScene("레벨선택", new levelChoiceScene);
 	SCENEMANAGER->addScene("MapToolScene", new mapTool);
 	SCENEMANAGER->addScene("BossStage", new bossStage);
+	SCENEMANAGER->addScene("정원", new garDen);
 }
 
 void playGround::addFrameImg()
