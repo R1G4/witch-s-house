@@ -31,7 +31,11 @@ void Player::update()
 void Player::render()
 {
 	CAMERAMANAGER->FrameRender(_player.img, Vector2(_player.x + TILESIZE/3,_player.rc.bottom-_player.img->GetFrameSize().y/2), _player.frameX, _player.frameY);
-	if (KEYMANAGER->isToggleKey(VK_TAB))CAMERAMANAGER->renderRc(_player.rc, D2D1::ColorF::Blue,1,1);
+	if (KEYMANAGER->isToggleKey(VK_TAB))
+	{
+		CAMERAMANAGER->renderRc(_player.searchRc, D2D1::ColorF::Magenta, 1, 1);
+		CAMERAMANAGER->renderRc(_player.rc, D2D1::ColorF::Blue, 1, 1);
+	}
 }
 
 void Player::setState(STATE st)
@@ -70,15 +74,19 @@ void Player::move()
 	switch (_player.direc)
 	{
 	case CHRDIREC_DOWN:
+		_player.searchRc = RectMakePivot(Vector2(_player.x, _player.y + TILESIZE), Vector2(30, 30), Pivot::LeftTop);
 		_player.y += _player.speed;
 		break;
 	case CHRDIREC_LEFT:
+		_player.searchRc = RectMakePivot(Vector2(_player.x - TILESIZE, _player.y ), Vector2(30, 30), Pivot::LeftTop);
 		_player.x -= _player.speed;
 		break;
 	case CHRDIREC_RIGHT:
+		_player.searchRc = RectMakePivot(Vector2(_player.x + TILESIZE, _player.y ), Vector2(30, 30), Pivot::LeftTop);
 		_player.x += _player.speed;
 		break;
 	case CHRDIREC_UP:
+		_player.searchRc = RectMakePivot(Vector2(_player.x, _player.y - TILESIZE), Vector2(30, 30), Pivot::LeftTop);
 		_player.y -= _player.speed;
 		break;
 	}

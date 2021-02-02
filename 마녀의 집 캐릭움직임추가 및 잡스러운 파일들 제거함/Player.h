@@ -25,6 +25,7 @@ struct tagPlayer
 	CHRDIRECTION direc;
 	float speed;
 	bool isDash;
+	FloatRect searchRc;
 };
 class Player :
 	public gameNode
@@ -57,5 +58,6 @@ public:
 	void setPLocaY(float y) { _player.y = y; }
 	CHRDIRECTION getPdirec() { return _player.direc; }
 	FloatRect getPlayerFrc() { return _player.rc; }
+	FloatRect getSearchRc() { return _player.searchRc; }
 };
 

@@ -8,6 +8,7 @@ HRESULT bossStage::init()
 	_player = new Player;
 	load();
 	_player->init();
+	_player->setDirec(CHRDIREC_UP);
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
 	CAMERAMANAGER->setCamera(camera);
