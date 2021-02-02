@@ -371,11 +371,30 @@ void mapTool::render()
 	//타일에 프레임 이미지 배치 랜더
 	for (int i = 0; i < _vFrameTile.size(); i++)
 	{
-		if (_vFrameTile[i].kinds == PLAYER)  CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::Blue, 0.7);
-		if (_vFrameTile[i].kinds == ENEMY)  CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::Black, 0.7);
+		//if (_vFrameTile[i].kinds == PLAYER)  CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::Blue, 0.7);
+		//else if (_vFrameTile[i].kinds == ENEMY)  CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::Black, 0.7);
+		//else CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::White, 0.7);
+
+		//아래코드는 참고용으로 냄겨둠
+		//CAMERAMANAGER->FrameRender
+		//(
+		//	_vFrameTile[i].img,
+		//	//프레임 이미지 랜딩방식
+		//	//1. y축을 타일 가운대에 위치하고 싶을때
+		//	Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.bottom - _vFrameTile[i].img->GetSize().y / 2),
+		//	//2. y축을 바텀의 기준으로 잡고 싶을때
+		//	//Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.top),
+		//	_vFrameTile[i].frameX, _vFrameTile[i].frameY
+		//);
+
+		//실제 사용하는 랜더
 		CAMERAMANAGER->FrameRender
 		(
 			_vFrameTile[i].img,
+			//문같은 경우는 가운대가 아닌 하단에 맞춰야 하기에..
+			_vFrameTile[i].keyName.find("문") != string::npos ? (_vFrameTile[i].keyName.size() <= 3 ?
+				Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.top) :
+				Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.bottom - _vFrameTile[i].img->GetSize().y / 2)) :
 			Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.bottom - _vFrameTile[i].img->GetSize().y / 2),
 			_vFrameTile[i].frameX, _vFrameTile[i].frameY
 		);
