@@ -7,6 +7,8 @@
 #include "menu.h"
 #include "levelChoiceScene.h"
 #include "bossStage.h"
+#include "castlefront.h"
+
 class playGround : public gameNode
 {
 private:

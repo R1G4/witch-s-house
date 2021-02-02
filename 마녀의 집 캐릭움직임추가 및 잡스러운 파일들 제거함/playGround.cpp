@@ -54,8 +54,9 @@ HRESULT playGround::init()
 #pragma endregion
 
 	
-	
-	SCENEMANAGER->changeScene("정원아래");
+	SCENEMANAGER->changeScene("성앞");
+
+
 	//SCENEMANAGER->changeScene("stage1_1");
 	//SCENEMANAGER->changeScene("MapToolScene");
 	/////////////////UI 일단 주석처리/////////////
@@ -138,6 +139,7 @@ void playGround::addScene()
 	SCENEMANAGER->addScene("BossStage", new bossStage);
 	SCENEMANAGER->addScene("정원", new garDen);
 	SCENEMANAGER->addScene("정원아래", new garDenUnder);
+	SCENEMANAGER->addScene("성앞", new castlefront);
 }
 
 void playGround::addFrameImg()

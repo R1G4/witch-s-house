@@ -14,8 +14,6 @@ private:
 	Player* _player;
 
 
-	int count;
-	int frame;
 public:
 	garDenUnder();
 	~garDenUnder();

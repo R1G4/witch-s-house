@@ -13,7 +13,7 @@ HRESULT garDenUnder::init()
 {
 	IMAGEMANAGER->AddFrameImage("TerrainSample", L"Image/mapTool/타일.png", 7, 2);
 	IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/objSample.png", 2, 3);
-	IMAGEMANAGER->AddImage("장미", L"Image/mapTool/tileset/003_tr.png");
+	IMAGEMANAGER->AddImage("장미", L"Image/mapTool/tileset/002_tr.png");
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
 
 	_player = new Player;
@@ -23,23 +23,15 @@ HRESULT garDenUnder::init()
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
 	CAMERAMANAGER->setCamera(camera);
-	return S_OK;
-	frame = 0;
+	
+	
 
 	return S_OK;
 }
 
 void garDenUnder::update()
 {
-	count++;
-	if (count % 4 == 0)
-	{
-		frame++;
-		if (frame > 15)
-		{
-			frame = 0;
-		}
-	}
+	
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
 

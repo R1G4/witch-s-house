@@ -55,6 +55,9 @@
     <Filter Include="playGround\Player">
       <UniqueIdentifier>{4a91c43e-7ad9-4995-a2ce-fd033b354cc8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\scense\OutSide">
+      <UniqueIdentifier>{0ffc2cbd-5c2f-4f7e-a398-6479578dc068}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -141,12 +144,6 @@
     <ClInclude Include="mapTool.h">
       <Filter>playGround</Filter>
     </ClInclude>
-    <ClInclude Include="levelChoiceScene.h">
-      <Filter>playGround\scense</Filter>
-    </ClInclude>
-    <ClInclude Include="garDen.h">
-      <Filter>playGround\scense</Filter>
-    </ClInclude>
     <ClInclude Include="boss.h">
       <Filter>playGround\enemy</Filter>
     </ClInclude>
@@ -177,9 +174,6 @@
     <ClInclude Include="menu.h">
       <Filter>playGround</Filter>
     </ClInclude>
-    <ClInclude Include="garDenUnder.h">
-      <Filter>playGround\scense</Filter>
-    </ClInclude>
     <ClInclude Include="WALK.h">
       <Filter>playGround\Player</Filter>
     </ClInclude>
@@ -199,6 +193,18 @@
       <Filter>2DGameFramework\Utils</Filter>
     </ClInclude>
     <ClInclude Include="bossStage.h">
+      <Filter>playGround\scense</Filter>
+    </ClInclude>
+    <ClInclude Include="castlefront.h">
+      <Filter>playGround\scense\OutSide</Filter>
+    </ClInclude>
+    <ClInclude Include="garDen.h">
+      <Filter>playGround\scense\OutSide</Filter>
+    </ClInclude>
+    <ClInclude Include="garDenUnder.h">
+      <Filter>playGround\scense\OutSide</Filter>
+    </ClInclude>
+    <ClInclude Include="levelChoiceScene.h">
       <Filter>playGround\scense</Filter>
     </ClInclude>
   </ItemGroup>
@@ -272,12 +278,6 @@
     <ClCompile Include="mapTool.cpp">
       <Filter>playGround</Filter>
     </ClCompile>
-    <ClCompile Include="levelChoiceScene.cpp">
-      <Filter>playGround\scense</Filter>
-    </ClCompile>
-    <ClCompile Include="garDen.cpp">
-      <Filter>playGround\scense</Filter>
-    </ClCompile>
     <ClCompile Include="boss.cpp">
       <Filter>playGround\enemy</Filter>
     </ClCompile>
@@ -305,9 +305,6 @@
     <ClCompile Include="menu.cpp">
       <Filter>playGround</Filter>
     </ClCompile>
-    <ClCompile Include="garDenUnder.cpp">
-      <Filter>playGround\scense</Filter>
-    </ClCompile>
     <ClCompile Include="characterState.cpp">
       <Filter>playGround\Player</Filter>
     </ClCompile>
@@ -327,6 +324,18 @@
       <Filter>2DGameFramework\Utils</Filter>
     </ClCompile>
     <ClCompile Include="bossStage.cpp">
+      <Filter>playGround\scense</Filter>
+    </ClCompile>
+    <ClCompile Include="castlefront.cpp">
+      <Filter>playGround\scense\OutSide</Filter>
+    </ClCompile>
+    <ClCompile Include="garDen.cpp">
+      <Filter>playGround\scense\OutSide</Filter>
+    </ClCompile>
+    <ClCompile Include="garDenUnder.cpp">
+      <Filter>playGround\scense\OutSide</Filter>
+    </ClCompile>
+    <ClCompile Include="levelChoiceScene.cpp">
       <Filter>playGround\scense</Filter>
     </ClCompile>
   </ItemGroup>
