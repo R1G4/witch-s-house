@@ -1,25 +1,30 @@
 #pragma once
 #include "gameNode.h"
+#include "Player.h"
 #include "mapTool.h"
 
-class garDenUnder : public gameNode
+
+class garDenUnder :
+	public gameNode
 {
 private:
-	tagTile _tiles[TILEX*TILEY];
-	
-	
 	Image* _backGround;
-	DWORD _attribute[TILEX*TILEY];
+	tagTile _tiles[TILEX*TILEY];
 	Vector2 camera;
+	Player* _player;
+
+
+	int count;
+	int frame;
 public:
 	garDenUnder();
 	~garDenUnder();
-
-	virtual HRESULT init();
-	virtual void update();
-	virtual void release();
-	virtual void render();
-
+	HRESULT init();
+	void release();
+	void update();
+	void render();
 	void load();
+	void tileCollision();
+	//	void adresslink(Player* pla) { _player = pla; }
 };
 

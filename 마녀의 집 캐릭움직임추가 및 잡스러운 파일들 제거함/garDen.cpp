@@ -84,7 +84,7 @@ void garDen::render()
 		}
 	}
 	
-	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("나무"), Vector2(720 + 480, 648));
+	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("나무"), Vector2(_backGround->GetSize().x / 2 + 480, _backGround->GetSize().y / 2));
 }
 
 
