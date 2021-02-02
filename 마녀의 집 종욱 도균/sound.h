@@ -18,6 +18,8 @@ public:
 	virtual void update();
 	virtual void render();
 
+	void volumeUp();
+
 	float getVolume() { return _volume; }
 };
 

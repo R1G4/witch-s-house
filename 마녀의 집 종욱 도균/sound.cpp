@@ -32,10 +32,19 @@ void sound::release()
 
 void sound::update()
 {
-	
 }
 
 void sound::render()
 {
 	
+}
+
+void sound::volumeUp()
+{
+	_volume += 0.025;
+	SOUNDMANAGER->setVolume(_volume);
+	if (_volume == 1.0f)
+	{
+		_volume = 0;
+	}
 }

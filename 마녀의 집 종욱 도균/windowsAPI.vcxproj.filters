@@ -55,6 +55,9 @@
     <Filter Include="playGround\player">
       <UniqueIdentifier>{701fd887-b02f-4772-bab2-3f33a83b0ed9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\UI">
+      <UniqueIdentifier>{bad4244d-e0ec-497c-ab3d-0a0fd419f578}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -180,6 +183,15 @@
     <ClInclude Include="sound.h">
       <Filter>playGround</Filter>
     </ClInclude>
+    <ClInclude Include="settings.h">
+      <Filter>playGround\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="load.h">
+      <Filter>playGround\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="item.h">
+      <Filter>playGround\player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -286,6 +298,15 @@
     </ClCompile>
     <ClCompile Include="sound.cpp">
       <Filter>playGround</Filter>
+    </ClCompile>
+    <ClCompile Include="settings.cpp">
+      <Filter>playGround\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="load.cpp">
+      <Filter>playGround\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="item.cpp">
+      <Filter>playGround\player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

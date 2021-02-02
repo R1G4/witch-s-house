@@ -1,5 +1,6 @@
 #pragma once
 #include "gameNode.h"
+#include "settings.h"
 
 class menu : public gameNode
 {
@@ -7,6 +8,7 @@ class menu : public gameNode
 	{
 		NEW = 0,
 		CONTINUE,
+		MAPTOOL,
 		OPTION,
 		END
 	};
@@ -22,11 +24,13 @@ class menu : public gameNode
 
 	map<CONTENTS, tagText> _mText;	//컨텐츠 정보 맵에 담아둠
 	CONTENTS _contents;			//해당 컨텐츠
+	settings* _settings;		//settings 클래스 선언
 	FloatRect _rcSelected;		//선택된 메뉴(컨텐츠)를 렉트로 보여줌
 	float _rcAlpha;				//렉트 투명도
 	float _rcAlphaChange;		//렉트 조절용
 	float _sceneAlpha;			//씬 투명도
 	bool _isClick;				//선택키(Z)를 눌렀는지?
+	bool _openOption;
 	float _volume;
 public:
 
