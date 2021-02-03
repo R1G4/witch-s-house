@@ -32,10 +32,10 @@ HRESULT playGround::init()
 	SCENEMANAGER->addScene("MapToolScene", new mapTool);
 		
 	//SCENEMANAGER->changeScene("¼º¾Õ");
-	SCENEMANAGER->changeScene("entranceFake");
+	//SCENEMANAGER->changeScene("entranceFake");
 
 	//SCENEMANAGER->changeScene("stage1_1");
-	//SCENEMANAGER->changeScene("MapToolScene");
+	SCENEMANAGER->changeScene("MapToolScene");
 	/////////////////UI ÀÏ´Ü ÁÖ¼®Ã³¸®/////////////
 	//addScene();
 	//SCENEMANAGER->changeScene("½ÃÀÛÈ­¸é");
@@ -131,6 +131,9 @@ void playGround::addFrameImg()
 	FRAMEINFOMANAGER->AddFrameInfo("»õÀå", L"Image/tempFrameImg/»õÀå.png", 1, 4, OBJ, 5, true, 1, false);
 	FRAMEINFOMANAGER->AddFrameInfo("2ÁßÃ¶Ã¢", L"Image/tempFrameImg/2ÁßÃ¶Ã¢.png", 1, 2, OBJ, 10, true, 1, false);
 	FRAMEINFOMANAGER->AddFrameInfo("ÇÔÁ¤1", L"Image/tempFrameImg/ÇÔÁ¤1.png", 1, 5, OBJ, 6, true, 1, false);
+	FRAMEINFOMANAGER->AddFrameInfo("ÇÏ¾á²É", L"Image/tempFrameImg/ÇÏ¾á²É.png", 1, 4, OBJ, 15);
+	FRAMEINFOMANAGER->AddFrameInfo("Çª¸¥¹°", L"Image/tempFrameImg/Çª¸¥¹°.png", 6, 1, OBJ);
+	FRAMEINFOMANAGER->AddFrameInfo("ºÓÀº¹°", L"Image/tempFrameImg/ºÓÀº¹°.png", 6, 1, OBJ);
 
 	//Ä³¸¯ÅÍ ÀÌ¹ÌÁö Ãß°¡
 	FRAMEINFOMANAGER->AddFrameInfo("violaIdle", L"Image/violaFrameImg/violaIdle.png", 16, 4, PLAYER);
