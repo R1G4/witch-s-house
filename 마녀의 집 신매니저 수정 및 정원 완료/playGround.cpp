@@ -108,6 +108,10 @@ void playGround::addScene()
 	SCENEMANAGER->addScene("entranceTrap", _entranceTrapStage);
 	SCENEMANAGER->addScene("entrance", _entranceStage);
 	SCENEMANAGER->addScene("hallway", _hallwayStage);
+
+	//3Ãþ
+	SCENEMANAGER->addScene("3Ãþ", new third);
+	SCENEMANAGER->addScene("3Ãþ2", new third2);
 }
 
 void playGround::addFrameImg()

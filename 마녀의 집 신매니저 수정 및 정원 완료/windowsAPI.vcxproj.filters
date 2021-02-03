@@ -61,6 +61,9 @@
     <Filter Include="playGround\scense\BossStage">
       <UniqueIdentifier>{ff9ab335-7db2-4d63-a749-02e57289e09f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\scense\ThirdFloor">
+      <UniqueIdentifier>{263c6fb6-01d9-4b42-b794-eb1390cc03e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -225,6 +228,12 @@
     <ClInclude Include="entranceTrap.h">
       <Filter>playGround\scense\FirstFloor</Filter>
     </ClInclude>
+    <ClInclude Include="third2.h">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="third.h">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -370,6 +379,12 @@
     </ClCompile>
     <ClCompile Include="entranceTrap.cpp">
       <Filter>playGround\scense\FirstFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="third.cpp">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="third2.cpp">
+      <Filter>playGround\scense\ThirdFloor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

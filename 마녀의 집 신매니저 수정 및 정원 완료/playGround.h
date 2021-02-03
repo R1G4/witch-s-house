@@ -13,6 +13,8 @@
 #include "entranceTrap.h"
 #include "entrance.h"
 #include "hallway.h"
+#include "third.h"
+#include "third2.h"
 
 
 class playGround : public gameNode

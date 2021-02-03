@@ -28,7 +28,7 @@ void Player::update()
 
 	chr_State->updateState();
 	_player.frameY = (int)_player.direc;
-	_player.rc = RectMakePivot(Vector2(_player.x, _player.y+3), Vector2(TILESIZE-15, TILESIZE-18), Pivot::LeftTop);
+	_player.rc = RectMakePivot(Vector2(_player.x+3, _player.y+3), Vector2(TILESIZE-15, TILESIZE-18), Pivot::LeftTop);
 	framePlay();
 }
 
