@@ -1,9 +1,8 @@
 #include "stdafx.h"
-#include "bossStage.h"
-#include "Player.h"
-HRESULT bossStage::init()
+#include "bossStage_3.h"
+
+HRESULT bossStage_3::init()
 {
-	//카메라 초기 세팅하는 부분
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
 	_playerTile = new astarTile;
 	_enemyTile = new astarTile;
@@ -14,27 +13,29 @@ HRESULT bossStage::init()
 	_boss = new boss;
 	load();
 	_player->init();
-	_player->setDirec(CHRDIREC_UP);
+	_player->setState(CHR_IDLE);
+	_player->setDirec(CHRDIREC_DOWN);
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
 	CAMERAMANAGER->setCamera(camera);
-	alpha = 1;
-	_Stop = false;
+	_isBossAppeal = false;
 	objectLocation();
+	_isStop = false;
+	alpha = 1;
 	return S_OK;
 }
 
-void bossStage::release()
+void bossStage_3::release()
 {
 }
 
-void bossStage::update()
+void bossStage_3::update()
 {
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
-	//cout<<
+
 	CAMERAMANAGER->setCamera(Vector2(camera.x - WINSIZEX / 2, camera.y - WINSIZEY / 2));
-	if (!_Stop)
+	if (!_stop)
 	{
 		_boss->update();
 		_player->update();
@@ -62,88 +63,91 @@ void bossStage::update()
 					resetEverything();
 					this->release();
 					SCENEMANAGER->changeScene("MapToolScene");
-					_stop = true;
+					_isStop = true;
 					return;
 				}
 				_follow_count = 0;
 			}
 		}
 	}
-
 	tileCollision();
-	activeTrigger();
-	activeCorr();
+	TriggerOn();
+
 }
 
-void bossStage::render()
+void bossStage_3::render()
 {
-
-		_backGround->SetAlpha(alpha);
-		CAMERAMANAGER->render(_backGround, Vector2(_backGround->GetSize().x / 2 + 480, _backGround->GetSize().y / 2));
-		for (int i = 0; i < TILEY; i++)
+	CAMERAMANAGER->render(_backGround, Vector2(_backGround->GetSize().x / 2 + 480, _backGround->GetSize().y / 2));
+	for (int i = 0; i < TILEY; i++)
+	{
+		for (int j = 0; j < TILEX; j++)
 		{
-			for (int j = 0; j < TILEX; j++)
+			if (KEYMANAGER->isToggleKey(VK_TAB))
 			{
-				if (KEYMANAGER->isToggleKey(VK_TAB))
+				CAMERAMANAGER->renderRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::White, 1, 1);
+				if (_tiles[i*TILEX + j].isCollider)
 				{
-					CAMERAMANAGER->renderRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::White, 1, 1);
-					if (_tiles[i*TILEX + j].isCollider)
-					{
-						CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Red, 0.4);
-					}
-					if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
+					CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Red, 0.4);
 				}
+				if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
+			}
 
-			}
 		}
-		_player->render();
-		if (_isBossAppeal)_boss->render();
-		for (int i = 0; i < TILEY; i++)
+	}
+	_player->render();
+	if (_isBossAppeal)_boss->render();
+	for (int i = 0; i < TILEY; i++)
+	{
+		for (int j = 0; j < TILEX; j++)
 		{
-			for (int j = 0; j < TILEX; j++)
-			{
-				if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
-				//IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(0.5);
-				IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(alpha);
-				CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
-					Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top));
-			}
+			if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
+			//IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(0.5);
+			//if ((_tiles[i*TILEX + j].keyName == "obj58" && !_vTrigger[2].isTriggerOn) && (_tiles[i*TILEX + j].keyName == "obj58" && !_vTrigger[5].isTriggerOn))continue;
+			//if ((_tiles[i*TILEX + j].keyName == "obj59" && !_vTrigger[0].isTriggerOn) && (_tiles[i*TILEX + j].keyName == "obj59" && !_vTrigger[3].isTriggerOn))continue;
+			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
+				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top + TILESIZE / 2));
 		}
-	
+	}
 }
 
-void bossStage::load()
+void bossStage_3::load()
 {
 	HANDLE file;
 	DWORD read;
-	file = CreateFile("Stage/ElenRoom.map", GENERIC_READ, NULL, NULL,
+	/*file = CreateFile("Stage/finalKitchen.map", GENERIC_READ, NULL, NULL,
+		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);*/
+	file = CreateFile("Stage/finaldiningRoom.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	camera = _tiles->camera;
 	_backGround = IMAGEMANAGER->FindImage(_tiles->backGroundName);
-	cout << _tiles->camera.x;
 	for (int i = 0; i < TILEX*TILEY; i++)
 	{
 		if (_tiles[i].attribute == PLAYER)
 		{
 			_player->setStart(i%TILEX, i / TILEX);
-			break;
+			continue;
 		}
 		if (_tiles[i].attribute == ENEMY)
 		{
 			bossLocX = i % TILEX;
 			bossLocY = i / TILEX;
 		}
-		if (_tiles[i].attribute == OBJ)
+		if (_tiles[i].terrain == TR_TRIGGER)
 		{
-		
+			Trigger _triggerTile;
+			_triggerTile.tile = _tiles[i].rc;
+			_triggerTile.idx = i % TILEX;
+			_triggerTile.idy = i / TILEY;
+			_triggerTile.isTriggerOn = false;
+			_vTrigger.push_back(_triggerTile);
 		}
 	}
-
 	CloseHandle(file);
+
 }
 
-void bossStage::tileCollision()
+void bossStage_3::tileCollision()
 {
 	for (int i = 0; i < TILEY; i++)
 	{
@@ -154,16 +158,16 @@ void bossStage::tileCollision()
 				switch (_player->getPdirec())
 				{
 				case CHRDIREC_DOWN:
-					_player->setPLocaY(_tiles[i*TILEX + j].rc.top - TILESIZE/3*2 );
+					_player->setPLocaY(_tiles[i*TILEX + j].rc.top - TILESIZE / 3 * 2);
 					break;
 				case CHRDIREC_LEFT:
-					_player->setPLocaX(_tiles[i*TILEX + j].rc.right +4);
+					_player->setPLocaX(_tiles[i*TILEX + j].rc.right + 4);
 					break;
 				case CHRDIREC_RIGHT:
-					_player->setPLocaX(_tiles[i*TILEX + j].rc.left-TILESIZE/3*2);
+					_player->setPLocaX(_tiles[i*TILEX + j].rc.left - TILESIZE / 3 * 2);
 					break;
 				case CHRDIREC_UP:
-					_player->setPLocaY(_tiles[i*TILEX + j].rc.bottom+4);
+					_player->setPLocaY(_tiles[i*TILEX + j].rc.bottom + 4);
 					break;
 				}
 			}
@@ -171,61 +175,24 @@ void bossStage::tileCollision()
 	}
 }
 
-void bossStage::activeTrigger()
+void bossStage_3::TriggerOn()
 {
-	for (int i = 0; i < TILEY; i++)
-	{
-		for (int j = 0; j < TILEX; j++)
-		{
-			if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].terrain == TR_TRIGGER&&!_isBossAppeal)
-			{
-				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-				{
-					_boss->init(bossLocX, bossLocY);
-					_isBossAppeal = true;
-				}
-			}
-		}
-	}
 }
 
-void bossStage::activeCorr()
+void bossStage_3::playerLocation()
 {
-	for (int i = 0; i < TILEY; i++)
-	{
-		for (int j = 0; j < TILEX; j++)
-		{
-			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].obj == OBJ_CORELATION)
-			{
-				_Stop = true;
-				alpha -= 0.01;
-				_player->setAlpha(alpha);
-				_boss->setalpha(alpha);
-				if (alpha <= 0)
-				{
-					SCENEMANAGER->changeScene("Boss2");
-					_boss->setalpha(1);
-					_player->setAlpha(1);
-				}
-			}
-		}
-	}
-}
-
-void bossStage::playerLocation()
-{
-	_playerTile->init(_player->getPlayerLocX()/TILESIZE,
-		_player->getPlayerLocY()/TILESIZE);
+	_playerTile->init(_player->getPlayerLocX() / TILESIZE,
+		_player->getPlayerLocY() / TILESIZE);
 	_playerTile->setAttribute("player");	// astar타일로 플레이어 적용
 }
 
-void bossStage::enemyLocation()
+void bossStage_3::enemyLocation()
 {
-	_enemyTile->init(bossLocX,bossLocY);			// astar타일로 지속적인 적용
+	_enemyTile->init(bossLocX, bossLocY);			// astar타일로 지속적인 적용
 	_enemyTile->setAttribute("enemy");			// astar타일로 에너미 적용
 }
 
-void bossStage::objectLocation()
+void bossStage_3::objectLocation()
 {
 	for (int i = 0; i < (TILEX * TILEY); i++)
 	{
@@ -235,14 +202,14 @@ void bossStage::objectLocation()
 			MaxIndex++;
 		}
 	}
-	cout << MaxIndex<<endl;
+	cout << MaxIndex << endl;
 	for (int i = 0; i < MaxIndex; i++)
 	{
 		_objTile[i]->setAttribute("wall");
 	}
 }
 
-void bossStage::setAstarTile()
+void bossStage_3::setAstarTile()
 {
 	//현재 타일은 시작타일루다가
 	_currentTile = _playerTile;
@@ -287,9 +254,10 @@ void bossStage::setAstarTile()
 			_vTotalList.push_back(node);
 		}
 	}
+
 }
 
-void bossStage::resetEverything()
+void bossStage_3::resetEverything()
 {
 	_numCount = 0;
 	_vOpenList.clear();
@@ -304,21 +272,22 @@ void bossStage::resetEverything()
 		_vTotalList[i]->setParentNode(NULL);
 		if (_vTotalList[i]->getAttribute() != "wall") _vTotalList[i]->setIsOpen(true);
 	}
+
 }
 
-vector<astarTile*> bossStage::addOpenList(astarTile * currentTile)
+vector<astarTile*> bossStage_3::addOpenList(astarTile * currentTile)
 {
 	int startX = currentTile->getIdx() - 1;
 	int startY = currentTile->getIdy() - 1;
 
-	for (int i = 2; i >=0; --i)
-	//for (int i = 0; i < 3; ++i)
+	for (int i = 2; i >= 0; --i)
+		//for (int i = 0; i < 3; ++i)
 	{
 		//// ############ 벡터 안터지게 #####################
 		if (startY + i < 0)				continue;
 		if (startY + i >= TILEY)		continue;
-		for (int j =2; j >=0; --j)
-		//for (int j = 0; j<3; ++j)
+		for (int j = 2; j >= 0; --j)
+			//for (int j = 0; j<3; ++j)
 		{
 			// ############ 신항로 개척 방지 #####################
 			if (startX + j < 0)			continue;
@@ -389,7 +358,7 @@ vector<astarTile*> bossStage::addOpenList(astarTile * currentTile)
 	return _vOpenList;
 }
 
-void bossStage::pathFinder(astarTile * currentTile)
+void bossStage_3::pathFinder(astarTile * currentTile)
 {
 	//경로비용을 매우 쉽게 하기 위해서 임의의 경로비용을 둠
 	float tempTotalCost = 5000;

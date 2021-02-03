@@ -1,14 +1,14 @@
 #pragma once
+#include "Player.h"
+#include "boss.h"
 #include "gameNode.h"
-#include"boss.h"
 struct Trigger
 {
 	bool isTriggerOn;
 	int idx, idy;
 	FloatRect tile;
 };
-class Player;
-class bossStage_2 :
+class bossStage_3 :
 	public gameNode
 {
 private:
@@ -68,5 +68,6 @@ public:
 
 	vector<astarTile*>			 getVTotalList() { return _vTotalList; };
 	vector<astarTile*>::iterator getViTotalList() { return _viTotalList; };
+
 };
 
