@@ -95,6 +95,25 @@ HRESULT sceneManager::changeScene(string sceneName, CHRDIRECTION _chrdirection)
 		
 		return S_OK;
 	}
+	return E_FAIL;
+}
 
+HRESULT sceneManager::changeScene(string sceneName, CHRDIRECTION _chrdirection, LOCATION _location)
+{
+	mapSceneIter find = _mSceneList.find(sceneName);
+
+	if (find == _mSceneList.end()) return E_FAIL;
+	if (find->second == _currentScene) return S_OK;
+
+	if (SUCCEEDED(find->second->init(_chrdirection, _location)))
+	{
+		//어떤 씬의 정보가 들어있기 때문에 릴리즈 먼저 해주고
+		if (_currentScene) _currentScene->release();
+
+		//현재 씬에 바꾸려는 씬을 담는다
+		_currentScene = find->second;
+
+		return S_OK;
+	}
 	return E_FAIL;
 }

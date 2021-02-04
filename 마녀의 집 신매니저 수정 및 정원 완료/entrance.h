@@ -6,36 +6,25 @@ class entrance : public firstFloorStage
 	enum TRIGGER
 	{
 		NONE = 0,
-		DOOR_LEFT_CLOSE = 1,
-		DOOR_LEFT_OPEN,
-		DOOR_RIGHT_CLOSE = 2,
-		DOOR_RIGHT_OPEN,
+		DOOR_LEFT_OPEN = 496,
+		DOOR_RIGHT_OPEN = 508,
 		CAT_TALK,
 		CANDLE_OFF = 442,
-		VASE_DOWN = 499
+		VASE_DOWN = 499,
+		DELAY
 	};
-	/*¿Ã∞« ∫πµµ ∏ 
-	enum TRIGGER
-	{
-		NONE,
-		DOOR_LEFT_CLOSE ,
-		DOOR_LEFT_OPEN,
-		DOOR_RIGHT_TOP_CLOSE,
-		DOOR_RIGHT_TOP_OPEN,
-		DOOR_RIGHT_BOTTOM_CLOSE,
-		DOOR_RIGHT_BOTTOM_OPEN
-	};*/
 
 	TRIGGER _trigger;
 public:
 	entrance();
 	~entrance();
 
-	HRESULT init();
+	HRESULT init(CHRDIRECTION _chrdirection = CHRDIREC_DOWN, LOCATION _location = LOCATION_DEFAULT);
 	void release();
+	void getMemory();
 	void update();
 	void render();
 	void Collision();
-	void load();
+	void load(LOCATION location = LOCATION_DEFAULT);
 };
 

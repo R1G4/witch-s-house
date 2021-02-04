@@ -15,9 +15,7 @@
 #define SAMPLETILEY 2
 #define SAMPLEOBJECTX 2 // 그림변환시 변환 필요
 #define SAMPLEOBJECTY 3 // 그림변환시 변환 필요
-#define OBJSIZE 56 // 오브젝트 추가 시 변환 필요
-
-
+#define OBJSIZE 58 // 오브젝트 추가 시 변환 필요
 
 enum CTRL
 {
@@ -110,6 +108,7 @@ struct tagFrameTile
 	int indexX;				//배치된 타일의 x축 인덱스
 	int indexY;				//배치된 타일의 y축 인덱스
 	bool isTrigger = false;	//트리거 발동 유무(기본 false)
+	bool isMaxframe = false;//마지막 프레임 돌릴것인지? (트리거 발동 후 상태 유지를 위해)
 };
 struct tagCurrentTile
 {
@@ -123,4 +122,13 @@ struct tagButton
 struct currentImgTile
 {
 	Image* img;
+}; 
+enum LOCATION
+{
+	LOCATION_DEFAULT = 1,
+	LOCATION_1,
+	LOCATION_2,
+	LOCATION_3,
+	LOCATION_4,
+	LOCATION_5
 };

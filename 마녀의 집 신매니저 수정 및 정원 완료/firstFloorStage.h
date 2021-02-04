@@ -19,10 +19,11 @@ protected:
 	Vector2 camera;
 
 	Player* _player;
-	int _frameInterval;
+	float _sceneAlpha;			//씬 투명도
+	int _frameInterval;			//프레임 바뀌는 간격
+	int _delay;					//딜레이(특정 트리거 밞을 시 멈칫 하는 ?)
 	bool isTrigger;
 
-	float _sceneAlpha;			//씬 투명도
 public:
 	firstFloorStage();
 	~firstFloorStage();
@@ -35,7 +36,7 @@ public:
 	void getFrameTile();
 	void setFrameIndex();			// 배치된 프레임 이미지의 인덱스 설정 
 	void tileCollision(int i, int j);
-	void sceneChange(string name);
+	void sceneChange(string name, CHRDIRECTION _chrdirection, LOCATION _location);
 	void addresslink(Player* player) { _player = player; }
 };
 

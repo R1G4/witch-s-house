@@ -150,9 +150,11 @@
     <ClInclude Include="animation.h" />
     <ClInclude Include="astarTile.h" />
     <ClInclude Include="bear.h" />
+    <ClInclude Include="bearRoom.h" />
     <ClInclude Include="boss.h" />
     <ClInclude Include="bossStage.h" />
     <ClInclude Include="bossStage_2.h" />
+    <ClInclude Include="boxRoom.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="castlefront.h" />
     <ClInclude Include="characterState.h" />
@@ -187,9 +189,11 @@
     <ClInclude Include="randomFunction.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="sceneManager.h" />
+    <ClInclude Include="scissorsRoom.h" />
     <ClInclude Include="singletonBase.h" />
     <ClInclude Include="skul.h" />
     <ClInclude Include="soundManager.h" />
+    <ClInclude Include="stageMemoryManager.h" />
     <ClInclude Include="status.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StringHelper.h" />
@@ -208,9 +212,11 @@
     <ClCompile Include="animation.cpp" />
     <ClCompile Include="astarTile.cpp" />
     <ClCompile Include="bear.cpp" />
+    <ClCompile Include="bearRoom.cpp" />
     <ClCompile Include="boss.cpp" />
     <ClCompile Include="bossStage.cpp" />
     <ClCompile Include="bossStage_2.cpp" />
+    <ClCompile Include="boxRoom.cpp" />
     <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="castlefront.cpp" />
     <ClCompile Include="characterState.cpp" />
@@ -241,8 +247,10 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="playGround.cpp" />
     <ClCompile Include="sceneManager.cpp" />
+    <ClCompile Include="scissorsRoom.cpp" />
     <ClCompile Include="skul.cpp" />
     <ClCompile Include="soundManager.cpp" />
+    <ClCompile Include="stageMemoryManager.cpp" />
     <ClCompile Include="status.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -234,6 +234,18 @@
     <ClInclude Include="third.h">
       <Filter>playGround\scense\ThirdFloor</Filter>
     </ClInclude>
+    <ClInclude Include="stageMemoryManager.h">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="boxRoom.h">
+      <Filter>playGround\scense\FirstFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="scissorsRoom.h">
+      <Filter>playGround\scense\FirstFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="bearRoom.h">
+      <Filter>playGround\scense\FirstFloor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -385,6 +397,18 @@
     </ClCompile>
     <ClCompile Include="third2.cpp">
       <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="stageMemoryManager.cpp">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="boxRoom.cpp">
+      <Filter>playGround\scense\FirstFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="scissorsRoom.cpp">
+      <Filter>playGround\scense\FirstFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="bearRoom.cpp">
+      <Filter>playGround\scense\FirstFloor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

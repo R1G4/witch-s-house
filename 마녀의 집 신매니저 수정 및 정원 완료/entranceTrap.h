@@ -6,7 +6,6 @@ class entranceTrap : public firstFloorStage
 	enum TRIGGER
 	{
 		NONE = 0,
-		DOOR_CLOSE = 1,
 		DOOR_OPEN = 681,
 		READ = 381
 	};
@@ -22,11 +21,11 @@ public:
 	entranceTrap();
 	~entranceTrap();
 
-	HRESULT init();
+	HRESULT init(CHRDIRECTION _chrdirection = CHRDIREC_UP, LOCATION _location = LOCATION_DEFAULT);
 	void release();
 	void update();
 	void render();
 	void Collision();
-	void load();
+	void load(LOCATION location = LOCATION_DEFAULT);
 };
 

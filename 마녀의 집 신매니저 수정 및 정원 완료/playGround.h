@@ -13,6 +13,9 @@
 #include "entranceTrap.h"
 #include "entrance.h"
 #include "hallway.h"
+#include "bearRoom.h"
+#include "boxRoom.h"
+#include "scissorsRoom.h"
 #include "third.h"
 #include "third2.h"
 
@@ -34,6 +37,9 @@ private:
 	firstFloorStage* _entranceTrapStage;
 	firstFloorStage* _entranceStage;
 	firstFloorStage* _hallwayStage;
+	firstFloorStage* _bearRoomStage;
+	firstFloorStage* _boxRoomStage;
+	firstFloorStage* _scissorsRoomStage;
 public:
 	playGround();
 	~playGround();

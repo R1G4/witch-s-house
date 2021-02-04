@@ -35,7 +35,7 @@ HRESULT playGround::init()
 	//SCENEMANAGER->changeScene("entranceFake");
 
 	//SCENEMANAGER->changeScene("stage1_1");
-	SCENEMANAGER->changeScene("Á¤¿ø");
+	SCENEMANAGER->changeScene("entranceFake");
 	/////////////////UI ÀÏ´Ü ÁÖ¼®Ã³¸®/////////////
 	//addScene();
 	//SCENEMANAGER->changeScene("½ÃÀÛÈ­¸é");
@@ -108,6 +108,9 @@ void playGround::addScene()
 	SCENEMANAGER->addScene("entranceTrap", _entranceTrapStage);
 	SCENEMANAGER->addScene("entrance", _entranceStage);
 	SCENEMANAGER->addScene("hallway", _hallwayStage);
+	SCENEMANAGER->addScene("bearRoom", _bearRoomStage);
+	SCENEMANAGER->addScene("boxRoom", _boxRoomStage);
+	SCENEMANAGER->addScene("scissorsRoom", _scissorsRoomStage);
 
 	//3Ãş
 	SCENEMANAGER->addScene("3Ãş", new third);
@@ -122,7 +125,7 @@ void playGround::addFrameImg()
 	FRAMEINFOMANAGER->AddFrameInfo("´«±ò", L"Image/tempFrameImg/´«±ò.png", 3, 4, ENEMY);
 	FRAMEINFOMANAGER->AddFrameInfo("ÇØ°ñ", L"Image/tempFrameImg/ÇØ°ñ.png", 3, 4, ENEMY);
 	FRAMEINFOMANAGER->AddFrameInfo("¾×ÀÚ", L"Image/tempFrameImg/¾×ÀÚ1.png", 1, 4, OBJ, 8, true, 1, false);
-	FRAMEINFOMANAGER->AddFrameInfo("²Éº´ÇÁ·¹ÀÓ", L"Image/tempFrameImg/²Éº´ÇÁ·¹ÀÓ.png", 1, 4, OBJ, 10, true, 1, true);
+	FRAMEINFOMANAGER->AddFrameInfo("²Éº´ÇÁ·¹ÀÓ", L"Image/tempFrameImg/²Éº´ÇÁ·¹ÀÓ.png", 1, 4, OBJ, 10, true, 1, false);
 	FRAMEINFOMANAGER->AddFrameInfo("ÄÑÁøÃÊ", L"Image/tempFrameImg/ÄÑÁøÃÊ.png", 3, 1, OBJ);
 	FRAMEINFOMANAGER->AddFrameInfo("²¨ÁøÃÊ", L"Image/tempFrameImg/²¨ÁøÃÊ.png", 3, 1, OBJ);
 	FRAMEINFOMANAGER->AddFrameInfo("ÄÑÁøÃÊ²¨ÁøÃÊ", L"Image/tempFrameImg/ÄÑÁøÃÊ²¨ÁøÃÊ.png", 6, 1, OBJ, 10, true, 3, false);
@@ -138,6 +141,10 @@ void playGround::addFrameImg()
 	FRAMEINFOMANAGER->AddFrameInfo("ÇÏ¾á²É", L"Image/tempFrameImg/ÇÏ¾á²É.png", 1, 4, OBJ, 15);
 	FRAMEINFOMANAGER->AddFrameInfo("Çª¸¥¹°", L"Image/tempFrameImg/Çª¸¥¹°.png", 6, 1, OBJ);
 	FRAMEINFOMANAGER->AddFrameInfo("ºÓÀº¹°", L"Image/tempFrameImg/ºÓÀº¹°.png", 6, 1, OBJ);
+	FRAMEINFOMANAGER->AddFrameInfo("Ä®µç¾ÆÀú¾¾", L"Image/tempFrameImg/Ä®µç¾ÆÀú¾¾.png", 6, 1, OBJ, 8, true, 3, false);
+	FRAMEINFOMANAGER->AddFrameInfo("¹Ù±¸´Ï°õ", L"Image/tempFrameImg/¹Ù±¸´Ï°õ.png", 4, 1, OBJ, 7, true, 1, false);
+	FRAMEINFOMANAGER->AddFrameInfo("°¡À§", L"Image/tempFrameImg/°¡À§.png", 2, 1, OBJ, 5, true, 1, false);
+	FRAMEINFOMANAGER->AddFrameInfo("»óÀÚ¾²·¯Áü", L"Image/tempFrameImg/»óÀÚ¾²·¯Áü.png", 1, 4, OBJ, 8, true, 1, false);
 
 	//Ä³¸¯ÅÍ ÀÌ¹ÌÁö Ãß°¡
 	FRAMEINFOMANAGER->AddFrameInfo("violaIdle", L"Image/violaFrameImg/violaIdle.png", 16, 4, PLAYER);
@@ -160,8 +167,14 @@ void playGround::addressLink()
 	_entranceTrapStage = new entranceTrap;
 	_entranceStage = new entrance;
 	_hallwayStage = new hallway;
+	_bearRoomStage = new bearRoom;
+	_boxRoomStage = new boxRoom;
+	_scissorsRoomStage = new scissorsRoom;
 	_entranceFakeStage->addresslink(_player);
 	_entranceTrapStage->addresslink(_player);
 	_entranceStage->addresslink(_player);
 	_hallwayStage->addresslink(_player);
+	_bearRoomStage->addresslink(_player);
+	_boxRoomStage->addresslink(_player);
+	_scissorsRoomStage->addresslink(_player);
 }

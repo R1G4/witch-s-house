@@ -12,6 +12,21 @@ entranceFake::~entranceFake()
 {
 }
 
+HRESULT entranceFake::init(CHRDIRECTION _chrdirection, LOCATION _location)
+{
+	_player->setDirec(_chrdirection);
+
+	//타일 불러오기
+	load(_location);
+
+	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
+	firstFloorStage::init();
+
+	_trigger = NONE;
+
+	return S_OK;
+}
+
 HRESULT entranceFake::init()
 {
 	_player->setDirec(CHRDIREC_UP);
@@ -19,7 +34,10 @@ HRESULT entranceFake::init()
 	//타일 불러오기
 	load();
 
+	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
 	firstFloorStage::init();
+
+	_trigger = NONE;
 
 	return S_OK;
 }
@@ -36,7 +54,7 @@ void entranceFake::update()
 
 	switch (_trigger)
 	{
-	case entranceFake::DOOR_CLOSE: case entranceFake::NONE:
+	 case entranceFake::NONE:
 		//문이 닫힌 상태라면 충돌 및 플레이어 무브 가능하게 한다.
 		firstFloorStage::update();
 		//충돌처리
@@ -44,7 +62,12 @@ void entranceFake::update()
 		break;
 	case entranceFake::DOOR_OPEN:
 		//문이 열린 상태라면 화면 투명도 조절하여 일정 투명도에 도달 할 경우 씬 전환을 한다.
-		firstFloorStage::sceneChange("entranceTrap");
+		firstFloorStage::sceneChange("entranceTrap", CHRDIREC_UP, LOCATION_DEFAULT);
+		break;
+	default:
+		_trigger = NONE;
+		firstFloorStage::update();
+		Collision();
 		break;
 	}
 
@@ -103,7 +126,7 @@ void entranceFake::Collision()
 	}
 }
 
-void entranceFake::load()
+void entranceFake::load(LOCATION location)
 {
 	HANDLE file;
 	DWORD read;
@@ -114,11 +137,11 @@ void entranceFake::load()
 	camera = _tiles->camera;
 	for (int i = 0; i < TILEX*TILEY; i++)
 	{
-		if (_tiles[i].attribute == PLAYER)
-		{
-			_player->setStart(i%TILEX, i / TILEX);
-			break;
-		}
+		if (_tiles[i].attribute != PLAYER)
+			continue;
+
+		if (location)	_player->setStart(i%TILEX, i / TILEX);
+		break;
 	}
 	CloseHandle(file);
 }

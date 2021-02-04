@@ -34,12 +34,16 @@ HRESULT gameNode::init(bool managerInit)
 
 		TXTDATA->init();
 	}
-
-
 	return S_OK;
 }
 
 HRESULT gameNode::init(CHRDIRECTION _CHRDIRECTION)
+{
+	_managerInit = false;
+	return S_OK;
+}
+
+HRESULT gameNode::init(CHRDIRECTION _CHRDIRECTION, LOCATION _LOCATION)
 {
 	_managerInit = false;
 	return S_OK;

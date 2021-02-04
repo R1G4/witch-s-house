@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "firstFloorStage.h"
-#include "dictionary.h"
 #include "Player.h"
 
 firstFloorStage::firstFloorStage()
@@ -22,11 +21,15 @@ HRESULT firstFloorStage::init()
 
 	getFrameTile();
 	_sceneAlpha = 1.f;
+
+	_delay = 0;
 	return S_OK;
 }
 
 void firstFloorStage::release()
 {
+	_player->release();
+	_vFrameTile.clear();
 }
 
 void firstFloorStage::update()
@@ -53,27 +56,13 @@ void firstFloorStage::render()
 			{
 				CAMERAMANAGER->renderRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::White, 1, 1);
 				if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
+				if (_tiles[i*TILEX + j].isCollider)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Red, 0.5);
 			}
 		}
 	}
 
 	//타일보다는 상위에 오브젝트보다는 하위에 위치해야함
 	_player->render();
-
-	for (int i = 0; i < TILEY; i++)
-	{
-		for (int j = 0; j < TILEX; j++)
-		{
-			if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
-
-			IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(_sceneAlpha);
-
-			//중간에 배치하고 싶다면 이걸쓰세요. 디폴트 센타
-			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
-				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2,
-					_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));
-		}
-	}
 
 	//타일에 프레임 이미지 배치 랜더
 	for (int i = 0; i < _vFrameTile.size(); i++)
@@ -95,6 +84,21 @@ void firstFloorStage::render()
 			Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.bottom - _vFrameTile[i].img->GetSize().y / 2),
 			_vFrameTile[i].frameX, _vFrameTile[i].frameY
 		);
+	}
+
+	for (int i = 0; i < TILEY; i++)
+	{
+		for (int j = 0; j < TILEX; j++)
+		{
+			if (_tiles[i*TILEX + j].obj == OBJ_NONE || _tiles[i*TILEX + j].keyName =="")continue;
+			string temp = _tiles[i*TILEX + j].keyName;
+			IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(_sceneAlpha);
+
+			//중간에 배치하고 싶다면 이걸쓰세요. 디폴트 센타
+			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
+				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2,
+					_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));
+		}
 	}
 }
 
@@ -140,6 +144,13 @@ void firstFloorStage::setFrameIndex()
 
 	for (int i = 0; i < _vFrameTile.size(); i++)
 	{
+		if (_vFrameTile[i].isMaxframe)
+		{
+			_vFrameTile[i].frameX = FRAMEINFOMANAGER->FindImage(_vFrameTile[i].keyName)->GetMaxFrameX() - 1;
+			_vFrameTile[i].frameY = FRAMEINFOMANAGER->FindImage(_vFrameTile[i].keyName)->GetMaxFrameY() - 1;
+			continue;
+		}
+
 		Vector2 temp;
 		temp = FRAMEINFOMANAGER->FrameOperation(_vFrameTile[i].keyName, Vector2(_vFrameTile[i].frameX, _vFrameTile[i].frameY), _vFrameTile[i].isTrigger);
 		_vFrameTile[i].frameX = temp.x;
@@ -168,13 +179,13 @@ void firstFloorStage::tileCollision(int i, int j)
 	}
 }
 
-void firstFloorStage::sceneChange(string name)
+void firstFloorStage::sceneChange(string name, CHRDIRECTION _chrdirection, LOCATION _location)
 {
-	_sceneAlpha -= 0.012f;
+	_sceneAlpha -= 0.008f;
+	if (_sceneAlpha <= 0.62f)
+		_sceneAlpha -= 0.02f;
+
 	_player->setAlpha(_sceneAlpha);
-	if (_sceneAlpha <= 0.f)
-	{
-		_player->release();
-		SCENEMANAGER->changeScene(name);
-	}
+
+	if (_sceneAlpha <= 0.f)	SCENEMANAGER->changeScene(name, _chrdirection, _location);
 }

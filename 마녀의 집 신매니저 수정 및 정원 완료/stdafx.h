@@ -71,6 +71,7 @@ using namespace Figure;
 #include "txtData.h"
 #include "frameInfoManager.h"
 #include "CameraManager.h"
+#include "stageMemoryManager.h"
 #include "astarTile.h"
 //MS VS버전이 올라가면서 기존의 문자열 함수의 안정성을 올리기위해
 //_s를 붙인 함수를 사용하게끔 경고하는 메시지를 무시해준다
@@ -94,6 +95,7 @@ using namespace Figure;
 #define TXTDATA txtData::getSingleton()
 #define FRAMEINFOMANAGER frameInfoManager::getSingleton()
 #define CAMERAMANAGER CameraManager::getSingleton()
+#define STAGEMEMORYMANAGER stageMemoryManager::getSingleton()
 #define D2DINS D2DRenderer::GetInstance()
 #define OBJECTMANAGER ObjectManager::getSingleton()
 #define SAFE_DELETE(p)		{if(p) {delete(p); (p) = NULL;}}
