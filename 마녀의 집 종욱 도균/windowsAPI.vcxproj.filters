@@ -192,6 +192,9 @@
     <ClInclude Include="item.h">
       <Filter>playGround\player</Filter>
     </ClInclude>
+    <ClInclude Include="continueScene.h">
+      <Filter>playGround\scense</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -307,6 +310,9 @@
     </ClCompile>
     <ClCompile Include="item.cpp">
       <Filter>playGround\player</Filter>
+    </ClCompile>
+    <ClCompile Include="continueScene.cpp">
+      <Filter>playGround\scense</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

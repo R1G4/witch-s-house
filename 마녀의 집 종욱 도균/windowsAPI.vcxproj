@@ -152,6 +152,7 @@
     <ClInclude Include="boss.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="commonMacroFunction.h" />
+    <ClInclude Include="continueScene.h" />
     <ClInclude Include="D2DRenderer.h" />
     <ClInclude Include="dictionary.h" />
     <ClInclude Include="Figure.h" />
@@ -197,6 +198,7 @@
     <ClCompile Include="bear.cpp" />
     <ClCompile Include="boss.cpp" />
     <ClCompile Include="CameraManager.cpp" />
+    <ClCompile Include="continueScene.cpp" />
     <ClCompile Include="D2DRenderer+Draw.cpp" />
     <ClCompile Include="D2DRenderer.cpp" />
     <ClCompile Include="Figure.cpp" />

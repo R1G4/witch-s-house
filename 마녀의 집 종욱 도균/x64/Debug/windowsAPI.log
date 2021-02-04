@@ -1,0 +1,113 @@
+﻿  stdafx.cpp
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\imagemanager.h(22): warning C4099: 'IWICImagingFactory': 처음에는 'struct'을(를) 사용하여 형식 이름을 표시했는데 이제는 'class'을(를) 사용하여 표시합니다.
+  c:\program files (x86)\windows kits\10\include\10.0.17763.0\um\wincodec.h(6261): note: 'IWICImagingFactory' 선언을 참조하십시오.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\dictionary.h(10): warning C4005: 'TILEX': 매크로 재정의
+  c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\stdafx.h(23): note: 'TILEX'의 이전 정의를 참조하십시오.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\dictionary.h(11): warning C4005: 'TILEY': 매크로 재정의
+  c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\stdafx.h(24): note: 'TILEY'의 이전 정의를 참조하십시오.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\frameinfomanager.h(54): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  animation.cpp
+  bear.cpp
+  boss.cpp
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\boss.cpp(90): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  CameraManager.cpp
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\cameramanager.cpp(157): warning C4244: '인수': 'float'에서 'const int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  continueScene.cpp
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\continuescene.cpp(109): warning C4244: '인수': 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  D2DRenderer+Draw.cpp
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\d2drenderer+draw.cpp(34): warning C4267: '인수': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\d2drenderer+draw.cpp(39): warning C4267: '=': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\d2drenderer+draw.cpp(79): warning C4267: '인수': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\d2drenderer+draw.cpp(84): warning C4267: '=': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\d2drenderer+draw.cpp(127): warning C4267: '인수': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\d2drenderer+draw.cpp(132): warning C4267: '=': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\d2drenderer+draw.cpp(172): warning C4267: '인수': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\d2drenderer+draw.cpp(177): warning C4267: '=': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  D2DRenderer.cpp
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\d2drenderer.cpp(91): warning C4244: '초기화 중': 'int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\d2drenderer.cpp(92): warning C4244: '초기화 중': 'int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Figure.cpp
+  firstFloorStage.cpp
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\firstfloorstage.cpp(54): warning C4305: '인수': 'double'에서 'const float'(으)로 잘립니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\firstfloorstage.cpp(75): warning C4305: '인수': 'double'에서 'const float'(으)로 잘립니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\firstfloorstage.cpp(76): warning C4305: '인수': 'double'에서 'const float'(으)로 잘립니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\firstfloorstage.cpp(77): warning C4305: '인수': 'double'에서 'const float'(으)로 잘립니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\firstfloorstage.cpp(136): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\firstfloorstage.cpp(137): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  FloatEllipse.cpp
+  FloatRect.cpp
+  frameInfoManager.cpp
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\frameinfomanager.cpp(56): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\frameinfomanager.cpp(97): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\frameinfomanager.cpp(250): warning C4804: '%': 연산에 'bool' 형식을 사용하는 것은 안전하지 않습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\frameinfomanager.cpp(542): warning C4804: '%': 연산에 'bool' 형식을 사용하는 것은 안전하지 않습니다.
+  gameNode.cpp
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\gamenode.cpp(92): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\gamenode.cpp(93): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\gamenode.cpp(86): warning C4101: 'hdc' :참조되지 않은 지역 변수입니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\gamenode.cpp(85): warning C4101: 'ps' :참조되지 않은 지역 변수입니다.
+  garDen.cpp
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\garden.cpp(63): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+  image.cpp
+  imageManager.cpp
+  item.cpp
+  keyManager.cpp
+  levelChoiceScene.cpp
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\levelchoicescene.cpp(143): warning C4244: '인수': 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Line.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  load.cpp
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\load.cpp(65): warning C4244: '인수': 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  mapTool.cpp
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\maptool.cpp(160): warning C4305: '인수': 'double'에서 'const float'(으)로 잘립니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\maptool.cpp(187): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\maptool.cpp(206): warning C4305: '인수': 'double'에서 'const float'(으)로 잘립니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\maptool.cpp(275): warning C4305: '인수': 'double'에서 'const float'(으)로 잘립니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\maptool.cpp(280): warning C4305: '인수': 'double'에서 'const float'(으)로 잘립니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\maptool.cpp(285): warning C4305: '인수': 'double'에서 'const float'(으)로 잘립니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\maptool.cpp(290): warning C4305: '인수': 'double'에서 'const float'(으)로 잘립니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\maptool.cpp(346): warning C4244: '인수': 'float'에서 'const int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\maptool.cpp(349): warning C4244: '인수': 'float'에서 'const int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\maptool.cpp(352): warning C4244: '인수': 'float'에서 'const int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\maptool.cpp(355): warning C4244: '인수': 'float'에서 'const int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\maptool.cpp(358): warning C4244: '인수': 'float'에서 'const int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\maptool.cpp(361): warning C4244: '인수': 'float'에서 'const int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\maptool.cpp(372): warning C4305: '인수': 'double'에서 'const float'(으)로 잘립니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\maptool.cpp(373): warning C4305: '인수': 'double'에서 'const float'(으)로 잘립니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\maptool.cpp(396): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\maptool.cpp(397): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Math.cpp
+  menu.cpp
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\menu.cpp(206): warning C4244: '인수': 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\menu.cpp(219): warning C4244: '인수': 'float'에서 'const int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\menu.cpp(215): warning C4244: '인수': 'float'에서 'const int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\menu.cpp(214): warning C4244: '인수': 'float'에서 'const int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  playGround.cpp
+  sceneManager.cpp
+  settings.cpp
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\settings.cpp(63): warning C4305: '+=': 'double'에서 'float'(으)로 잘립니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\settings.cpp(83): warning C4305: '+=': 'double'에서 'float'(으)로 잘립니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\settings.cpp(111): warning C4244: '인수': 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  skul.cpp
+  sound.cpp
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\sound.cpp(44): warning C4305: '+=': 'double'에서 'float'(으)로 잘립니다.
+  soundManager.cpp
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\soundmanager.cpp(170): warning C4244: '인수': 'float'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  stage1_1.cpp
+  playerMenu.cpp
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\playermenu.cpp(205): warning C4244: '인수': 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  timeManager.cpp
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\timemanager.cpp(49): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\timemanager.cpp(52): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\timemanager.cpp(55): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  timer.cpp
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\timer.cpp(61): warning C4244: '=': 'float'에서 'unsigned long'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Triangle.cpp
+  txtData.cpp
+  Vector2.cpp
+  windowsAPI.cpp
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\windowsapi.cpp(96): warning C4244: 'return': 'WPARAM'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다...
+c:\users\zzang\onedrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\txtdata.cpp(58): warning C4172: 지역 변수 또는 임시: str의 주소를 반환하고 있습니다.
+  windowsAPI.vcxproj -> C:\Users\zzang\OneDrive\바탕 화면\포트폴리오 공유\witch-s-house\마녀의 집 종욱 도균\x64\Debug\windowsAPI.exe

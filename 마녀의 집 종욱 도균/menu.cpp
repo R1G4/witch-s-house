@@ -144,6 +144,15 @@ void menu::update()
 		break;
 	case menu::END:
 		_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2 - 10, WINSIZEY / 2 + 300), Vector2(220, 60), Pivot::Center);
+		if (_isClick)
+		{
+			//투명도 1이하라면 종료한다.
+			if (sceneAlphaChange())
+				PostQuitMessage(0);
+		}
+		//원키다운이 먹히지 않으므로 스테이로 수정함
+		if (KEYMANAGER->isStayKeyDown(VK_SPACE))
+			_isClick = true;
 		break;
 	}
 
