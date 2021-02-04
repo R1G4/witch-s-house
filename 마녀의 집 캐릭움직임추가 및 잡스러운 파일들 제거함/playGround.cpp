@@ -35,7 +35,7 @@ HRESULT playGround::init()
 	//SCENEMANAGER->changeScene("entranceFake");
 
 	//SCENEMANAGER->changeScene("stage1_1");
-	SCENEMANAGER->changeScene("MapToolScene");
+	SCENEMANAGER->changeScene("정원");
 	/////////////////UI 일단 주석처리/////////////
 	//addScene();
 	//SCENEMANAGER->changeScene("시작화면");

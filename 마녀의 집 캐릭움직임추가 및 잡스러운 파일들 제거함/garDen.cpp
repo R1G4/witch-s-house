@@ -14,19 +14,76 @@ HRESULT garDen::init()
 	IMAGEMANAGER->AddFrameImage("TerrainSample", L"Image/mapTool/타일.png", 7, 2);
 	IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/objSample.png", 2, 3);
 	IMAGEMANAGER->AddFrameImage("SavePoint", L"Image/mapTool/saveCat.png", 16, 4);
-	IMAGEMANAGER->AddImage("나무", L"Image/mapTool/tileset/001_tr.png");
+	IMAGEMANAGER->AddImage("정원나무", L"Image/mapTool/tileset/001_tr.png");
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
 	
 	_player = new Player;
 	load();
 	_player->init();
-	_player->setDirec(CHRDIREC_UP);
+	_player->setDirec(CHRDIREC_DOWN);
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
 	CAMERAMANAGER->setCamera(camera);
-	return S_OK;
 	frame = 0;
+
+	mapChange[0].x = WINSIZEX / 2 + 775;
+	mapChange[0].y = WINSIZEY / 2 - 140;
+
+	mapChange[1].x = WINSIZEX / 2 + 391;
+	mapChange[1].y = WINSIZEY / 2 + 790;
+
+	mapChange[0].rc = RectMakeCenter(mapChange[0].x, mapChange[0].y, 24, 24);
+	mapChange[1].rc = RectMakeCenter(mapChange[1].x, mapChange[1].y, 24, 24);
 	
+	return S_OK;
+}
+
+HRESULT garDen::init(CHRDIRECTION _CHRDIRECTION)
+{
+	if (_CHRDIRECTION == CHRDIREC_UP)
+	{
+		_player = new Player;
+		load();
+		_player->setStart((WINSIZEX / 2 + 391) / TILESIZE, (WINSIZEY / 2 + 650) / TILESIZE);
+		_player->init();
+		_player->setDirec(CHRDIREC_UP);
+		camera.x = _player->getPlayerLocX();
+		camera.y = _player->getPlayerLocY();
+		CAMERAMANAGER->setCamera(camera);
+		frame = 0;
+
+		mapChange[0].x = WINSIZEX / 2 + 775;
+		mapChange[0].y = WINSIZEY / 2 - 140;
+
+		mapChange[1].x = WINSIZEX / 2 + 391;
+		mapChange[1].y = WINSIZEY / 2 + 790;
+
+		mapChange[0].rc = RectMakeCenter(mapChange[0].x, mapChange[0].y, 24, 24);
+		mapChange[1].rc = RectMakeCenter(mapChange[1].x, mapChange[1].y, 24, 24);
+	}
+	if (_CHRDIRECTION == CHRDIREC_DOWN)
+	{
+		_player = new Player;
+		load();
+		_player->setStart((WINSIZEX / 2 + 775) / TILESIZE, (WINSIZEY / 2) / TILESIZE);
+		_player->init();
+		_player->setDirec(CHRDIREC_DOWN);
+		camera.x = _player->getPlayerLocX();
+		camera.y = _player->getPlayerLocY();
+		CAMERAMANAGER->setCamera(camera);
+		frame = 0;
+
+		mapChange[0].x = WINSIZEX / 2 + 775;
+		mapChange[0].y = WINSIZEY / 2 - 140;
+
+		mapChange[1].x = WINSIZEX / 2 + 391;
+		mapChange[1].y = WINSIZEY / 2 + 790;
+
+		mapChange[0].rc = RectMakeCenter(mapChange[0].x, mapChange[0].y, 24, 24);
+		mapChange[1].rc = RectMakeCenter(mapChange[1].x, mapChange[1].y, 24, 24);
+	}
+	
+		
 	return S_OK;
 }
 
@@ -68,11 +125,14 @@ void garDen::render()
 					CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Red, 0.4);
 				}
 				if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
+				CAMERAMANAGER->renderRc(mapChange[0].rc, D2D1::ColorF::White, 1.0f, 24);
+				CAMERAMANAGER->renderRc(mapChange[1].rc, D2D1::ColorF::White, 1.0f, 24);
 			}
 
 		}
 	}
 	CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("SavePoint"), Vector2(1035, 755), frame, 2);
+	
 	_player->render();
 	for (int i = 0; i < TILEY; i++)
 	{
@@ -84,7 +144,7 @@ void garDen::render()
 		}
 	}
 	
-	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("나무"), Vector2(720 + 480, 648));
+	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("정원나무"), Vector2(720 + 480, 648));
 }
 
 
@@ -98,7 +158,7 @@ void garDen::load()
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	camera = _tiles->camera;
 	_backGround = IMAGEMANAGER->FindImage(_tiles->backGroundName);
-	cout << _tiles->camera.x;
+	
 	for (int i = 0; i < TILEX*TILEY; i++)
 	{
 		if (_tiles[i].attribute == PLAYER)
@@ -141,5 +201,13 @@ void garDen::tileCollision()
 				}
 			}
 		}
+	}
+	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange[0].rc))
+	{
+		SCENEMANAGER->changeScene("성앞", CHRDIREC_UP);
+	}
+	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange[1].rc))
+	{
+		SCENEMANAGER->changeScene("정원아래", CHRDIREC_DOWN);
 	}
 }

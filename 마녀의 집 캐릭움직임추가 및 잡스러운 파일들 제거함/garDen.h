@@ -13,16 +13,19 @@ private:
 	Vector2 camera;
 	Player* _player;
 	
-	
+	getRect mapChange[2];
+	getRect uiTriger;
+
 	int count;
 	int frame;
 public:
 	garDen();
 	~garDen();
-	HRESULT init();
-	void release();
-	void update();
-	void render();
+	virtual HRESULT init();
+	virtual HRESULT init(CHRDIRECTION _CHRDIRECTION);
+	virtual void release();
+	virtual void update();
+	virtual void render();
 	void load();
 	void tileCollision();
 	//	void adresslink(Player* pla) { _player = pla; }

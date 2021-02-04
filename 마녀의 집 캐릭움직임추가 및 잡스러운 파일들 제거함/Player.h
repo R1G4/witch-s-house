@@ -1,13 +1,7 @@
 #pragma once
 #include "gameNode.h"
 class characterState;
-enum CHRDIRECTION
-{
-	CHRDIREC_DOWN,
-	CHRDIREC_LEFT,
-	CHRDIREC_RIGHT,
-	CHRDIREC_UP
-};
+
 enum STATE
 {
 	CHR_IDLE,

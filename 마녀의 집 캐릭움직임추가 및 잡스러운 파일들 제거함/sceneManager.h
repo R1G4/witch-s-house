@@ -1,5 +1,6 @@
 #pragma once
 #include "singletonBase.h"
+#include "dictionary.h"
 
 
 class gameNode;
@@ -26,6 +27,6 @@ public:
 	gameNode* addScene(string sceneName, gameNode* scene);
 
 	HRESULT changeScene(string sceneName);
-
+	virtual HRESULT changeScene(string sceneName, CHRDIRECTION _chrdirection);
 };
 

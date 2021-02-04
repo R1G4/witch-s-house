@@ -12,15 +12,18 @@ private:
 	tagTile _tiles[TILEX*TILEY];
 	Vector2 camera;
 	Player* _player;
+	
 
+	getRect mapChange;
+	getRect uiTriger;
 
 public:
 	garDenUnder();
 	~garDenUnder();
-	HRESULT init();
-	void release();
-	void update();
-	void render();
+	virtual HRESULT init(CHRDIRECTION _chrdirection);
+	virtual void release();
+	virtual void update();
+	virtual void render();
 	void load();
 	void tileCollision();
 	//	void adresslink(Player* pla) { _player = pla; }

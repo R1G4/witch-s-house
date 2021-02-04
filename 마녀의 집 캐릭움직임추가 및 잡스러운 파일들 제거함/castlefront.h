@@ -11,13 +11,13 @@ private:
 	Vector2 camera;
 	Player* _player;
 
-
+	getRect mapChange[2];
 
 public:
 	castlefront();
 	~castlefront();
 
-	virtual HRESULT init();
+	virtual HRESULT init(CHRDIRECTION _chrdirection);
 	virtual void update();
 	virtual void release();
 	virtual void render();

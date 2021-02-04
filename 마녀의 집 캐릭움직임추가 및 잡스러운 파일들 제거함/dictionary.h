@@ -47,6 +47,18 @@ enum OBJECT
 {
 	OBJ_PUSH, OBJ_LOOK, OBJ_CORELATION, OBJ_NONE
 };
+struct getRect
+{
+	FloatRect rc;
+	int x, y;
+};
+enum CHRDIRECTION
+{
+	CHRDIREC_DOWN,
+	CHRDIREC_LEFT,
+	CHRDIREC_RIGHT,
+	CHRDIREC_UP
+};
 struct tagTile
 {
 	TERRAIN terrain;		//ÁöÇü

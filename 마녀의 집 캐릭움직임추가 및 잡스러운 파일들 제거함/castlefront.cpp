@@ -9,23 +9,33 @@ castlefront::~castlefront()
 {
 }
 
-HRESULT castlefront::init()
+HRESULT castlefront::init(CHRDIRECTION _chrdirection)
 {
 	IMAGEMANAGER->AddFrameImage("TerrainSample", L"Image/mapTool/타일.png", 7, 2);
 	IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/objSample.png", 2, 3);
-	IMAGEMANAGER->AddImage("나무", L"Image/mapTool/tileset/003_tr.png");
+	IMAGEMANAGER->AddImage("성앞나무", L"Image/mapTool/tileset/003_tr.png");
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
+	if (_chrdirection == CHRDIREC_UP)
+	{
+		_player = new Player;
+		load();
+		_player->init();
+		_player->setDirec(CHRDIREC_UP);
+		camera.x = _player->getPlayerLocX();
+		camera.y = _player->getPlayerLocY();
+		CAMERAMANAGER->setCamera(camera);
 
-	_player = new Player;
-	load();
-	_player->init();
-	_player->setDirec(CHRDIREC_UP);
-	camera.x = _player->getPlayerLocX();
-	camera.y = _player->getPlayerLocY();
-	CAMERAMANAGER->setCamera(camera);
+		mapChange[0].x = WINSIZEX / 2 + 775;
+		mapChange[0].y = WINSIZEY / 2 - 140;
 
+		mapChange[1].x = WINSIZEX / 2 + 535;
+		mapChange[1].y = WINSIZEY / 2 + 1320;
 
-
+		mapChange[0].rc = RectMakeCenter(mapChange[0].x, mapChange[0].y, 24, 24);
+		mapChange[1].rc = RectMakeCenter(mapChange[1].x, mapChange[1].y, 24, 24);
+	}
+		
+	
 	return S_OK;
 }
 
@@ -58,6 +68,8 @@ void castlefront::render()
 					CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Red, 0.4);
 				}
 				if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
+				CAMERAMANAGER->renderRc(mapChange[0].rc, D2D1::ColorF::White, 1.0f, 24);
+				CAMERAMANAGER->renderRc(mapChange[1].rc, D2D1::ColorF::White, 1.0f, 24);
 			}
 
 		}
@@ -74,7 +86,7 @@ void castlefront::render()
 		}
 	}
 
-	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("나무"), Vector2(_backGround->GetSize().x / 2 + 480, _backGround->GetSize().y / 2));
+	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("성앞나무"), Vector2(_backGround->GetSize().x / 2 + 480, _backGround->GetSize().y / 2));
 }
 
 void castlefront::load()
@@ -97,7 +109,7 @@ void castlefront::load()
 
 		if (_tiles[i].attribute == OBJ)
 		{
-
+		
 		}
 	}
 
@@ -129,5 +141,9 @@ void castlefront::tileCollision()
 				}
 			}
 		}
+	}
+	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange[1].rc))
+	{
+		SCENEMANAGER->changeScene("정원", CHRDIREC_DOWN);
 	}
 }

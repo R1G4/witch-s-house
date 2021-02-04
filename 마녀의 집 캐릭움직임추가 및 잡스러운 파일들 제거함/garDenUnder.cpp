@@ -9,21 +9,27 @@ garDenUnder::~garDenUnder()
 {
 }
 
-HRESULT garDenUnder::init()
+HRESULT garDenUnder::init(CHRDIRECTION _chrdirection)
 {
 	IMAGEMANAGER->AddFrameImage("TerrainSample", L"Image/mapTool/타일.png", 7, 2);
 	IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/objSample.png", 2, 3);
 	IMAGEMANAGER->AddImage("장미", L"Image/mapTool/tileset/002_tr.png");
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
+	if (_chrdirection == CHRDIREC_DOWN)
+	{
+		_player = new Player;
+		load();
+		_player->init();
+		_player->setDirec(CHRDIREC_DOWN);
+		camera.x = _player->getPlayerLocX();
+		camera.y = _player->getPlayerLocY();
+		CAMERAMANAGER->setCamera(camera);
 
-	_player = new Player;
-	load();
-	_player->init();
-	_player->setDirec(CHRDIREC_UP);
-	camera.x = _player->getPlayerLocX();
-	camera.y = _player->getPlayerLocY();
-	CAMERAMANAGER->setCamera(camera);
-	
+		mapChange.x = WINSIZEX / 2 + 775 - 96;
+		mapChange.y = WINSIZEY / 2 - 140 - 48;
+
+		mapChange.rc = RectMakeCenter(mapChange.x, mapChange.y, 24, 24);
+	}
 	
 
 	return S_OK;
@@ -59,6 +65,7 @@ void garDenUnder::render()
 					CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Red, 0.4);
 				}
 				if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
+				CAMERAMANAGER->renderRc(mapChange.rc, D2D1::ColorF::White, 1.0f, 24);
 			}
 
 		}
@@ -132,5 +139,9 @@ void garDenUnder::tileCollision()
 				}
 			}
 		}
+	}
+	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange.rc))
+	{
+		SCENEMANAGER->changeScene("정원", CHRDIREC_UP);
 	}
 }
