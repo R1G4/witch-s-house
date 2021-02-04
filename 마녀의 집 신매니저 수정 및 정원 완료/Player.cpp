@@ -14,8 +14,8 @@ HRESULT Player::init()
 	setState(CHR_IDLE);
 	_player.isDash = true;
 	_player.alpha = 1;
-
-	_player.rc = RectMakePivot(Vector2(_player.x, _player.y + 3), Vector2(TILESIZE - 15, TILESIZE - 18), Pivot::LeftTop);
+	frameSpeed = 5;
+	_player.rc = RectMakePivot(Vector2(_player.x+3, _player.y + 3), Vector2(TILESIZE/2, TILESIZE/2), Pivot::LeftTop);
 	return S_OK;
 }
 
@@ -28,7 +28,7 @@ void Player::update()
 
 	chr_State->updateState();
 	_player.frameY = (int)_player.direc;
-	_player.rc = RectMakePivot(Vector2(_player.x+3, _player.y+3), Vector2(TILESIZE-15, TILESIZE-18), Pivot::LeftTop);
+	_player.rc = RectMakePivot(Vector2(_player.x+3, _player.y+3), Vector2(TILESIZE/2, TILESIZE/2), Pivot::LeftTop);
 	framePlay();
 }
 
@@ -67,7 +67,7 @@ void Player::setState(STATE st)
 void Player::framePlay()
 {
 	_count++;
-	if (_count %5==0)
+	if (_count %frameSpeed==0)
 	{
 		_player.frameX++;
 		if (_player.frameX > _player.img->GetMaxFrameX()-1)_player.frameX = 0;

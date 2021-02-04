@@ -30,6 +30,8 @@ private:
 	Vector2 _startPosition;
 	characterState* chr_State;
 	int _count;
+	int frameSpeed;
+
 public:
 	HRESULT init();
 	void release();
@@ -45,6 +47,7 @@ public:
 	float getPlayerLocX() { return _player.x; }
 	float getPlayerLocY() { return _player.y; }
 	void setFrameX(int frame) { _player.frameX = frame; }
+	int getFrameX() { return _player.frameX; }
 	void setSpeed(float speed) { _player.speed = speed; }
 	void setIsDash(bool onOff) { _player.isDash = onOff; }
 	void setStart(int x, int y) { _startPosition = Vector2(x, y); }
@@ -55,5 +58,6 @@ public:
 	FloatRect getPlayerFrc() { return _player.rc; }
 	FloatRect getSearchRc() { return _player.searchRc; }
 	void setAlpha(float x) { _player.alpha = x; }
+	void setFrameSpeed(int speed) { frameSpeed = speed; }
 };
 
