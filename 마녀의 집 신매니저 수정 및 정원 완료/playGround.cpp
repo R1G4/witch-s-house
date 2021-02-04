@@ -157,6 +157,17 @@ void playGround::addFrameImg()
 	//¿¤·» ÀÌ¹ÌÁö Ãß°¡
 	FRAMEINFOMANAGER->AddFrameInfo("Elen", L"Image/ElenFrameImg/Elen.png", 8, 4, ENEMY);
 
+
+	//»ç¸Á ÀÌ¹ÌÁö Ãß°¡
+	IMAGEMANAGER->AddImage("gameOver", L"Image/Death/dead.png");
+	IMAGEMANAGER->AddFrameImage("bossDead", L"Image/Death/death_boss.png", 3, 1);
+	IMAGEMANAGER->AddFrameImage("skullDeath", L"Image/Death/skullDeath.png", 8, 4);
+	IMAGEMANAGER->AddFrameImage("clockDeath", L"Image/Death/clockDeath.png", 1, 4);
+	IMAGEMANAGER->AddFrameImage("snakeDeath", L"Image/Death/snakeDeath.png", 3, 4);
+	IMAGEMANAGER->AddImage("LWall", L"Image/Death/leftWall.png");
+	IMAGEMANAGER->AddImage("RWall", L"Image/Death/rightWall.png");
+	IMAGEMANAGER->AddFrameImage("bearDeath", L"Image/Death/bearDeath.png", 10, 1);
+
 }
 
 void playGround::addressLink()

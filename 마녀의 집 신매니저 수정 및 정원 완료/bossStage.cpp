@@ -3,9 +3,11 @@
 #include "Player.h"
 HRESULT bossStage::init()
 {
+	//카메라 초기 세팅하는 부분
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
 	_playerTile = new astarTile;
 	_enemyTile = new astarTile;
+	dead = new DeadManager;
 	for (int i = 0; i < TILEX*TILEY; i++)
 	{
 		_objTile[i] = new astarTile;
@@ -20,6 +22,8 @@ HRESULT bossStage::init()
 	alpha = 1;
 	_Stop = false;
 	objectLocation();
+	dead->setPlayerAddress(_player);
+	clock = false;
 	return S_OK;
 }
 
@@ -31,7 +35,7 @@ void bossStage::update()
 {
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
-
+	//cout<<
 	CAMERAMANAGER->setCamera(Vector2(camera.x - WINSIZEX / 2, camera.y - WINSIZEY / 2));
 	if (!_Stop)
 	{
@@ -56,8 +60,13 @@ void bossStage::update()
 				resetEverything();
 				_currentTile = _playerTile;
 				while (_numCount == 0 && !_stop) pathFinder(_currentTile);
-				if (Math::GetDistance(_playerTile->getIdx(), _playerTile->getIdy(), _enemyTile->getIdx(), _enemyTile->getIdy()) < 1.0f)
+				if (Math::GetDistance(_playerTile->getIdx(), _playerTile->getIdy(), _enemyTile->getIdx(), _enemyTile->getIdy()) < 1.5f)
 				{
+					resetEverything();
+					this->release();
+					dead->setDead(DEAD_BOSS);
+					dead->update();
+		
 					_stop = true;
 					return;
 				}
@@ -73,37 +82,39 @@ void bossStage::update()
 
 void bossStage::render()
 {
-	_backGround->SetAlpha(alpha);
-	CAMERAMANAGER->render(_backGround, Vector2(_backGround->GetSize().x / 2 + 480, _backGround->GetSize().y / 2));
-	for (int i = 0; i < TILEY; i++)
-	{
-		for (int j = 0; j < TILEX; j++)
+
+		_backGround->SetAlpha(alpha);
+		CAMERAMANAGER->render(_backGround, Vector2(_backGround->GetSize().x / 2 + 480, _backGround->GetSize().y / 2));
+		for (int i = 0; i < TILEY; i++)
 		{
-			if (KEYMANAGER->isToggleKey(VK_TAB))
+			for (int j = 0; j < TILEX; j++)
 			{
-				CAMERAMANAGER->renderRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::White, 1, 1);
-				if (_tiles[i*TILEX + j].isCollider)
+				if (KEYMANAGER->isToggleKey(VK_TAB))
 				{
-					CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Red, 0.4);
+					CAMERAMANAGER->renderRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::White, 1, 1);
+					if (_tiles[i*TILEX + j].isCollider)
+					{
+						CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Red, 0.4);
+					}
+					if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
 				}
-				if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
+
 			}
-			
 		}
-	}
-	_player->render();
-	if(_isBossAppeal)_boss->render();
-	for (int i = 0; i < TILEY; i++)
-	{
-		for (int j = 0; j < TILEX; j++)
+		_player->render();
+		if (_isBossAppeal&&!dead->getIsDead())_boss->render();
+		for (int i = 0; i < TILEY; i++)
 		{
-			if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
-			//IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(0.5);
-			IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(alpha);
-			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j]. keyName),
-				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top));
+			for (int j = 0; j < TILEX; j++)
+			{
+				if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
+				//IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(0.5);
+				IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(alpha);
+				CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
+					Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top));
+			}
 		}
-	}
+		dead->render();
 
 }
 
@@ -149,13 +160,13 @@ void bossStage::tileCollision()
 				switch (_player->getPdirec())
 				{
 				case CHRDIREC_DOWN:
-					_player->setPLocaY(_tiles[i*TILEX + j].rc.top - TILESIZE/4*3 );
+					_player->setPLocaY(_tiles[i*TILEX + j].rc.top - TILESIZE/3*2 );
 					break;
 				case CHRDIREC_LEFT:
 					_player->setPLocaX(_tiles[i*TILEX + j].rc.right +4);
 					break;
 				case CHRDIREC_RIGHT:
-					_player->setPLocaX(_tiles[i*TILEX + j].rc.left-TILESIZE/4*3);
+					_player->setPLocaX(_tiles[i*TILEX + j].rc.left-TILESIZE/3*2);
 					break;
 				case CHRDIREC_UP:
 					_player->setPLocaY(_tiles[i*TILEX + j].rc.bottom+4);
@@ -172,7 +183,7 @@ void bossStage::activeTrigger()
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].terrain == TR_TRIGGER)
+			if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].terrain == TR_TRIGGER&&!_isBossAppeal)
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 				{
@@ -182,6 +193,7 @@ void bossStage::activeTrigger()
 			}
 		}
 	}
+
 }
 
 void bossStage::activeCorr()
@@ -190,7 +202,7 @@ void bossStage::activeCorr()
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].obj == OBJ_CORELATION)
+			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].obj == OBJ_CORELATION)
 			{
 				_Stop = true;
 				alpha -= 0.01;
@@ -307,11 +319,13 @@ vector<astarTile*> bossStage::addOpenList(astarTile * currentTile)
 	int startY = currentTile->getIdy() - 1;
 
 	for (int i = 2; i >=0; --i)
+	//for (int i = 0; i < 3; ++i)
 	{
 		//// ############ 벡터 안터지게 #####################
 		if (startY + i < 0)				continue;
 		if (startY + i >= TILEY)		continue;
-		for (int j = 2; j>=0; --j)
+		for (int j =2; j >=0; --j)
+		//for (int j = 0; j<3; ++j)
 		{
 			// ############ 신항로 개척 방지 #####################
 			if (startX + j < 0)			continue;
@@ -401,7 +415,7 @@ void bossStage::pathFinder(astarTile * currentTile)
 		POINT center2 = _vOpenList[i]->getCenter();
 
 		_vOpenList[i]->setCostFromStart((center1.x == center2.x ||
-			center1.y == center2.y) ? 12 : 10);
+			center1.y == center2.y) ? 14 : 10);
 		// 직선이면(x,y 둘중하나가 같다면) 10, 아니면 대각선이니 14의 비용
 
 		//F = G + H 니까~ 

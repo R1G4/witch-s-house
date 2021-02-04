@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "bossStage_2.h"
-#include"Player.h"
-HRESULT bossStage_2::init()
+#include "bossStage_3.h"
+
+HRESULT bossStage_3::init()
 {
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
 	_playerTile = new astarTile;
@@ -25,11 +25,11 @@ HRESULT bossStage_2::init()
 	return S_OK;
 }
 
-void bossStage_2::release()
+void bossStage_3::release()
 {
 }
 
-void bossStage_2::update()
+void bossStage_3::update()
 {
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
@@ -62,8 +62,7 @@ void bossStage_2::update()
 				{
 					resetEverything();
 					this->release();
-					dead->setDead(DEAD_BOSS);
-					dead->update();
+					SCENEMANAGER->changeScene("MapToolScene");
 					_isStop = true;
 					return;
 				}
@@ -73,9 +72,10 @@ void bossStage_2::update()
 	}
 	tileCollision();
 	TriggerOn();
+
 }
 
-void bossStage_2::render()
+void bossStage_3::render()
 {
 	CAMERAMANAGER->render(_backGround, Vector2(_backGround->GetSize().x / 2 + 480, _backGround->GetSize().y / 2));
 	for (int i = 0; i < TILEY; i++)
@@ -95,36 +95,34 @@ void bossStage_2::render()
 		}
 	}
 	_player->render();
-	if(_isBossAppeal)_boss->render();
+	if (_isBossAppeal)_boss->render();
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
 			if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
 			//IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(0.5);
-			if ((_tiles[i*TILEX + j].keyName == "obj61" && !_vTrigger[2].isTriggerOn) && (_tiles[i*TILEX + j].keyName == "obj58" && !_vTrigger[5].isTriggerOn))continue;
-			if ((_tiles[i*TILEX + j].keyName == "obj59" && !_vTrigger[0].isTriggerOn) && (_tiles[i*TILEX + j].keyName == "obj59" && !_vTrigger[3].isTriggerOn))continue;
+			//if ((_tiles[i*TILEX + j].keyName == "obj58" && !_vTrigger[2].isTriggerOn) && (_tiles[i*TILEX + j].keyName == "obj58" && !_vTrigger[5].isTriggerOn))continue;
+			//if ((_tiles[i*TILEX + j].keyName == "obj59" && !_vTrigger[0].isTriggerOn) && (_tiles[i*TILEX + j].keyName == "obj59" && !_vTrigger[3].isTriggerOn))continue;
 			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
 				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2,
 					_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));
 
 		}
 	}
-	dead->render();
 }
 
-void bossStage_2::load()
+void bossStage_3::load()
 {
 	HANDLE file;
 	DWORD read;
 	/*file = CreateFile("Stage/finalKitchen.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);*/
-	file = CreateFile("Stage/finalKitchen.map", GENERIC_READ, NULL, NULL,
+	file = CreateFile("Stage/finaldiningRoom.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	camera = _tiles->camera;
 	_backGround = IMAGEMANAGER->FindImage(_tiles->backGroundName);
-	cout << _tiles->camera.x;
 	for (int i = 0; i < TILEX*TILEY; i++)
 	{
 		if (_tiles[i].attribute == PLAYER)
@@ -148,9 +146,10 @@ void bossStage_2::load()
 		}
 	}
 	CloseHandle(file);
+
 }
 
-void bossStage_2::tileCollision()
+void bossStage_3::tileCollision()
 {
 	for (int i = 0; i < TILEY; i++)
 	{
@@ -161,13 +160,13 @@ void bossStage_2::tileCollision()
 				switch (_player->getPdirec())
 				{
 				case CHRDIREC_DOWN:
-					_player->setPLocaY(_tiles[i*TILEX + j].rc.top - TILESIZE / 3*2);
+					_player->setPLocaY(_tiles[i*TILEX + j].rc.top - TILESIZE / 3 * 2);
 					break;
 				case CHRDIREC_LEFT:
 					_player->setPLocaX(_tiles[i*TILEX + j].rc.right + 4);
 					break;
 				case CHRDIREC_RIGHT:
-					_player->setPLocaX(_tiles[i*TILEX + j].rc.left - TILESIZE /3*2);
+					_player->setPLocaX(_tiles[i*TILEX + j].rc.left - TILESIZE / 3 * 2);
 					break;
 				case CHRDIREC_UP:
 					_player->setPLocaY(_tiles[i*TILEX + j].rc.bottom + 4);
@@ -178,38 +177,24 @@ void bossStage_2::tileCollision()
 	}
 }
 
-void bossStage_2::TriggerOn()
+void bossStage_3::TriggerOn()
 {
-	for (int i = 0; i < _vTrigger.size() ; i++)
-	{
-		FloatRect temp;
-		if (IntersectRectToRect(&temp,&_player->getPlayerFrc(), &_vTrigger[i].tile))
-		{
-			_vTrigger[i].isTriggerOn = true;
-			cout << _vTrigger[i].isTriggerOn << " " << i<<endl;
-		}
-	}
-	if (IntersectRectToRect(&_player->getPlayerFrc(), &_vTrigger[1].tile) || IntersectRectToRect(&_player->getPlayerFrc(), &_vTrigger[4].tile))
-	{
-		_boss->init(bossLocX, bossLocY);
-		_isBossAppeal = true;
-	}
 }
 
-void bossStage_2::playerLocation()
+void bossStage_3::playerLocation()
 {
 	_playerTile->init(_player->getPlayerLocX() / TILESIZE,
 		_player->getPlayerLocY() / TILESIZE);
 	_playerTile->setAttribute("player");	// astar타일로 플레이어 적용
 }
 
-void bossStage_2::enemyLocation()
+void bossStage_3::enemyLocation()
 {
 	_enemyTile->init(bossLocX, bossLocY);			// astar타일로 지속적인 적용
 	_enemyTile->setAttribute("enemy");			// astar타일로 에너미 적용
 }
 
-void bossStage_2::objectLocation()
+void bossStage_3::objectLocation()
 {
 	for (int i = 0; i < (TILEX * TILEY); i++)
 	{
@@ -224,10 +209,9 @@ void bossStage_2::objectLocation()
 	{
 		_objTile[i]->setAttribute("wall");
 	}
-
 }
 
-void bossStage_2::setAstarTile()
+void bossStage_3::setAstarTile()
 {
 	//현재 타일은 시작타일루다가
 	_currentTile = _playerTile;
@@ -272,9 +256,10 @@ void bossStage_2::setAstarTile()
 			_vTotalList.push_back(node);
 		}
 	}
+
 }
 
-void bossStage_2::resetEverything()
+void bossStage_3::resetEverything()
 {
 	_numCount = 0;
 	_vOpenList.clear();
@@ -289,9 +274,10 @@ void bossStage_2::resetEverything()
 		_vTotalList[i]->setParentNode(NULL);
 		if (_vTotalList[i]->getAttribute() != "wall") _vTotalList[i]->setIsOpen(true);
 	}
+
 }
 
-vector<astarTile*> bossStage_2::addOpenList(astarTile * currentTile)
+vector<astarTile*> bossStage_3::addOpenList(astarTile * currentTile)
 {
 	int startX = currentTile->getIdx() - 1;
 	int startY = currentTile->getIdy() - 1;
@@ -374,7 +360,7 @@ vector<astarTile*> bossStage_2::addOpenList(astarTile * currentTile)
 	return _vOpenList;
 }
 
-void bossStage_2::pathFinder(astarTile * currentTile)
+void bossStage_3::pathFinder(astarTile * currentTile)
 {
 	//경로비용을 매우 쉽게 하기 위해서 임의의 경로비용을 둠
 	float tempTotalCost = 5000;

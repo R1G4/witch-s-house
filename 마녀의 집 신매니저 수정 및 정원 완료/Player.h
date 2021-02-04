@@ -47,6 +47,7 @@ public:
 	float getPlayerLocX() { return _player.x; }
 	float getPlayerLocY() { return _player.y; }
 	void setFrameX(int frame) { _player.frameX = frame; }
+	void setFrameY(int frame) { _player.frameY = frame; }
 	int getFrameX() { return _player.frameX; }
 	void setSpeed(float speed) { _player.speed = speed; }
 	void setIsDash(bool onOff) { _player.isDash = onOff; }
