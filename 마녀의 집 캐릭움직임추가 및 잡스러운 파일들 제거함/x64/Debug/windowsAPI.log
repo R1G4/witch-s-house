@@ -6,6 +6,32 @@ c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐�
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\dictionary.h(11): warning C4005: 'TILEY': 매크로 재정의
   c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\stdafx.h(24): note: 'TILEY'의 이전 정의를 참조하십시오.
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\frameinfomanager.h(54): warning C4267: 'return': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  CameraManager.cpp
+c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\cameramanager.cpp(157): warning C4244: '인수': 'float'에서 'const int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  D2DRenderer+Draw.cpp
+c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\d2drenderer+draw.cpp(34): warning C4267: '인수': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\d2drenderer+draw.cpp(39): warning C4267: '=': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\d2drenderer+draw.cpp(79): warning C4267: '인수': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\d2drenderer+draw.cpp(84): warning C4267: '=': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\d2drenderer+draw.cpp(127): warning C4267: '인수': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\d2drenderer+draw.cpp(132): warning C4267: '=': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\d2drenderer+draw.cpp(172): warning C4267: '인수': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\d2drenderer+draw.cpp(177): warning C4267: '=': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  D2DRenderer.cpp
+c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\d2drenderer.cpp(91): warning C4244: '초기화 중': 'int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\d2drenderer.cpp(92): warning C4244: '초기화 중': 'int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  DASH.cpp
+  Figure.cpp
+  FloatEllipse.cpp
+  FloatRect.cpp
+  IDLE.cpp
+  Line.cpp
+  Math.cpp
+  Player.cpp
+  StringHelper.cpp
+  Triangle.cpp
+  Vector2.cpp
+  WALK.cpp
   animation.cpp
   astarTile.cpp
   bear.cpp
@@ -24,6 +50,8 @@ c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐�
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\bossstage.cpp(410): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\bossstage.cpp(466): warning C4244: '인수': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\bossstage.cpp(467): warning C4244: '인수': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
   bossStage_2.cpp
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\bossstage_2.cpp(61): warning C4244: '인수': 'int'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\bossstage_2.cpp(89): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
@@ -35,60 +63,38 @@ c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐�
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\bossstage_2.cpp(391): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\bossstage_2.cpp(447): warning C4244: '인수': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\bossstage_2.cpp(448): warning C4244: '인수': 'LONG'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  CameraManager.cpp
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\cameramanager.cpp(157): warning C4244: '인수': 'float'에서 'const int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   castlefront.cpp
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\castlefront.cpp(68): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
   characterState.cpp
-  D2DRenderer+Draw.cpp
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\d2drenderer+draw.cpp(34): warning C4267: '인수': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\d2drenderer+draw.cpp(39): warning C4267: '=': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\d2drenderer+draw.cpp(79): warning C4267: '인수': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\d2drenderer+draw.cpp(84): warning C4267: '=': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\d2drenderer+draw.cpp(127): warning C4267: '인수': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\d2drenderer+draw.cpp(132): warning C4267: '=': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\d2drenderer+draw.cpp(172): warning C4267: '인수': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\d2drenderer+draw.cpp(177): warning C4267: '=': 'size_t'에서 'UINT32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  D2DRenderer.cpp
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\d2drenderer.cpp(91): warning C4244: '초기화 중': 'int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\d2drenderer.cpp(92): warning C4244: '초기화 중': 'int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  DASH.cpp
   entrance.cpp
   entranceFake.cpp
   entranceTrap.cpp
-  Figure.cpp
   firstFloorStage.cpp
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\firstfloorstage.cpp(84): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\firstfloorstage.cpp(85): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\firstfloorstage.cpp(86): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\firstfloorstage.cpp(145): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\firstfloorstage.cpp(146): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  FloatEllipse.cpp
-  FloatRect.cpp
   frameInfoManager.cpp
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\frameinfomanager.cpp(56): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\frameinfomanager.cpp(97): warning C4267: '=': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\frameinfomanager.cpp(250): warning C4804: '%': 연산에 'bool' 형식을 사용하는 것은 안전하지 않습니다.
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\frameinfomanager.cpp(548): warning C4804: '%': 연산에 'bool' 형식을 사용하는 것은 안전하지 않습니다.
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
   gameNode.cpp
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\gamenode.cpp(92): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\gamenode.cpp(93): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\gamenode.cpp(86): warning C4101: 'hdc' :참조되지 않은 지역 변수입니다.
-c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\gamenode.cpp(85): warning C4101: 'ps' :참조되지 않은 지역 변수입니다.
+c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\gamenode.cpp(98): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\gamenode.cpp(99): warning C4244: '=': 'float'에서 'LONG'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\gamenode.cpp(92): warning C4101: 'hdc' :참조되지 않은 지역 변수입니다.
+c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\gamenode.cpp(91): warning C4101: 'ps' :참조되지 않은 지역 변수입니다.
   garDen.cpp
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\garden.cpp(125): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
   garDenUnder.cpp
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\gardenunder.cpp(65): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
   hallway.cpp
-  IDLE.cpp
   image.cpp
   imageManager.cpp
   keyManager.cpp
   levelChoiceScene.cpp
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\levelchoicescene.cpp(117): warning C4244: '인수': 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Line.cpp
   mapTool.cpp
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\maptool.cpp(161): warning C4305: '인수': 'double'에서 'const float'(으)로 잘립니다.
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\maptool.cpp(176): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
@@ -107,33 +113,27 @@ c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐�
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\maptool.cpp(363): warning C4244: '인수': 'float'에서 'const int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\maptool.cpp(419): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\maptool.cpp(420): warning C4244: '=': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Math.cpp
   menu.cpp
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\menu.cpp(131): warning C4244: '인수': 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\menu.cpp(144): warning C4244: '인수': 'float'에서 'const int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\menu.cpp(140): warning C4244: '인수': 'float'에서 'const int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\menu.cpp(139): warning C4244: '인수': 'float'에서 'const int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Player.cpp
   playGround.cpp
   sceneManager.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
   skul.cpp
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\skul.cpp(81): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   soundManager.cpp
   status.cpp
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\status.cpp(110): warning C4244: '인수': 'double'에서 'const float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  StringHelper.cpp
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
   timeManager.cpp
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\timemanager.cpp(49): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\timemanager.cpp(52): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\timemanager.cpp(55): warning C4267: '인수': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   timer.cpp
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\timer.cpp(61): warning C4244: '=': 'float'에서 'unsigned long'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  Triangle.cpp
   txtData.cpp
-  Vector2.cpp
-  WALK.cpp
   windowsAPI.cpp
 c:\users\clxlz\onedrive\바탕 화면\찐포폴\witch-s-house\마녀의 집 캐릭움직임추가 및 잡스러운 파일들 제거함\windowsapi.cpp(96): warning C4244: 'return': 'WPARAM'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   코드를 생성하고 있습니다...

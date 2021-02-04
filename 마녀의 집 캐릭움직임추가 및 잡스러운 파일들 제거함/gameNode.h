@@ -15,6 +15,7 @@ public:
 	//제대로 초기화가 잘됐는지 아닌지를 보여준다
 	virtual HRESULT init();			//초기화 전용 함수
 	virtual HRESULT init(bool managerInit);
+	virtual HRESULT init(CHRDIRECTION _CHRDIRECTION);
 	virtual void release();			//메모리 해제 전용
 	virtual void update();			//연산 전용
 	virtual void render();			//그리기 전용

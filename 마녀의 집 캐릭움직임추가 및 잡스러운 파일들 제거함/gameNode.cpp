@@ -39,6 +39,12 @@ HRESULT gameNode::init(bool managerInit)
 	return S_OK;
 }
 
+HRESULT gameNode::init(CHRDIRECTION _CHRDIRECTION)
+{
+	_managerInit = false;
+	return S_OK;
+}
+
 void gameNode::release()
 {
 	if (_managerInit)
