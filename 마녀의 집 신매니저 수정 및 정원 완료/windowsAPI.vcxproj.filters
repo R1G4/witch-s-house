@@ -246,6 +246,15 @@
     <ClInclude Include="bearRoom.h">
       <Filter>playGround\scense\FirstFloor</Filter>
     </ClInclude>
+    <ClInclude Include="thirdFrogRoom.h">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdFloorDead.h">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="third3.h">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -409,6 +418,15 @@
     </ClCompile>
     <ClCompile Include="bearRoom.cpp">
       <Filter>playGround\scense\FirstFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdFrogRoom.cpp">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdFloorDead.cpp">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="third3.cpp">
+      <Filter>playGround\scense\ThirdFloor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

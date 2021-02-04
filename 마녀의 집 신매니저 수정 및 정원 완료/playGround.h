@@ -18,6 +18,9 @@
 #include "scissorsRoom.h"
 #include "third.h"
 #include "third2.h"
+#include "third3.h"
+#include "thirdFloorDead.h"
+#include "thirdFrogRoom.h"
 
 
 class playGround : public gameNode

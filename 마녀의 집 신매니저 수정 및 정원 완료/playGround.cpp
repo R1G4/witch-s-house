@@ -35,7 +35,7 @@ HRESULT playGround::init()
 	//SCENEMANAGER->changeScene("entranceFake");
 
 	//SCENEMANAGER->changeScene("stage1_1");
-	SCENEMANAGER->changeScene("entranceFake");
+	SCENEMANAGER->changeScene("3Ãþ°³±¸¸®¹æ");
 	/////////////////UI ÀÏ´Ü ÁÖ¼®Ã³¸®/////////////
 	//addScene();
 	//SCENEMANAGER->changeScene("½ÃÀÛÈ­¸é");
@@ -115,6 +115,10 @@ void playGround::addScene()
 	//3Ãþ
 	SCENEMANAGER->addScene("3Ãþ", new third);
 	SCENEMANAGER->addScene("3Ãþ2", new third2);
+	SCENEMANAGER->addScene("3Ãþ3", new third3);		//¿¹ºñ¿ë?? °í¹ÎÁß
+	SCENEMANAGER->addScene("3ÃþÃ¹¹øÂ°µ¥µå¾À", new thirdFloorDead);
+	SCENEMANAGER->addScene("3Ãþ°³±¸¸®¹æ", new thirdFrogRoom);
+	//SCENEMANAGER->addScene("3ÃþµÎ¹øÂ°µ¥µå¾À", new thirdFloorDead);
 }
 
 void playGround::addFrameImg()

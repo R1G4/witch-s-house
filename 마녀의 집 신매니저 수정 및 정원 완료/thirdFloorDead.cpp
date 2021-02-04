@@ -1,17 +1,16 @@
 #include "stdafx.h"
-#include "third.h"
+#include "thirdFloorDead.h"
 
-third::third()
+thirdFloorDead::thirdFloorDead()
 {
 }
 
-third::~third()
+thirdFloorDead::~thirdFloorDead()
 {
 }
 
-HRESULT third::init()
+HRESULT thirdFloorDead::init()
 {
-	IMAGEMANAGER->AddFrameImage("SavePoint", L"Image/mapTool/saveCat.png", 16, 4);
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
 
 	_player = new Player;
@@ -23,44 +22,24 @@ HRESULT third::init()
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
 	CAMERAMANAGER->setCamera(camera);
-
-	_count = 0;
-	_frame = 0;
-
 	return S_OK;
 }
 
-void third::release()
+void thirdFloorDead::release()
 {
 }
 
-void third::update()
+void thirdFloorDead::update()
 {
-	_count++;
-	if (_count % 4 == 0)
-	{
-		_frame++;
-		if (_frame > 15)
-		{
-			_frame = 0;
-		}
-	}
-
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
 
 	CAMERAMANAGER->setCamera(Vector2(camera.x - WINSIZEX / 2, camera.y - WINSIZEY / 2));
 	_player->update();
 	tileCollision();
-	//trigger();
-
-
-	//if(_count %10 == 0) cout << _player->getPlayerFrc().right / TILESIZE << endl;
-
-
 }
 
-void third::render()
+void thirdFloorDead::render()
 {
 	CAMERAMANAGER->render(_backGround, Vector2(_backGround->GetSize().x / 2 + 480, _backGround->GetSize().y / 2));
 	for (int i = 0; i < TILEY; i++)
@@ -80,7 +59,7 @@ void third::render()
 		}
 	}
 	_player->render();
-	CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("SavePoint"), Vector2(920, 1680), _frame, 2);
+
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
@@ -90,27 +69,15 @@ void third::render()
 			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
 				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top));
 
-			if (_player->getPlayerFrc().top / TILESIZE <= 21 && _player->getPlayerFrc().top / TILESIZE >= 20)
-			{
-				if (_tiles[i*TILEX + j].obj != OBJ_NONE)
-				{
-					_tiles[i*TILEX + j].rc.bottom -= 48;
-					_tiles[i*TILEX + j].rc.top -= 48;
-
-				}
-			}
-
-			if (_player->getPlayerFrc().left / TILESIZE <= 21 || _player->getPlayerFrc().right / TILESIZE >= 23)
-			{
-				cout << _player->getPlayerFrc().right / TILESIZE << endl;
-				SCENEMANAGER->changeScene("3층첫번째데드씬");
-			}
-
 		}
 	}
 }
 
-void third::tileCollision()
+void thirdFloorDead::trigger()
+{
+}
+
+void thirdFloorDead::tileCollision()
 {
 	for (int i = 0; i < TILEY; i++)
 	{
@@ -133,30 +100,20 @@ void third::tileCollision()
 					_player->setPLocaY(_tiles[i*TILEX + j].rc.bottom + 4);
 					break;
 				}
-
-				SCENEMANAGER->changeScene("3층2");
-
-			}
-
-			//플레이어 렉트의 현재 탑의 위치가 타일 인덱스 10보다 커질때
-
-			if (_player->getPlayerFrc().bottom / TILESIZE >= 10 /*&& _player->getPlayerFrc().top / TILESIZE <= 30*/)
-			{
-				if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)
-				{
-					_tiles[i*TILEX + j].rc.bottom -= 10;
-					_tiles[i*TILEX + j].rc.top -= 10;
-				}
 			}
 		}
 	}
 }
 
-void third::load()
+void thirdFloorDead::Collision()
+{
+}
+
+void thirdFloorDead::load()
 {
 	HANDLE file;
 	DWORD read;
-	file = CreateFile("Stage/3f_first.map", GENERIC_READ, NULL, NULL,
+	file = CreateFile("Stage/3f_dead.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	camera = _tiles->camera;

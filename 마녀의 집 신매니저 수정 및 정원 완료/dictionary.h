@@ -60,6 +60,12 @@ enum CHRDIRECTION
 	CHRDIREC_RIGHT,
 	CHRDIREC_UP
 };
+//3stage에서 쓰는중
+enum text
+{
+	CHANGEIMG, LEFT, RIGHT, UP, DOWN, OPENTEXT, OPENLEFT, OPENRIGHT
+};
+
 struct tagTile
 {
 	TERRAIN terrain;		//지형

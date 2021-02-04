@@ -200,6 +200,9 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="third.h" />
     <ClInclude Include="third2.h" />
+    <ClInclude Include="third3.h" />
+    <ClInclude Include="thirdFloorDead.h" />
+    <ClInclude Include="thirdFrogRoom.h" />
     <ClInclude Include="timeManager.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="Triangle.h" />
@@ -261,6 +264,9 @@
     <ClCompile Include="StringHelper.cpp" />
     <ClCompile Include="third.cpp" />
     <ClCompile Include="third2.cpp" />
+    <ClCompile Include="third3.cpp" />
+    <ClCompile Include="thirdFloorDead.cpp" />
+    <ClCompile Include="thirdFrogRoom.cpp" />
     <ClCompile Include="timeManager.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="Triangle.cpp" />
