@@ -153,8 +153,11 @@
     <ClInclude Include="bearRoom.h" />
     <ClInclude Include="boss.h" />
     <ClInclude Include="bossStage.h" />
+    <ClInclude Include="bossStage_1.h" />
     <ClInclude Include="bossStage_2.h" />
     <ClInclude Include="bossStage_3.h" />
+    <ClInclude Include="bossStage_4.h" />
+    <ClInclude Include="bossStage_5.h" />
     <ClInclude Include="boxRoom.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="castlefront.h" />
@@ -233,8 +236,11 @@
     <ClCompile Include="bearRoom.cpp" />
     <ClCompile Include="boss.cpp" />
     <ClCompile Include="bossStage.cpp" />
+    <ClCompile Include="bossStage_1.cpp" />
     <ClCompile Include="bossStage_2.cpp" />
     <ClCompile Include="bossStage_3.cpp" />
+    <ClCompile Include="bossStage_4.cpp" />
+    <ClCompile Include="bossStage_5.cpp" />
     <ClCompile Include="boxRoom.cpp" />
     <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="castlefront.cpp" />

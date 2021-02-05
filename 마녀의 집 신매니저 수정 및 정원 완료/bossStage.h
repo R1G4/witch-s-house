@@ -3,10 +3,16 @@
 #include"boss.h"
 #include "DeadManager.h"
 class Player;
+struct Trigger
+{
+	bool isTriggerOn;
+	int idx, idy;
+	FloatRect tile;
+};
 class bossStage :
 	public gameNode
 {
-private://astar용 세팅
+protected://astar용 세팅
 	//astar용 벡터
 	vector<astarTile*>			_vTotalList;
 	vector<astarTile*>::iterator _viTotalList;
@@ -30,30 +36,43 @@ private://astar용 세팅
 	bool _start;
 	bool _stop;			// 못찾은거
 
-private://스테이지용 세팅
-	//
+protected://스테이지용 세팅
+	//배경 이미ㅣ
 	Image* _backGround;
+	//맵타일
 	tagTile _tiles[TILEX*TILEY];
+	//프레임 타일용 벡터
+	vector<tagFrameTile> _vFrameTile;
+	//카메라
 	Vector2 camera;
 	Player* _player;
 	boss* _boss;
+	//데드씬 관련
 	DeadManager* dead;
+	//보스 위치 설정
 	int bossLocX, bossLocY;
+	//보스 프레임 설정
 	int bossFrameX, bossFrameY;
+	//보스 등장 여부
 	bool _isBossAppeal;
+	//알파값
 	float alpha;
+	//특정 상황에서 업데이트를 멈추게 하기 위한 변수
 	bool _Stop;
-	bool clock;
+
 public://스테이지 세팅용
+	bossStage();
+	~bossStage();
+
 	HRESULT init();
 	void release();
 	void update();
 	void render();
-	void load();
 	void tileCollision();
 	void addresslink(Player* pla) { _player = pla; }
-	void activeTrigger();
-	void activeCorr();
+	void getFrameTile();
+	void setFrameIndex();
+
 
 public://a스타용
 

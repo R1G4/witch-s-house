@@ -5,8 +5,11 @@
 #include "garDenUnder.h"
 #include "menu.h"
 #include "levelChoiceScene.h"
-#include "bossStage.h"
+#include "bossStage_1.h"
 #include "bossStage_2.h"
+#include "bossStage_3.h"
+#include "bossStage_4.h"
+#include "bossStage_5.h"
 #include "Player.h"
 #include "castlefront.h"
 #include "entranceFake.h"
@@ -41,8 +44,11 @@ private:
 	Image* viola;
 	POINT camera;
 	Player* _player;
-	bossStage* _bossStage;
+	bossStage_1* _bossStage_1;
 	bossStage_2* _bossStage_2;
+	bossStage_3* _bossStage_3;
+	bossStage_4* _bossStage_4;
+	bossStage_5* _bossStage_5;
 	firstFloorStage* _entranceFakeStage;
 	firstFloorStage* _entranceTrapStage;
 	firstFloorStage* _entranceStage;

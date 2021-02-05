@@ -1,6 +1,12 @@
 #include "stdafx.h"
 #include "bossStage.h"
 #include "Player.h"
+bossStage::bossStage()
+{
+}
+bossStage::~bossStage()
+{
+}
 HRESULT bossStage::init()
 {
 	//카메라 초기 세팅하는 부분
@@ -13,9 +19,8 @@ HRESULT bossStage::init()
 		_objTile[i] = new astarTile;
 	}
 	_boss = new boss;
-	load();
 	_player->init();
-	_player->setDirec(CHRDIREC_UP);
+	getFrameTile();
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
 	CAMERAMANAGER->setCamera(camera);
@@ -23,19 +28,21 @@ HRESULT bossStage::init()
 	_Stop = false;
 	objectLocation();
 	dead->setPlayerAddress(_player);
-	clock = false;
 	return S_OK;
 }
 
 void bossStage::release()
 {
+	_player->release();
+	resetEverything();
+	_Stop = false;
+	_isBossAppeal = false;
 }
 
 void bossStage::update()
 {
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
-	//cout<<
 	CAMERAMANAGER->setCamera(Vector2(camera.x - WINSIZEX / 2, camera.y - WINSIZEY / 2));
 	if (!_Stop)
 	{
@@ -44,7 +51,6 @@ void bossStage::update()
 
 		if (_isBossAppeal)
 		{
-			playerLocation();
 			//enemyLocation();
 			// 셋타일 (처음에 변수가 쓰레기값이므로 여기서 한번만 적용시킴)
 			if (!_setTile)
@@ -59,25 +65,27 @@ void bossStage::update()
 			{
 				resetEverything();
 				_currentTile = _playerTile;
-				while (_numCount == 0 && !_stop) pathFinder(_currentTile);
-				if (Math::GetDistance(_playerTile->getIdx(), _playerTile->getIdy(), _enemyTile->getIdx(), _enemyTile->getIdy()) < 1.5f)
+				while (_numCount <= 0 && !_stop)
 				{
-					resetEverything();
-					this->release();
+					pathFinder(_currentTile);
+					cout << "WW";
+				}
+				if (Math::GetDistance(_playerTile->getIdx(), _playerTile->getIdy(), _enemyTile->getIdx(), _enemyTile->getIdy()) < 1.1f)
+				{
+					//resetEverything();
 					dead->setDead(DEAD_BOSS);
 					dead->update();
-		
+					resetEverything();
 					_stop = true;
 					return;
 				}
 				_follow_count = 0;
 			}
+			playerLocation();
 		}
 	}
 
 	tileCollision();
-	activeTrigger();
-	activeCorr();
 }
 
 void bossStage::render()
@@ -108,45 +116,45 @@ void bossStage::render()
 			for (int j = 0; j < TILEX; j++)
 			{
 				if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
-				//IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(0.5);
-				IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(alpha);
+				//중간에 배치하고 싶다면 이걸쓰세요. 디폴트 센타
 				CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
-					Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top));
+					Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2,
+						_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));
+
+				//오른쪽으로 붙고자 하면 이걸쓰고
+				/*CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
+					Vector2(_tiles[i*TILEX + j].rc.right,
+						_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));*/
+				if(KEYMANAGER->isToggleKey(VK_TAB))
+				if (_tiles[i*TILEX + j].obj == OBJ_CORELATION)CAMERAMANAGER->renderFillRc(_tiles[i*TILEY + j].rc, D2D1::ColorF::Yellow, 0.5);
 			}
-		}
-		dead->render();
-
-}
-
-void bossStage::load()
-{
-	HANDLE file;
-	DWORD read;
-	file = CreateFile("Stage/ElenRoom.map", GENERIC_READ, NULL, NULL,
-		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
-	camera = _tiles->camera;
-	_backGround = IMAGEMANAGER->FindImage(_tiles->backGroundName);
-	cout << _tiles->camera.x;
-	for (int i = 0; i < TILEX*TILEY; i++)
-	{
-		if (_tiles[i].attribute == PLAYER)
-		{
-			_player->setStart(i%TILEX, i / TILEX);
-			break;
-		}
-		if (_tiles[i].attribute == ENEMY)
-		{
-			bossLocX = i % TILEX;
-			bossLocY = i / TILEX;
-		}
-		if (_tiles[i].attribute == OBJ)
-		{
 		
 		}
-	}
 
-	CloseHandle(file);
+		//타일에 프레임 이미지 배치 랜더
+		for (int i = 0; i < _vFrameTile.size(); i++)
+		{
+			if (KEYMANAGER->isToggleKey(VK_TAB))
+			{
+				IMAGEMANAGER->FindImage(_vFrameTile[i].keyName)->SetAlpha(alpha);
+				if (_vFrameTile[i].kinds == PLAYER)  CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::Blue, 0.7);
+				else if (_vFrameTile[i].kinds == ENEMY)  CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::Black, 0.7);
+				else CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::White, 0.7);
+			}
+
+			if (_vFrameTile[i].kinds == PLAYER) continue;
+			if (_vFrameTile[i].kinds == ENEMY)continue;
+			_vFrameTile[i].img->SetAlpha(alpha);
+			CAMERAMANAGER->FrameRender
+			(
+				_vFrameTile[i].img,
+				Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.bottom - _vFrameTile[i].img->GetSize().y / 2),
+				_vFrameTile[i].frameX, _vFrameTile[i].frameY
+			);
+		}
+
+		dead->render();
+
 }
 
 void bossStage::tileCollision()
@@ -177,56 +185,17 @@ void bossStage::tileCollision()
 	}
 }
 
-void bossStage::activeTrigger()
-{
-	for (int i = 0; i < TILEY; i++)
-	{
-		for (int j = 0; j < TILEX; j++)
-		{
-			if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].terrain == TR_TRIGGER&&!_isBossAppeal)
-			{
-				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-				{
-					_boss->init(bossLocX, bossLocY);
-					_isBossAppeal = true;
-				}
-			}
-		}
-	}
 
-}
 
-void bossStage::activeCorr()
-{
-	for (int i = 0; i < TILEY; i++)
-	{
-		for (int j = 0; j < TILEX; j++)
-		{
-			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].obj == OBJ_CORELATION)
-			{
-				_Stop = true;
-				alpha -= 0.01;
-				_player->setAlpha(alpha);
-				_boss->setalpha(alpha);
-				if (alpha <= 0)
-				{
-					SCENEMANAGER->changeScene("Boss2");
-					_boss->setalpha(1);
-					_player->setAlpha(1);
-				}
-			}
-		}
-	}
-}
 
 void bossStage::playerLocation()
 {
-	_playerTile->init(_player->getPlayerLocX()/TILESIZE,
-		_player->getPlayerLocY()/TILESIZE);
+	_playerTile->init((_player->getPlayerLocX()+TILESIZE/2)/TILESIZE,
+		(_player->getPlayerLocY()+TILESIZE/2)/TILESIZE);
 	_playerTile->setAttribute("player");	// astar타일로 플레이어 적용
 }
 
-void bossStage::enemyLocation()
+void bossStage::enemyLocation() 
 {
 	_enemyTile->init(bossLocX,bossLocY);			// astar타일로 지속적인 적용
 	_enemyTile->setAttribute("enemy");			// astar타일로 에너미 적용
@@ -449,6 +418,7 @@ void bossStage::pathFinder(astarTile * currentTile)
 	// ############## 경로 못찾으면 끝내는 함수 #####################
 	if (!changed)
 	{// 아무것도 변경안하고 포문이 무사히(?) 돌았다면 끝낸다
+		cout << "HH";
 		_stop = true;
 		return;
 	}
@@ -456,14 +426,17 @@ void bossStage::pathFinder(astarTile * currentTile)
 	//도착했다면
 	if (tempTile->getAttribute() == "enemy")
 	{
+		cout << "dd";
 		_enemyTile->setAttribute("");
 		_enemyTile->setColor(D2D1::ColorF::White);
 		while (_currentTile->getParentNode() != NULL)
 		{
+			cout << "Cc";
 			++_numCount;
 			_currentTile->setNumber(_numCount); // 숫자를 지정해줄수 있음
 			if (_numCount == 1)
 			{
+				cout << "??";
 				bossLocX = _currentTile->getIdx();
 				bossLocY = _currentTile->getIdy();
 				_vTotalList[bossLocY*TILEX + bossLocX]->setAttribute("enemy");
@@ -487,6 +460,7 @@ void bossStage::pathFinder(astarTile * currentTile)
 	{
 		if (*_viOpenList == tempTile)
 		{
+			cout << "PP";
 			_viOpenList = _vOpenList.erase(_viOpenList);
 			break;
 		}
@@ -494,3 +468,59 @@ void bossStage::pathFinder(astarTile * currentTile)
 	_currentTile = tempTile;
 
 }
+void bossStage::getFrameTile()
+{
+	for (int i = 0; i < TILEY; i++)
+	{
+		for (int j = 0; j < TILEX; j++)
+		{
+			//이미지 정보가 존재하지 않는다면 불필요한 반복문은 건너뛴다.
+			if (!FRAMEINFOMANAGER->GetSize())
+				return;
+
+			if (!FRAMEINFOMANAGER->KeyCheck(_tiles[i*TILEX + j].keyName))
+				continue;
+
+			//렉트 생성
+			FloatRect rc;
+			rc = RectMakePivot(Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top + TILESIZE / 2), Vector2(TILESIZE, TILESIZE), Pivot::Center);
+
+			FRAMEATTRIBUTE tempKinds = FRAMEINFOMANAGER->GetAttribute(_tiles[i*TILEX + j].keyName);
+
+			tagFrameTile temp;
+			temp.rc = rc;
+			temp.kinds = tempKinds;
+			temp.keyName = _tiles[i*TILEX + j].keyName;
+			temp.indexX = i;
+			temp.indexY = j;
+			temp.frameX = 0;
+			temp.frameY = 0;
+			temp.img = FRAMEINFOMANAGER->FindImage(_tiles[i*TILEX + j].keyName);
+
+			_vFrameTile.push_back(temp);
+		}
+	}
+
+}
+
+void bossStage::setFrameIndex()
+{
+	if (_vFrameTile.size() <= 0)
+		return;
+
+	for (int i = 0; i < _vFrameTile.size(); i++)
+	{
+		if (_vFrameTile[i].isMaxframe)
+		{
+			_vFrameTile[i].frameX = FRAMEINFOMANAGER->FindImage(_vFrameTile[i].keyName)->GetMaxFrameX() - 1;
+			_vFrameTile[i].frameY = FRAMEINFOMANAGER->FindImage(_vFrameTile[i].keyName)->GetMaxFrameY() - 1;
+			continue;
+		}
+
+		Vector2 temp;
+		temp = FRAMEINFOMANAGER->FrameOperation(_vFrameTile[i].keyName, Vector2(_vFrameTile[i].frameX, _vFrameTile[i].frameY), _vFrameTile[i].isTrigger);
+		_vFrameTile[i].frameX = temp.x;
+		_vFrameTile[i].frameY = temp.y;
+	}
+}
+

@@ -37,7 +37,7 @@ HRESULT playGround::init()
 	//SCENEMANAGER->changeScene("entranceFake");
 
 	//SCENEMANAGER->changeScene("prison_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
-	SCENEMANAGER->changeScene("시작화면");
+	SCENEMANAGER->changeScene("BossStage1");
 	SOUNDMANAGER->play("main");
 
 	
@@ -107,9 +107,11 @@ void playGround::addScene()
 	SCENEMANAGER->addScene("성앞", new castlefront);
 
 	//보스씬 관련
-	SCENEMANAGER->addScene("BossStage", _bossStage);
-	SCENEMANAGER->addScene("Boss2", _bossStage_2);
-
+	SCENEMANAGER->addScene("BossStage1", _bossStage_1);
+	SCENEMANAGER->addScene("BossStage2", _bossStage_2);
+	SCENEMANAGER->addScene("BossStage3", _bossStage_3);
+	SCENEMANAGER->addScene("BossStage4", _bossStage_4);
+	SCENEMANAGER->addScene("BossStage5", _bossStage_5);
 	//1층
 	SCENEMANAGER->addScene("entranceFake", _entranceFakeStage);
 	SCENEMANAGER->addScene("entranceTrap", _entranceTrapStage);
@@ -188,10 +190,16 @@ void playGround::addFrameImg()
 void playGround::addressLink()
 {
 	_player = new Player;
-	_bossStage = new bossStage;
+	_bossStage_1 = new bossStage_1;
 	_bossStage_2 = new bossStage_2;
-	_bossStage->addresslink(_player);
+	_bossStage_1->addresslink(_player);
 	_bossStage_2->addresslink(_player);
+	_bossStage_3 = new bossStage_3;
+	_bossStage_3->addresslink(_player);
+	_bossStage_4 = new bossStage_4;
+	_bossStage_4->addresslink(_player);
+	_bossStage_5 = new bossStage_5;
+	_bossStage_5->addresslink(_player);
 
 	_entranceFakeStage = new entranceFake;
 	_entranceTrapStage = new entranceTrap;
