@@ -35,7 +35,7 @@ HRESULT playGround::init()
 	//SCENEMANAGER->changeScene("entranceFake");
 
 	//SCENEMANAGER->changeScene("stage1_1");
-	SCENEMANAGER->changeScene("3Ãş°³±¸¸®¹æ");
+	SCENEMANAGER->changeScene("garden_5f");
 	/////////////////UI ÀÏ´Ü ÁÖ¼®Ã³¸®/////////////
 	//addScene();
 	//SCENEMANAGER->changeScene("½ÃÀÛÈ­¸é");
@@ -119,6 +119,14 @@ void playGround::addScene()
 	SCENEMANAGER->addScene("3ÃşÃ¹¹øÂ°µ¥µå¾À", new thirdFloorDead);
 	SCENEMANAGER->addScene("3Ãş°³±¸¸®¹æ", new thirdFrogRoom);
 	//SCENEMANAGER->addScene("3ÃşµÎ¹øÂ°µ¥µå¾À", new thirdFloorDead);
+
+	//5Ãş
+	SCENEMANAGER->addScene("garden_5f", _garden_5f_Stage);
+	SCENEMANAGER->addScene("gardenToBoss_5f", _gardenToBoss_5f_Stage);
+	SCENEMANAGER->addScene("diningRoom_5f", _dining_5f_Stage);
+	SCENEMANAGER->addScene("prison_5f", _prison_5f_Stage);
+	SCENEMANAGER->addScene("prison_well_5f", _prison_well_5f_Stage);
+	SCENEMANAGER->addScene("prison_skul_5f", _prison_skul_5f_Stage);
 }
 
 void playGround::addFrameImg()
@@ -192,4 +200,18 @@ void playGround::addressLink()
 	_bearRoomStage->addresslink(_player);
 	_boxRoomStage->addresslink(_player);
 	_scissorsRoomStage->addresslink(_player);
+
+	// 5Ãş ÇÃ·¹ÀÌ¾î ¸µÅ©
+	_garden_5f_Stage = new garden_5f;
+	_gardenToBoss_5f_Stage = new gardenToBoss_5f;
+	_dining_5f_Stage = new diningRoom_5f;
+	_prison_5f_Stage = new prison_5f;
+	_prison_well_5f_Stage = new prison_5f_well;
+	_prison_skul_5f_Stage = new prison_5f_skul;
+	_garden_5f_Stage->addresslink(_player);
+	_dining_5f_Stage->addresslink(_player);
+	_prison_5f_Stage->addresslink(_player);
+	_prison_well_5f_Stage->addresslink(_player);
+	_prison_skul_5f_Stage->addresslink(_player);
+	_gardenToBoss_5f_Stage->addresslink(_player);
 }

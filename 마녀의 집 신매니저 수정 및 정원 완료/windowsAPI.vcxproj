@@ -154,6 +154,7 @@
     <ClInclude Include="boss.h" />
     <ClInclude Include="bossStage.h" />
     <ClInclude Include="bossStage_2.h" />
+    <ClInclude Include="bossStage_3.h" />
     <ClInclude Include="boxRoom.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="castlefront.h" />
@@ -161,10 +162,13 @@
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="D2DRenderer.h" />
     <ClInclude Include="DASH.h" />
+    <ClInclude Include="DeadManager.h" />
     <ClInclude Include="dictionary.h" />
+    <ClInclude Include="diningRoom_5f.h" />
     <ClInclude Include="entrance.h" />
     <ClInclude Include="entranceFake.h" />
     <ClInclude Include="entranceTrap.h" />
+    <ClInclude Include="fifthFloorStage.h" />
     <ClInclude Include="Figure.h" />
     <ClInclude Include="firstFloorStage.h" />
     <ClInclude Include="FloatEllipse.h" />
@@ -172,7 +176,9 @@
     <ClInclude Include="frameInfoManager.h" />
     <ClInclude Include="gameNode.h" />
     <ClInclude Include="garDen.h" />
+    <ClInclude Include="gardenToBoss_5f.h" />
     <ClInclude Include="garDenUnder.h" />
+    <ClInclude Include="garden_5f.h" />
     <ClInclude Include="hallway.h" />
     <ClInclude Include="IDLE.h" />
     <ClInclude Include="image.h" />
@@ -186,6 +192,9 @@
     <ClInclude Include="menu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="playGround.h" />
+    <ClInclude Include="prison_5f.h" />
+    <ClInclude Include="prison_5f_skul.h" />
+    <ClInclude Include="prison_5f_well.h" />
     <ClInclude Include="randomFunction.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="sceneManager.h" />
@@ -219,6 +228,7 @@
     <ClCompile Include="boss.cpp" />
     <ClCompile Include="bossStage.cpp" />
     <ClCompile Include="bossStage_2.cpp" />
+    <ClCompile Include="bossStage_3.cpp" />
     <ClCompile Include="boxRoom.cpp" />
     <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="castlefront.cpp" />
@@ -226,9 +236,12 @@
     <ClCompile Include="D2DRenderer+Draw.cpp" />
     <ClCompile Include="D2DRenderer.cpp" />
     <ClCompile Include="DASH.cpp" />
+    <ClCompile Include="DeadManager.cpp" />
+    <ClCompile Include="diningRoom_5f.cpp" />
     <ClCompile Include="entrance.cpp" />
     <ClCompile Include="entranceFake.cpp" />
     <ClCompile Include="entranceTrap.cpp" />
+    <ClCompile Include="fifthFloorStage.cpp" />
     <ClCompile Include="Figure.cpp" />
     <ClCompile Include="firstFloorStage.cpp" />
     <ClCompile Include="FloatEllipse.cpp" />
@@ -236,7 +249,9 @@
     <ClCompile Include="frameInfoManager.cpp" />
     <ClCompile Include="gameNode.cpp" />
     <ClCompile Include="garDen.cpp" />
+    <ClCompile Include="gardenToBoss_5f.cpp" />
     <ClCompile Include="garDenUnder.cpp" />
+    <ClCompile Include="garden_5f.cpp" />
     <ClCompile Include="hallway.cpp" />
     <ClCompile Include="IDLE.cpp" />
     <ClCompile Include="image.cpp" />
@@ -249,6 +264,9 @@
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="playGround.cpp" />
+    <ClCompile Include="prison_5f.cpp" />
+    <ClCompile Include="prison_5f_skul.cpp" />
+    <ClCompile Include="prison_5f_well.cpp" />
     <ClCompile Include="sceneManager.cpp" />
     <ClCompile Include="scissorsRoom.cpp" />
     <ClCompile Include="skul.cpp" />

@@ -21,6 +21,12 @@
 #include "third3.h"
 #include "thirdFloorDead.h"
 #include "thirdFrogRoom.h"
+#include "garden_5f.h"
+#include "gardenToBoss_5f.h"
+#include "diningRoom_5f.h"
+#include "prison_5f.h"
+#include "prison_5f_well.h"
+#include "prison_5f_skul.h"
 
 
 class playGround : public gameNode
@@ -43,6 +49,13 @@ private:
 	firstFloorStage* _bearRoomStage;
 	firstFloorStage* _boxRoomStage;
 	firstFloorStage* _scissorsRoomStage;
+
+	fifthFloorStage* _garden_5f_Stage;
+	fifthFloorStage* _gardenToBoss_5f_Stage;
+	fifthFloorStage* _dining_5f_Stage;
+	fifthFloorStage* _prison_5f_Stage;
+	fifthFloorStage* _prison_well_5f_Stage;
+	fifthFloorStage* _prison_skul_5f_Stage;
 public:
 	playGround();
 	~playGround();

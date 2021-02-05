@@ -12,6 +12,7 @@
 #include <memory.h>
 #include <tchar.h>
 #include <assert.h>
+#include <atlconv.h>			// wstring으로 변환위한 함수
 
 #include <vector>
 #include <map>

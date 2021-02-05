@@ -1,16 +1,6 @@
 #include "stdafx.h"
 #include "txtData.h"
 
-
-txtData::txtData()
-{
-}
-
-
-txtData::~txtData()
-{
-}
-
 HRESULT txtData::init()
 {
 	return S_OK;
@@ -20,7 +10,7 @@ void txtData::release()
 {
 }
 
-void txtData::txtSave(const char * saveFileName, vector<string> vStr)
+void txtData::txtSave(const char* saveFileName, vector<string> vStr)
 {
 	HANDLE file;
 	DWORD write;
@@ -31,11 +21,9 @@ void txtData::txtSave(const char * saveFileName, vector<string> vStr)
 
 	file = CreateFile(saveFileName, GENERIC_WRITE, NULL, NULL,
 		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-
 	WriteFile(file, str, 128, &write, NULL);
 
 	CloseHandle(file);
-
 }
 
 char* txtData::vectorArrayCombine(vector<string> vArray)
@@ -43,28 +31,29 @@ char* txtData::vectorArrayCombine(vector<string> vArray)
 	char str[128];
 	ZeroMemory(str, sizeof(str));
 
-	//우주선 X좌표 20
-	//우주선 Y좌표 40
-	//우주선 체력 100
-	//벡터 사이즈 3
-	//20,40,100
+	//스페이스 쉽 X 좌표 100
+	//스페이스 쉽 Y 좌표 330
+	//스페이스 쉽 현재 체력 80
+	//스페이스 쉽 최대 체력 100
+
 	for (int i = 0; i < vArray.size(); ++i)
 	{
+		//
 		strncat_s(str, 128, vArray[i].c_str(), 126);
 		if (i + 1 < vArray.size()) strcat_s(str, ",");
+		//100, 330, 80, 100
 	}
-
 
 	return str;
 }
 
-vector<string> txtData::txtLoad(const char * loadFileName)
+vector<string> txtData::txtLoad(const char* loadFileName)
 {
 	HANDLE file;
 	DWORD read;
 
 	char str[128];
-	
+
 	file = CreateFile(loadFileName, GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -72,10 +61,28 @@ vector<string> txtData::txtLoad(const char * loadFileName)
 
 	CloseHandle(file);
 
-	
-
 	return charArraySeparation(str);
 }
+vector<string> txtData::txtLoad(const char * loadFileName, const char * ch)
+{
+	HANDLE file;
+	DWORD read;
+
+	char str[1000];
+	ZeroMemory(str, sizeof(str));
+
+	file = CreateFile(loadFileName, GENERIC_READ, NULL, NULL,
+		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	ReadFile(file, str, 1000, &read, NULL);
+
+	CloseHandle(file);
+
+
+
+	return charArraySeparation(str, ch);
+}
+
 
 vector<string> txtData::charArraySeparation(char charArray[])
 {
@@ -85,11 +92,28 @@ vector<string> txtData::charArraySeparation(char charArray[])
 	const char* separator = ",";
 	char* token;
 
-	//우주선 X좌표 20
-	//우주선 Y좌표 40
-	//우주선 체력 100
-	//벡터 사이즈 3
-	//20,40,100
+	token = strtok_s(charArray, separator, &temp);
+
+	vArray.push_back(token);
+
+	while (NULL != (token = strtok_s(NULL, separator, &temp)))
+	{
+		vArray.push_back(token);
+	}
+	//스페이스 쉽 X 좌표 100
+	//스페이스 쉽 Y 좌표 330
+	//스페이스 쉽 현재 체력 80
+	//스페이스 쉽 최대 체력 100
+	return vArray;
+}
+
+vector<string> txtData::charArraySeparation(char charArray[], const char * ch)
+{
+	vector<string> vArray;
+
+	char* temp;
+	const char* separator = ch;
+	char* token;
 
 	token = strtok_s(charArray, separator, &temp);
 
@@ -100,6 +124,50 @@ vector<string> txtData::charArraySeparation(char charArray[])
 		vArray.push_back(token);
 	}
 
-
 	return vArray;
+}
+bool txtData::canLoadFile(const char * loadFileName)
+{
+	HANDLE file;
+	DWORD read;
+
+	char str[128];
+
+	file = CreateFile(loadFileName, GENERIC_READ, NULL, NULL,
+		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	ReadFile(file, str, 128, &read, NULL);
+
+	CloseHandle(file);
+
+	char* ptr = strchr(str, ',');
+
+	if (ptr != NULL)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool txtData::canLoadFile(const char * loadFileName, char ch)
+{
+	HANDLE file;
+	DWORD read;
+
+	char str[700];
+
+	file = CreateFile(loadFileName, GENERIC_READ, NULL, NULL,
+		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	ReadFile(file, str, 700, &read, NULL);
+
+	CloseHandle(file);
+
+	char* ptr = strchr(str, ch);
+
+	if (ptr != NULL)
+	{
+		return true;
+	}
+	return false;
 }

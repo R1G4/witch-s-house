@@ -1,0 +1,33 @@
+#pragma once
+#include "fifthFloorStage.h"
+
+class diningRoom_5f : public fifthFloorStage
+{
+	enum TRIGGER
+	{
+		DOORTOGARDEN = 34 + 14 * TILEX,
+		DOORTODININGROOMITEM = 29 + 19 * TILEX,
+		DROPFLOWER = 22 + 13 * TILEX,
+		Y_FLOWER_1 = 27 + 12 * TILEX,
+		Y_FLOWER_2 = 28 + 14 * TILEX,
+		Y_FLOWER_3 = 26 + 16 * TILEX,
+		Y_FLOWER_4 = 24 + 14 * TILEX,
+		CLOCK = 26 + 7 * TILEX,
+		LIGHT = 17 + 14 * TILEX
+	};
+
+	TRIGGER _trigger;
+public:
+	diningRoom_5f() {};
+	~diningRoom_5f() {};
+
+	HRESULT init();
+	void release();
+	void update();
+	void render();
+	void Collision();
+	void load();
+
+	void setTrigger();
+};
+

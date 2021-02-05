@@ -64,6 +64,9 @@
     <Filter Include="playGround\scense\ThirdFloor">
       <UniqueIdentifier>{263c6fb6-01d9-4b42-b794-eb1390cc03e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\scense\FithFloor">
+      <UniqueIdentifier>{576a824b-273c-47f3-9614-7bb466fa792e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -255,6 +258,33 @@
     <ClInclude Include="third3.h">
       <Filter>playGround\scense\ThirdFloor</Filter>
     </ClInclude>
+    <ClInclude Include="prison_5f.h">
+      <Filter>playGround\scense\FithFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="prison_5f_skul.h">
+      <Filter>playGround\scense\FithFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="prison_5f_well.h">
+      <Filter>playGround\scense\FithFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="garden_5f.h">
+      <Filter>playGround\scense\FithFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="gardenToBoss_5f.h">
+      <Filter>playGround\scense\FithFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="fifthFloorStage.h">
+      <Filter>playGround\scense\FithFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="diningRoom_5f.h">
+      <Filter>playGround\scense\FithFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="DeadManager.h">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="bossStage_3.h">
+      <Filter>playGround\scense\BossStage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -427,6 +457,33 @@
     </ClCompile>
     <ClCompile Include="third3.cpp">
       <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="prison_5f.cpp">
+      <Filter>playGround\scense\FithFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="prison_5f_skul.cpp">
+      <Filter>playGround\scense\FithFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="prison_5f_well.cpp">
+      <Filter>playGround\scense\FithFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="garden_5f.cpp">
+      <Filter>playGround\scense\FithFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="gardenToBoss_5f.cpp">
+      <Filter>playGround\scense\FithFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="fifthFloorStage.cpp">
+      <Filter>playGround\scense\FithFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="diningRoom_5f.cpp">
+      <Filter>playGround\scense\FithFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="DeadManager.cpp">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="bossStage_3.cpp">
+      <Filter>playGround\scense\BossStage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
