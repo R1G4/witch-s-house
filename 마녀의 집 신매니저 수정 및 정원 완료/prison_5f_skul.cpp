@@ -2,12 +2,12 @@
 #include "prison_5f_skul.h"
 #include "Player.h"
 
-HRESULT prison_5f_skul::init()
+HRESULT prison_5f_skul::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
-	_player->setDirec(CHRDIREC_RIGHT);
+	_player->setDirec(_chrdirection);
 
 	//타일 불러오기
-	load();
+	load(_location);
 
 	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
 	fifthFloorStage::init();
@@ -46,7 +46,7 @@ void prison_5f_skul::Collision()
 {
 }
 
-void prison_5f_skul::load()
+void prison_5f_skul::load(LOCATION _location)
 {
 	HANDLE file;
 	DWORD read;
@@ -57,12 +57,16 @@ void prison_5f_skul::load()
 	camera = _tiles->camera;
 	for (int i = 0; i < TILEX*TILEY; i++)
 	{
-		if (_tiles[i].attribute == PLAYER)
-		{
-			_player->setStart(i % TILEX + 1, i / TILEX);
+		if (_tiles[i].attribute != PLAYER) continue;
 
+		//초기 위치를 잡아준다.
+		switch (_location)
+		{
+		case LOCATION_DEFAULT: default:
+			_player->setStart(i % TILEX, i / TILEX);
 			break;
 		}
+		break;
 	}
 	CloseHandle(file);
 }
@@ -101,7 +105,8 @@ void prison_5f_skul::setTrigger()
 		IntersectRectToRect(&_tiles[DOORTOPRISON + 1].rc, &_player->getPlayerFrc()) ||
 		IntersectRectToRect(&_tiles[DOORTOPRISON - 1].rc, &_player->getPlayerFrc()))
 	{
-		sceneChange("prison_5f");
+		_isChangeScene = true;
+		sceneChange("prison_5f", CHRDIREC_LEFT, LOCATION_1);
 		cout << "감옥으로!" << endl;
 	}
 }

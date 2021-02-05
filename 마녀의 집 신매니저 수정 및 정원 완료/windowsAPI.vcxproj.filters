@@ -303,6 +303,9 @@
     <ClInclude Include="levelChoiceScene.h">
       <Filter>playGround\UI</Filter>
     </ClInclude>
+    <ClInclude Include="textMananger.h">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -517,6 +520,9 @@
     </ClCompile>
     <ClCompile Include="levelChoiceScene.cpp">
       <Filter>playGround\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="textMananger.cpp">
+      <Filter>2DGameFramework\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

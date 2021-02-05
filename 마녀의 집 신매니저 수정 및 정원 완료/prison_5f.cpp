@@ -2,12 +2,12 @@
 #include "prison_5f.h"
 #include "Player.h"
 
-HRESULT prison_5f::init()
+HRESULT prison_5f::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
-	_player->setDirec(CHRDIREC_RIGHT);
+	_player->setDirec(_chrdirection);
 
 	//타일 불러오기
-	load();
+	load(_location);
 
 	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
 	fifthFloorStage::init();
@@ -17,20 +17,29 @@ HRESULT prison_5f::init()
 
 void prison_5f::release()
 {
-	_player->release();
-	_vFrameTile.clear();
 }
 
 void prison_5f::update()
 {
-	fifthFloorStage::update();
-	//_player->update();
-	setFrameIndex();
+	if (!_isStopToRead)
+	{
+		fifthFloorStage::update();
+		//_player->update();
+		setFrameIndex();
 
-	//카메라 관련 업데이트
-	cameraUpdate();
+		//카메라 관련 업데이트
+		cameraUpdate();
 
-	setTrigger();
+		setTrigger();
+	}
+	else
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))	// 클릭행동 트리거
+		{
+			_isStopToRead = TEXTMANAGER->setNextScript(true);
+		}
+	}
+
 	//cout << "x : " << (int)(_player->getPlayerLocX()) / TILESIZE << " y : " << (int)(_player->getPlayerLocY()) / TILESIZE << endl;
 }
 
@@ -43,13 +52,16 @@ void prison_5f::render()
 			IMAGEMANAGER->FindImage("배경65")->GetSize().y / 2));
 
 	fifthFloorStage::render();
+
+	if (_isStopToRead)
+		TEXTMANAGER->renderText();
 }
 
 void prison_5f::Collision()
 {
 }
 
-void prison_5f::load()
+void prison_5f::load(LOCATION _location)
 {
 	HANDLE file;
 	DWORD read;
@@ -60,12 +72,22 @@ void prison_5f::load()
 	camera = _tiles->camera;
 	for (int i = 0; i < TILEX*TILEY; i++)
 	{
-		if (_tiles[i].attribute == PLAYER)
-		{
-			_player->setStart(i % TILEX + 1, i / TILEX);
+		if (_tiles[i].attribute != PLAYER) continue;
 
+		//초기 위치를 잡아준다.
+		switch (_location)
+		{
+		case LOCATION_1:
+			_player->setStart((DOORTOPRISONSKUL - 1) % TILEX, (DOORTOPRISONSKUL - 1) / TILEX);
+			break;
+		case LOCATION_2:
+			_player->setStart((DOORTOPRISONWELL + TILEX) % TILEX, (DOORTOPRISONWELL + TILEX) / TILEX);
+			break;
+		case LOCATION_DEFAULT: default:
+			_player->setStart(i % TILEX, i / TILEX);
 			break;
 		}
+		break;
 	}
 	CloseHandle(file);
 }
@@ -74,21 +96,31 @@ void prison_5f::setTrigger()
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))	// 클릭행동 트리거
 	{
+		_isStopToRead = TEXTMANAGER->setNextScript(true);
+
 		if (IntersectRectToRect(&_tiles[R_FLOWER_1].rc, &_player->getSearchRc()))
 		{
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_flower_1.txt");
 			cout << "꽃1!" << endl;
+			_isStopToRead = true;
 		}
 		if (IntersectRectToRect(&_tiles[R_FLOWER_2].rc, &_player->getSearchRc()))
 		{
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_flower_1.txt");
 			cout << "꽃2!" << endl;
+			_isStopToRead = true;
 		}
 		if (IntersectRectToRect(&_tiles[R_FLOWER_3].rc, &_player->getSearchRc()))
 		{
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_flower_2.txt");
 			cout << "꽃3!" << endl;
+			_isStopToRead = true;
 		}
 		if (IntersectRectToRect(&_tiles[BOOK].rc, &_player->getSearchRc()))
 		{
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_book.txt");
 			cout << "책!" << endl;
+			_isStopToRead = true;
 		}
 		if (IntersectRectToRect(&_tiles[PAPER].rc, &_player->getSearchRc()))
 		{
@@ -107,19 +139,22 @@ void prison_5f::setTrigger()
 	if (IntersectRectToRect(&_tiles[DOORTOGARDEN].rc, &_player->getPlayerFrc()) ||
 		IntersectRectToRect(&_tiles[DOORTOGARDEN + TILEX].rc, &_player->getPlayerFrc()))
 	{
-		sceneChange("garden_5f");
+		_isChangeScene = true;
+		sceneChange("garden_5f", CHRDIREC_LEFT, LOCATION_3);
 		cout << "정원으로!" << endl;
 	}
 	if (IntersectRectToRect(&_tiles[DOORTOPRISONWELL].rc, &_player->getPlayerFrc()) ||
 		IntersectRectToRect(&_tiles[DOORTOPRISONWELL + 1].rc, &_player->getPlayerFrc()))
 	{
-		sceneChange("prison_well_5f");
+		_isChangeScene = true;
+		sceneChange("prison_well_5f", CHRDIREC_UP, LOCATION_DEFAULT);
 		cout << "우물로!" << endl;
 	}
 	if (IntersectRectToRect(&_tiles[DOORTOPRISONSKUL].rc, &_player->getPlayerFrc()) ||
 		IntersectRectToRect(&_tiles[DOORTOPRISONSKUL + TILEX].rc, &_player->getPlayerFrc()))
 	{
-		sceneChange("prison_skul_5f");
+		_isChangeScene = true;
+		sceneChange("prison_skul_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
 		cout << "해골방으로!" << endl;
 	}
 }

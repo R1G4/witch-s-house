@@ -5,7 +5,7 @@ class prison_5f_skul : public fifthFloorStage
 private:
 	enum TRIGGER
 	{
-		DOORTOPRISON = 16 + 8 * TILEX,
+		DOORTOPRISON = 15 + 8 * TILEX,
 		SKUL_1 = 20 + 6 * TILEX,
 		SKUL_2 = 20 + 10 * TILEX,
 		SKUL_3 = 24 + 10 * TILEX,
@@ -19,12 +19,12 @@ public:
 	prison_5f_skul() {};
 	~prison_5f_skul() {};
 
-	HRESULT init();
+	HRESULT init(CHRDIRECTION _chrdirection = CHRDIREC_UP, LOCATION _location = LOCATION_DEFAULT);
 	void release();
 	void update();
 	void render();
 	void Collision();
-	void load();
+	void load(LOCATION location = LOCATION_DEFAULT);
 
 	void setTrigger();
 };

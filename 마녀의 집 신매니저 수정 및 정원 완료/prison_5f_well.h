@@ -15,12 +15,12 @@ public:
 	prison_5f_well() {};
 	~prison_5f_well() {};
 
-	HRESULT init();
+	HRESULT init(CHRDIRECTION _chrdirection = CHRDIREC_UP, LOCATION _location = LOCATION_DEFAULT);
 	void release();
 	void update();
 	void render();
 	void Collision();
-	void load();
+	void load(LOCATION location = LOCATION_DEFAULT);
 
 	void setTrigger();
 };

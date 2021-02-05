@@ -19,6 +19,8 @@ protected:
 	//케뭬라
 	Vector2 camera;
 
+	bool _isChangeScene;
+
 	Player* _player;
 	int _frameInterval;
 	bool isTrigger;
@@ -37,6 +39,7 @@ public:
 	void setFrameIndex();			// 배치된 프레임 이미지의 인덱스 설정 
 	void tileCollision();
 	void sceneChange(string name);
+	void sceneChange(string name, CHRDIRECTION _chrdirection, LOCATION _location);
 	void addresslink(Player* player) { _player = player; }
 
 	wstring stringToWstring(string src)

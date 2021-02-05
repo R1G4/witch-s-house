@@ -22,7 +22,8 @@ void fifthFloorStage::release()
 
 void fifthFloorStage::update()
 {
-	_player->update();
+	if(!_isChangeScene)
+		_player->update();
 	tileCollision();
 }
 
@@ -239,7 +240,22 @@ void fifthFloorStage::sceneChange(string name)
 	_player->setAlpha(_sceneAlpha);
 	if (_sceneAlpha <= 0.f)
 	{
+		_isChangeScene = false;
 		_player->release();
+		_vFrameTile.clear();
 		SCENEMANAGER->changeScene(name);
+	}
+}
+
+void fifthFloorStage::sceneChange(string name, CHRDIRECTION _chrdirection, LOCATION _location)
+{
+	_sceneAlpha -= 0.012f;
+	_player->setAlpha(_sceneAlpha);
+	if (_sceneAlpha <= 0.f)
+	{
+		_isChangeScene = false;
+		_player->release();
+		_vFrameTile.clear();
+		SCENEMANAGER->changeScene(name, _chrdirection, _location);
 	}
 }

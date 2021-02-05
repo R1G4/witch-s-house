@@ -36,7 +36,7 @@ HRESULT playGround::init()
 	//SCENEMANAGER->changeScene("성앞");
 	//SCENEMANAGER->changeScene("entranceFake");
 
-	//SCENEMANAGER->changeScene("stage1_1");
+	//SCENEMANAGER->changeScene("prison_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
 	SCENEMANAGER->changeScene("시작화면");
 	SOUNDMANAGER->play("main");
 

@@ -2,12 +2,12 @@
 #include "garden_5f.h"
 #include "player.h"
 
-HRESULT garden_5f::init()
+HRESULT garden_5f::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
-	_player->setDirec(CHRDIREC_UP);
+	_player->setDirec(_chrdirection);
 
 	//타일 불러오기
-	load();
+	load(_location);
 
 	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
 	fifthFloorStage::init();
@@ -21,15 +21,15 @@ void garden_5f::release()
 
 void garden_5f::update()
 {
+	
 	fifthFloorStage::update();
-	//_player->update();
+
 	setFrameIndex();
 
 	//카메라 관련 업데이트
 	cameraUpdate();
 
 	setTrigger();
-
 	//cout << "x : " << (int)(_player->getPlayerLocX()) / TILESIZE << " y : " << (int)(_player->getPlayerLocY()) / TILESIZE << endl;
 }
 
@@ -50,7 +50,7 @@ void garden_5f::Collision()
 {
 }
 
-void garden_5f::load()
+void garden_5f::load(LOCATION _location)
 {
 	HANDLE file;
 	DWORD read;
@@ -61,12 +61,25 @@ void garden_5f::load()
 	camera = _tiles->camera;
 	for (int i = 0; i < TILEX*TILEY; i++)
 	{
-		if (_tiles[i].attribute == PLAYER)
-		{
-			_player->setStart(i % TILEX, i / TILEX);
+		if (_tiles[i].attribute != PLAYER) continue;
 
+		//초기 위치를 잡아준다.
+		switch (_location)
+		{
+		case LOCATION_1:
+			_player->setStart((DOORTODININGROOM + 1) % TILEX, (DOORTODININGROOM + 1) / TILEX);
+			break;
+		case LOCATION_2:
+			_player->setStart((DOORTOGARDENTOBOSS + TILEX) % TILEX, (DOORTOGARDENTOBOSS + TILEX) / TILEX);
+			break;		
+		case LOCATION_3:
+			_player->setStart((DOORTOPRISON - 1) % TILEX, (DOORTOPRISON - 1) / TILEX);
+			break;
+		case LOCATION_DEFAULT: default:
+			_player->setStart(i%TILEX, i / TILEX);
 			break;
 		}
+		break;
 	}
 	CloseHandle(file);
 }
@@ -90,22 +103,26 @@ void garden_5f::setTrigger()
 		}
 	}
 
+	//cout << _vFrameTile[1].keyName << endl;
 	if (IntersectRectToRect(&_tiles[DOORTOGARDENTOBOSS].rc, &_player->getPlayerFrc()))
 	{
-		_vFrameTile[0].isTrigger = true;
-		sceneChange("gardenToBoss_5f");
+		_isChangeScene = true;
+		_vFrameTile[1].isTrigger = true;
+		sceneChange("gardenToBoss_5f", CHRDIREC_UP, LOCATION_DEFAULT);
 		cout << "보스로!" << endl;
 	}
 	if (IntersectRectToRect(&_tiles[DOORTOPRISON].rc, &_player->getPlayerFrc()) ||
 		IntersectRectToRect(&_tiles[DOORTOPRISON + TILEX].rc, &_player->getPlayerFrc()))
 	{
-		sceneChange("prison_5f");
+		_isChangeScene = true;
+		sceneChange("prison_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
 		cout << "감옥으로!" << endl;
 	}
 	if (IntersectRectToRect(&_tiles[DOORTODININGROOM].rc, &_player->getPlayerFrc()) ||
 		IntersectRectToRect(&_tiles[DOORTODININGROOM + TILEX].rc, &_player->getPlayerFrc()))
 	{
-		sceneChange("diningRoom_5f");
+		_isChangeScene = true;
+		sceneChange("diningRoom_5f", CHRDIREC_LEFT, LOCATION_DEFAULT);
 		cout << "안방으로!" << endl;
 	}
 }

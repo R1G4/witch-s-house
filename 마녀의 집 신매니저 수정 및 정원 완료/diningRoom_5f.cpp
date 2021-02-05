@@ -2,12 +2,12 @@
 #include "diningRoom_5f.h"
 #include "Player.h"
 
-HRESULT diningRoom_5f::init()
+HRESULT diningRoom_5f::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
 	_player->setDirec(CHRDIREC_LEFT);
 
 	//타일 불러오기
-	load();
+	load(_location);
 
 	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
 	fifthFloorStage::init();
@@ -47,7 +47,7 @@ void diningRoom_5f::Collision()
 {
 }
 
-void diningRoom_5f::load()
+void diningRoom_5f::load(LOCATION _location)
 {
 	HANDLE file;
 	DWORD read;
@@ -58,12 +58,16 @@ void diningRoom_5f::load()
 	camera = _tiles->camera;
 	for (int i = 0; i < TILEX*TILEY; i++)
 	{
-		if (_tiles[i].attribute == PLAYER)
-		{
-			_player->setStart(i % TILEX, i / TILEX);
+		if (_tiles[i].attribute != PLAYER) continue;
 
+		//초기 위치를 잡아준다.
+		switch (_location)
+		{
+		case LOCATION_DEFAULT: default:
+			_player->setStart(i%TILEX, i / TILEX);
 			break;
 		}
+		break;
 	}
 	CloseHandle(file);
 }
@@ -105,7 +109,8 @@ void diningRoom_5f::setTrigger()
 	if (IntersectRectToRect(&_tiles[DOORTOGARDEN].rc, &_player->getPlayerFrc()) ||
 		IntersectRectToRect(&_tiles[DOORTOGARDEN + TILEX].rc, &_player->getPlayerFrc()))
 	{
-		sceneChange("garden_5f");
+		_isChangeScene = true;
+		sceneChange("garden_5f", CHRDIREC_RIGHT, LOCATION_1);
 		cout << "정원으로!" << endl;
 	}
 	if (IntersectRectToRect(&_tiles[DROPFLOWER].rc, &_player->getPlayerFrc()))

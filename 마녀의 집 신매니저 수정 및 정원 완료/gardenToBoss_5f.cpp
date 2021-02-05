@@ -2,12 +2,12 @@
 #include "gardenToBoss_5f.h"
 #include "Player.h"
 
-HRESULT gardenToBoss_5f::init()
+HRESULT gardenToBoss_5f::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
-	_player->setDirec(CHRDIREC_UP);
+	_player->setDirec(_chrdirection);
 
 	//타일 불러오기
-	load();
+	load(_location);
 
 	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
 	fifthFloorStage::init();
@@ -52,7 +52,7 @@ void gardenToBoss_5f::Collision()
 {
 }
 
-void gardenToBoss_5f::load()
+void gardenToBoss_5f::load(LOCATION _location)
 {
 	HANDLE file;
 	DWORD read;
@@ -63,12 +63,16 @@ void gardenToBoss_5f::load()
 	camera = _tiles->camera;
 	for (int i = 0; i < TILEX*TILEY; i++)
 	{
-		if (_tiles[i].attribute == PLAYER)
-		{
-			_player->setStart(i % TILEX+1, i / TILEX);
+		if (_tiles[i].attribute != PLAYER) continue;
 
+		//초기 위치를 잡아준다.
+		switch (_location)
+		{
+		case LOCATION_DEFAULT: default:
+			_player->setStart(i % TILEX, i / TILEX);
 			break;
 		}
+		break;
 	}
 	CloseHandle(file);
 }
@@ -94,6 +98,7 @@ void gardenToBoss_5f::setTrigger()
 
 	if (IntersectRectToRect(&_tiles[DOORTOBOSS].rc, &_player->getPlayerFrc()))
 	{
+		_isChangeScene = true;
 		_vFrameTile[0].isTrigger = true;
 		sceneChange("BossStage");
 		fifthFloorStage::release();
@@ -101,7 +106,8 @@ void gardenToBoss_5f::setTrigger()
 	}
 	if (IntersectRectToRect(&_tiles[DOORTOGARDEN].rc, &_player->getPlayerFrc()))
 	{
-		sceneChange("garden_5f");
+		_isChangeScene = true;
+		sceneChange("garden_5f", CHRDIREC_DOWN, LOCATION_2);
 		cout << "가든으로!" << endl;
 	}
 }

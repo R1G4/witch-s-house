@@ -9,7 +9,7 @@ private:
 		DOORTO4F = 21 + 6 * TILEX,
 		DOORTODININGROOM = 16 + 16 * TILEX,
 		DOORTOPRISON = 30 + 16 * TILEX,
-		DOORTOGARDENTOBOSS = 23 + 6 * TILEX,
+		DOORTOGARDENTOBOSS = 23 + 5 * TILEX,
 		TREE = 22 + 14 * TILEX,
 		FLOWER = 23 + 15 * TILEX,
 		NEKO = 23 + 18 * TILEX
@@ -20,12 +20,12 @@ public:
 	garden_5f() {};
 	~garden_5f() {};
 
-	HRESULT init();
+	HRESULT init(CHRDIRECTION _chrdirection = CHRDIREC_UP, LOCATION _location = LOCATION_DEFAULT);
 	void release();
 	void update();
 	void render();
 	void Collision();
-	void load();
+	void load(LOCATION location = LOCATION_DEFAULT);
 
 	void setTrigger();
 };
