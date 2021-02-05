@@ -60,7 +60,7 @@ void zOrder::insert(float x, float y, string keyName, ZTYPE type)
 	insertSort();
 }
 
-void zOrder::insertSort()
+void zOrder::insertSort()//계속해서 새로운 값들을 넣어 정렬해야하니까 삽입 정렬이 제일 빠르다고 판단하여 삽입정렬 활용함
 {
 	for (int i = 0; i < _vZorder.size() - 1; ++i)
 	{

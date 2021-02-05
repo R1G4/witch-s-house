@@ -90,7 +90,7 @@ void bossStage::update()
 
 void bossStage::render()
 {
-
+		//배경 그대로
 		_backGround->SetAlpha(alpha);
 		CAMERAMANAGER->render(_backGround, Vector2(_backGround->GetSize().x / 2 + 480, _backGround->GetSize().y / 2));
 		for (int i = 0; i < TILEY; i++)
@@ -109,8 +109,14 @@ void bossStage::render()
 
 			}
 		}
+		//Z-order 벡터에 데이터를 넣어주는 과정
+		//플레이어와 에너미의 경우 각 객체의 랜더함수를 호출할 것이므로 z-order비교를 위한 y값과 타입값만 넣어주면 충분
 		ZORDER->insert(_player->getPlayerFrc().left, _player->getPlayerFrc().top, ZPLAYER);
 		if (_isBossAppeal)ZORDER->insert(_boss->getRect().left, _boss->getRect().top, ZENEMY);
+		//오브젝트를 넣어주는 과정
+		//오브젝트의 경우 랜딩을 해줘야하므로 이미지를 넣어주거나 키값을 넣어주는게 맞음
+		//특정 트리거로 예외처리를 해야한다면, 이미지를 바로 넣기보다는 키값을 넣어주는 방식을 사용하는게 좋아보임
+		//오브젝트중 검은 타일까지 넣게되면 프로그램이 느려져서 제외하기로함
 		for (int i = 0; i < TILEX*TILEY; i++)
 		{
 			if (_tiles[i].obj != OBJ_NONE)
@@ -119,17 +125,19 @@ void bossStage::render()
 				ZORDER->insert(_tiles[i].rc.left, _tiles[i].rc.bottom, IMAGEMANAGER->FindImage(_tiles[i].keyName), ZOBJECT);
 			}
 		}
+		//프레임 오브젝트들을 넣어주는 과정
+		//종욱이가 만든 프레임인포매니저를 활용하게 될 경우 바꿔야할 가능성 있음
 		for (int i = 0; i < _vFrameTile.size(); i++)
 		{
 			ZORDER->insert(_vFrameTile[i].rc.left, _vFrameTile[i].rc.top, _vFrameTile[i].keyName, ZFRAMEOBJ);
 		}
-		//ZORDER->quickSort(0, ZORDER->getZorder().size() - 1);
-
 		for (int i = 0; i < ZORDER->getZorder().size(); i++)
 		{
 			cout << ZORDER->getZorder()[i].y << " " << ZORDER->getZorder()[i].type << " / ";
 		}
-		cout << endl;
+		//정렬된 순서대로 랜딩
+		//각 인덱스의 타입을 확인하여 타입에 따라 이미지를 랜딩하도록 설계함
+		//이 부분에서 FrameInfoManager가 잘 돌아가게 될지는 모르겠음 적용필요
 		for (int i = 0; i < ZORDER->getZorder().size(); i++)
 		{
 				if(ZORDER->getZorder()[i].type==ZPLAYER)_player->render();
@@ -155,13 +163,17 @@ void bossStage::render()
 					}
 				}
 		}
+		//zorder 벡터를 초기화해줌 안하면 느려짐
 		ZORDER->release();
+
+		//검은색 타일 오브젝트이미지까지 넣게되면 프로그램이 무거워져서 따로 뺌
 		for (int i = 0; i < TILEX*TILEY; i++)
 		{
 			if (_tiles[i].keyName == "obj5" || _tiles[i].keyName == "obj9")
 				CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i].keyName),
 					Vector2(_tiles[i].rc.left + TILESIZE / 2, _tiles[i].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i].keyName)->GetSize().y / 2));
 		}
+		//여기도 그대로
 		dead->render();
 
 }
