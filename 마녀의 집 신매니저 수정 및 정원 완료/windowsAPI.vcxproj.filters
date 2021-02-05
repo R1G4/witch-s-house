@@ -228,12 +228,6 @@
     <ClInclude Include="entranceTrap.h">
       <Filter>playGround\scense\FirstFloor</Filter>
     </ClInclude>
-    <ClInclude Include="third2.h">
-      <Filter>playGround\scense\ThirdFloor</Filter>
-    </ClInclude>
-    <ClInclude Include="third.h">
-      <Filter>playGround\scense\ThirdFloor</Filter>
-    </ClInclude>
     <ClInclude Include="stageMemoryManager.h">
       <Filter>2DGameFramework\Manager</Filter>
     </ClInclude>
@@ -247,12 +241,6 @@
       <Filter>playGround\scense\FirstFloor</Filter>
     </ClInclude>
     <ClInclude Include="thirdFrogRoom.h">
-      <Filter>playGround\scense\ThirdFloor</Filter>
-    </ClInclude>
-    <ClInclude Include="thirdFloorDead.h">
-      <Filter>playGround\scense\ThirdFloor</Filter>
-    </ClInclude>
-    <ClInclude Include="third3.h">
       <Filter>playGround\scense\ThirdFloor</Filter>
     </ClInclude>
     <ClInclude Include="prison_5f.h">
@@ -314,6 +302,27 @@
     </ClInclude>
     <ClInclude Include="bossStage_4.h">
       <Filter>playGround\scense\BossStage</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdOnewayLoad.h">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdFrogOutRoom.h">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdSnakeRoom.h">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdOnewayDead.h">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdSnakeDead.h">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdMain.h">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdLibrary.h">
+      <Filter>playGround\scense\ThirdFloor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -455,12 +464,6 @@
     <ClCompile Include="entranceTrap.cpp">
       <Filter>playGround\scense\FirstFloor</Filter>
     </ClCompile>
-    <ClCompile Include="third.cpp">
-      <Filter>playGround\scense\ThirdFloor</Filter>
-    </ClCompile>
-    <ClCompile Include="third2.cpp">
-      <Filter>playGround\scense\ThirdFloor</Filter>
-    </ClCompile>
     <ClCompile Include="stageMemoryManager.cpp">
       <Filter>2DGameFramework\Manager</Filter>
     </ClCompile>
@@ -474,12 +477,6 @@
       <Filter>playGround\scense\FirstFloor</Filter>
     </ClCompile>
     <ClCompile Include="thirdFrogRoom.cpp">
-      <Filter>playGround\scense\ThirdFloor</Filter>
-    </ClCompile>
-    <ClCompile Include="thirdFloorDead.cpp">
-      <Filter>playGround\scense\ThirdFloor</Filter>
-    </ClCompile>
-    <ClCompile Include="third3.cpp">
       <Filter>playGround\scense\ThirdFloor</Filter>
     </ClCompile>
     <ClCompile Include="prison_5f.cpp">
@@ -541,6 +538,27 @@
     </ClCompile>
     <ClCompile Include="bossStage_4.cpp">
       <Filter>playGround\scense\BossStage</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdOnewayLoad.cpp">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdFrogOutRoom.cpp">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdSnakeRoom.cpp">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdOnewayDead.cpp">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdLibrary.cpp">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdMain.cpp">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdSnakeDead.cpp">
+      <Filter>playGround\scense\ThirdFloor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,19 +1,20 @@
 #include "stdafx.h"
-#include "third2.h"
+#include "thirdFrogOutRoom.h"
 
-third2::third2()
+thirdFrogOutRoom::thirdFrogOutRoom()
 {
 }
 
-third2::~third2()
+thirdFrogOutRoom::~thirdFrogOutRoom()
 {
 }
 
-HRESULT third2::init()
+HRESULT thirdFrogOutRoom::init()
 {
 	IMAGEMANAGER->AddImage("3f_doar", L"Image/obj/3f_2_doar.png");
 	_frogOut = IMAGEMANAGER->AddFrameImage("frogOut", L"Image/tempFrameImg/frogOut2.png", 10, 1);
 	_bar = IMAGEMANAGER->AddImage("bar", L"Image/obj/bar2.png");
+	IMAGEMANAGER->AddImage("dialogueBar", L"Image/UI/dialogueBar.png");
 
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
 
@@ -32,22 +33,24 @@ HRESULT third2::init()
 	_rcAlphaChange = 0.03f;
 	_x = WINSIZEX / 2;
 	_y = WINSIZEY / 2;
-	_rc = RectMakePivot(Vector2(_x, _y), Vector2(270, 75), Pivot::Center);
+	_rc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
 
 	_count = 0;
 	_frame = 0;
 	_isText = false;
 	_leftClick = false;
 	_rightClick = false;
+	_dialogue = false;
 	_playerRender = true;
+	_isStopToRead = false;
 	return S_OK;
 }
 
-void third2::release()
+void thirdFrogOutRoom::release()
 {
 }
 
-void third2::update()
+void thirdFrogOutRoom::update()
 {
 	//텍스트칸 렉트 알파값 조절
 	rcAlphaChange();
@@ -58,7 +61,8 @@ void third2::update()
 
 	//타일충돌
 	tileCollision();
-
+	//바닥에 떨어진 일지 읽기
+	readBook();
 	//_count++;
 	//if(_count %10 == 0) cout << _player->getPlayerFrc().left / TILESIZE << endl;
 
@@ -107,26 +111,35 @@ void third2::update()
 	case OPENRIGHT:
 
 		break;
+	case OPENUP:
+
+		break;
+	case OPENDOWN:
+
+		break;
+	case DEAD:
+
+		break;
 	default:
 		break;
 	}
 
-	//
-	if (!_isText && _text != OPENTEXT)
+	//텍스트창이 열려있으면 플레이어 안움직이게
+	if (!_isText && _text != OPENLEFT && _text != OPENDOWN)
 	{
 		_player->update();
-		//_rc = RectMakePivot(Vector2(camera.x - 360, camera.y - 145), Vector2(270, 75), Pivot::Center);
-		_rc = RectMakePivot(Vector2(camera.x - 360, camera.y - 145), Vector2(270, 75), Pivot::Center);
 	}
 
 
 	//문앞에 섰을때 선택지 뜨게
-	if (_player->getPlayerFrc().left / TILESIZE <= 18 && KEYMANAGER->isOnceKeyDown(VK_SPACE) && _text != OPENTEXT)
+	if (_player->getPlayerFrc().left / TILESIZE <= 18 && _text != OPENLEFT)
 	{
-		_isText = true;
+		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+			_isText = true;
 
 	}
 
+	//텍스트가 열린 상태일때 방향키누르면 선택렉트 생성
 	if (_isText)
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
@@ -153,23 +166,43 @@ void third2::update()
 
 		//대화창 활성화 시에 상호작용 스페이스바 작동안되서 A로 해둠 ㅜ
 
-		//우측 텍스트 눌렀을때 플레이어 업데이트, 첫번째 텍스트창 닫음
+		//우측 텍스트 눌렀을때(아무것도 하지 않는다) 플레이어 업데이트on, 첫번째 텍스트창 닫음
 		if (_text == RIGHT && KEYMANAGER->isOnceKeyDown('A'))
 		{
+			cout << "ttt" << endl;
 			_player->update();
 			_isText = false;
 		}
-		//좌측 텍스트 눌렀을때
+		//좌측 텍스트 눌렀을때(엿보기 구멍으로 본다) 다이어로그 on
 		if (_text == LEFT && KEYMANAGER->isOnceKeyDown('A'))
 		{
 			_isText = false;
-			_text = OPENTEXT;
+			_text = OPENLEFT;		//개구리 던질때로 바까야함
+			_dialogue = true;
+			_isStopToRead = TEXTMANAGER->setNextScript(true);
+			_vScript = TEXTMANAGER->loadFile("dialog/3f/3f_eyes.txt");
+			_isStopToRead = true;
 		}
+		//위에 텍스트 눌렀을때(귀를 댄다) 다이어로그 on
+		if (_text == UP && KEYMANAGER->isOnceKeyDown('A'))
+		{
+			_isText = false;
+			_dialogue = true;
+			_isStopToRead = TEXTMANAGER->setNextScript(true);
+			_vScript = TEXTMANAGER->loadFile("dialog/3f/3f_ears.txt");
+			_isStopToRead = true;
 
+		}
+		//아래 텍스트 눌렀을때(문을 연다)
+		if (_text == DOWN && KEYMANAGER->isOnceKeyDown('A'))
+		{
+			_isText = false;
+			_text = OPENDOWN;
+		}
 	}
 
-	//첫번째 텍스트창에서 좌측 눌렀을때 두번째 텍스트 창 오픈
-	if (_text == OPENTEXT)
+	//첫번째 텍스트창에서 좌측(엿보기 구멍으로 본다) 눌렀을때 두번째 텍스트 창 오픈
+	if (_text == OPENLEFT)
 	{
 		//두번째 텍스트창에서 좌측 눌렀을때
 		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
@@ -183,24 +216,71 @@ void third2::update()
 			_rc = RectMakePivot(Vector2(_x + 290, _y - 10), Vector2(270, 75), Pivot::Center);
 			_rightClick = true;
 		}
+
+		//첫번째 텍스트창에서 좌측 텍스트 말고 다른거 누르면 랜더에 개구리 던지기 모션 안되게
+		if (_leftClick && KEYMANAGER->isOnceKeyDown('A'))
+		{
+			_text = CHANGEIMG;
+			_leftClick = false;
+		}
 	}
 
-	if (_leftClick && KEYMANAGER->isOnceKeyDown('A'))
-	{
-		_text = OPENLEFT;
-	}
+	//첫번째 텍스트창에서 좌측 텍스트 말고 다른거 누르면 랜더에 개구리 던지기 모션 안되게
+	//if (_text != OPENDOWN && _leftClick && KEYMANAGER->isOnceKeyDown('A'))
+	//{
+	//	_text = CHANGEIMG;
+	//	_leftClick = false;
+	//}
 
 
 	if (_rightClick && KEYMANAGER->isOnceKeyDown('A'))
 	{
-		_isText = true;	//첫번째 텍스트창으로 이동. 다만들면 변수명 _isText로 바꾸기
+		_isText = true;
 		_text = OPENRIGHT;	//일단 창 닫으려고 임시로 넣음. 2번째 텍스트창 오픈할때를 건드려야할듯
+		_rightClick = false;
 
 	}
 
+	//첫번째 텍스트에서 아래 텍스트(문을 연다) 눌렀을때 선택렉트 보여주고 좌우키 움직이게
+	if (_text == OPENDOWN && !_isText)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+		{
+			cout << "rr" << endl;
+			_rc = RectMakePivot(Vector2(camera.x - 360, camera.y - 145), Vector2(270, 75), Pivot::Center);
+			_leftClick = true;
+			_rightClick = false;
+		}
+		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+		{
+			_rc = RectMakePivot(Vector2(_x + 290, _y - 10), Vector2(270, 75), Pivot::Center);
+			_rightClick = true;
+			_leftClick = false;
+		}
+
+		//아이템(개구리) 없이 문을열고 들어가면 바로 데드신으로 
+		if (_leftClick && KEYMANAGER->isOnceKeyDown('A') /*&& 개구리 예외처리 해주기*/)
+		{
+			cout << "changeScene" << endl;
+			changeScene();
+			_leftClick = false;
+		}
+		//우측키 눌렀을때(일단 다른대에 되어있어서 주석처리함. 안되면 이거부터 풀기)////////////////////////////////////////////
+		if (_rightClick && KEYMANAGER->isOnceKeyDown('A'))
+		{
+			//_player->update();
+			//_isText = false;
+			//_rightClick = false;
+		}
+	}
+
+
+
+
+
 }
 
-void third2::render()
+void thirdFrogOutRoom::render()
 {
 	//첫번째 텍스트창 off일때
 	if (!_isText)
@@ -293,8 +373,44 @@ void third2::render()
 
 	}
 
+	//첫번째 텍스트에서 위에(귀를 댄다) 눌렀을때
+	if (_dialogue)
+	{
+		cout << "yyy" << endl;
+		//D2DINS->GetInstance()->RenderText(430, 330, L"연다", RGB(255, 255, 255), 0.85f, 27);
+
+		//CAMERAMANAGER->render(IMAGEMANAGER->FindImage("dialogueBar"), Vector2(WINSIZEX / 2 + 250, WINSIZEY / 2 + 250));
+
+		////////////////////////////////////////////////////////////
+		//cout << "reee" << endl;
+		if (_isStopToRead)
+			TEXTMANAGER->renderText();
+
+		//////////////////////////////////////////////////////////
+
+		if (KEYMANAGER->isOnceKeyDown('A')) _dialogue = false;
+	}
+
+	//다이어로그 꺼지면 이미지 일단 안보이는곳으로 치워뒀음
+	//if (!_dialogue) CAMERAMANAGER->render(IMAGEMANAGER->FindImage("dialogueBar"), Vector2(0, 0));
+
+	//첫번째 텍스트에서 아래(문을 연다) 눌렀을때
+	if (_text == OPENDOWN)
+	{
+		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(camera.x - 180, camera.y - 10));	//왼쪽
+		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(WINSIZEX / 2 + 470, WINSIZEY / 2 + 120));	//오른쪽
+		D2DINS->GetInstance()->RenderText(430, 330, L"연다", RGB(255, 255, 255), 0.85f, 27);
+		D2DINS->GetInstance()->RenderText(850, 330, L"역시 그만둔다", RGB(255, 255, 255), 0.85f, 27);
+
+		D2DINS->FillRectangle(_rc, D2D1::ColorF::Enum::WhiteSmoke, _rcAlpha / 5.5);
+		D2DINS->GetInstance()->DrawRectangle(_rc, D2D1::ColorF::White, _rcAlpha, 1.0f);
+
+	}
+
+
 	//텍스트 열린 상태에서 한 문장 선택했을때
-	if (_text == OPENTEXT  /*&& !_leftClick && !_rightClick*/)
+	//이거 개구리 눌렀을때로 그대로 넣어주면 됌. 왼쪽은 다이로그로 바꿈
+	if (_text == OPENLEFT  /*&& !_leftClick && !_rightClick*/)
 	{
 		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(camera.x - 180, camera.y - 10));	//왼쪽
 		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(WINSIZEX / 2 + 470, WINSIZEY / 2 + 120)); // 오른쪽
@@ -308,12 +424,13 @@ void third2::render()
 	}
 
 	//두번째 텍스트창에서 좌측 눌렀을때 플레이어 렌더 false해주고
-	if (_text == OPENLEFT)
+	if (_text == CHANGEIMG)
 	{
+		cout << "Rrr" << endl;
 		_player->setFrameX(0);
 		_player->setFrameSpeed(20);
 		_playerRender = false;
-		_text = CHANGEIMG;	//체인지 이미지 말고 다른걸로 바꾸기
+		_text = DEFAULT;	//체인지 이미지 말고 다른걸로 바꾸기
 	}
 	//플레이어 기본상태 잠시 지워주고 개구리 던지는 이미지 랜더
 	if (!_playerRender)
@@ -330,7 +447,12 @@ void third2::render()
 
 }
 
-void third2::rcAlphaChange()
+void thirdFrogOutRoom::changeScene()
+{
+	SCENEMANAGER->changeScene("thirdSnakeDead");
+}
+
+void thirdFrogOutRoom::rcAlphaChange()
 {
 	if (_rcAlpha >= 0.9f)
 		_rcAlphaChange = -0.03f;
@@ -341,7 +463,37 @@ void third2::rcAlphaChange()
 	_rcAlpha += _rcAlphaChange;
 }
 
-void third2::tileCollision()
+void thirdFrogOutRoom::readBook()
+{
+	//책 읽기
+	for (int i = 0; i < TILEY; i++)
+	{
+		for (int j = 0; j < TILEX; j++)
+		{
+			if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc)
+				&& _tiles[i*TILEX + j].terrain == TR_TRIGGER && _player->getPlayerFrc().bottom / TILESIZE <= 10)
+			{
+				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+				{
+					_dialogue = true;
+					_isStopToRead = TEXTMANAGER->setNextScript(true);
+					_vScript = TEXTMANAGER->loadFile("dialog/3f/3f_book.txt");
+					_isStopToRead = true;
+				}
+			}
+			//다이어로그 켜져있을때 스페이스바 누르면 원래대로 돌아가게. 모든 다이어로그 다 포함
+			if (_dialogue)
+			{
+				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+				{
+					_dialogue = false;
+				}
+			}
+		}
+	}
+}
+
+void thirdFrogOutRoom::tileCollision()
 {
 	for (int i = 0; i < TILEY; i++)
 	{
@@ -369,7 +521,7 @@ void third2::tileCollision()
 	}
 }
 
-void third2::load()
+void thirdFrogOutRoom::load()
 {
 	HANDLE file;
 	DWORD read;

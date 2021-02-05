@@ -1,40 +1,32 @@
 #pragma once
 #include "gameNode.h"
 #include "Player.h"
-
-class third : public gameNode
+class thirdLibrary : public gameNode
 {
 private:
-
-	enum trigger
-	{
-		SWORD = 1222,
-
-		DEAD
-	};
-
 
 	Image* _backGround;
 	tagTile _tiles[TILEX*TILEY];
 	Vector2 camera;
 	Player* _player;
-	trigger _trigger;
 
 	int _count;
 	int _frame;
-
+	bool _dialogue;
+	bool _isStopToRead;			//텍스트매니저용 변수
+	vector<string> _vScript;	//
 
 public:
-	third();
-	~third();
+	thirdLibrary();
+	~thirdLibrary();
 
 	HRESULT init();
 	void release();
 	void update();
 	void render();
-	void trigger();
+	void changeScene();
+	void readBook();
 	void tileCollision();
-	void Collision();
 	void load();
 };
 

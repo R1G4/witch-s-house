@@ -1,22 +1,26 @@
 #pragma once
 #include "gameNode.h"
 #include "Player.h"
-class third3 : public gameNode
+#include "DeadManager.h"
+class thirdOnewayDead : public gameNode
 {
 private:
+
 	Image* _backGround;
 	tagTile _tiles[TILEX*TILEY];
 	Vector2 camera;
 	Player* _player;
+	DeadManager* _deadManager;
+	int _count;
+
 public:
-	third3();
-	~third3();
+	thirdOnewayDead();
+	~thirdOnewayDead();
 
 	HRESULT init();
 	void release();
 	void update();
 	void render();
-	void trigger();
 	void tileCollision();
 	void load();
 };

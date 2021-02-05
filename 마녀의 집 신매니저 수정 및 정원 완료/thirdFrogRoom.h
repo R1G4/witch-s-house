@@ -26,6 +26,10 @@ private:
 	int _frameY;
 	bool _isText;
 
+	bool _dialogue;
+	bool _isStopToRead;			//텍스트매니저용 변수
+	vector<string> _vScript;	//
+
 public:
 	thirdFrogRoom();
 	~thirdFrogRoom();
@@ -38,6 +42,7 @@ public:
 	void changeScene();
 	void tileCollision();
 	void openText();
+	void readBook();
 	void load();
 };
 

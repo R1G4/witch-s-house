@@ -1,16 +1,17 @@
 #include "stdafx.h"
-#include "thirdFloorDead.h"
+#include "thirdLibrary.h"
 
-thirdFloorDead::thirdFloorDead()
+thirdLibrary::thirdLibrary()
 {
 }
 
-thirdFloorDead::~thirdFloorDead()
+thirdLibrary::~thirdLibrary()
 {
 }
 
-HRESULT thirdFloorDead::init()
+HRESULT thirdLibrary::init()
 {
+	IMAGEMANAGER->AddFrameImage("SavePoint", L"Image/mapTool/saveCat.png", 16, 4);
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
 
 	_player = new Player;
@@ -22,24 +23,44 @@ HRESULT thirdFloorDead::init()
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
 	CAMERAMANAGER->setCamera(camera);
+
+	_count = 0;
+	_frame = 0;
+	_dialogue = false;
+	_isStopToRead = false;
+
 	return S_OK;
 }
 
-void thirdFloorDead::release()
+void thirdLibrary::release()
 {
 }
 
-void thirdFloorDead::update()
+void thirdLibrary::update()
 {
+	_count++;
+	if (_count % 4 == 0)
+	{
+		_frame++;
+		if (_frame > 15)
+		{
+			_frame = 0;
+		}
+	}
+
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
 
 	CAMERAMANAGER->setCamera(Vector2(camera.x - WINSIZEX / 2, camera.y - WINSIZEY / 2));
 	_player->update();
 	tileCollision();
+	changeScene();
+	readBook();
+
+	//if(_count %10 == 0) cout << _player->getPlayerFrc().right / TILESIZE << endl;
 }
 
-void thirdFloorDead::render()
+void thirdLibrary::render()
 {
 	CAMERAMANAGER->render(_backGround, Vector2(_backGround->GetSize().x / 2 + 480, _backGround->GetSize().y / 2));
 	for (int i = 0; i < TILEY; i++)
@@ -59,7 +80,7 @@ void thirdFloorDead::render()
 		}
 	}
 	_player->render();
-
+	CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("SavePoint"), Vector2(920, 1680), _frame, 2);
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
@@ -71,13 +92,66 @@ void thirdFloorDead::render()
 
 		}
 	}
+	//다이어로그 켜졌을때
+	if (_dialogue)
+	{
+		cout << "yyy" << endl;
+		if (_isStopToRead)
+			TEXTMANAGER->renderText();
+	}
 }
 
-void thirdFloorDead::trigger()
+void thirdLibrary::changeScene()
 {
+	if (_player->getPlayerFrc().bottom / TILESIZE >= 10.7f)
+		SCENEMANAGER->changeScene("thirdOnewayLoad");
 }
 
-void thirdFloorDead::tileCollision()
+void thirdLibrary::readBook()
+{
+	//책 읽기
+	for (int i = 0; i < TILEY; i++)
+	{
+		for (int j = 0; j < TILEX; j++)
+		{
+			//일지 읽을때
+			if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc)
+				&& _tiles[i*TILEX + j].terrain == TR_TRIGGER && _player->getPlayerFrc().right / TILESIZE <= 20)
+			{
+				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+				{
+					_dialogue = true;
+					_isStopToRead = TEXTMANAGER->setNextScript(true);
+					_vScript = TEXTMANAGER->loadFile("dialog/3f/3f_library_message.txt");
+					_isStopToRead = true;
+				}
+			}
+			//마녀 책 읽을때
+			else if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc)
+				&& _tiles[i*TILEX + j].terrain == TR_TRIGGER && _player->getPlayerFrc().right / TILESIZE >= 21)
+			{
+				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+				{
+					_dialogue = true;
+					_isStopToRead = TEXTMANAGER->setNextScript(true);
+					_vScript = TEXTMANAGER->loadFile("dialog/3f/3f_library_book.txt");
+					_isStopToRead = true;
+				}
+			}
+
+			//다이어로그 켜져있을때 스페이스바 누르면 원래대로 돌아가게. 모든 다이어로그 다 포함
+			if (_dialogue)
+			{
+				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+				{
+					_dialogue = false;
+				}
+			}
+		}
+	}
+}
+
+void thirdLibrary::tileCollision()
 {
 	for (int i = 0; i < TILEY; i++)
 	{
@@ -100,20 +174,17 @@ void thirdFloorDead::tileCollision()
 					_player->setPLocaY(_tiles[i*TILEX + j].rc.bottom + 4);
 					break;
 				}
+
 			}
 		}
 	}
 }
 
-void thirdFloorDead::Collision()
-{
-}
-
-void thirdFloorDead::load()
+void thirdLibrary::load()
 {
 	HANDLE file;
 	DWORD read;
-	file = CreateFile("Stage/3f_dead.map", GENERIC_READ, NULL, NULL,
+	file = CreateFile("Stage/3f_library.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	camera = _tiles->camera;

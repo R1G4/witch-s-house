@@ -39,6 +39,10 @@ HRESULT thirdFrogRoom::init()
 	_frameX = 0;
 	_frameY = 0;
 	_isText = false;
+
+	_dialogue = false;
+	_isStopToRead = false;
+
 	return S_OK;
 }
 
@@ -58,7 +62,7 @@ void thirdFrogRoom::update()
 		}
 	}
 	//_count++;
-	//if(_count %10 == 0) cout << _player->getPlayerFrc().left / TILESIZE << endl;
+	//if(_count %10 == 0) cout << _player->getPlayerFrc().bottom / TILESIZE << endl;
 
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
@@ -72,6 +76,7 @@ void thirdFrogRoom::update()
 	rcAlphaChange();
 	changeScene();
 	openText();
+	readBook();
 }
 
 void thirdFrogRoom::render()
@@ -148,6 +153,15 @@ void thirdFrogRoom::render()
 		D2DINS->GetInstance()->DrawRectangle(_rc, D2D1::ColorF::White, _rcAlpha, 1.0f);
 	}
 
+	//다이어로그 켜졌을때
+	if (_dialogue)
+	{
+		cout << "yyy" << endl;
+		if (_isStopToRead)
+			TEXTMANAGER->renderText();
+	}
+
+
 	CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("frog"), Vector2(_x2, _y2), _frameX, _frameY);
 
 	_player->render();
@@ -169,12 +183,12 @@ void thirdFrogRoom::changeScene()
 {
 	if (_player->getPlayerFrc().right / TILESIZE >= 23.5f)
 	{
-		SCENEMANAGER->changeScene("3층");
+		SCENEMANAGER->changeScene("thirdMain");
 	}
 }
 void thirdFrogRoom::openText()
 {
-	if (_player->getPlayerFrc().left / TILESIZE <= 21)
+	if (_player->getPlayerFrc().left / TILESIZE <= 21 && _player->getPlayerFrc().bottom / TILESIZE >= 7)
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
@@ -231,7 +245,7 @@ void thirdFrogRoom::openText()
 		}
 		if (!_isText)
 		{
-			//시간남으면 개구리 돌리기
+			//개구리 돌리기 걍 넣어봤음 빼도 됌
 			_alpha++;
 			_frameX = 2;
 			_frog->SetAngle(_alpha);
@@ -239,6 +253,37 @@ void thirdFrogRoom::openText()
 		}
 	}
 }
+
+void thirdFrogRoom::readBook()
+{
+	//책 읽기
+	for (int i = 0; i < TILEY; i++)
+	{
+		for (int j = 0; j < TILEX; j++)
+		{
+			if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc)
+				&& _tiles[i*TILEX + j].terrain == TR_TRIGGER && _player->getPlayerFrc().bottom / TILESIZE <= 7)
+			{
+				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+				{
+					_dialogue = true;
+					_isStopToRead = TEXTMANAGER->setNextScript(true);
+					_vScript = TEXTMANAGER->loadFile("dialog/3f/3f_book.txt");
+					_isStopToRead = true;
+				}
+			}
+			//다이어로그 켜져있을때 스페이스바 누르면 원래대로 돌아가게. 모든 다이어로그 다 포함
+			if (_dialogue)
+			{
+				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+				{
+					_dialogue = false;
+				}
+			}
+		}
+	}
+}
+
 void thirdFrogRoom::tileCollision()
 {
 	for (int i = 0; i < TILEY; i++)
@@ -271,7 +316,7 @@ void thirdFrogRoom::load()
 {
 	HANDLE file;
 	DWORD read;
-	file = CreateFile("Stage/3f_frogRoom.map", GENERIC_READ, NULL, NULL,
+	file = CreateFile("Stage/3f_frogRoom2.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	camera = _tiles->camera;

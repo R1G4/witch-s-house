@@ -1,14 +1,9 @@
 #pragma once
 #include "gameNode.h"
 #include "Player.h"
-class third2 : public gameNode
+class thirdFrogOutRoom : public gameNode
 {
 private:
-
-	/*enum text
-	{
-		LEFT, RIGHT, UP, DOWN, OPENTEXT,OPENLEFT, OPENRIGHT, CHANGEIMG
-	};*/
 
 	Image* _backGround;
 	Image* _bar;
@@ -27,16 +22,22 @@ private:
 	bool _isText;		//첫번째 상호작용 텍스트창 관리
 	bool _leftClick;	//두번째 상호작용 텍스트창 관리
 	bool _rightClick;	//두번째 상호작용 텍스트창 관리
-	bool _playerRender;
+	bool _playerRender;	//플레이어 랜더 관리
+	bool _dialogue;
+
+	bool _isStopToRead;			//텍스트매니저용 변수
+	vector<string> _vScript;	//
 public:
-	third2();
-	~third2();
+	thirdFrogOutRoom();
+	~thirdFrogOutRoom();
 
 	HRESULT init();
 	void release();
 	void update();
 	void render();
+	void changeScene();
 	void rcAlphaChange();
+	void readBook();
 	void trigger();
 	void tileCollision();
 	void load();

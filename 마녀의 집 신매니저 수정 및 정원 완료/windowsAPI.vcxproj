@@ -216,10 +216,13 @@
     <ClInclude Include="StringHelper.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="textMananger.h" />
-    <ClInclude Include="third.h" />
-    <ClInclude Include="third2.h" />
-    <ClInclude Include="third3.h" />
-    <ClInclude Include="thirdFloorDead.h" />
+    <ClInclude Include="thirdLibrary.h" />
+    <ClInclude Include="thirdMain.h" />
+    <ClInclude Include="thirdOnewayLoad.h" />
+    <ClInclude Include="thirdFrogOutRoom.h" />
+    <ClInclude Include="thirdSnakeDead.h" />
+    <ClInclude Include="thirdSnakeRoom.h" />
+    <ClInclude Include="thirdOnewayDead.h" />
     <ClInclude Include="thirdFrogRoom.h" />
     <ClInclude Include="timeManager.h" />
     <ClInclude Include="timer.h" />
@@ -298,10 +301,13 @@
     </ClCompile>
     <ClCompile Include="StringHelper.cpp" />
     <ClCompile Include="textMananger.cpp" />
-    <ClCompile Include="third.cpp" />
-    <ClCompile Include="third2.cpp" />
-    <ClCompile Include="third3.cpp" />
-    <ClCompile Include="thirdFloorDead.cpp" />
+    <ClCompile Include="thirdLibrary.cpp" />
+    <ClCompile Include="thirdMain.cpp" />
+    <ClCompile Include="thirdOnewayLoad.cpp" />
+    <ClCompile Include="thirdFrogOutRoom.cpp" />
+    <ClCompile Include="thirdSnakeDead.cpp" />
+    <ClCompile Include="thirdSnakeRoom.cpp" />
+    <ClCompile Include="thirdOnewayDead.cpp" />
     <ClCompile Include="thirdFrogRoom.cpp" />
     <ClCompile Include="timeManager.cpp" />
     <ClCompile Include="timer.cpp" />

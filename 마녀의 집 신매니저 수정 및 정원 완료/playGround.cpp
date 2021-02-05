@@ -37,8 +37,8 @@ HRESULT playGround::init()
 	//SCENEMANAGER->changeScene("entranceFake");
 
 	//SCENEMANAGER->changeScene("prison_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
-	SCENEMANAGER->changeScene("BossStage1");
-	SOUNDMANAGER->play("main");
+	SCENEMANAGER->changeScene("thirdMain");
+	//SOUNDMANAGER->play("main");
 
 	
 
@@ -122,12 +122,14 @@ void playGround::addScene()
 	SCENEMANAGER->addScene("scissorsRoom", _scissorsRoomStage);
 
 	//3Ãş
-	SCENEMANAGER->addScene("3Ãş", new third);
-	SCENEMANAGER->addScene("3Ãş2", new third2);
-	SCENEMANAGER->addScene("3Ãş3", new third3);		//¿¹ºñ¿ë?? °í¹ÎÁß
-	SCENEMANAGER->addScene("3ÃşÃ¹¹øÂ°µ¥µå¾À", new thirdFloorDead);
-	SCENEMANAGER->addScene("3Ãş°³±¸¸®¹æ", new thirdFrogRoom);
-	//SCENEMANAGER->addScene("3ÃşµÎ¹øÂ°µ¥µå¾À", new thirdFloorDead);
+	SCENEMANAGER->addScene("thirdMain", new thirdMain);
+	SCENEMANAGER->addScene("thirdFrogRoom", new thirdFrogRoom);
+	SCENEMANAGER->addScene("thirdLibrary", new thirdLibrary);
+	SCENEMANAGER->addScene("thirdOnewayLoad", new thirdOnewayLoad);
+	SCENEMANAGER->addScene("thirdFrogOutRoom", new thirdFrogOutRoom);
+	SCENEMANAGER->addScene("thirdSnakeRoom", new thirdSnakeRoom);
+	SCENEMANAGER->addScene("thirdOnewayDead", new thirdOnewayDead);
+	SCENEMANAGER->addScene("thirdSnakeDead", new thirdSnakeDead);
 
 	//5Ãş
 	SCENEMANAGER->addScene("garden_5f", _garden_5f_Stage);
