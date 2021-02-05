@@ -51,45 +51,58 @@ void bossStage_2::render()
 			}
 
 		}
-	}
-	_player->render();
-	if(_isBossAppeal)_boss->render();
-	for (int i = 0; i < TILEY; i++)
-	{
-		for (int j = 0; j < TILEX; j++)
-		{
-			if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
-			//IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(0.5);
-			if ((_tiles[i*TILEX + j].keyName == "obj61" && !_vTrigger[2].isTriggerOn) && (_tiles[i*TILEX + j].keyName == "obj61" && !_vTrigger[5].isTriggerOn))continue;
-			if ((_tiles[i*TILEX + j].keyName == "obj59" && !_vTrigger[0].isTriggerOn) && (_tiles[i*TILEX + j].keyName == "obj59" && !_vTrigger[3].isTriggerOn))continue;
-			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
-				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2,
-					_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));
+	}			
+			ZORDER->insert(_player->getPlayerLocX(), _player->getPlayerLocY(), ZPLAYER);
+			if (_isBossAppeal)ZORDER->insert(_boss->getRect().left, _boss->getRect().top, ZENEMY);
+			for (int i = 0; i < TILEX*TILEY; i++)
+			{
+				if (_tiles[i].obj != OBJ_NONE)
+				{
+					if (_tiles[i].keyName == "obj5" || _tiles[i].keyName == "obj9")continue;
+					ZORDER->insert(_tiles[i].rc.left, _tiles[i].rc.bottom,_tiles[i].keyName, ZOBJECT);
+				}
+			}
+			for (int i = 0; i < _vFrameTile.size(); i++)
+			{
+				ZORDER->insert(_vFrameTile[i].rc.left, _vFrameTile[i].rc.top, _vFrameTile[i].keyName, ZFRAMEOBJ);
+			}
+			for (int i = 0; i < ZORDER->getZorder().size(); i++)
+			{
 
-		}
-	}
-	//타일에 프레임 이미지 배치 랜더
-	for (int i = 0; i < _vFrameTile.size(); i++)
-	{
-		if (KEYMANAGER->isToggleKey(VK_TAB))
-		{
-			IMAGEMANAGER->FindImage(_vFrameTile[i].keyName)->SetAlpha(alpha);
-			if (_vFrameTile[i].kinds == PLAYER)  CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::Blue, 0.7);
-			else if (_vFrameTile[i].kinds == ENEMY)  CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::Black, 0.7);
-			else CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::White, 0.7);
-		}
+				if (ZORDER->getZorder()[i].type == ZPLAYER)_player->render();
 
-		if (_vFrameTile[i].kinds == PLAYER) continue;
-		if (_vFrameTile[i].kinds == ENEMY)continue;
-		_vFrameTile[i].img->SetAlpha(alpha);
-		CAMERAMANAGER->FrameRender
-		(
-			_vFrameTile[i].img,
-			Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.bottom - _vFrameTile[i].img->GetSize().y / 2),
-			_vFrameTile[i].frameX, _vFrameTile[i].frameY
-		);
-	}
+				if (ZORDER->getZorder()[i].type == ZENEMY)_boss->render();
 
+				if (ZORDER->getZorder()[i].type == ZOBJECT)
+				{
+					if ((ZORDER->getZorder()[i].keyName == "obj61" && !_vTrigger[2].isTriggerOn) && (ZORDER->getZorder()[i].keyName == "obj61" && !_vTrigger[5].isTriggerOn))continue;
+					if ((ZORDER->getZorder()[i].keyName == "obj59" && !_vTrigger[0].isTriggerOn) && (ZORDER->getZorder()[i].keyName == "obj59" && !_vTrigger[3].isTriggerOn))continue;
+					CAMERAMANAGER->render(ZORDER->getZorder()[i].img,
+						Vector2(ZORDER->getZorder()[i].x + TILESIZE / 2, ZORDER->getZorder()[i].y  - ZORDER->getZorder()[i].img->GetSize().y / 2));
+				}
+				if (ZORDER->getZorder()[i].type == ZFRAMEOBJ)
+				{
+					for (int j = 0; j < _vFrameTile.size(); j++)
+					{
+						if (_vFrameTile[j].kinds == PLAYER) continue;
+						if (_vFrameTile[j].kinds == ENEMY)continue;
+						if (ZORDER->getZorder()[i].keyName == _vFrameTile[j].keyName)
+							CAMERAMANAGER->FrameRender
+							(
+								_vFrameTile[j].img,
+								Vector2((_vFrameTile[j].rc.left + _vFrameTile[j].rc.right) / 2, _vFrameTile[j].rc.bottom - _vFrameTile[j].img->GetSize().y / 2),
+								_vFrameTile[j].frameX, _vFrameTile[j].frameY
+							);
+					}
+				}
+			}
+			ZORDER->release();
+			for (int i = 0; i < TILEX*TILEY; i++)
+			{
+				if (_tiles[i].keyName == "obj5" || _tiles[i].keyName == "obj9")
+					CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i].keyName),
+						Vector2(_tiles[i].rc.left + TILESIZE / 2, _tiles[i].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i].keyName)->GetSize().y / 2));
+			}
 	dead->render();
 }
 
@@ -115,6 +128,7 @@ void bossStage_2::load()
 			bossLocX = i % TILEX;
 			bossLocY = i / TILEX;
 		}
+
 		if (_tiles[i].terrain == TR_TRIGGER)
 		{
 			Trigger _triggerTile;

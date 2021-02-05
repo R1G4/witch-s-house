@@ -52,7 +52,6 @@ void bossStage_1::load()
 		if (_tiles[i].attribute == PLAYER)
 		{
 			_player->setStart(i%TILEX, i / TILEX);
-			break;
 		}
 		if (_tiles[i].attribute == ENEMY)
 		{

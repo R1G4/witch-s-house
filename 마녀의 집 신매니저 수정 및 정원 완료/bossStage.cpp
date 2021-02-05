@@ -37,6 +37,7 @@ void bossStage::release()
 	resetEverything();
 	_Stop = false;
 	_isBossAppeal = false;
+	ZORDER->release();
 }
 
 void bossStage::update()
@@ -68,7 +69,6 @@ void bossStage::update()
 				while (_numCount <= 0 && !_stop)
 				{
 					pathFinder(_currentTile);
-					cout << "WW";
 				}
 				if (Math::GetDistance(_playerTile->getIdx(), _playerTile->getIdy(), _enemyTile->getIdx(), _enemyTile->getIdy()) < 1.1f)
 				{
@@ -109,50 +109,59 @@ void bossStage::render()
 
 			}
 		}
-		_player->render();
-		if (_isBossAppeal&&!dead->getIsDead())_boss->render();
-		for (int i = 0; i < TILEY; i++)
+		ZORDER->insert(_player->getPlayerFrc().left, _player->getPlayerFrc().top, ZPLAYER);
+		if (_isBossAppeal)ZORDER->insert(_boss->getRect().left, _boss->getRect().top, ZENEMY);
+		for (int i = 0; i < TILEX*TILEY; i++)
 		{
-			for (int j = 0; j < TILEX; j++)
+			if (_tiles[i].obj != OBJ_NONE)
 			{
-				if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
-				//중간에 배치하고 싶다면 이걸쓰세요. 디폴트 센타
-				CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
-					Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2,
-						_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));
-
-				//오른쪽으로 붙고자 하면 이걸쓰고
-				/*CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
-					Vector2(_tiles[i*TILEX + j].rc.right,
-						_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));*/
-				if(KEYMANAGER->isToggleKey(VK_TAB))
-				if (_tiles[i*TILEX + j].obj == OBJ_CORELATION)CAMERAMANAGER->renderFillRc(_tiles[i*TILEY + j].rc, D2D1::ColorF::Yellow, 0.5);
+				if (_tiles[i].keyName == "obj5" || _tiles[i].keyName == "obj9")continue;
+				ZORDER->insert(_tiles[i].rc.left, _tiles[i].rc.bottom, IMAGEMANAGER->FindImage(_tiles[i].keyName), ZOBJECT);
 			}
-		
 		}
-
-		//타일에 프레임 이미지 배치 랜더
 		for (int i = 0; i < _vFrameTile.size(); i++)
 		{
-			if (KEYMANAGER->isToggleKey(VK_TAB))
-			{
-				IMAGEMANAGER->FindImage(_vFrameTile[i].keyName)->SetAlpha(alpha);
-				if (_vFrameTile[i].kinds == PLAYER)  CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::Blue, 0.7);
-				else if (_vFrameTile[i].kinds == ENEMY)  CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::Black, 0.7);
-				else CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::White, 0.7);
-			}
-
-			if (_vFrameTile[i].kinds == PLAYER) continue;
-			if (_vFrameTile[i].kinds == ENEMY)continue;
-			_vFrameTile[i].img->SetAlpha(alpha);
-			CAMERAMANAGER->FrameRender
-			(
-				_vFrameTile[i].img,
-				Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.bottom - _vFrameTile[i].img->GetSize().y / 2),
-				_vFrameTile[i].frameX, _vFrameTile[i].frameY
-			);
+			ZORDER->insert(_vFrameTile[i].rc.left, _vFrameTile[i].rc.top, _vFrameTile[i].keyName, ZFRAMEOBJ);
 		}
+		//ZORDER->quickSort(0, ZORDER->getZorder().size() - 1);
 
+		for (int i = 0; i < ZORDER->getZorder().size(); i++)
+		{
+			cout << ZORDER->getZorder()[i].y << " " << ZORDER->getZorder()[i].type << " / ";
+		}
+		cout << endl;
+		for (int i = 0; i < ZORDER->getZorder().size(); i++)
+		{
+				if(ZORDER->getZorder()[i].type==ZPLAYER)_player->render();
+				if (ZORDER->getZorder()[i].type == ZENEMY)_boss->render();
+				if (ZORDER->getZorder()[i].type == ZOBJECT)
+				{
+					CAMERAMANAGER->render(ZORDER->getZorder()[i].img,
+						Vector2(ZORDER->getZorder()[i].x + TILESIZE / 2, ZORDER->getZorder()[i].y-TILESIZE/2- ZORDER->getZorder()[i].img->GetSize().y / 2));
+				}
+				if (ZORDER->getZorder()[i].type == ZFRAMEOBJ)
+				{
+					for (int j = 0; j < _vFrameTile.size(); j++)
+					{
+						if (_vFrameTile[j].kinds == PLAYER) continue;
+						if (_vFrameTile[j].kinds == ENEMY)continue;
+						if (ZORDER->getZorder()[i].keyName == _vFrameTile[j].keyName)
+							CAMERAMANAGER->FrameRender
+							(
+								_vFrameTile[j].img,
+								Vector2((_vFrameTile[j].rc.left + _vFrameTile[j].rc.right) / 2, _vFrameTile[j].rc.bottom - _vFrameTile[j].img->GetSize().y / 2),
+								_vFrameTile[j].frameX, _vFrameTile[j].frameY
+							);
+					}
+				}
+		}
+		ZORDER->release();
+		for (int i = 0; i < TILEX*TILEY; i++)
+		{
+			if (_tiles[i].keyName == "obj5" || _tiles[i].keyName == "obj9")
+				CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i].keyName),
+					Vector2(_tiles[i].rc.left + TILESIZE / 2, _tiles[i].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i].keyName)->GetSize().y / 2));
+		}
 		dead->render();
 
 }
@@ -211,7 +220,6 @@ void bossStage::objectLocation()
 			MaxIndex++;
 		}
 	}
-	cout << MaxIndex<<endl;
 	for (int i = 0; i < MaxIndex; i++)
 	{
 		_objTile[i]->setAttribute("wall");
@@ -360,7 +368,6 @@ vector<astarTile*> bossStage::addOpenList(astarTile * currentTile)
 			if (!addObj) continue;
 			_vOpenList.push_back(node);
 		}
-		//cout << endl << endl;
 	}
 	return _vOpenList;
 }
@@ -418,7 +425,6 @@ void bossStage::pathFinder(astarTile * currentTile)
 	// ############## 경로 못찾으면 끝내는 함수 #####################
 	if (!changed)
 	{// 아무것도 변경안하고 포문이 무사히(?) 돌았다면 끝낸다
-		cout << "HH";
 		_stop = true;
 		return;
 	}
@@ -426,17 +432,14 @@ void bossStage::pathFinder(astarTile * currentTile)
 	//도착했다면
 	if (tempTile->getAttribute() == "enemy")
 	{
-		cout << "dd";
 		_enemyTile->setAttribute("");
 		_enemyTile->setColor(D2D1::ColorF::White);
 		while (_currentTile->getParentNode() != NULL)
 		{
-			cout << "Cc";
 			++_numCount;
 			_currentTile->setNumber(_numCount); // 숫자를 지정해줄수 있음
 			if (_numCount == 1)
 			{
-				cout << "??";
 				bossLocX = _currentTile->getIdx();
 				bossLocY = _currentTile->getIdy();
 				_vTotalList[bossLocY*TILEX + bossLocX]->setAttribute("enemy");
@@ -460,7 +463,6 @@ void bossStage::pathFinder(astarTile * currentTile)
 	{
 		if (*_viOpenList == tempTile)
 		{
-			cout << "PP";
 			_viOpenList = _vOpenList.erase(_viOpenList);
 			break;
 		}
@@ -496,7 +498,6 @@ void bossStage::getFrameTile()
 			temp.frameX = 0;
 			temp.frameY = 0;
 			temp.img = FRAMEINFOMANAGER->FindImage(_tiles[i*TILEX + j].keyName);
-
 			_vFrameTile.push_back(temp);
 		}
 	}

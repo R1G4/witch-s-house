@@ -231,6 +231,7 @@
     <ClInclude Include="Vector2.h" />
     <ClInclude Include="WALK.h" />
     <ClInclude Include="windowsAPI.h" />
+    <ClInclude Include="zOrder.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="animation.cpp" />
@@ -316,6 +317,7 @@
     <ClCompile Include="Vector2.cpp" />
     <ClCompile Include="WALK.cpp" />
     <ClCompile Include="windowsAPI.cpp" />
+    <ClCompile Include="zOrder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="windowsAPI.rc" />

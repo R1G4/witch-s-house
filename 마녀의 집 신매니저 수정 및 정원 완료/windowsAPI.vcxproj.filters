@@ -324,6 +324,9 @@
     <ClInclude Include="thirdLibrary.h">
       <Filter>playGround\scense\ThirdFloor</Filter>
     </ClInclude>
+    <ClInclude Include="zOrder.h">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -559,6 +562,9 @@
     </ClCompile>
     <ClCompile Include="thirdSnakeDead.cpp">
       <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="zOrder.cpp">
+      <Filter>2DGameFramework\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
