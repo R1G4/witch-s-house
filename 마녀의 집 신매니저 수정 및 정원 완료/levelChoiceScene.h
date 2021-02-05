@@ -12,6 +12,7 @@ public:
 	float _rcAlphaChange;		//렉트 조절용
 	float _x, _y;
 	float _sceneAlpha;
+	float _volume;
 	bool _isChoice;
 
 public:

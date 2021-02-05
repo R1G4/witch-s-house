@@ -27,6 +27,7 @@
 #include "prison_5f.h"
 #include "prison_5f_well.h"
 #include "prison_5f_skul.h"
+#include "playerMenu.h"
 
 
 class playGround : public gameNode
@@ -56,6 +57,8 @@ private:
 	fifthFloorStage* _prison_5f_Stage;
 	fifthFloorStage* _prison_well_5f_Stage;
 	fifthFloorStage* _prison_skul_5f_Stage;
+
+	playerMenu* _playerMenu;
 public:
 	playGround();
 	~playGround();

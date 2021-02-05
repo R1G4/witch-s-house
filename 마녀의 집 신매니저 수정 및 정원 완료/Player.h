@@ -1,5 +1,6 @@
 #pragma once
 #include "gameNode.h"
+#include "playerMenu.h"
 class characterState;
 
 enum STATE
@@ -26,11 +27,13 @@ class Player :
 	public gameNode
 {
 private:
+	playerMenu* _playerMenu;
 	tagPlayer _player;
 	Vector2 _startPosition;
 	characterState* chr_State;
 	int _count;
 	int frameSpeed;
+	bool _open;
 
 public:
 	HRESULT init();

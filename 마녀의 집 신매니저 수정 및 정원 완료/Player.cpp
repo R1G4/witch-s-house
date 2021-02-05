@@ -16,6 +16,10 @@ HRESULT Player::init()
 	_player.alpha = 1;
 	frameSpeed = 5;
 	_player.rc = RectMakePivot(Vector2(_player.x+3, _player.y + 3), Vector2(TILESIZE/2, TILESIZE/2), Pivot::LeftTop);
+
+	//_playerMenu = new playerMenu;
+	//_playerMenu->init();
+	_open = false;
 	return S_OK;
 }
 
@@ -25,11 +29,23 @@ void Player::release()
 
 void Player::update()
 {
-
-	chr_State->updateState();
-	_player.frameY = (int)_player.direc;
-	_player.rc = RectMakePivot(Vector2(_player.x+3, _player.y+3), Vector2(TILESIZE/2, TILESIZE/2), Pivot::LeftTop);
-	framePlay();
+	
+	//2월5일 UI합치면서 open 만들어둠
+	if (_open)
+	{
+		//_playerMenu->update();
+		if (KEYMANAGER->isOnceKeyDown('X')) _open = false;
+	}
+	
+	if (!_open)
+	{
+		if (KEYMANAGER->isOnceKeyDown('X')) _open = true;
+		chr_State->updateState();
+		_player.frameY = (int)_player.direc;
+		_player.rc = RectMakePivot(Vector2(_player.x + 3, _player.y + 3), Vector2(TILESIZE / 2, TILESIZE / 2), Pivot::LeftTop);
+		framePlay();
+	}
+	
 }
 
 void Player::render()
@@ -41,6 +57,7 @@ void Player::render()
 		CAMERAMANAGER->renderRc(_player.searchRc, D2D1::ColorF::Magenta, 1, 1);
 		CAMERAMANAGER->renderRc(_player.rc, D2D1::ColorF::Blue, 1, 1);
 	}
+	//_playerMenu->render();
 }
 
 void Player::setState(STATE st)

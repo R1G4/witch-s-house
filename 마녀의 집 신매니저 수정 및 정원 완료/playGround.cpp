@@ -29,17 +29,18 @@ HRESULT playGround::init()
 
 	addAutoImage();
 	addFrameImg();
+	_playerMenu = new playerMenu;
+	_playerMenu->init();
 	SCENEMANAGER->addScene("MapToolScene", new mapTool);
 		
 	//SCENEMANAGER->changeScene("성앞");
 	//SCENEMANAGER->changeScene("entranceFake");
 
 	//SCENEMANAGER->changeScene("stage1_1");
-	SCENEMANAGER->changeScene("garden_5f");
-	/////////////////UI 일단 주석처리/////////////
-	//addScene();
-	//SCENEMANAGER->changeScene("시작화면");
-	/////////////////////////////////////////////
+	SCENEMANAGER->changeScene("시작화면");
+	SOUNDMANAGER->play("main");
+
+	
 
 	return S_OK;
 }
@@ -56,6 +57,7 @@ void playGround::update()
 	gameNode::update();
 	SCENEMANAGER->update();
 	FRAMEINFOMANAGER->update();
+	_playerMenu->update();
 }
 
 //그리기 전용
@@ -64,10 +66,15 @@ void playGround::render()
 	//백버퍼 초기화
 	D2DRenderer::GetInstance()->BeginRender(D2D1::ColorF::Black);
 	{
+
 		SCENEMANAGER->render();
+		_playerMenu->render();
+
 	}
 	//백버퍼에 그린 내용들을 화면에 뿌려라~
 	D2DRenderer::GetInstance()->EndRender();
+
+	
 }
 
 void playGround::addAutoImage()

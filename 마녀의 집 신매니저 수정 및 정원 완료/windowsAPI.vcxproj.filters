@@ -67,6 +67,9 @@
     <Filter Include="playGround\scense\FithFloor">
       <UniqueIdentifier>{576a824b-273c-47f3-9614-7bb466fa792e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\UI">
+      <UniqueIdentifier>{f0ac301e-1b59-41f2-a7c1-2a055aa60c5d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -177,9 +180,6 @@
     <ClInclude Include="status.h">
       <Filter>playGround</Filter>
     </ClInclude>
-    <ClInclude Include="menu.h">
-      <Filter>playGround</Filter>
-    </ClInclude>
     <ClInclude Include="WALK.h">
       <Filter>playGround\Player</Filter>
     </ClInclude>
@@ -206,9 +206,6 @@
     </ClInclude>
     <ClInclude Include="garDenUnder.h">
       <Filter>playGround\scense\OutSide</Filter>
-    </ClInclude>
-    <ClInclude Include="levelChoiceScene.h">
-      <Filter>playGround\scense</Filter>
     </ClInclude>
     <ClInclude Include="bossStage.h">
       <Filter>playGround\scense\BossStage</Filter>
@@ -284,6 +281,27 @@
     </ClInclude>
     <ClInclude Include="bossStage_3.h">
       <Filter>playGround\scense\BossStage</Filter>
+    </ClInclude>
+    <ClInclude Include="playerMenu.h">
+      <Filter>playGround\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="item.h">
+      <Filter>playGround\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="load.h">
+      <Filter>playGround\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="settings.h">
+      <Filter>playGround\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="sound.h">
+      <Filter>playGround\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="menu.h">
+      <Filter>playGround\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="levelChoiceScene.h">
+      <Filter>playGround\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -377,9 +395,6 @@
     <ClCompile Include="status.cpp">
       <Filter>playGround</Filter>
     </ClCompile>
-    <ClCompile Include="menu.cpp">
-      <Filter>playGround</Filter>
-    </ClCompile>
     <ClCompile Include="characterState.cpp">
       <Filter>playGround\Player</Filter>
     </ClCompile>
@@ -406,9 +421,6 @@
     </ClCompile>
     <ClCompile Include="garDenUnder.cpp">
       <Filter>playGround\scense\OutSide</Filter>
-    </ClCompile>
-    <ClCompile Include="levelChoiceScene.cpp">
-      <Filter>playGround\scense</Filter>
     </ClCompile>
     <ClCompile Include="bossStage.cpp">
       <Filter>playGround\scense\BossStage</Filter>
@@ -484,6 +496,27 @@
     </ClCompile>
     <ClCompile Include="bossStage_3.cpp">
       <Filter>playGround\scense\BossStage</Filter>
+    </ClCompile>
+    <ClCompile Include="playerMenu.cpp">
+      <Filter>playGround\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="item.cpp">
+      <Filter>playGround\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="settings.cpp">
+      <Filter>playGround\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="load.cpp">
+      <Filter>playGround\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="sound.cpp">
+      <Filter>playGround\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="menu.cpp">
+      <Filter>playGround\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="levelChoiceScene.cpp">
+      <Filter>playGround\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
