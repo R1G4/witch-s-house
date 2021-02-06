@@ -35,6 +35,9 @@
 #include "prison_5f_skul.h"
 #include "playerMenu.h"
 #include "inMenu.h"
+#include "soundStage.h"
+#include "soundStageW.h"
+#include "soundStageE1.h"
 
 
 class playGround : public gameNode

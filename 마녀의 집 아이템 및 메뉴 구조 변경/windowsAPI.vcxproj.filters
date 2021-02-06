@@ -73,6 +73,9 @@
     <Filter Include="playGround\temp">
       <UniqueIdentifier>{9bc06893-064c-481f-a77f-69e49c1f711f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="playGround\scense\4thFloor">
+      <UniqueIdentifier>{a9191caa-d6b0-4194-a687-c43f47d26d66}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -339,6 +342,15 @@
     <ClInclude Include="playerMenu.h">
       <Filter>playGround\temp</Filter>
     </ClInclude>
+    <ClInclude Include="soundStage.h">
+      <Filter>playGround\scense\4thFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="soundStageE1.h">
+      <Filter>playGround\scense\4thFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="soundStageW.h">
+      <Filter>playGround\scense\4thFloor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -586,6 +598,15 @@
     </ClCompile>
     <ClCompile Include="playerMenu.cpp">
       <Filter>playGround\temp</Filter>
+    </ClCompile>
+    <ClCompile Include="soundStage.cpp">
+      <Filter>playGround\scense\4thFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="soundStageE1.cpp">
+      <Filter>playGround\scense\4thFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="soundStageW.cpp">
+      <Filter>playGround\scense\4thFloor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

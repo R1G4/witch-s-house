@@ -212,6 +212,9 @@
     <ClInclude Include="skul.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="soundManager.h" />
+    <ClInclude Include="soundStage.h" />
+    <ClInclude Include="soundStageE1.h" />
+    <ClInclude Include="soundStageW.h" />
     <ClInclude Include="stageMemoryManager.h" />
     <ClInclude Include="status.h" />
     <ClInclude Include="stdafx.h" />
@@ -297,6 +300,9 @@
     <ClCompile Include="skul.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="soundManager.cpp" />
+    <ClCompile Include="soundStage.cpp" />
+    <ClCompile Include="soundStageE1.cpp" />
+    <ClCompile Include="soundStageW.cpp" />
     <ClCompile Include="stageMemoryManager.cpp" />
     <ClCompile Include="status.cpp" />
     <ClCompile Include="stdafx.cpp">
