@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{E2958D70-CFC8-4A1D-980D-12180D9B541F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>windowsAPI</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="animation.h" />
+    <ClInclude Include="astarTile.h" />
+    <ClInclude Include="bear.h" />
+    <ClInclude Include="bearRoom.h" />
+    <ClInclude Include="boss.h" />
+    <ClInclude Include="bossStage.h" />
+    <ClInclude Include="bossStage_1.h" />
+    <ClInclude Include="bossStage_2.h" />
+    <ClInclude Include="bossStage_3.h" />
+    <ClInclude Include="bossStage_4.h" />
+    <ClInclude Include="bossStage_5.h" />
+    <ClInclude Include="boxRoom.h" />
+    <ClInclude Include="CameraManager.h" />
+    <ClInclude Include="castlefront.h" />
+    <ClInclude Include="characterState.h" />
+    <ClInclude Include="commonMacroFunction.h" />
+    <ClInclude Include="D2DRenderer.h" />
+    <ClInclude Include="DASH.h" />
+    <ClInclude Include="DeadManager.h" />
+    <ClInclude Include="dictionary.h" />
+    <ClInclude Include="diningRoom_5f.h" />
+    <ClInclude Include="entrance.h" />
+    <ClInclude Include="entranceFake.h" />
+    <ClInclude Include="entranceTrap.h" />
+    <ClInclude Include="fifthFloorStage.h" />
+    <ClInclude Include="Figure.h" />
+    <ClInclude Include="firstFloorStage.h" />
+    <ClInclude Include="FloatEllipse.h" />
+    <ClInclude Include="FloatRect.h" />
+    <ClInclude Include="frameInfoManager.h" />
+    <ClInclude Include="gameNode.h" />
+    <ClInclude Include="garDen.h" />
+    <ClInclude Include="gardenToBoss_5f.h" />
+    <ClInclude Include="garDenUnder.h" />
+    <ClInclude Include="garden_5f.h" />
+    <ClInclude Include="hallway.h" />
+    <ClInclude Include="IDLE.h" />
+    <ClInclude Include="image.h" />
+    <ClInclude Include="imageManager.h" />
+    <ClInclude Include="inMenu.h" />
+    <ClInclude Include="item.h" />
+    <ClInclude Include="ItemManager.h" />
+    <ClInclude Include="keyManager.h" />
+    <ClInclude Include="levelChoiceScene.h" />
+    <ClInclude Include="LibraryHeader.h" />
+    <ClInclude Include="Line.h" />
+    <ClInclude Include="load.h" />
+    <ClInclude Include="mapTool.h" />
+    <ClInclude Include="Math.h" />
+    <ClInclude Include="menu.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="playerMenu.h" />
+    <ClInclude Include="playGround.h" />
+    <ClInclude Include="prison_5f.h" />
+    <ClInclude Include="prison_5f_skul.h" />
+    <ClInclude Include="prison_5f_well.h" />
+    <ClInclude Include="randomFunction.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="sceneManager.h" />
+    <ClInclude Include="scissorsRoom.h" />
+    <ClInclude Include="settings.h" />
+    <ClInclude Include="singletonBase.h" />
+    <ClInclude Include="skul.h" />
+    <ClInclude Include="sound.h" />
+    <ClInclude Include="soundManager.h" />
+    <ClInclude Include="stageMemoryManager.h" />
+    <ClInclude Include="status.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="StorageManager.h" />
+    <ClInclude Include="StringHelper.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="textMananger.h" />
+    <ClInclude Include="thirdLibrary.h" />
+    <ClInclude Include="thirdMain.h" />
+    <ClInclude Include="thirdOnewayLoad.h" />
+    <ClInclude Include="thirdFrogOutRoom.h" />
+    <ClInclude Include="thirdSnakeDead.h" />
+    <ClInclude Include="thirdSnakeRoom.h" />
+    <ClInclude Include="thirdOnewayDead.h" />
+    <ClInclude Include="thirdFrogRoom.h" />
+    <ClInclude Include="timeManager.h" />
+    <ClInclude Include="timer.h" />
+    <ClInclude Include="Triangle.h" />
+    <ClInclude Include="txtData.h" />
+    <ClInclude Include="Vector2.h" />
+    <ClInclude Include="WALK.h" />
+    <ClInclude Include="windowsAPI.h" />
+    <ClInclude Include="zOrder.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="animation.cpp" />
+    <ClCompile Include="astarTile.cpp" />
+    <ClCompile Include="bear.cpp" />
+    <ClCompile Include="bearRoom.cpp" />
+    <ClCompile Include="boss.cpp" />
+    <ClCompile Include="bossStage.cpp" />
+    <ClCompile Include="bossStage_1.cpp" />
+    <ClCompile Include="bossStage_2.cpp" />
+    <ClCompile Include="bossStage_3.cpp" />
+    <ClCompile Include="bossStage_4.cpp" />
+    <ClCompile Include="bossStage_5.cpp" />
+    <ClCompile Include="boxRoom.cpp" />
+    <ClCompile Include="CameraManager.cpp" />
+    <ClCompile Include="castlefront.cpp" />
+    <ClCompile Include="characterState.cpp" />
+    <ClCompile Include="D2DRenderer+Draw.cpp" />
+    <ClCompile Include="D2DRenderer.cpp" />
+    <ClCompile Include="DASH.cpp" />
+    <ClCompile Include="DeadManager.cpp" />
+    <ClCompile Include="diningRoom_5f.cpp" />
+    <ClCompile Include="entrance.cpp" />
+    <ClCompile Include="entranceFake.cpp" />
+    <ClCompile Include="entranceTrap.cpp" />
+    <ClCompile Include="fifthFloorStage.cpp" />
+    <ClCompile Include="Figure.cpp" />
+    <ClCompile Include="firstFloorStage.cpp" />
+    <ClCompile Include="FloatEllipse.cpp" />
+    <ClCompile Include="FloatRect.cpp" />
+    <ClCompile Include="frameInfoManager.cpp" />
+    <ClCompile Include="gameNode.cpp" />
+    <ClCompile Include="garDen.cpp" />
+    <ClCompile Include="gardenToBoss_5f.cpp" />
+    <ClCompile Include="garDenUnder.cpp" />
+    <ClCompile Include="garden_5f.cpp" />
+    <ClCompile Include="hallway.cpp" />
+    <ClCompile Include="IDLE.cpp" />
+    <ClCompile Include="image.cpp" />
+    <ClCompile Include="imageManager.cpp" />
+    <ClCompile Include="inMenu.cpp" />
+    <ClCompile Include="item.cpp" />
+    <ClCompile Include="ItemManager.cpp" />
+    <ClCompile Include="keyManager.cpp" />
+    <ClCompile Include="levelChoiceScene.cpp" />
+    <ClCompile Include="Line.cpp" />
+    <ClCompile Include="load.cpp" />
+    <ClCompile Include="mapTool.cpp" />
+    <ClCompile Include="Math.cpp" />
+    <ClCompile Include="menu.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="playerMenu.cpp" />
+    <ClCompile Include="playGround.cpp" />
+    <ClCompile Include="prison_5f.cpp" />
+    <ClCompile Include="prison_5f_skul.cpp" />
+    <ClCompile Include="prison_5f_well.cpp" />
+    <ClCompile Include="sceneManager.cpp" />
+    <ClCompile Include="scissorsRoom.cpp" />
+    <ClCompile Include="settings.cpp" />
+    <ClCompile Include="skul.cpp" />
+    <ClCompile Include="sound.cpp" />
+    <ClCompile Include="soundManager.cpp" />
+    <ClCompile Include="stageMemoryManager.cpp" />
+    <ClCompile Include="status.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="StorageManager.cpp" />
+    <ClCompile Include="StringHelper.cpp" />
+    <ClCompile Include="textMananger.cpp" />
+    <ClCompile Include="thirdLibrary.cpp" />
+    <ClCompile Include="thirdMain.cpp" />
+    <ClCompile Include="thirdOnewayLoad.cpp" />
+    <ClCompile Include="thirdFrogOutRoom.cpp" />
+    <ClCompile Include="thirdSnakeDead.cpp" />
+    <ClCompile Include="thirdSnakeRoom.cpp" />
+    <ClCompile Include="thirdOnewayDead.cpp" />
+    <ClCompile Include="thirdFrogRoom.cpp" />
+    <ClCompile Include="timeManager.cpp" />
+    <ClCompile Include="timer.cpp" />
+    <ClCompile Include="Triangle.cpp" />
+    <ClCompile Include="txtData.cpp" />
+    <ClCompile Include="Vector2.cpp" />
+    <ClCompile Include="WALK.cpp" />
+    <ClCompile Include="windowsAPI.cpp" />
+    <ClCompile Include="zOrder.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="windowsAPI.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico" />
+    <Image Include="windowsAPI.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
