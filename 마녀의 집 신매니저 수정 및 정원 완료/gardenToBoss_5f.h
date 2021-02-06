@@ -24,12 +24,4 @@ public:
 	void load(LOCATION location = LOCATION_DEFAULT);
 
 	void setTrigger();
-
-	// 다이얼로그용
-	bool _isStopToRead;
-	int _string_count;
-	vector<string> _vScript;
-	void renderText();
-	int _count_dia;
-	int _i_word;
 };

@@ -36,8 +36,8 @@ HRESULT playGround::init()
 	//SCENEMANAGER->changeScene("¼º¾Õ");
 	//SCENEMANAGER->changeScene("entranceFake");
 
-	//SCENEMANAGER->changeScene("prison_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
-	SCENEMANAGER->changeScene("thirdMain");
+	SCENEMANAGER->changeScene("prison_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
+	//SCENEMANAGER->changeScene("thirdMain");
 	//SOUNDMANAGER->play("main");
 
 	

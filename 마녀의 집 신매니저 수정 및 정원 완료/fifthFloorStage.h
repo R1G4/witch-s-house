@@ -1,5 +1,7 @@
 #pragma once
 #include "gameNode.h"
+#include "skul.h"
+#include "DeadManager.h"
 
 class Player;
 
@@ -20,12 +22,23 @@ protected:
 	Vector2 camera;
 
 	bool _isChangeScene;
+	bool _isDead;
 
 	Player* _player;
+	skul* _skul;
+	DeadManager* _dead;
+
 	int _frameInterval;
 	bool isTrigger;
+	bool _isSkulAppeal;
 
 	float _sceneAlpha;			//씬 투명도
+
+	float _rcAlpha;				//선택창 투명도
+	float _rcAlphaChange;
+
+	bool _isStopToRead;			// 다이어로그용
+	vector<string> _vScript;
 public:
 	fifthFloorStage() {};
 	~fifthFloorStage() {};
@@ -38,6 +51,7 @@ public:
 	void getFrameTile();
 	void setFrameIndex();			// 배치된 프레임 이미지의 인덱스 설정 
 	void tileCollision();
+	void rcAlphaChange();
 	void sceneChange(string name);
 	void sceneChange(string name, CHRDIRECTION _chrdirection, LOCATION _location);
 	void addresslink(Player* player) { _player = player; }

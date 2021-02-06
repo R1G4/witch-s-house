@@ -4,6 +4,12 @@
 class garden_5f : public fifthFloorStage
 {
 private:
+	enum CLICKORDER
+	{
+		FIRST,
+		SECOND
+	};
+
 	enum TRIGGER
 	{
 		DOORTO4F = 21 + 6 * TILEX,
@@ -12,10 +18,19 @@ private:
 		DOORTOGARDENTOBOSS = 23 + 5 * TILEX,
 		TREE = 22 + 14 * TILEX,
 		FLOWER = 23 + 15 * TILEX,
-		NEKO = 23 + 18 * TILEX
+		NEKO = 23 + 18 * TILEX,
+		TEE = 24 + 18 * TILEX,
 	};
 
 	TRIGGER _trigger;
+	CLICKORDER _co;
+
+	float _x, _y;
+	FloatRect _rc;
+	FloatRect _correct_rc;
+
+	bool _isClick;
+
 public:
 	garden_5f() {};
 	~garden_5f() {};
@@ -28,5 +43,6 @@ public:
 	void load(LOCATION location = LOCATION_DEFAULT);
 
 	void setTrigger();
+	void setChoiceScene();
 };
 

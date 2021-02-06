@@ -12,6 +12,11 @@ HRESULT garden_5f::init(CHRDIRECTION _chrdirection, LOCATION _location)
 	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
 	fifthFloorStage::init();
 
+	_x = WINSIZEX / 2 - 250;
+	_y = WINSIZEY / 2;
+	_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+	_correct_rc = RectMakePivot(Vector2(WINSIZEX / 2 + 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+	_co = FIRST;
 	return S_OK;
 }
 
@@ -21,15 +26,24 @@ void garden_5f::release()
 
 void garden_5f::update()
 {
+	if (!_isClick && !_isStopToRead)
+	{
+		fifthFloorStage::update();
+
+		setFrameIndex();
+
+		//카메라 관련 업데이트
+		cameraUpdate();
+
+		setTrigger();
+	}
+	setChoiceScene();
 	
-	fifthFloorStage::update();
-
-	setFrameIndex();
-
-	//카메라 관련 업데이트
-	cameraUpdate();
-
-	setTrigger();
+	if (_isStopToRead)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))	// 클릭행동 트리거
+			_isStopToRead = TEXTMANAGER->setNextScript(true);
+	}
 	//cout << "x : " << (int)(_player->getPlayerLocX()) / TILESIZE << " y : " << (int)(_player->getPlayerLocY()) / TILESIZE << endl;
 }
 
@@ -43,7 +57,24 @@ void garden_5f::render()
 
 	fifthFloorStage::render();
 
+	if (_isStopToRead)
+		TEXTMANAGER->renderText();
 
+	if (_isClick)
+	{
+		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(camera.x - 250, camera.y));	//왼쪽
+		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(camera.x + 250, camera.y));	//오른쪽
+		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(camera.x, camera.y - 150));	//위
+		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(camera.x, camera.y + 150));	//아래
+
+		D2DINS->GetInstance()->RenderText(WINSIZEX / 2 - 300, 345, L"뜯는다.", RGB(255, 255, 255), 0.85f, 27);
+		D2DINS->GetInstance()->RenderText(WINSIZEX / 2 + 117, 345, L"아무것도 하지 않는다.", RGB(255, 255, 255), 0.85f, 27);
+		D2DINS->GetInstance()->RenderText(WINSIZEX / 2 - 50, 195, L"뽑는다.", RGB(255, 255, 255), 0.85f, 27);
+		D2DINS->GetInstance()->RenderText(WINSIZEX / 2 - 50, 495, L"꺾는다.", RGB(255, 255, 255), 0.85f, 27);
+
+		D2DINS->FillRectangle(_rc, D2D1::ColorF::Enum::WhiteSmoke, _rcAlpha / 5.5);
+		D2DINS->GetInstance()->DrawRectangle(_rc, D2D1::ColorF::White, _rcAlpha, 1.0f);
+	}
 }
 
 void garden_5f::Collision()
@@ -90,7 +121,17 @@ void garden_5f::setTrigger()
 	{
 		if (IntersectRectToRect(&_tiles[FLOWER].rc, &_player->getSearchRc()))
 		{
-			cout << "꽃!" << endl;
+			switch (_co)
+			{
+			case FIRST:
+				_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_garden_flower.txt");
+				_isStopToRead = true;
+				_co = SECOND;
+				break;
+			case SECOND:
+				_isClick = true;
+				break;
+			}
 		}
 		if (IntersectRectToRect(&_tiles[NEKO].rc, &_player->getSearchRc()))
 		{
@@ -99,30 +140,56 @@ void garden_5f::setTrigger()
 		if (IntersectRectToRect(&_tiles[TREE].rc, &_player->getSearchRc()) ||
 			IntersectRectToRect(&_tiles[TREE + 1].rc, &_player->getSearchRc()))
 		{
-			cout << "나무!" << endl;
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_garden_tree.txt");
+			_isStopToRead = true;
+		}
+		if (IntersectRectToRect(&_tiles[TEE].rc, &_player->getSearchRc()))
+		{
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_garden_tee.txt");
+			_isStopToRead = true;
 		}
 	}
 
-	//cout << _vFrameTile[1].keyName << endl;
 	if (IntersectRectToRect(&_tiles[DOORTOGARDENTOBOSS].rc, &_player->getPlayerFrc()))
 	{
 		_isChangeScene = true;
 		_vFrameTile[1].isTrigger = true;
 		sceneChange("gardenToBoss_5f", CHRDIREC_UP, LOCATION_DEFAULT);
-		cout << "보스로!" << endl;
 	}
 	if (IntersectRectToRect(&_tiles[DOORTOPRISON].rc, &_player->getPlayerFrc()) ||
 		IntersectRectToRect(&_tiles[DOORTOPRISON + TILEX].rc, &_player->getPlayerFrc()))
 	{
 		_isChangeScene = true;
 		sceneChange("prison_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
-		cout << "감옥으로!" << endl;
 	}
 	if (IntersectRectToRect(&_tiles[DOORTODININGROOM].rc, &_player->getPlayerFrc()) ||
 		IntersectRectToRect(&_tiles[DOORTODININGROOM + TILEX].rc, &_player->getPlayerFrc()))
 	{
 		_isChangeScene = true;
 		sceneChange("diningRoom_5f", CHRDIREC_LEFT, LOCATION_DEFAULT);
-		cout << "안방으로!" << endl;
+	}
+}
+
+void garden_5f::setChoiceScene()
+{
+	if (_isClick)
+	{
+		rcAlphaChange();
+		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+			_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+			_rc = RectMakePivot(Vector2(WINSIZEX / 2 + 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+		if (KEYMANAGER->isOnceKeyDown(VK_UP))
+			_rc = RectMakePivot(Vector2(WINSIZEX / 2, WINSIZEY / 2 - 150), Vector2(270, 75), Pivot::Center);
+		if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
+			_rc = RectMakePivot(Vector2(WINSIZEX / 2, WINSIZEY / 2 + 150), Vector2(270, 75), Pivot::Center);
+		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+		{
+			_isClick = false;
+			if (IntersectRectToRect(&_rc, &_correct_rc))
+				cout << "정답!" << endl;
+			else
+				cout << "오답!" << endl;
+		}
 	}
 }

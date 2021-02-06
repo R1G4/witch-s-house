@@ -32,6 +32,13 @@ void gardenToBoss_5f::update()
 		cameraUpdate();
 		setTrigger();
 	}
+	else
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))	// 클릭행동 트리거
+		{
+			_isStopToRead = TEXTMANAGER->setNextScript(true);
+		}
+	}
 }
 
 void gardenToBoss_5f::render()
@@ -45,7 +52,7 @@ void gardenToBoss_5f::render()
 	fifthFloorStage::render();
 
 	if (_isStopToRead)
-		renderText();
+		TEXTMANAGER->renderText();
 }
 
 void gardenToBoss_5f::Collision()
@@ -81,16 +88,16 @@ void gardenToBoss_5f::setTrigger()
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))	// 클릭행동 트리거
 	{
+		_isStopToRead = TEXTMANAGER->setNextScript(true);
+
 		if (IntersectRectToRect(&_tiles[BOOK].rc, &_player->getSearchRc()))
 		{
-			if (!_isStopToRead)
-				_vScript = TXTDATA->txtLoad("dialog/5f_gardenToBossBook.txt", "\n");
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_gardenToBossBook.txt");
 			_isStopToRead = true;
 		}
 		if (IntersectRectToRect(&_tiles[NEKO].rc, &_player->getSearchRc()))
 		{
-			if (!_isStopToRead)
-				_vScript = TXTDATA->txtLoad("dialog/5f_gardenToBossNeko.txt", "\n");
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_gardenToBossNeko.txt");
 			_isStopToRead = true;
 			cout << "세이브!" << endl;
 		}
@@ -102,59 +109,10 @@ void gardenToBoss_5f::setTrigger()
 		_vFrameTile[0].isTrigger = true;
 		sceneChange("BossStage");
 		fifthFloorStage::release();
-		cout << "보스로!" << endl;
 	}
 	if (IntersectRectToRect(&_tiles[DOORTOGARDEN].rc, &_player->getPlayerFrc()))
 	{
 		_isChangeScene = true;
 		sceneChange("garden_5f", CHRDIREC_DOWN, LOCATION_2);
-		cout << "가든으로!" << endl;
 	}
-}
-
-void gardenToBoss_5f::renderText()
-{
-	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-	{
-		if (_string_count < _vScript.size())
-		{
-			_string_count++;
-			_i_word = 0;
-			if (_string_count >= _vScript.size())
-			{
-				_isStopToRead = false;
-				_string_count = 0;
-				return;
-			}
-		}
-	}
-
-	D2DINS->FillRectangle(RectMakePivot(Vector2(0, WINSIZEY / 2 - 100), Vector2(WINSIZEX, 200), Pivot::LeftTop), D2D1::ColorF::Black, 0.5);
-	
-	char str[256];
-	wstring wstr;
-
-	strcpy_s(str, _vScript[_string_count].c_str());
-
-	_count_dia++;
-	if (_count_dia % 5 == 0 && _i_word <= strlen(str))	// 한줄 출력시 한글자씩 출력하게하는 함수
-	{
-		_i_word = _i_word + 2;
-		strncpy_s(str, str, _i_word);
-		wstr = stringToWstring(str);
-		_count_dia = 0;
-	}
-	else if (_i_word >= strlen(str))
-	{
-		strncpy_s(str, str, _i_word);
-		wstr = stringToWstring(str);
-		_count_dia = 0;
-	}
-	else
-	{
-		strncpy_s(str, str, _i_word);
-		wstr = stringToWstring(str);
-	}
-
-	D2DINS->RenderTextField(WINSIZEX / 2 - 200, WINSIZEY / 2 - 100, wstr, RGB(255, 255, 255), 20, 400, 200, 1.0);
 }

@@ -4,15 +4,22 @@
 
 HRESULT fifthFloorStage::init()
 {
+	_skul = new skul;
+	_dead = new DeadManager;
 	_player->init();
 	_player->setAlpha(1.f);
 
+	IMAGEMANAGER->AddImage("bar", L"Image/obj/bar2.png");
 	//카메라 아직 잘 모르겠다 다 초기화 하자..
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
 	CAMERAMANAGER->setCamera(camera);
 
 	getFrameTile();
-	_sceneAlpha = 1.f;
+	_sceneAlpha = 1.0f;
+	_rcAlpha = 1.0f;
+	_rcAlphaChange = 0.03f;
+	_isSkulAppeal = _isDead = false;
+	_dead->setPlayerAddress(_player);
 	return S_OK;
 }
 
@@ -24,7 +31,10 @@ void fifthFloorStage::update()
 {
 	if(!_isChangeScene)
 		_player->update();
+	_skul->update();
 	tileCollision();
+	if (_isDead)
+		_dead->update();
 }
 
 void fifthFloorStage::cameraUpdate()
@@ -53,6 +63,7 @@ void fifthFloorStage::render()
 
 	//타일보다는 상위에 오브젝트보다는 하위에 위치해야함
 	_player->render();
+	if (_isSkulAppeal) _skul->render();
 
 	for (int i = 0; i < TILEY; i++)
 	{
@@ -80,7 +91,7 @@ void fifthFloorStage::render()
 			else CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::White, 0.7);
 		}
 
-		if (_vFrameTile[i].kinds == PLAYER) continue;
+		if (_vFrameTile[i].kinds == PLAYER || _vFrameTile[i].kinds == ENEMY) continue;
 
 		_vFrameTile[i].img->SetAlpha(_sceneAlpha);
 		CAMERAMANAGER->FrameRender
@@ -90,6 +101,7 @@ void fifthFloorStage::render()
 			_vFrameTile[i].frameX, _vFrameTile[i].frameY
 		);
 	}
+	_dead->render();
 }
 
 void fifthFloorStage::getFrameTile()
@@ -232,6 +244,17 @@ void fifthFloorStage::tileCollision()
 			}
 		}
 	}
+}
+
+void fifthFloorStage::rcAlphaChange()
+{
+	if (_rcAlpha >= 0.9f)
+		_rcAlphaChange = -0.03f;
+
+	if (_rcAlpha <= 0.35f)
+		_rcAlphaChange = 0.03f;
+
+	_rcAlpha += _rcAlphaChange;
 }
 
 void fifthFloorStage::sceneChange(string name)
