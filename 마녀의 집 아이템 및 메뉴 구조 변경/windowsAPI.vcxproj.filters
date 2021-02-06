@@ -195,9 +195,6 @@
     <ClInclude Include="IDLE.h">
       <Filter>playGround\Player</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>playGround\Player</Filter>
-    </ClInclude>
     <ClInclude Include="StringHelper.h">
       <Filter>2DGameFramework\Utils</Filter>
     </ClInclude>
@@ -273,9 +270,6 @@
     <ClInclude Include="bossStage_3.h">
       <Filter>playGround\scense\BossStage</Filter>
     </ClInclude>
-    <ClInclude Include="playerMenu.h">
-      <Filter>playGround\Player</Filter>
-    </ClInclude>
     <ClInclude Include="item.h">
       <Filter>playGround\Player</Filter>
     </ClInclude>
@@ -327,9 +321,6 @@
     <ClInclude Include="StorageManager.h">
       <Filter>2DGameFramework\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="inMenu.h">
-      <Filter>2DGameFramework\Manager</Filter>
-    </ClInclude>
     <ClInclude Include="ItemManager.h">
       <Filter>2DGameFramework\Manager</Filter>
     </ClInclude>
@@ -337,6 +328,15 @@
       <Filter>playGround\temp</Filter>
     </ClInclude>
     <ClInclude Include="load.h">
+      <Filter>playGround\temp</Filter>
+    </ClInclude>
+    <ClInclude Include="inMenu.h">
+      <Filter>playGround\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>playGround\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="playerMenu.h">
       <Filter>playGround\temp</Filter>
     </ClInclude>
   </ItemGroup>
@@ -440,9 +440,6 @@
     <ClCompile Include="IDLE.cpp">
       <Filter>playGround\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>playGround\Player</Filter>
-    </ClCompile>
     <ClCompile Include="WALK.cpp">
       <Filter>playGround\Player</Filter>
     </ClCompile>
@@ -521,9 +518,6 @@
     <ClCompile Include="bossStage_3.cpp">
       <Filter>playGround\scense\BossStage</Filter>
     </ClCompile>
-    <ClCompile Include="playerMenu.cpp">
-      <Filter>playGround\Player</Filter>
-    </ClCompile>
     <ClCompile Include="item.cpp">
       <Filter>playGround\Player</Filter>
     </ClCompile>
@@ -572,9 +566,6 @@
     <ClCompile Include="zOrder.cpp">
       <Filter>2DGameFramework\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="inMenu.cpp">
-      <Filter>2DGameFramework\Manager</Filter>
-    </ClCompile>
     <ClCompile Include="StorageManager.cpp">
       <Filter>2DGameFramework\Manager</Filter>
     </ClCompile>
@@ -585,6 +576,15 @@
       <Filter>playGround\temp</Filter>
     </ClCompile>
     <ClCompile Include="load.cpp">
+      <Filter>playGround\temp</Filter>
+    </ClCompile>
+    <ClCompile Include="inMenu.cpp">
+      <Filter>playGround\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>playGround\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="playerMenu.cpp">
       <Filter>playGround\temp</Filter>
     </ClCompile>
   </ItemGroup>
