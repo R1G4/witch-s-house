@@ -84,7 +84,6 @@ void bossStage::update()
 			playerLocation();
 		}
 	}
-
 	tileCollision();
 }
 
@@ -173,6 +172,11 @@ void bossStage::render()
 				CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i].keyName),
 					Vector2(_tiles[i].rc.left + TILESIZE / 2, _tiles[i].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i].keyName)->GetSize().y / 2));
 		}
+		//IMAGEMANAGER->FindImage("Back")->SetAlpha(_blackAlpha);
+		//IMAGEMANAGER->FindImage("Back")->Render(Vector2(WINSIZEX / 2, WINSIZEY / 2));
+		IMAGEMANAGER->FindImage("Back2")->SetAlpha (1.0f);
+		IMAGEMANAGER->FindImage("Back2")->SetSize(Vector2(1920, 1280));
+		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("Back2"), Vector2(_player->getPlayerLocX(), _player->getPlayerLocY()));
 		//여기도 그대로
 		dead->render();
 

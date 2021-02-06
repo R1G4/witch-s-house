@@ -69,8 +69,8 @@ void bossStage_4::activeTrigger()
 			if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].terrain == TR_TRIGGER && !_isBossAppeal)
 			{
 
-					_boss->init(bossLocX, bossLocY);
-					_isBossAppeal = true;
+				//	_boss->init(bossLocX, bossLocY);
+				//	_isBossAppeal = true;
 			}
 		}
 	}

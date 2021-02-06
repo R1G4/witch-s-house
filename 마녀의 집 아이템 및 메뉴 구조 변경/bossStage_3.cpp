@@ -75,7 +75,7 @@ void bossStage_3::render()
 				if (ZORDER->getZorder()[i].type == ZOBJECT)
 				{
 					if ((ZORDER->getZorder()[i].keyName == "obj61" && !_vTrigger[2].isTriggerOn) && (ZORDER->getZorder()[i].keyName == "obj61" && !_vTrigger[5].isTriggerOn))continue;
-					if ((ZORDER->getZorder()[i].keyName == "obj59" && !_vTrigger[0].isTriggerOn) && (ZORDER->getZorder()[i].keyName == "obj59" && !_vTrigger[1].isTriggerOn))continue;
+					if ((ZORDER->getZorder()[i].keyName == "obj59" && !_vTrigger[1].isTriggerOn) && (ZORDER->getZorder()[i].keyName == "obj59" && !_vTrigger[4].isTriggerOn))continue;
 					CAMERAMANAGER->render(ZORDER->getZorder()[i].img,
 						Vector2(ZORDER->getZorder()[i].x + TILESIZE / 2, ZORDER->getZorder()[i].y  - ZORDER->getZorder()[i].img->GetSize().y / 2));
 				}
@@ -102,6 +102,9 @@ void bossStage_3::render()
 					CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i].keyName),
 						Vector2(_tiles[i].rc.left + TILESIZE / 2, _tiles[i].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i].keyName)->GetSize().y / 2));
 			}
+			IMAGEMANAGER->FindImage("Back2")->SetAlpha(1.0f);
+			IMAGEMANAGER->FindImage("Back2")->SetSize(Vector2(1920, 1280));
+			CAMERAMANAGER->render(IMAGEMANAGER->FindImage("Back2"), Vector2(_player->getPlayerLocX(), _player->getPlayerLocY()));
 	dead->render();
 
 }
