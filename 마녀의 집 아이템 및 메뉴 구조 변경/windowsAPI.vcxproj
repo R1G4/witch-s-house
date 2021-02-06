@@ -168,6 +168,7 @@
     <ClInclude Include="DeadManager.h" />
     <ClInclude Include="dictionary.h" />
     <ClInclude Include="diningRoom_5f.h" />
+    <ClInclude Include="EndingScene.h" />
     <ClInclude Include="entrance.h" />
     <ClInclude Include="entranceFake.h" />
     <ClInclude Include="entranceTrap.h" />
@@ -260,6 +261,7 @@
     <ClCompile Include="DASH.cpp" />
     <ClCompile Include="DeadManager.cpp" />
     <ClCompile Include="diningRoom_5f.cpp" />
+    <ClCompile Include="EndingScene.cpp" />
     <ClCompile Include="entrance.cpp" />
     <ClCompile Include="entranceFake.cpp" />
     <ClCompile Include="entranceTrap.cpp" />

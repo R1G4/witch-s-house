@@ -30,7 +30,7 @@ HRESULT playGround::init()
 		
 	//SCENEMANAGER->changeScene("¼º¾Õ");
 	//SCENEMANAGER->changeScene("entranceFake");
-	SCENEMANAGER->changeScene("4ÃþÈ¦");
+	SCENEMANAGER->changeScene("Ending");
 	
 	//SCENEMANAGER->changeScene("prison_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
 	//SCENEMANAGER->changeScene("thirdMain");
@@ -144,6 +144,9 @@ void playGround::addScene()
 	SCENEMANAGER->addScene("prison_5f", _prison_5f_Stage);
 	SCENEMANAGER->addScene("prison_well_5f", _prison_well_5f_Stage);
 	SCENEMANAGER->addScene("prison_skul_5f", _prison_skul_5f_Stage);
+
+	//¿£µù
+	SCENEMANAGER->addScene("Ending", new EndingScene);
 }
 
 void playGround::addFrameImg()

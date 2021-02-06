@@ -38,6 +38,7 @@
 #include "soundStage.h"
 #include "soundStageW.h"
 #include "soundStageE1.h"
+#include "EndingScene.h"
 
 
 class playGround : public gameNode
