@@ -33,7 +33,6 @@ HRESULT gameNode::init(bool managerInit)
 		SCENEMANAGER->init();
 
 		TXTDATA->init();
-		INIDATA->init();
 	}
 	return S_OK;
 }
@@ -50,6 +49,12 @@ HRESULT gameNode::init(CHRDIRECTION _CHRDIRECTION, LOCATION _LOCATION)
 	return S_OK;
 }
 
+HRESULT gameNode::init(int x, int y, CHRDIRECTION _CHRDIRECTION)
+{
+	_managerInit = false;
+	return S_OK;
+}
+
 void gameNode::release()
 {
 	if (_managerInit)
@@ -61,7 +66,6 @@ void gameNode::release()
 
 		TXTDATA->release();
 		TXTDATA->releaseSingleton();
-		INIDATA->releaseSingleton();
 
 		TIMEMANAGER->release();
 		TIMEMANAGER->releaseSingleton();

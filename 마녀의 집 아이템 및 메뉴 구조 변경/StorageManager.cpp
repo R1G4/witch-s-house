@@ -82,7 +82,8 @@ MENUSTATE StorageManager::loadView()
 		//_isClick=fales;
 		// return MENU_END(메뉴에서 불러오기로 판단하면됨)
 
-
+		loadData();
+		return MENU_END;
 	}
 
 	if (_toggle)
@@ -100,21 +101,25 @@ bool StorageManager::saveData()
 	{
 	case OPENING:
 		INIDATA->addData("스테이지", "스테이지 이름", "시작의 정원");
+		INIDATA->addData("스테이지", "스테이지 씬", "정원");
 		INIDATA->addData("스테이지", "스테이지 번호(OPENING:0,FINAL:5)", save_s_enum.c_str());
 		INIDATA->iniSave(fileName);
 		break;
 	case FIRSTSTAGE:
 		INIDATA->addData("스테이지", "스테이지 이름", "마녀의 집 1층");
+		INIDATA->addData("스테이지", "스테이지 씬", "entrance");
 		INIDATA->addData("스테이지", "스테이지 번호(OPENING:0,FINAL:5)", save_s_enum.c_str());
 		INIDATA->iniSave(fileName);
 		break;
 	case SECONDSTAGE:
 		INIDATA->addData("스테이지", "스테이지 이름", "마녀의 집 2층");
+		INIDATA->addData("스테이지", "스테이지 씬", "thirdMain");
 		INIDATA->addData("스테이지", "스테이지 번호(OPENING:0,FINAL:5)", save_s_enum.c_str());
 		INIDATA->iniSave(fileName);
 		break;
 	case THIRDSTAGE:
 		INIDATA->addData("스테이지", "스테이지 이름", "마녀의 집 3층");
+		INIDATA->addData("스테이지", "스테이지 씬", "4층 홀");
 		INIDATA->addData("스테이지", "스테이지 번호(OPENING:0,FINAL:5)", save_s_enum.c_str());
 		INIDATA->iniSave(fileName);
 		break;
@@ -203,6 +208,8 @@ bool StorageManager::loadData()
 	//파일 로드
 	//타이틀을 가지고온 기준으로 폴더안에 파일명과 일치하는 파일을 불러옴
 	//로드 완료한다면 true를 반환
+	_toggle = false;
+	_saveStage = (STAGE)INIDATA->loadDataInterger(fileName, "스테이지", "스테이지 번호(OPENING:0,FINAL:5)");
 	switch (_saveStage)
 	{
 	case OPENING:
@@ -267,6 +274,11 @@ bool StorageManager::loadData()
 		//_player->setPLocaY(_load_y_i);
 		break;
 	case FINALSTAGE:
+		_stage = INIDATA->loadDataString(fileName, "스테이지", "스테이지 씬");
+		_playerDirection = (CHRDIRECTION)INIDATA->loadDataInterger(fileName, "비올라", "방향");
+		_playerX = INIDATA->loadDataInterger(fileName, "비올라", "x좌표");
+		_playerY = INIDATA->loadDataInterger(fileName, "비올라", "y좌표");
+		SCENEMANAGER->changeScene(_stage, _playerX, _playerY, _playerDirection);
 		break;
 	}
 	return false;

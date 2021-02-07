@@ -14,7 +14,7 @@ playGround::~playGround()
 HRESULT playGround::init()
 {
 	gameNode::init(true);
-	STORAGEMANAGER->init();
+
 	//Å¬·¡½º »ý¼º ¹× ÂüÁ¶
 	addressLink();
 	//¾À Ãß°¡
@@ -31,13 +31,18 @@ HRESULT playGround::init()
 	//SCENEMANAGER->changeScene("¼º¾Õ");
 	//SCENEMANAGER->changeScene("MapToolScene");
 	//SCENEMANAGER->changeScene("4ÃþÈ¦");
-
-	SCENEMANAGER->changeScene("4ÃþÈ¦");
+	STORAGEMANAGER->init();
+	//SCENEMANAGER->changeScene("BossStage1");
 	//SCENEMANAGER->changeScene("prison_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
-	//SCENEMANAGER->changeScene("thirdMain");
+	SCENEMANAGER->changeScene("½ÃÀÛÈ­¸é");
+	//SCENEMANAGER->changeScene("thirdMain",CHRDIREC_DOWN);
 	//SOUNDMANAGER->play("main");
 
-	
+	SOUNDMANAGER->addSound("main", "sound/main.OGG", true, true);
+	SOUNDMANAGER->addSound("firstMap", "sound/firstMap.OGG", false, true);
+	SOUNDMANAGER->addSound("wind", "sound/wind.OGG", false, true);
+	SOUNDMANAGER->addSound("cursor", "sound/cursor.OGG", false, false);
+	SOUNDMANAGER->addSound("click", "sound/click.OGG", false, false);
 
 	return S_OK;
 }

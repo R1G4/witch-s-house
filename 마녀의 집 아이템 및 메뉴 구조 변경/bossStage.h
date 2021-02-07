@@ -59,12 +59,18 @@ protected://스테이지용 세팅
 	float alpha;
 	//특정 상황에서 업데이트를 멈추게 하기 위한 변수
 	bool _Stop;
-
+	int save_x;
+	int save_y;
+	CHRDIRECTION save_direc;
+	string save_s_x;
+	string save_s_y;
+	string save_s_direc;
 public://스테이지 세팅용
 	bossStage();
 	~bossStage();
 
 	HRESULT init();
+	virtual HRESULT init(int x, int y,CHRDIRECTION direc);
 	void release();
 	void update();
 	void render();

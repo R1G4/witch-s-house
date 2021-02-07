@@ -17,6 +17,7 @@ public:
 	virtual HRESULT init(bool managerInit);
 	virtual HRESULT init(CHRDIRECTION _CHRDIRECTION);
 	virtual HRESULT init(CHRDIRECTION _CHRDIRECTION, LOCATION _LOCATION);
+	virtual HRESULT init(int x, int y, CHRDIRECTION _CHRDIRECTION);
 	virtual void release();			//메모리 해제 전용
 	virtual void update();			//연산 전용
 	virtual void render();			//그리기 전용

@@ -18,6 +18,20 @@ HRESULT bossStage_1::init()
 	return S_OK;
 }
 
+HRESULT bossStage_1::init(int x, int y, CHRDIRECTION direc)
+{
+	SOUNDMANAGER->play("Boss");
+
+	load();
+	bossStage::init();
+	_player->setPLocaX(x);
+	_player->setPLocaY(y);
+	_player->setDirec(direc);
+	_boss->init(bossLocX, bossLocY);
+	_isBossAppeal = true;
+	return S_OK;
+}
+
 void bossStage_1::release()
 {
 	bossStage::release();
@@ -69,13 +83,27 @@ void bossStage_1::activeTrigger()
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].terrain == TR_TRIGGER && !_isBossAppeal)
+			if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].terrain == TR_TRIGGER)
 			{
-				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+				STORAGEMANAGER->setStage(FINALSTAGE);
+				save_x = _player->getPlayerLocX();
+				save_y = _player->getPlayerLocY();
+				save_direc = _player->getPdirec();
+				save_s_x = to_string(save_x);
+				save_s_y = to_string(save_y);
+				save_s_direc = to_string(save_direc);
+				INIDATA->addData("비올라", "x좌표", save_s_x.c_str());
+				INIDATA->addData("비올라", "y좌표", save_s_y.c_str());
+				INIDATA->addData("비올라", "방향", save_s_direc.c_str());
+				if (STORAGEMANAGER->saveView()&&!_isBossAppeal)
 				{
+					_Stop = true;
+					SOUNDMANAGER->stop("BossStage");
+					SOUNDMANAGER->play("Boss");
 					_boss->init(bossLocX, bossLocY);
 					_isBossAppeal = true;
 				}
+				else _Stop = false;
 			}
 		}
 	}

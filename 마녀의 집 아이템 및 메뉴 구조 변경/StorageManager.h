@@ -81,6 +81,10 @@ protected:
 	int _load_obj[100];
 
 	LOCATION5F _real_location;
+
+	string _stage;//전환할 스테이지 씬 이름
+	int _playerX, _playerY;//플레이어 좌표
+	CHRDIRECTION _playerDirection;//플레이어 방향
 public:
 	StorageManager();
 	~StorageManager();

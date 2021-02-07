@@ -9,6 +9,11 @@ bossStage::~bossStage()
 }
 HRESULT bossStage::init()
 {
+	SOUNDMANAGER->addSound("BossStage", "sound/bgm/창훈이맵 다운받은거.mp3", true, true);
+	SOUNDMANAGER->addSound("Boss", "sound/bgm/창훈이 맵.ogg", true, true);
+	SOUNDMANAGER->addSound("SoundEffect", "sound/effect/downBox.ogg", false, false);
+	SOUNDMANAGER->addSound("BossDead", "sound/effect/똑똑똑똑.ogg", false, false);
+	SOUNDMANAGER->play("BossStage", 0.5f);
 	//카메라 초기 세팅하는 부분
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
 	_playerTile = new astarTile;
@@ -31,6 +36,11 @@ HRESULT bossStage::init()
 	return S_OK;
 }
 
+HRESULT bossStage::init(int x, int y,CHRDIRECTION direc)
+{
+	return S_OK;
+}
+
 void bossStage::release()
 {
 	_player->release();
@@ -45,7 +55,9 @@ void bossStage::update()
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
 	CAMERAMANAGER->setCamera(Vector2(camera.x - WINSIZEX / 2, camera.y - WINSIZEY / 2));
-	if (!_Stop)
+	//if (STORAGEMANAGER->getToggle())_Stop = true;
+	//if (!STORAGEMANAGER->getToggle())_Stop = false;
+	if (!_Stop&&!STORAGEMANAGER->getToggle())
 	{
 		_boss->update();
 		_player->update();
@@ -73,8 +85,10 @@ void bossStage::update()
 				if (Math::GetDistance(_playerTile->getIdx(), _playerTile->getIdy(), _enemyTile->getIdx(), _enemyTile->getIdy()) < 1.1f)
 				{
 					//resetEverything();
+					SOUNDMANAGER->play("BossDead");
 					dead->setDead(DEAD_BOSS);
 					dead->update();
+					
 					resetEverything();
 					_stop = true;
 					return;
@@ -130,10 +144,7 @@ void bossStage::render()
 		{
 			ZORDER->insert(_vFrameTile[i].rc.left, _vFrameTile[i].rc.top, _vFrameTile[i].keyName, ZFRAMEOBJ);
 		}
-		for (int i = 0; i < ZORDER->getZorder().size(); i++)
-		{
-			cout << ZORDER->getZorder()[i].y << " " << ZORDER->getZorder()[i].type << " / ";
-		}
+
 		//정렬된 순서대로 랜딩
 		//각 인덱스의 타입을 확인하여 타입에 따라 이미지를 랜딩하도록 설계함
 		//이 부분에서 FrameInfoManager가 잘 돌아가게 될지는 모르겠음 적용필요
@@ -178,6 +189,7 @@ void bossStage::render()
 		IMAGEMANAGER->FindImage("Back2")->SetSize(Vector2(1920, 1280));
 		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("Back2"), Vector2(_player->getPlayerLocX(), _player->getPlayerLocY()));
 		//여기도 그대로
+		STORAGEMANAGER->render();
 		dead->render();
 
 }

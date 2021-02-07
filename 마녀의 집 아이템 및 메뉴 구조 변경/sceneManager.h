@@ -30,6 +30,7 @@ public:
 	virtual HRESULT changeScene(string sceneName, CHRDIRECTION _chrdirection);
 	//스테이지 key, 플레이어가 바라보는 방향, 스테이지 씬을 옮길때 초기 플레이어 위치(구분)
 	virtual HRESULT changeScene(string sceneName, CHRDIRECTION _chrdirection, LOCATION _location);
+	virtual HRESULT changeScene(string sceneName, int x, int y,CHRDIRECTION _chrdirection);
 	bool getKeyCheck(string key) 
 	{
 		//key(sceneName)이 이 맵에 존재하는지 확인한다.

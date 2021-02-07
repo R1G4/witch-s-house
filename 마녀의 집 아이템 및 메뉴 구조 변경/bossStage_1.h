@@ -12,6 +12,7 @@ public:
 	~bossStage_1();
 
 	HRESULT init();
+	virtual HRESULT init(int x, int y, CHRDIRECTION direc);
 	void release();
 	void update();
 	void render();

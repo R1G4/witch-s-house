@@ -203,18 +203,24 @@ void menu::openMenu()
 
 	case menu::CONTINUE:
 		_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2 - 10, WINSIZEY / 2 + 90), Vector2(220, 60), Pivot::Center);
-		if (_isClick)
+		//if (_isClick)
 		{
 			//저장소 창을 열어 재끼고 컨텐츠의 상태를 받아온다(뒤로가기, 진행~)
 			_isMenuState = STORAGEMANAGER->loadView();
-			//if(_isMenuState == MENU_END)
-			//여기서 불러온다? 혹은 매니저에서 불러와야하나 생각좀
-
-			if (!_isMenuState)	_isClick = false;
+			_isClick = _isMenuState ? true : false;
 		}
-		//원키다운이 먹히지 않으므로 스테이로 수정함
-		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-			_isClick = true;
+		//if (_isClick)
+		//{
+		//   //저장소 창을 열어 재끼고 컨텐츠의 상태를 받아온다(뒤로가기, 진행~)
+		//   _isMenuState = STORAGEMANAGER->loadView();
+		//   //if(_isMenuState == MENU_END)
+		//   //여기서 불러온다? 혹은 매니저에서 불러와야하나 생각좀
+
+		//   if (!_isMenuState)   _isClick = false;
+		//}
+		////원키다운이 먹히지 않으므로 스테이로 수정함
+		//if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+		//   _isClick = true;
 		break;
 
 	case menu::MAPTOOL:
