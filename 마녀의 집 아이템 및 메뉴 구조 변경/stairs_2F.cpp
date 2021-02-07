@@ -1,15 +1,15 @@
 #include "stdafx.h"
-#include "thirdLibrary.h"
+#include "stairs_2F.h"
 
-thirdLibrary::thirdLibrary()
+stairs_2F::stairs_2F()
 {
 }
 
-thirdLibrary::~thirdLibrary()
+stairs_2F::~stairs_2F()
 {
 }
 
-HRESULT thirdLibrary::init()
+HRESULT stairs_2F::init()
 {
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
 
@@ -18,38 +18,20 @@ HRESULT thirdLibrary::init()
 
 	_player->init();
 	_player->setState(CHR_IDLE);
-	_player->setDirec(CHRDIREC_RIGHT);
+	_player->setDirec(CHRDIREC_DOWN);
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
 	CAMERAMANAGER->setCamera(camera);
-
 	_count = 0;
-	_frame = 0;
-	_candleFrame = 0;
-	_dialogue = false;
-	_isStopToRead = false;
-
 	return S_OK;
 }
 
-void thirdLibrary::release()
+void stairs_2F::release()
 {
 }
 
-void thirdLibrary::update()
+void stairs_2F::update()
 {
-	_count++;
-	if (_count % 4 == 0)
-	{
-		_frame++;
-		_candleFrame++;
-		if (_frame > 15)
-		{
-			_frame = 0;
-		}
-		if (_candleFrame >= 3) _candleFrame = 0;
-	}
-
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
 
@@ -57,12 +39,16 @@ void thirdLibrary::update()
 	_player->update();
 	tileCollision();
 	changeScene();
-	readBook();
+	//if (_count % 10 == 0) cout << _player->getPlayerFrc().right / TILESIZE << endl;
 
-	if (_count % 10 == 0) cout << _player->getPlayerFrc().left / TILESIZE << endl;
+
+	//바로 눈알
+	/*if(_player->getPlayerFrc().right / TILESIZE >= 20)
+	_deadManager->setDead(DEAD_WALL);
+	_deadManager->update();*/
 }
 
-void thirdLibrary::render()
+void stairs_2F::render()
 {
 	CAMERAMANAGER->render(_backGround, Vector2(_backGround->GetSize().x / 2 + 480, _backGround->GetSize().y / 2));
 	for (int i = 0; i < TILEY; i++)
@@ -83,7 +69,6 @@ void thirdLibrary::render()
 	}
 	_player->render();
 
-	//타일 오브젝트 or 프레임이미지 랜더 
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
@@ -92,86 +77,40 @@ void thirdLibrary::render()
 			//IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(0.5);
 			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
 				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top));
+
 		}
 	}
+}
+
+void stairs_2F::changeScene()
+{
+	//1층으로 내려가기
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (_tiles[i*TILEX + j].attribute == NONE)continue;
-			if (_tiles[i*TILEX + j].attribute == PLAYER)continue;
-			//IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(0.5);
-			CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
-				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top), _candleFrame, 0);
-		}
-	}
-
-
-	//다이어로그 켜졌을때
-	if (_dialogue)
-	{
-		cout << "yyy" << endl;
-		if (_isStopToRead)
-			TEXTMANAGER->renderText();
-	}
-}
-
-void thirdLibrary::changeScene()
-{
-	//다음 스테이지로 이동
-	if (_player->getPlayerFrc().bottom / TILESIZE >= 10.7f)
-		SCENEMANAGER->changeScene("thirdOnewayLoad");
-
-	//이전  스테이지로 이동
-	if (_player->getPlayerFrc().left / TILESIZE <= 16.3f)
-		SCENEMANAGER->changeScene("thirdMain", CHRDIREC_LEFT);
-}
-
-void thirdLibrary::readBook()
-{
-	//책 읽기
-	for (int i = 0; i < TILEY; i++)
-	{
-		for (int j = 0; j < TILEX; j++)
-		{
-			//일지 읽을때
-			if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc)
+			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc)
 				&& _tiles[i*TILEX + j].terrain == TR_TRIGGER && _player->getPlayerFrc().right / TILESIZE <= 20)
 			{
-				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-				{
-					_dialogue = true;
-					_isStopToRead = TEXTMANAGER->setNextScript(true);
-					_vScript = TEXTMANAGER->loadFile("dialog/3f/3f_library_message.txt");
-					_isStopToRead = true;
-				}
+				SCENEMANAGER->changeScene("scissorsRoom", CHRDIREC_DOWN, LOCATION_DEFAULT);
 			}
-			//마녀의 책 읽을때
-			else if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc)
-				&& _tiles[i*TILEX + j].terrain == TR_TRIGGER && _player->getPlayerFrc().right / TILESIZE >= 21)
+		}
+	}
+	//3층으로 올라가기
+	for (int i = 0; i < TILEY; i++)
+	{
+		for (int j = 0; j < TILEX; j++)
+		{
+			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc)
+				&& _tiles[i*TILEX + j].terrain == TR_TRIGGER && _player->getPlayerFrc().right / TILESIZE >= 20)
 			{
-				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-				{
-					_dialogue = true;
-					_isStopToRead = TEXTMANAGER->setNextScript(true);
-					_vScript = TEXTMANAGER->loadFile("dialog/3f/3f_library_book.txt");
-					_isStopToRead = true;
-				}
-			}
-
-			//다이어로그 켜져있을때 스페이스바 누르면 원래대로 돌아가게. 모든 다이어로그 다 포함
-			if (_dialogue)
-			{
-				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-				{
-					_dialogue = false;
-				}
+				SCENEMANAGER->changeScene("thirdMain", CHRDIREC_DOWN);
 			}
 		}
 	}
 }
 
-void thirdLibrary::tileCollision()
+void stairs_2F::tileCollision()
 {
 	for (int i = 0; i < TILEY; i++)
 	{
@@ -194,17 +133,16 @@ void thirdLibrary::tileCollision()
 					_player->setPLocaY(_tiles[i*TILEX + j].rc.bottom + 4);
 					break;
 				}
-
 			}
 		}
 	}
 }
 
-void thirdLibrary::load()
+void stairs_2F::load()
 {
 	HANDLE file;
 	DWORD read;
-	file = CreateFile("Stage/3f_library.map", GENERIC_READ, NULL, NULL,
+	file = CreateFile("Stage/stairs_2F.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	camera = _tiles->camera;

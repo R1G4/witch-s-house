@@ -9,23 +9,69 @@ thirdMain::~thirdMain()
 {
 }
 
-HRESULT thirdMain::init()
+HRESULT thirdMain::init(CHRDIRECTION _chrdirection)
 {
-	IMAGEMANAGER->AddFrameImage("SavePoint", L"Image/mapTool/saveCat.png", 16, 4);
+	_saveCat = IMAGEMANAGER->AddFrameImage("SavePoint", L"Image/mapTool/saveCat.png", 16, 4);
+	IMAGEMANAGER->AddFrameImage("켜진초", L"Image/tempFrameImg/켜진초.png", 3, 0);
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
-
-	_player = new Player;
-	load();
-
-	_player->init();
-	_player->setState(CHR_IDLE);
-	_player->setDirec(CHRDIREC_DOWN);
-	camera.x = _player->getPlayerLocX();
-	camera.y = _player->getPlayerLocY();
-	CAMERAMANAGER->setCamera(camera);
-
 	_count = 0;
-	_frame = 0;
+	_catFrameX = 0;
+	_catFrameY = 0;
+	_candleFrame = 0;
+
+	//다른스테이지에서 씬전환 했을때 플레이어 모션이 left였다면
+	if (_chrdirection == CHRDIREC_LEFT)
+	{
+		_player = new Player;
+		_player->setStart(0, 0);
+
+		load();
+
+		_player->init();
+		_player->setState(CHR_IDLE);
+		_player->setDirec(CHRDIREC_LEFT);
+		_player->setPLocaX(WINSIZEX / 2 + 520);		//setStart 0,0으로 두고 위치 잡아주기
+		_player->setPLocaY(WINSIZEY / 2 + 280);
+
+		camera.x = _player->getPlayerLocX();
+		camera.y = _player->getPlayerLocY();
+		CAMERAMANAGER->setCamera(camera);
+	}
+	//다른스테이지에서 씬전환 했을때 플레이어 모션이 right였다면
+	if (_chrdirection == CHRDIREC_RIGHT)
+	{
+		_player = new Player;
+		_player->setStart(0, 0);
+
+		load();
+
+		_player->init();
+		_player->setState(CHR_IDLE);
+		_player->setDirec(CHRDIREC_RIGHT);
+		_player->setPLocaX(WINSIZEX / 2 + 230);
+		_player->setPLocaY(WINSIZEY / 2 + 130);
+
+		camera.x = _player->getPlayerLocX();
+		camera.y = _player->getPlayerLocY();
+		CAMERAMANAGER->setCamera(camera);
+	}
+	//다른스테이지에서 씬전환 했을때 플레이어 모션이 down였다면
+	if (_chrdirection == CHRDIREC_DOWN)
+	{
+		_player = new Player;
+		load();
+
+		_player->init();
+		_player->setState(CHR_IDLE);
+		_player->setDirec(CHRDIREC_DOWN);
+
+		camera.x = _player->getPlayerLocX();
+		camera.y = _player->getPlayerLocY();
+		CAMERAMANAGER->setCamera(camera);
+	}
+
+
+
 
 	return S_OK;
 }
@@ -39,11 +85,11 @@ void thirdMain::update()
 	_count++;
 	if (_count % 4 == 0)
 	{
-		_frame++;
-		if (_frame > 15)
-		{
-			_frame = 0;
-		}
+		_catFrameX++;
+		_candleFrame++;
+		if (_catFrameX > 15) _catFrameX = 0;
+		if (_candleFrame >= 3) _candleFrame = 0;
+
 	}
 
 	camera.x = _player->getPlayerLocX();
@@ -76,7 +122,8 @@ void thirdMain::render()
 		}
 	}
 	_player->render();
-	CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("SavePoint"), Vector2(920, 1680), _frame, 2);
+	CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("SavePoint"), Vector2(WINSIZEX / 2 + 440, WINSIZEY / 2 + 210), _catFrameX, _catFrameY);
+	CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("켜진초"), Vector2(WINSIZEX / 2 + 440, WINSIZEY / 2 + 90), _candleFrame, 0);
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
@@ -98,9 +145,9 @@ void thirdMain::changeScene()
 
 	if (_player->getPlayerFrc().right / TILESIZE >= 26)
 		SCENEMANAGER->changeScene("thirdLibrary");
-
 }
 
+//캐릭터, 콜라이더 타일 충돌했을때
 void thirdMain::tileCollision()
 {
 	for (int i = 0; i < TILEY; i++)
@@ -124,7 +171,12 @@ void thirdMain::tileCollision()
 					_player->setPLocaY(_tiles[i*TILEX + j].rc.bottom + 4);
 					break;
 				}
+			}
 
+			if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc)
+				&& _tiles[i*TILEX + j].terrain == TR_TRIGGER)
+			{
+				if (KEYMANAGER->isOnceKeyDown(VK_SPACE)) _catFrameY = 1;
 			}
 		}
 	}

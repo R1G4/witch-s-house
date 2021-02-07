@@ -20,8 +20,7 @@ HRESULT thirdFrogRoom::init()
 
 	_player->init();
 	_player->setState(CHR_IDLE);
-	_player->setDirec(CHRDIREC_DOWN);
-
+	_player->setDirec(CHRDIREC_LEFT);
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
 	CAMERAMANAGER->setCamera(camera);
@@ -35,6 +34,7 @@ HRESULT thirdFrogRoom::init()
 	_rc = RectMakePivot(Vector2(_x - 250, _y - 8), Vector2(270, 75), Pivot::Center);
 
 	_alpha = 255;
+	_sceneAlpha = 0.05;
 	_count = 0;
 	_frameX = 0;
 	_frameY = 0;
@@ -179,64 +179,112 @@ void thirdFrogRoom::rcAlphaChange()
 	_rcAlpha += _rcAlphaChange;
 }
 
+//씬전환
 void thirdFrogRoom::changeScene()
 {
 	if (_player->getPlayerFrc().right / TILESIZE >= 23.5f)
 	{
-		SCENEMANAGER->changeScene("thirdMain");
+		SCENEMANAGER->changeScene("thirdMain", CHRDIREC_RIGHT);
 	}
+
+	/*if (_player->getPlayerFrc().right / TILESIZE >= 23.5f)
+	{
+		_sceneAlpha -= 0.008f;
+		if (_sceneAlpha <= 0.65f)
+			_sceneAlpha -= 0.021f;
+		if (_sceneAlpha <= 0.f)
+		{
+			cout << "ttt" << endl;
+			SCENEMANAGER->changeScene("thirdMain", CHRDIREC_RIGHT);
+		}
+		_player->setAlpha(_sceneAlpha);
+
+	}*/
+
 }
+
+//개구리와 상호작용 할때
 void thirdFrogRoom::openText()
 {
-	if (_player->getPlayerFrc().left / TILESIZE <= 21 && _player->getPlayerFrc().bottom / TILESIZE >= 7)
+	//개구리 앞에서 상호작용키 눌렀을때
+	for (int i = 0; i < TILEX*TILEY; i++)
 	{
-		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+		if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i].rc)
+			&& _tiles[i].terrain == TR_TRIGGER && _player->getPlayerFrc().left / TILESIZE <= 21)
 		{
-			//개구리 프레임x,y축 변경해줌
-			_frameY = 2;
-			_frameX = 2;
-			_isText = true;
+			if (KEYMANAGER->isOnceKeyDown(VK_SPACE) && _alpha > 0)
+			{
+				//개구리 프레임 이미지 변경
+				_frameY = 2;
+				_frameX = 2;
+				_isText = true;
+			}
 		}
 	}
 
+	//2월6일 21시 전에 쓰던거 일단 킵
+	//if (_player->getPlayerFrc().left / TILESIZE <= 21 && _player->getPlayerFrc().bottom / TILESIZE >= 7)
+	//{
+	//	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+	//	{
+	//		//개구리 프레임 이미지 변경
+	//		_frameY = 2;
+	//		_frameX = 2;
+	//		_isText = true;
+	//	}
+	//}
+
+	//개구리와 상호작용 하고 텍스트on 상태일때
 	if (_isText)
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 		{
 			_rc = RectMakePivot(Vector2(_x + 180, _y - 10), Vector2(270, 75), Pivot::Center);
-			_text = RIGHT;
+			_text = TEXTRIGHT;
 		}
 		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 		{
 			_rc = RectMakePivot(Vector2(_x - 250, _y - 8), Vector2(270, 75), Pivot::Center);
 
-			_text = LEFT;
+			_text = TEXTLEFT;
 		}
 	}
-
-	if (_text == LEFT)
+	//대리고간다
+	if (_text == TEXTLEFT)
 	{
 		if (KEYMANAGER->isOnceKeyDown('A'))
 		{
 			_isText = false;
-
 		}
 	}
 	//좌측 텍스트 선택한다면
-	if (_text == LEFT && !_isText)
+	if (_text == TEXTLEFT && !_isText)
 	{
-		if (_player->getPlayerFrc().left / TILESIZE <= _x2)
+		//소지품에 프로그 아이템 생성
+		ITEMMANAGER->addItem("frog");
+		_frameX = 2;
+		_y2 - 20;
+		_x2 += 1.3f;
+		//프로그 아이템 생성됬다면 이미지 지워주기
+		if (_alpha >= 0) _alpha -= 5;
+		if (_alpha <= 0) _x2 = 0;
+		_frog->SetAlpha(_alpha);
+	}
+	//////////////////////////////////////////
+	//아이템창 열렸다면?? << 이걸 판단해야하는데 아직 모름
+	if (_menustate == MENU_PROGRESS)
+	{
+		cout << "rtt" << endl;
+		if (KEYMANAGER->isOnceKeyDown('W'))
 		{
-			cout << _alpha << endl;
-			_frameX = 2;
-			_y2 - 20;
-			_x2 += 1.3f;
-			_alpha -= 5;
-			_frog->SetAlpha(_alpha);
+			ITEMMANAGER->useItem("frog");
+
 		}
 	}
+	////////////////////////////////////////////
+
 	//우측 텍스트 선택한다면
-	if (_text == RIGHT)
+	if (_text == TEXTRIGHT)
 	{
 		if (_frameY == 2 && KEYMANAGER->isOnceKeyDown('A'))
 		{
@@ -316,7 +364,7 @@ void thirdFrogRoom::load()
 {
 	HANDLE file;
 	DWORD read;
-	file = CreateFile("Stage/3f_frogRoom2.map", GENERIC_READ, NULL, NULL,
+	file = CreateFile("Stage/3f_frogRoom.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	camera = _tiles->camera;

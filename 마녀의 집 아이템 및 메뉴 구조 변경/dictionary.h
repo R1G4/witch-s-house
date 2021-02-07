@@ -63,7 +63,7 @@ enum CHRDIRECTION
 //3stage에서 쓰는중
 enum text
 {
-	DEFAULT, CHANGEIMG, LEFT, RIGHT, UP, DOWN, DEAD,
+	DEFAULT, CHANGEIMG, TEXTLEFT, TEXTRIGHT, TEXTUP, TEXTDOWN, DEAD,
 	OPENTEXT, OPENLEFT, OPENRIGHT, OPENDOWN, OPENUP
 };
 //메뉴 뒤로가기, 진행, 전체종료( MENU_END는 각 메뉴 컨텐츠에 따라 전체종료, 로드 등 패턴이 다르다)

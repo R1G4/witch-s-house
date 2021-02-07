@@ -15,6 +15,7 @@ private:
 	Player* _player;
 	FloatRect _rc;
 	text _text;
+	MENUSTATE _menustate;
 
 	float _x, _y;
 	float _x2, _y2;
@@ -25,7 +26,7 @@ private:
 	int _frameX;
 	int _frameY;
 	bool _isText;
-
+	float _sceneAlpha;
 	bool _dialogue;
 	bool _isStopToRead;			//텍스트매니저용 변수
 	vector<string> _vScript;	//

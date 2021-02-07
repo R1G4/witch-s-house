@@ -220,6 +220,7 @@
     <ClInclude Include="soundStageN.h" />
     <ClInclude Include="soundStageW.h" />
     <ClInclude Include="stageMemoryManager.h" />
+    <ClInclude Include="stairs_2F.h" />
     <ClInclude Include="status.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StorageManager.h" />
@@ -312,6 +313,7 @@
     <ClCompile Include="soundStageN.cpp" />
     <ClCompile Include="soundStageW.cpp" />
     <ClCompile Include="stageMemoryManager.cpp" />
+    <ClCompile Include="stairs_2F.cpp" />
     <ClCompile Include="status.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

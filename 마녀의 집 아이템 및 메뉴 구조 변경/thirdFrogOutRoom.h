@@ -24,6 +24,8 @@ private:
 	bool _rightClick;	//두번째 상호작용 텍스트창 관리
 	bool _playerRender;	//플레이어 랜더 관리
 	bool _dialogue;
+	bool _leftText2;
+	bool _leftText3;
 
 	bool _isStopToRead;			//텍스트매니저용 변수
 	vector<string> _vScript;	//
@@ -35,6 +37,8 @@ public:
 	void release();
 	void update();
 	void render();
+	void clickLeftText();
+	void clickRightText();
 	void changeScene();
 	void rcAlphaChange();
 	void readBook();

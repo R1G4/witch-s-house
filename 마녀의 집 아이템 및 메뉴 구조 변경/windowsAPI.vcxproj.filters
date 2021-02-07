@@ -363,6 +363,9 @@
     <ClInclude Include="soundStageD.h">
       <Filter>playGround\scense\4thFloor</Filter>
     </ClInclude>
+    <ClInclude Include="stairs_2F.h">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -631,6 +634,9 @@
     </ClCompile>
     <ClCompile Include="soundStageD.cpp">
       <Filter>playGround\scense\4thFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="stairs_2F.cpp">
+      <Filter>playGround\scense\ThirdFloor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -19,6 +19,7 @@
 #include "bearRoom.h"
 #include "boxRoom.h"
 #include "scissorsRoom.h"
+#include "stairs_2F.h"
 #include "thirdMain.h"
 #include "thirdLibrary.h"
 #include "thirdOnewayLoad.h"

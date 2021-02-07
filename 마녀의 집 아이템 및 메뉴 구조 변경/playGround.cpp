@@ -32,7 +32,7 @@ HRESULT playGround::init()
 	//SCENEMANAGER->changeScene("MapToolScene");
 	//SCENEMANAGER->changeScene("4ÃþÈ¦");
 
-	SCENEMANAGER->changeScene("½ÃÀÛÈ­¸é");
+	SCENEMANAGER->changeScene("stairs_2F");
 	//SCENEMANAGER->changeScene("prison_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
 	//SCENEMANAGER->changeScene("thirdMain");
 	//SOUNDMANAGER->play("main");
@@ -124,6 +124,7 @@ void playGround::addScene()
 	SCENEMANAGER->addScene("scissorsRoom", _scissorsRoomStage);
 
 	//3Ãþ
+	SCENEMANAGER->addScene("stairs_2F", new stairs_2F);
 	SCENEMANAGER->addScene("thirdMain", new thirdMain);
 	SCENEMANAGER->addScene("thirdFrogRoom", new thirdFrogRoom);
 	SCENEMANAGER->addScene("thirdLibrary", new thirdLibrary);

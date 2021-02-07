@@ -43,6 +43,9 @@ HRESULT thirdFrogOutRoom::init()
 	_dialogue = false;
 	_playerRender = true;
 	_isStopToRead = false;
+	_leftText2 = false;
+	_leftText3 = false;
+
 	return S_OK;
 }
 
@@ -63,44 +66,22 @@ void thirdFrogOutRoom::update()
 	tileCollision();
 	//바닥에 떨어진 일지 읽기
 	readBook();
+
 	//_count++;
 	//if(_count %10 == 0) cout << _player->getPlayerFrc().left / TILESIZE << endl;
 
-	//프레임 이미지 
-	//플레이어 기본 랜더가 아닐때
-	//if (!_playerRender)
-	//{
-	//	//카운트 플플
-	//	_count++;
-	//	//카운트 50일떄
-	//	if (_count % 50 == 0)
-	//	{
-	//		//프레임 플플
-	//		_frame++;
-	//		//프레임이 10보다 커지면
-	//		if (_frame >= 10 )		
-	//		{
-	//			_frame = 9;
-	//			_count = 0;
-	//			cout << "rrrr" << endl;
-	//			_playerRender = true;	//기본랜더 켜줘
-	//			_isText = false;		//초기 백그라운드 화면 보여줘
-	//		}
-	//	}
-	//}
-
 	switch (_text)
 	{
-	case LEFT:
+	case TEXTLEFT:
 
 		break;
-	case RIGHT:
+	case TEXTRIGHT:
 
 		break;
-	case UP:
+	case TEXTUP:
 
 		break;
-	case DOWN:
+	case TEXTDOWN:
 
 		break;
 	case OPENTEXT:
@@ -124,15 +105,15 @@ void thirdFrogOutRoom::update()
 		break;
 	}
 
-	//텍스트창이 열려있으면 플레이어 안움직이게
-	if (!_isText && _text != OPENLEFT && _text != OPENDOWN)
+	//텍스트창 or 다이어로그 열려있으면 플레이어 안움직이게
+	if (!_isText && !_dialogue && !_leftText3 && _text != OPENLEFT && _text != OPENDOWN)
 	{
 		_player->update();
 	}
 
 
-	//문앞에 섰을때 선택지 뜨게
-	if (_player->getPlayerFrc().left / TILESIZE <= 18 && _text != OPENLEFT)
+	//문앞에 섰을때 상호작용 키 누르면 텍스트 on
+	if (_player->getPlayerFrc().left / TILESIZE <= 18 && _text != OPENLEFT && !_dialogue)
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 			_isText = true;
@@ -144,38 +125,39 @@ void thirdFrogOutRoom::update()
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 		{
-			_rc = RectMakePivot(Vector2(_x + 290, _y - 10), Vector2(270, 75), Pivot::Center);
-			_text = RIGHT;
+			_rc = RectMakePivot(Vector2(_x + 290, _y - 5), Vector2(270, 75), Pivot::Center);
+			_text = TEXTRIGHT;
 		}
 		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 		{
 			//_rc = RectMakePivot(Vector2(_x - 160, _y - 8), Vector2(270, 75), Pivot::Center);
-			_rc = RectMakePivot(Vector2(camera.x - 360, camera.y - 145), Vector2(270, 75), Pivot::Center);
-			_text = LEFT;
+			_rc = RectMakePivot(Vector2(camera.x - 360, camera.y - 135), Vector2(270, 75), Pivot::Center);
+			_text = TEXTLEFT;
 		}
 		if (KEYMANAGER->isOnceKeyDown(VK_UP))
 		{
-			_rc = RectMakePivot(Vector2(_x + 70, _y - 150), Vector2(270, 75), Pivot::Center);
-			_text = UP;
+			_rc = RectMakePivot(Vector2(_x + 70, _y - 145), Vector2(270, 75), Pivot::Center);
+			_text = TEXTUP;
 		}
 		if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
 		{
-			_rc = RectMakePivot(Vector2(_x + 70, _y + 120), Vector2(270, 75), Pivot::Center);
-			_text = DOWN;
+			_rc = RectMakePivot(Vector2(_x + 70, _y + 125), Vector2(270, 75), Pivot::Center);
+			_text = TEXTDOWN;
 		}
 
 		//대화창 활성화 시에 상호작용 스페이스바 작동안되서 A로 해둠 ㅜ
 
 		//우측 텍스트 눌렀을때(아무것도 하지 않는다) 플레이어 업데이트on, 첫번째 텍스트창 닫음
-		if (_text == RIGHT && KEYMANAGER->isOnceKeyDown('A'))
+		if (_text == TEXTRIGHT && KEYMANAGER->isStayKeyDown('A'))
 		{
-			cout << "ttt" << endl;
-			_player->update();
+			//상호작용 키 눌렀을때 렉트 사라지게하고 텍스트창 꺼주기
+			_rc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
 			_isText = false;
 		}
 		//좌측 텍스트 눌렀을때(엿보기 구멍으로 본다) 다이어로그 on
-		if (_text == LEFT && KEYMANAGER->isOnceKeyDown('A'))
+		if (_text == TEXTLEFT && KEYMANAGER->isOnceKeyDown('A'))
 		{
+			_rc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
 			_isText = false;
 			_text = OPENLEFT;		//개구리 던질때로 바까야함
 			_dialogue = true;
@@ -184,8 +166,9 @@ void thirdFrogOutRoom::update()
 			_isStopToRead = true;
 		}
 		//위에 텍스트 눌렀을때(귀를 댄다) 다이어로그 on
-		if (_text == UP && KEYMANAGER->isOnceKeyDown('A'))
+		if (_text == TEXTUP && KEYMANAGER->isOnceKeyDown('A'))
 		{
+			_rc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
 			_isText = false;
 			_dialogue = true;
 			_isStopToRead = TEXTMANAGER->setNextScript(true);
@@ -194,66 +177,112 @@ void thirdFrogOutRoom::update()
 
 		}
 		//아래 텍스트 눌렀을때(문을 연다)
-		if (_text == DOWN && KEYMANAGER->isOnceKeyDown('A'))
+		if (_text == TEXTDOWN && KEYMANAGER->isOnceKeyDown('A'))
 		{
+			_rc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
 			_isText = false;
 			_text = OPENDOWN;
 		}
 	}
 
-	//첫번째 텍스트창에서 좌측(엿보기 구멍으로 본다) 눌렀을때 두번째 텍스트 창 오픈
+	//첫번째 텍스트에서 왼쪽(엿보기 창으로 엿본다) 눌렀을때
+	if (_text == OPENLEFT && _dialogue)
+	{
+		if (KEYMANAGER->isStayKeyDown(VK_SPACE))
+		{
+			_dialogue = false;
+			_leftText2 = true;
+		}
+	}
+
+	//첫번째 텍스트창에서 좌측(엿보기 구멍으로 본다) 눌렀을때 다이어로그 나온 후 두번째 텍스트 창 오픈
 	if (_text == OPENLEFT)
 	{
 		//두번째 텍스트창에서 좌측 눌렀을때
 		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 		{
-			_rc = RectMakePivot(Vector2(camera.x - 360, camera.y - 145), Vector2(270, 75), Pivot::Center);
+			_rc = RectMakePivot(Vector2(camera.x - 360, camera.y - 135), Vector2(270, 75), Pivot::Center);
 			_leftClick = true;
+			_rightClick = false;
 		}
 		//두번째 텍스트창에서 우측 눌렀을때
 		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 		{
-			_rc = RectMakePivot(Vector2(_x + 290, _y - 10), Vector2(270, 75), Pivot::Center);
+			_rc = RectMakePivot(Vector2(_x + 290, _y - 5), Vector2(270, 75), Pivot::Center);
 			_rightClick = true;
-		}
-
-		//첫번째 텍스트창에서 좌측 텍스트 말고 다른거 누르면 랜더에 개구리 던지기 모션 안되게
-		if (_leftClick && KEYMANAGER->isOnceKeyDown('A'))
-		{
-			_text = CHANGEIMG;
 			_leftClick = false;
 		}
+
+		//두번째 텍스트창에서 좌측 텍스트 클릭하면 3번째 텍스트 오픈
+		if (_leftClick && KEYMANAGER->isOnceKeyDown('A'))
+		{
+			_leftClick = false;
+			_isText = false;
+			_leftText2 = false;
+			_leftText3 = true;		//두번째창에서 왼쪽텍스트 누르면 3번째 텍스트 오픈
+
+		}
+
+		if (_rightClick && KEYMANAGER->isOnceKeyDown('A'))
+		{
+			_rightClick = false;
+			_leftText2 = false;
+			_isText = true;
+		}
 	}
 
-	//첫번째 텍스트창에서 좌측 텍스트 말고 다른거 누르면 랜더에 개구리 던지기 모션 안되게
-	//if (_text != OPENDOWN && _leftClick && KEYMANAGER->isOnceKeyDown('A'))
-	//{
-	//	_text = CHANGEIMG;
-	//	_leftClick = false;
-	//}
-
-
-	if (_rightClick && KEYMANAGER->isOnceKeyDown('A'))
+	if (_leftText3 && !_leftText2)
 	{
-		_isText = true;
-		_text = OPENRIGHT;	//일단 창 닫으려고 임시로 넣음. 2번째 텍스트창 오픈할때를 건드려야할듯
-		_rightClick = false;
+		//세번째 텍스트창에서 좌측 눌렀을때
+		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+		{
+			cout << "mmm" << endl;
+			_rc = RectMakePivot(Vector2(camera.x - 360, camera.y - 145), Vector2(270, 75), Pivot::Center);
+			_leftClick = true;
+			_rightClick = false;
+		}
+		//세번째 텍스트창에서 우측 눌렀을때
+		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+		{
+			cout << "nnn" << endl;
+			_rc = RectMakePivot(Vector2(_x + 290, _y - 5), Vector2(270, 75), Pivot::Center);
+			_rightClick = true;
+			_leftClick = false;
+		}
 
+		//세번째 텍스트창에서 왼쪽 텍스트 누르면 개구리 넣기
+		if (_leftClick && KEYMANAGER->isOnceKeyDown('A') || KEYMANAGER->isOnceKeyDown('B'))
+		{
+			cout << "left" << endl;
+			_text = CHANGEIMG;
+			_leftClick = false;
+			_rightClick = false;
+			_leftText3 = false;
+		}
+
+		if (_rightClick && KEYMANAGER->isOnceKeyDown('B') || _rightClick && KEYMANAGER->isOnceKeyDown('A'))
+		{
+			cout << "right" << endl;
+			_rightClick = false;
+			_leftClick = false;
+			_leftText3 = false;
+			_isText = true;
+		}
 	}
+
 
 	//첫번째 텍스트에서 아래 텍스트(문을 연다) 눌렀을때 선택렉트 보여주고 좌우키 움직이게
 	if (_text == OPENDOWN && !_isText)
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 		{
-			cout << "rr" << endl;
-			_rc = RectMakePivot(Vector2(camera.x - 360, camera.y - 145), Vector2(270, 75), Pivot::Center);
+			_rc = RectMakePivot(Vector2(camera.x - 360, camera.y - 135), Vector2(270, 75), Pivot::Center);
 			_leftClick = true;
 			_rightClick = false;
 		}
 		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 		{
-			_rc = RectMakePivot(Vector2(_x + 290, _y - 10), Vector2(270, 75), Pivot::Center);
+			_rc = RectMakePivot(Vector2(_x + 290, _y - 15), Vector2(270, 75), Pivot::Center);
 			_rightClick = true;
 			_leftClick = false;
 		}
@@ -268,9 +297,9 @@ void thirdFrogOutRoom::update()
 		//우측키 눌렀을때(일단 다른대에 되어있어서 주석처리함. 안되면 이거부터 풀기)////////////////////////////////////////////
 		if (_rightClick && KEYMANAGER->isOnceKeyDown('A'))
 		{
-			//_player->update();
-			//_isText = false;
-			//_rightClick = false;
+			cout << "rwgfrew" << endl;
+			_isText = true;
+			_rightClick = false;
 		}
 	}
 
@@ -302,27 +331,69 @@ void thirdFrogOutRoom::render()
 
 			}
 		}
-		_player->render();
+		//Z-order 벡터에 데이터를 넣어주는 과정
+		//플레이어와 에너미의 경우 각 객체의 랜더함수를 호출할 것이므로 z-order비교를 위한 y값과 타입값만 넣어주면 충분
 
-		for (int i = 0; i < TILEY; i++)
+		ZORDER->insert(_player->getPlayerFrc().left, _player->getPlayerFrc().top, ZPLAYER);
+
+		//오브젝트를 넣어주는 과정
+		//오브젝트의 경우 랜딩을 해줘야하므로 이미지를 넣어주거나 키값을 넣어주는게 맞음
+		//특정 트리거로 예외처리를 해야한다면, 이미지를 바로 넣기보다는 키값을 넣어주는 방식을 사용하는게 좋아보임
+		//오브젝트중 검은 타일까지 넣게되면 프로그램이 느려져서 제외하기로함
+
+		for (int i = 0; i < TILEX*TILEY; i++)
 		{
-			for (int j = 0; j < TILEX; j++)
+			if (_tiles[i].obj != OBJ_NONE)
 			{
-				if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
-				//IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(0.5);
-				CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
-					Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top));
+				//if (_tiles[i].keyName == "obj5" || _tiles[i].keyName == "obj9")
+				ZORDER->insert(_tiles[i].rc.left, _tiles[i].rc.top, IMAGEMANAGER->FindImage(_tiles[i].keyName), ZOBJECT);
 			}
 		}
 
+		//정렬된 순서대로 랜딩
+		//각 인덱스의 타입을 확인하여 타입에 따라 이미지를 랜딩하도록 설계함
+		//이 부분에서 FrameInfoManager가 잘 돌아가게 될지는 모르겠음 적용필요
+		for (int i = 0; i < ZORDER->getZorder().size(); i++)
+		{
+			if (ZORDER->getZorder()[i].type == ZPLAYER)_player->render();
+
+			if (ZORDER->getZorder()[i].type == ZOBJECT)
+			{
+				CAMERAMANAGER->render(ZORDER->getZorder()[i].img,
+					Vector2(ZORDER->getZorder()[i].x + TILESIZE / 2, ZORDER->getZorder()[i].y - ZORDER->getZorder()[i].img->GetSize().y / 2));
+			}
+
+		}
+
+
 		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("3f_doar"), Vector2(WINSIZEX / 2 + 180, WINSIZEY / 2 + 60));
+
+		//zorder 벡터를 초기화해줌 안하면 느려짐
+		ZORDER->release();
+
+
+		//_player->render();
+
+		//오브젝트 or 프레임이미지 랜더
+		//for (int i = 0; i < TILEY; i++)
+		//{
+		//	for (int j = 0; j < TILEX; j++)
+		//	{
+		//		if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
+		//		//IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(0.5);
+		//		CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
+		//			Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top));
+		//	}
+		//}
 	}
 
 
 	//첫번째 택스트창 on일때
 	if (_isText)
 	{
+		//배경이미지 랜더
 		CAMERAMANAGER->render(_backGround, Vector2(_backGround->GetSize().x / 2 + 480, _backGround->GetSize().y / 2));
+		//탭키 눌렀을때 타일 랜더
 		for (int i = 0; i < TILEY; i++)
 		{
 			for (int j = 0; j < TILEX; j++)
@@ -341,7 +412,7 @@ void thirdFrogOutRoom::render()
 		}
 		_player->render();
 
-
+		//오브젝트 or 프레임오브젝트 랜더
 		for (int i = 0; i < TILEY; i++)
 		{
 			for (int j = 0; j < TILEX; j++)
@@ -363,10 +434,10 @@ void thirdFrogOutRoom::render()
 		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(WINSIZEX / 2 + 250, WINSIZEY / 2 + 250));	//아래
 
 		//D2DINS->RenderText(350, 330, L"개구리를 넣는다", RGB(100, 100, 100), 0.85f, 30);
-		D2DINS->GetInstance()->RenderText(330, 330, L"엿보기 창으로 엿본다", RGB(255, 255, 255), 0.85f, 27);
-		D2DINS->GetInstance()->RenderText(810, 330, L"아무것도 하지 않는다", RGB(255, 255, 255), 0.85f, 27);
-		D2DINS->GetInstance()->RenderText(650, 190, L"귀를 댄다", RGB(255, 255, 255), 0.85f, 27);
-		D2DINS->GetInstance()->RenderText(650, 460, L"문을 연다", RGB(255, 255, 255), 0.85f, 27);
+		D2DINS->GetInstance()->RenderText(330, 335, L"엿보기 창으로 엿본다", RGB(255, 255, 255), 0.85f, 27);
+		D2DINS->GetInstance()->RenderText(805, 340, L"아무것도 하지 않는다", RGB(255, 255, 255), 0.85f, 27);
+		D2DINS->GetInstance()->RenderText(650, 200, L"귀를 댄다", RGB(255, 255, 255), 0.85f, 27);
+		D2DINS->GetInstance()->RenderText(650, 470, L"문을 연다", RGB(255, 255, 255), 0.85f, 27);
 
 		D2DINS->FillRectangle(_rc, D2D1::ColorF::Enum::WhiteSmoke, _rcAlpha / 5.5);
 		D2DINS->GetInstance()->DrawRectangle(_rc, D2D1::ColorF::White, _rcAlpha, 1.0f);
@@ -376,52 +447,71 @@ void thirdFrogOutRoom::render()
 	//첫번째 텍스트에서 위에(귀를 댄다) 눌렀을때
 	if (_dialogue)
 	{
-		cout << "yyy" << endl;
-		//D2DINS->GetInstance()->RenderText(430, 330, L"연다", RGB(255, 255, 255), 0.85f, 27);
-
-		//CAMERAMANAGER->render(IMAGEMANAGER->FindImage("dialogueBar"), Vector2(WINSIZEX / 2 + 250, WINSIZEY / 2 + 250));
-
-		////////////////////////////////////////////////////////////
-		//cout << "reee" << endl;
 		if (_isStopToRead)
 			TEXTMANAGER->renderText();
-
-		//////////////////////////////////////////////////////////
-
-		if (KEYMANAGER->isOnceKeyDown('A')) _dialogue = false;
+		if (KEYMANAGER->isOnceKeyDown(VK_SPACE)) _dialogue = false;
 	}
 
 	//다이어로그 꺼지면 이미지 일단 안보이는곳으로 치워뒀음
 	//if (!_dialogue) CAMERAMANAGER->render(IMAGEMANAGER->FindImage("dialogueBar"), Vector2(0, 0));
 
 	//첫번째 텍스트에서 아래(문을 연다) 눌렀을때
-	if (_text == OPENDOWN)
+	if (_text == OPENDOWN && !_isText)
 	{
 		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(camera.x - 180, camera.y - 10));	//왼쪽
-		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(WINSIZEX / 2 + 470, WINSIZEY / 2 + 120));	//오른쪽
+		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(WINSIZEX / 2 + 470, WINSIZEY / 2 + 110));	//오른쪽
 		D2DINS->GetInstance()->RenderText(430, 330, L"연다", RGB(255, 255, 255), 0.85f, 27);
-		D2DINS->GetInstance()->RenderText(850, 330, L"역시 그만둔다", RGB(255, 255, 255), 0.85f, 27);
+		D2DINS->GetInstance()->RenderText(840, 330, L"역시 그만둔다", RGB(255, 255, 255), 0.85f, 27);
 
 		D2DINS->FillRectangle(_rc, D2D1::ColorF::Enum::WhiteSmoke, _rcAlpha / 5.5);
 		D2DINS->GetInstance()->DrawRectangle(_rc, D2D1::ColorF::White, _rcAlpha, 1.0f);
 
 	}
 
-
-	//텍스트 열린 상태에서 한 문장 선택했을때
-	//이거 개구리 눌렀을때로 그대로 넣어주면 됌. 왼쪽은 다이로그로 바꿈
-	if (_text == OPENLEFT  /*&& !_leftClick && !_rightClick*/)
+	//왼쪽텍스트 눌렀을때 두번째 텍스트
+	if (_leftText2)
 	{
 		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(camera.x - 180, camera.y - 10));	//왼쪽
 		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(WINSIZEX / 2 + 470, WINSIZEY / 2 + 120)); // 오른쪽
 
 
-		D2DINS->GetInstance()->RenderTextField(330, 320, L"\t개구리를\n \t창문으로 넣는다", RGB(255, 255, 255), 27, 270, 50, 0.85f, DWRITE_TEXT_ALIGNMENT_CENTER);
-		D2DINS->GetInstance()->RenderText(800, 330, L"아무것도 하지 않는다", RGB(255, 255, 255), 0.85f, 27);
+		D2DINS->GetInstance()->RenderTextField(330, 325, L"\t개구리를\n \t창문으로 넣는다", RGB(255, 255, 255), 27, 270, 50, 0.85f, DWRITE_TEXT_ALIGNMENT_CENTER);
+		D2DINS->GetInstance()->RenderText(820, 340, L"역시 하지 않는다", RGB(255, 255, 255), 0.85f, 27);
 
 		D2DINS->FillRectangle(_rc, D2D1::ColorF::Enum::WhiteSmoke, _rcAlpha / 5.5);
 		D2DINS->GetInstance()->DrawRectangle(_rc, D2D1::ColorF::White, _rcAlpha, 1.0f);
 	}
+	//왼쪽텍스트 눌렀을때 세번째 텍스트
+	if (_leftText3)
+	{
+		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(camera.x - 180, camera.y - 10));	//왼쪽
+		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(WINSIZEX / 2 + 470, WINSIZEY / 2 + 120)); // 오른쪽
+
+
+		D2DINS->GetInstance()->RenderTextField(330, 320, L"정말로?", RGB(255, 255, 255), 27, 270, 50, 0.85f, DWRITE_TEXT_ALIGNMENT_CENTER);
+		D2DINS->GetInstance()->RenderText(860, 340, L"... 그만 둔다", RGB(255, 255, 255), 0.85f, 27);
+
+		D2DINS->FillRectangle(_rc, D2D1::ColorF::Enum::WhiteSmoke, _rcAlpha / 5.5);
+		D2DINS->GetInstance()->DrawRectangle(_rc, D2D1::ColorF::White, _rcAlpha, 1.0f);
+	}
+
+
+
+
+	//텍스트 열린 상태에서 한 문장 선택했을때
+	//이거 개구리 눌렀을때로 그대로 넣어주면 됌. 왼쪽은 다이로그로 바꿈
+	//if (_text == OPENLEFT  /*&& !_leftClick && !_rightClick*/)
+	//{
+	//	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(camera.x - 180, camera.y - 10));	//왼쪽
+	//	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(WINSIZEX / 2 + 470, WINSIZEY / 2 + 120)); // 오른쪽
+	//	
+	//	
+	//	D2DINS->GetInstance()->RenderTextField(330, 320, L"\t개구리를\n \t창문으로 넣는다", RGB(255, 255, 255), 27, 270, 50, 0.85f, DWRITE_TEXT_ALIGNMENT_CENTER);
+	//	D2DINS->GetInstance()->RenderText(800, 330, L"아무것도 하지 않는다", RGB(255, 255, 255), 0.85f, 27);
+	//	
+	//	D2DINS->FillRectangle(_rc, D2D1::ColorF::Enum::WhiteSmoke, _rcAlpha / 5.5);
+	//	D2DINS->GetInstance()->DrawRectangle(_rc, D2D1::ColorF::White, _rcAlpha, 1.0f);
+	//}
 
 	//두번째 텍스트창에서 좌측 눌렀을때 플레이어 렌더 false해주고
 	if (_text == CHANGEIMG)
@@ -482,13 +572,13 @@ void thirdFrogOutRoom::readBook()
 				}
 			}
 			//다이어로그 켜져있을때 스페이스바 누르면 원래대로 돌아가게. 모든 다이어로그 다 포함
-			if (_dialogue)
+			/*if (_dialogue)
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 				{
 					_dialogue = false;
 				}
-			}
+			}*/
 		}
 	}
 }
@@ -525,7 +615,7 @@ void thirdFrogOutRoom::load()
 {
 	HANDLE file;
 	DWORD read;
-	file = CreateFile("Stage/3f_second.map", GENERIC_READ, NULL, NULL,
+	file = CreateFile("Stage/3f_frogOutRoom2.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	camera = _tiles->camera;
