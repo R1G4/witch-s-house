@@ -59,6 +59,7 @@ int ItemManager::conversion(string itemKey)
 {
 	return itemKey == "obj58" ? ITEM_TEDDYBEAR :
 		itemKey == "obj59" ? ITEM_TEDDYBEARBODY :
+		itemKey == "obj33" ? ITEM_TAEYUP :
 		itemKey == "obj11" ? ITEM_TEDDYBEARHAND : ITEM_FROH;
 		//itemKey == "frog" ? ITEM_FROH : ITEM_FROH;
 }
