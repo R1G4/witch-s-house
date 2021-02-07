@@ -12,7 +12,10 @@ StorageManager::~StorageManager()
 HRESULT StorageManager::init()
 {
 	_selectedStorage = FIRST;
-
+	for (int i = 1; i <= 5; i++)
+	{
+		_vFileSlot.push_back("");
+	}
 	//파일들의 제목? 불러오기
 	loadTitle();
 
@@ -23,14 +26,27 @@ void StorageManager::loadTitle()
 {
 	//해당 폴더 안에 존재하는(최대5개)
 	//파일들의 제목만 가지고옴
+	_vFileSlot[0]=INIDATA->loadDataString("Save1", "스테이지", "스테이지 이름");
+	_vFileSlot[1] = INIDATA->loadDataString("Save2", "스테이지", "스테이지 이름");
+	_vFileSlot[2] = INIDATA->loadDataString("Save3", "스테이지", "스테이지 이름");
+	_vFileSlot[3] = INIDATA->loadDataString("Save4", "스테이지", "스테이지 이름");
+	_vFileSlot[4] = INIDATA->loadDataString("Save5", "스테이지", "스테이지 이름");
 }
 
 MENUSTATE StorageManager::saveView()
 {
+	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+		_toggle = !_toggle;
 	//뒤로가기 조작 키
 	//키가 안먹혀서 한번더 체크하는 용도? 'X' int 값을 곱해줌
 	if (KEYMANAGER->isOnceKeyDown('X') * (int) 'X')
-		return MENU_BACK;
+		return _toggle == true ? MENU_PROGRESS : MENU_BACK;
+	
+	_vFileSlot[0] = INIDATA->loadDataString("Save1", "스테이지", "스테이지 이름");
+	_vFileSlot[1] = INIDATA->loadDataString("Save2", "스테이지", "스테이지 이름");
+	_vFileSlot[2] = INIDATA->loadDataString("Save3", "스테이지", "스테이지 이름");
+	_vFileSlot[3] = INIDATA->loadDataString("Save4", "스테이지", "스테이지 이름");
+	_vFileSlot[4] = INIDATA->loadDataString("Save5", "스테이지", "스테이지 이름");
 
 	//저장소 오픈
 	storageOpen();
@@ -42,9 +58,10 @@ MENUSTATE StorageManager::saveView()
 		//loadTitle(); 타이틀을 다시 보여준다.(변경된 데이터)
 		//_isClick=fales;
 		//return MENU_END(메뉴에서 저장 완료로 판단하면 됨)
+		saveData();
 	}
 
-	return MENU_PROGRESS;
+	return _toggle == true ? MENU_PROGRESS : MENU_BACK;
 }
 
 MENUSTATE StorageManager::loadView()
@@ -53,8 +70,9 @@ MENUSTATE StorageManager::loadView()
 	//키가 안먹혀서 한번더 체크하는 용도? 'X' int 값을 곱해줌
 	if (KEYMANAGER->isOnceKeyDown('X') * (int) 'X')
 		return MENU_BACK;
-
-	//저장소 오픈
+	if (KEYMANAGER->isOnceKeyDown(VK_SPACE)*0x20)
+		_toggle = !_toggle;
+		//저장소 오픈
 	storageOpen();
 
 	if (_isClick)
@@ -63,6 +81,8 @@ MENUSTATE StorageManager::loadView()
 		//무사히 불러왔다면
 		//_isClick=fales;
 		// return MENU_END(메뉴에서 불러오기로 판단하면됨)
+
+
 	}
 
 	return MENU_PROGRESS;
@@ -72,6 +92,41 @@ bool StorageManager::saveData()
 {
 	//파일 저장
 	//저장 완료한다면 true를 반환
+	save_enum = (int)_saveStage;
+	save_s_enum = to_string(save_enum);
+	switch (_saveStage)
+	{
+	case OPENING:
+		INIDATA->addData("스테이지", "스테이지 이름", "시작의 정원");
+		INIDATA->addData("스테이지", "스테이지 번호(OPENING:0,FINAL:5)", save_s_enum.c_str());
+		INIDATA->iniSave(fileName);
+		break;
+	case FIRSTSTAGE:
+		INIDATA->addData("스테이지", "스테이지 이름", "마녀의 집 1층");
+		INIDATA->addData("스테이지", "스테이지 번호(OPENING:0,FINAL:5)", save_s_enum.c_str());
+		INIDATA->iniSave(fileName);
+		break;
+	case SECONDSTAGE:
+		INIDATA->addData("스테이지", "스테이지 이름", "마녀의 집 2층");
+		INIDATA->addData("스테이지", "스테이지 번호(OPENING:0,FINAL:5)", save_s_enum.c_str());
+		INIDATA->iniSave(fileName);
+		break;
+	case THIRDSTAGE:
+		INIDATA->addData("스테이지", "스테이지 이름", "마녀의 집 3층");
+		INIDATA->addData("스테이지", "스테이지 번호(OPENING:0,FINAL:5)", save_s_enum.c_str());
+		INIDATA->iniSave(fileName);
+		break;
+	case FOURTHSTAGE:
+		INIDATA->addData("스테이지", "스테이지 이름", "마녀의 집 4층");
+		INIDATA->addData("스테이지", "스테이지 번호(OPENING:0,FINAL:5)", save_s_enum.c_str());
+		INIDATA->iniSave(fileName);
+		break;
+	case FINALSTAGE:
+		INIDATA->addData("스테이지", "스테이지 이름", "엘렌의 방");
+		INIDATA->addData("스테이지","스테이지 번호(OPENING:0,FINAL:5)",save_s_enum.c_str());
+		INIDATA->iniSave(fileName);
+		break;
+	}
 	return false;
 }
 
@@ -80,6 +135,21 @@ bool StorageManager::loadData()
 	//파일 로드
 	//타이틀을 가지고온 기준으로 폴더안에 파일명과 일치하는 파일을 불러옴
 	//로드 완료한다면 true를 반환
+	switch (_saveStage)
+	{
+	case OPENING:
+		break;
+	case FIRSTSTAGE:
+		break;
+	case SECONDSTAGE:
+		break;
+	case THIRDSTAGE:
+		break;
+	case FOURTHSTAGE:
+		break;
+	case FINALSTAGE:
+		break;
+	}
 	return false;
 }
 
@@ -87,36 +157,58 @@ bool StorageManager::loadData()
 void StorageManager::storageOpen()
 {
 	//방향키 조작
-	if (!_isClick && KEYMANAGER->isOnceKeyDown(VK_DOWN))
+	if (!_isClick && KEYMANAGER->isOnceKeyDown(VK_DOWN)*0x28)
 		_selectedStorage = (STORAGE)(_selectedStorage == FIFTH ? FIRST : (int)_selectedStorage + 1);
 
-	if (!_isClick && KEYMANAGER->isOnceKeyDown(VK_UP))
+	if (!_isClick && KEYMANAGER->isOnceKeyDown(VK_UP)*0x26)
 		_selectedStorage = (STORAGE)(_selectedStorage == FIRST ? FIFTH : (int)_selectedStorage - 1);
 
 	switch (_selectedStorage)
 	{
 	case StorageManager::FIRST:
 		_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2 - 10, 230), Vector2(1100, 100), Pivot::Center);
-		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+		if (KEYMANAGER->isOnceKeyDown(/*VK_SPACE*/'Z'))
+		{
 			_isClick = true;
+			fileName = "Save1";
+		}
+		if (KEYMANAGER->isOnceKeyUp('Z'))_isClick = false;
 		break;
 	case StorageManager::SECOND:
 		_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2, 330), Vector2(1100, 100), Pivot::Center);
-		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+		if (KEYMANAGER->isOnceKeyDown(/*VK_SPACE*/'Z'))
+		{
 			_isClick = true;
+			fileName = "Save2";
+		}		
+		if (KEYMANAGER->isOnceKeyUp('Z'))_isClick = false;
 		break;
 	case StorageManager::THIRD:
 		_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2, 430), Vector2(1100, 100), Pivot::Center);
-		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+		if (KEYMANAGER->isOnceKeyDown(/*VK_SPACE*/'Z'))
+		{
 			_isClick = true;
+			fileName = "Save3";
+		}
+		if (KEYMANAGER->isOnceKeyUp('Z'))_isClick = false;
 		break;
 	case StorageManager::FOURTH:
 		_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2, 530), Vector2(1100, 100), Pivot::Center);
-		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+		if (KEYMANAGER->isOnceKeyDown(/*VK_SPACE*/'Z'))
+		{
 			_isClick = true;
+			fileName = "Save4";
+		}
+		if (KEYMANAGER->isOnceKeyUp('Z'))_isClick = false;
 		break;
 	case StorageManager::FIFTH:
 		_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2, 630), Vector2(1100, 100), Pivot::Center);
+		if (KEYMANAGER->isOnceKeyDown(/*VK_SPACE*/'Z'))
+		{
+			_isClick = true;
+			fileName = "Save5";
+		}
+		if (KEYMANAGER->isOnceKeyUp('Z'))_isClick = false;
 		break;
 	}
 
@@ -137,9 +229,9 @@ void StorageManager::rcAlphaChange()
 void StorageManager::render()
 {
 	//백그라운드 셋팅 및 랜더~
-	ImageManager::GetInstance()->FindImage("menu")->SetSize(Vector2(1280, 720));
-	ImageManager::GetInstance()->FindImage("menu")->Render(Vector2(WINSIZEX / 2, WINSIZEY / 2));
-
+	//ImageManager::GetInstance()->FindImage("menu")->SetSize(Vector2(1280, 720));
+	//ImageManager::GetInstance()->FindImage("menu")->Render(Vector2(WINSIZEX / 2, WINSIZEY / 2));
+	if (!_toggle)return;
 	ImageManager::GetInstance()->FindImage("messe")->SetSize(Vector2(1240, 120));
 	ImageManager::GetInstance()->FindImage("messe")->Render(Vector2(WINSIZEX / 2, 75));
 
@@ -179,4 +271,8 @@ void StorageManager::render()
 		_rcAlpha,
 		3.f
 	);
+	for (int i = 0; i < _vFileSlot.size(); i++)
+	{
+		D2DINS->RenderTextField(100, 220 + i * 100, stringToWstring(_vFileSlot[i]), 40, 1100, 10,D2DRenderer::DefaultBrush::White,DWRITE_TEXT_ALIGNMENT_CENTER);
+	}
 }

@@ -163,10 +163,11 @@ void inMenu::selectedContents()
 		_contents = (CONTENTS)(_contents - 1 > -1 ? _contents - 1 : _contents);
 	}
 
-	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+	if (KEYMANAGER->isOnceKeyDown(VK_SPACE/*'Z'*/))
 	{
 		SOUNDMANAGER->play("cursor", 0.5f);
 		_isConnecting = true;
+		cout << _isConnecting;
 	}
 }
 
@@ -193,8 +194,11 @@ void inMenu::connect()
 		case LOAD:
 			//불러오기 창에서 x키 누르면 뒤로가기
 			//아이템이 존재 하지 않는다면 뒤로가기만 가능
+			//STORAGEMANAGER->setToggle(true);
 			_isMenuState = STORAGEMANAGER->loadView();
-
+			//STORAGEMANAGER->saveView();
+			//STORAGEMANAGER->render();
+			cout << _isConnecting;
 			if (!_isMenuState)	_isConnecting = false;
 			if (_isMenuState == MENU_END)
 			{
