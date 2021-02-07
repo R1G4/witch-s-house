@@ -11,7 +11,8 @@ enum DEADVARIABLE
 	DEAD_SOLDIER,
 	DEAD_SNAKE,
 	DEAD_FROG,
-	DEAD_FLOWER
+	DEAD_FLOWER,
+	DEAD_THORN
 };
 class DeadManager :
 	public gameNode

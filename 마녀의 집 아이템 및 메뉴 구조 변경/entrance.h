@@ -16,11 +16,13 @@ class entrance : public firstFloorStage
 		PALM_RIGHT = 506
 	};
 	TRIGGER _trigger;
+	int _enemyInterval;
 public:
 	entrance();
 	~entrance();
 
 	HRESULT init(CHRDIRECTION _chrdirection = CHRDIREC_DOWN, LOCATION _location = LOCATION_DEFAULT);
+	void bearCom();
 	void release();
 	void getMemory();
 	void update();

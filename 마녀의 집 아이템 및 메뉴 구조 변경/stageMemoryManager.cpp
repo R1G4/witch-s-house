@@ -11,6 +11,9 @@ stageMemoryManager::stageMemoryManager() :
 	isBox(false),
 	isPalmLeft(false),
 	isPalmRight(false),
+	isPalm(false),
+	isScissors(false),
+	isBearComing2(false),
 
 	// 5Ãþ
 	isSkuls_1(false),

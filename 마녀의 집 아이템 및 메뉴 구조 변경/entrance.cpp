@@ -14,22 +14,60 @@ entrance::~entrance()
 
 HRESULT entrance::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
-	//캐릭터의 위치랑, 바라보는 방향
+	//플레이어가 바라보는 방향
 	_player->setDirec(_chrdirection);
-
-	_bear = new bear;
 
 	//타일 불러오기
 	load(_location);
 
+	//카메라 셋팅
 	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
+
+	//1층 관련 스테이지 초기화
 	firstFloorStage::init();
 
+	//초기 트리거 상태
 	_trigger = NONE;
+
+	//에너미 등장 인터벌
+	_enemyInterval = 0;
+
+	//스테이지 메모리 불러오기
 	getMemory();
+
+	//프레임 이미지 프레임 셋팅
 	setFrameIndex();
 
 	return S_OK;
+}
+
+void entrance::bearCom()
+{
+	if (!STAGEMEMORYMANAGER->getIsBearComing() ||
+		STAGEMEMORYMANAGER->getIsBearComing2() ||
+		!STAGEMEMORYMANAGER->getIsBearPickUp() ||
+		!STAGEMEMORYMANAGER->getIsBearPut())
+		return;
+
+	_enemyInterval++;
+	if (_enemyInterval == 80)
+	{
+		_bear = new bear;
+		_bear->init(496 % TILEX, 496 / TILEX);
+		_playerTile = new astarTile;
+		_enemyTile = new astarTile;
+		_dead = new DeadManager;
+		_dead->init();
+		_dead->setPlayerAddress(_player);
+		for (int k = 0; k < TILEX*TILEY; k++)
+			_objTile[k] = new astarTile;
+		bossLocX = 496 % TILEX;
+		bossLocY = 496 / TILEX;
+
+		firstFloorStage::objectLocation();
+
+		STAGEMEMORYMANAGER->setIsBearComing2(true);
+	}
 }
 
 void entrance::release()
@@ -65,6 +103,8 @@ void entrance::getMemory()
 
 void entrance::update()
 {
+	bearCom();
+
 	//프레임 인덱스 셋팅
 	setFrameIndex();
 	switch (_trigger)
@@ -117,8 +157,9 @@ void entrance::update()
 		Collision();
 		break;
 	}	
-	
+
 	//카메라 관련 업데이트
+	if (_bear)	firstFloorStage::enemyUpdate();
 	firstFloorStage::cameraUpdate();
 }
 
@@ -131,8 +172,6 @@ void entrance::render()
 			IMAGEMANAGER->FindImage("배경8")->GetSize().y / 2));
 
 	firstFloorStage::render();
-
-	_bear->render();
 }
 
 void entrance::Collision()
@@ -155,8 +194,7 @@ void entrance::Collision()
 				
 				if ((TRIGGER)index == PALM_LEFT || (TRIGGER)index == PALM_RIGHT)
 				{
-					//곰돌이를 바구니에 넣은 상태라면 (미구현 상태 복도에서 임시적으로 true로 만듬)
-					if (_isBlood && STAGEMEMORYMANAGER->getIsBearPut())
+					if (_isBlood && STAGEMEMORYMANAGER->getIsScissors())
 					{
 						for (int k = 0; k < _vFrameTile.size(); k++)
 						{
@@ -204,7 +242,8 @@ void entrance::Collision()
 							_vFrameTile[k].isTrigger = true;
 							_trigger = CANDLE_OFF;
 						}
-						else if ((TRIGGER)index == VASE_DOWN && _vFrameTile[k].keyName == "꽃병프레임")
+						//곰돌이를 바구니에 넣은 상태
+						else if (STAGEMEMORYMANAGER->getIsBearPut() && (TRIGGER)index == VASE_DOWN && _vFrameTile[k].keyName == "꽃병프레임")
 						{
 							//트리거를 발동한다.
 							_vFrameTile[k].isTrigger = true;
@@ -229,23 +268,24 @@ void entrance::load(LOCATION location)
 	camera = _tiles->camera;
 	for (int i = 0; i < TILEX*TILEY; i++)
 	{
-		if (_tiles[i].attribute != PLAYER)
-			continue;
-
-		//초기 위치를 잡아준다.
-		switch (location)
+		switch (_tiles[i].attribute)
 		{
-		case LOCATION_1:
-			_player->setStart(507 % TILEX, 507 / TILEX);
-			break;
-		case LOCATION_2:
-			_player->setStart(498 % TILEX, 498 / TILEX);
-			break;
-		case LOCATION_DEFAULT: default:
-			_player->setStart(i%TILEX, i / TILEX);
-			break;
+			case PLAYER:
+				//초기 위치를 잡아준다.
+				switch (location)
+				{
+					case LOCATION_1:
+						_player->setStart(507 % TILEX, 507 / TILEX);
+						break;
+					case LOCATION_2:
+						_player->setStart(498 % TILEX, 498 / TILEX);
+						break;
+					case LOCATION_DEFAULT: default:
+						_player->setStart(i%TILEX, i / TILEX);
+						break;
+				}
+				break;
 		}
-		break;
 	}
 	CloseHandle(file);
 }

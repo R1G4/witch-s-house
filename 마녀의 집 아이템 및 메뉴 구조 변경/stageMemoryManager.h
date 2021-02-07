@@ -9,10 +9,12 @@ private:
 	bool isBearPickUp;
 	bool isBearPut;
 	bool isBearComing;
+	bool isBearComing2;
 	bool isBox;
 	bool isPalmLeft;
 	bool isPalmRight;
 	bool isPalm;
+	bool isScissors;
 
 	//5Ãþ
 	bool isSkuls_1;
@@ -41,10 +43,12 @@ public:
 	bool getIsBearPickUp() { return isBearPickUp; }
 	bool getIsBearPut() { return isBearPut; }
 	bool getIsBearComing() { return isBearComing; }
+	bool getIsBearComing2() { return isBearComing2; }
 	bool getIsBox() { return isBox; }
 	bool getIsPalmLeft() { return isPalmLeft; }
 	bool getIsPalmRight() { return isPalmRight; }
 	bool getIsPalm() { return isPalm; }
+	bool getIsScissors() { return isScissors; }
 
 	//5Ãþ	
 	bool getIsSkul1() { return isSkuls_1; }
@@ -70,10 +74,12 @@ public:
 	void setIsBearPickUp(bool IsBearPickUp) { isBearPickUp = IsBearPickUp; }
 	void setIsBearPut(bool IsBearPut) { isBearPut = IsBearPut; }
 	void setIsBearComing(bool IsBearComing) { isBearComing = IsBearComing; }
+	void setIsBearComing2(bool IsBearComing) { isBearComing2 = IsBearComing; }
 	void setIsBox(bool IsBox) { isBox = IsBox; }
 	void setIsPalmLeft(bool IsPalmLeft) { isPalmLeft = IsPalmLeft; }
 	void setIsPalmRight(bool IsPalmRight) { isPalmRight = IsPalmRight; }
 	void setIsPalm(bool IsPalm) { isPalm = IsPalm; }
+	void setIsScissors(bool IsScissors) { isScissors = IsScissors; }
 
 	//5Ãþ
 	void setIsSkul1(bool _skul) { isSkuls_1 = _skul; }

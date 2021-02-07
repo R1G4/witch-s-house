@@ -2,11 +2,9 @@
 #include "entranceTrap.h"
 #include "player.h"
 
-
 entranceTrap::entranceTrap()
 {
 }
-
 
 entranceTrap::~entranceTrap()
 {
@@ -24,12 +22,17 @@ HRESULT entranceTrap::init(CHRDIRECTION _chrdirection, LOCATION _location)
 
 	_trigger = NONE;
 
+	_dead = new DeadManager;
+	_dead->init();
+	_dead->setPlayerAddress(_player);
+
 	return S_OK;
 }
 
 void entranceTrap::release()
 {
 	firstFloorStage::release();
+	if (_dead)	_dead->release();
 }
 
 void entranceTrap::update()
@@ -55,7 +58,20 @@ void entranceTrap::update()
 		//샬라샬라~ 여기서 다이얼로그 보여줘야함
 		//읽는 미션 성공
 		_mission.read = SUCCESS;
-		_trigger = NONE;
+		_vScript = TEXTMANAGER->loadFile("dialog/1f/1f_entranceTrap.txt");
+
+		if (KEYMANAGER->isOnceKeyUp(VK_SPACE) || KEYMANAGER->isOnceKeyUp('x'))
+		{
+			TEXTMANAGER->clearScript();
+			_trigger = NONE;
+			_vScript.clear();
+		}
+
+		break;
+	case entranceTrap::WALL:
+		firstFloorStage::setAlpha();
+		_dead->setDead(DEAD_WALL);
+		_dead->update();
 		break;
 	default:
 		_trigger = NONE;
@@ -98,9 +114,10 @@ void entranceTrap::Collision()
 			{
 			case TR_TRIGGER:
 				//트리거를 받아온다
-				_trigger = index == DOOR_OPEN ? (_mission.read ? DOOR_OPEN : _trigger) :
-					index == READ ? (!_mission.read ? READ : _trigger) : _trigger;
+				_trigger = index == DOOR_OPEN ? (_mission.read ? DOOR_OPEN : _trigger) : NONE;
 
+				if ((TRIGGER)index == READ && KEYMANAGER->isOnceKeyUp(VK_SPACE))
+					_trigger = READ;
 				//트리거와 프레임 이미지가 같이 위치한 경우
 				//해당 프레임 이미지를 찾아서
 				for (int k = 0; k < _vFrameTile.size(); k++)
@@ -108,7 +125,8 @@ void entranceTrap::Collision()
 					if (_vFrameTile[k].indexX == i && _vFrameTile[k].indexY == j && _vFrameTile[k].keyName == _tiles[index].keyName)
 					{
 						//트리거를 발동한다.
-						_vFrameTile[k].isTrigger = true;
+						//_vFrameTile[k].isTrigger = true;
+						_trigger = WALL;
 					}
 				}
 				break;

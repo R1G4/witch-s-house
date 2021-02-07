@@ -21,20 +21,96 @@ HRESULT firstFloorStage::init()
 
 	getFrameTile();
 	_sceneAlpha = 0.05;
-
 	_delay = 0;
+
 	return S_OK;
 }
 
 void firstFloorStage::release()
 {
-	_player->release();
+	//에너미가 존재할 시 메모리 해제 및 제거
+	if (_bear)
+	{
+		SAFE_RELEASE(_bear);
+		SAFE_DELETE(_bear);
+	}
+
+	//데드 모션이 존재할 시 메모리 해제 및 제거
+	if (_dead)
+	{
+		SAFE_RELEASE(_dead);
+		SAFE_DELETE(_dead);
+	}
+
+	//A* 관련 리스트 비우기
+	_vTotalList.clear();
+	_vOpenList.clear();
+	_vCloseList.clear();
 	_vFrameTile.clear();
+	if (_playerTile)_playerTile->release();					// 플레이어 타일
+	if (_enemyTile)_enemyTile->release();					// 에너미 타일
+	if (_objTile[TILEX*TILEY])_objTile[TILEX*TILEY]->release();		// 오브젝트 타일
+	if (_currentTile)_currentTile->release();
+
+	//dialog 관련 비우기
+	_vScript.clear();
+	TEXTMANAGER->clearScript();
+
+	//Z 오더 메모리 해제
+	ZORDER->release();
 }
 
 void firstFloorStage::update()
 {
-	if(!_isForm)	_player->update();
+	if (!_isForm) _player->update();
+}
+
+void firstFloorStage::enemyUpdate()
+{
+	//에너미 업데이트
+	_bear->update();
+
+	//에너미가 존재한다면 A* 적용한다. 
+	if (_bear)
+	{
+		playerLocation();
+
+		if (!_setTile)
+		{
+			enemyLocation();
+			setAstarTile();
+			_setTile = true;
+		}
+
+		_follow_count++;
+		if (_follow_count >= 15)
+		{
+			resetEverything();
+			_currentTile = _playerTile;
+			while (_numCount <= 0 && !_stop)
+			{
+				pathFinder(_currentTile);
+			}
+			if (Math::GetDistance(_playerTile->getIdx(), _playerTile->getIdy(), _enemyTile->getIdx(), _enemyTile->getIdy()) < 1.1f)
+			{
+				//에너미가 존재하지 않다면 반환한다.
+				if (!_bear)	return;
+				resetEverything();			
+
+				//데드씬 설정
+				_dead->setDead(DEAD_BEAR);
+				_dead->update();
+
+				//에너미 메모리 해지 및제거
+				SAFE_RELEASE(_bear);
+				SAFE_DELETE(_bear);
+
+				_stop = true;
+				return;
+			}
+			_follow_count = 0;
+		}
+	}
 }
 
 void firstFloorStage::cameraUpdate()
@@ -60,51 +136,79 @@ void firstFloorStage::render()
 			}
 		}
 	}
-
-	//타일보다는 상위에 오브젝트보다는 하위에 위치해야함
-	_player->render();
-
-	//타일에 프레임 이미지 배치 랜더
+	//Z-order 벡터에 데이터를 넣어주는 과정
+		//플레이어와 에너미의 경우 각 객체의 랜더함수를 호출할 것이므로 z-order비교를 위한 y값과 타입값만 넣어주면 충분
+	ZORDER->insert(_player->getPlayerFrc().left, _player->getPlayerFrc().top, ZPLAYER);
+	if(_bear)	ZORDER->insert(_bear->getRect().left, _bear->getRect().top, ZENEMY);
+//	if (_isBossAppeal)ZORDER->insert(_bear->getRect().left, _bear->getRect().top, ZENEMY);
+	//오브젝트를 넣어주는 과정
+	//오브젝트의 경우 랜딩을 해줘야하므로 이미지를 넣어주거나 키값을 넣어주는게 맞음
+	//특정 트리거로 예외처리를 해야한다면, 이미지를 바로 넣기보다는 키값을 넣어주는 방식을 사용하는게 좋아보임
+	//오브젝트중 검은 타일까지 넣게되면 프로그램이 느려져서 제외하기로함
+	for (int i = 0; i < TILEX*TILEY; i++)
+	{
+		if (_tiles[i].obj != OBJ_NONE)
+		{
+			if (_tiles[i].keyName == "obj5" || _tiles[i].keyName == "obj9")continue;
+			if (!STAGEMEMORYMANAGER->getIsBearComing2() && (_tiles[i].keyName == "obj62" || _tiles[i].keyName == "obj63"))continue;
+			ZORDER->insert(_tiles[i].rc.left, _tiles[i].rc.bottom, IMAGEMANAGER->FindImage(_tiles[i].keyName), ZOBJECT);
+		}
+	}
+	//프레임 오브젝트들을 넣어주는 과정
+	//종욱이가 만든 프레임인포매니저를 활용하게 될 경우 바꿔야할 가능성 있음
 	for (int i = 0; i < _vFrameTile.size(); i++)
 	{
-		if (KEYMANAGER->isToggleKey(VK_TAB))
-		{
-			IMAGEMANAGER->FindImage(_vFrameTile[i].keyName)->SetAlpha(_sceneAlpha);
-			if (_vFrameTile[i].kinds == PLAYER)  CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::Blue, 0.7);
-			else if (_vFrameTile[i].kinds == ENEMY)  CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::Black, 0.7);
-			else CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::White, 0.7);
-		}
-
-		if (_vFrameTile[i].kinds == PLAYER) continue; 
-		if (_vFrameTile[i].kinds == ENEMY) continue;
-		if (_vFrameTile[i].keyName == "손바닥" && !_isBlood) continue;
-		
-		_vFrameTile[i].img->SetAlpha(_sceneAlpha);
-		CAMERAMANAGER->FrameRender
-		(
-			_vFrameTile[i].img,
-			Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.bottom - _vFrameTile[i].img->GetSize().y / 2),
-			_vFrameTile[i].frameX, _vFrameTile[i].frameY
-		);
+		ZORDER->insert(_vFrameTile[i].rc.left, _vFrameTile[i].rc.top, _vFrameTile[i].keyName, ZFRAMEOBJ);
 	}
-
-	for (int i = 0; i < TILEY; i++)
+	for (int i = 0; i < ZORDER->getZorder().size(); i++)
 	{
-		for (int j = 0; j < TILEX; j++)
+		cout << ZORDER->getZorder()[i].y << " " << ZORDER->getZorder()[i].type << " / ";
+	}
+	//정렬된 순서대로 랜딩
+	//각 인덱스의 타입을 확인하여 타입에 따라 이미지를 랜딩하도록 설계함
+	//이 부분에서 FrameInfoManager가 잘 돌아가게 될지는 모르겠음 적용필요
+	for (int i = 0; i < ZORDER->getZorder().size(); i++)
+	{
+		if (ZORDER->getZorder()[i].type == ZPLAYER)_player->render();
+		if (ZORDER->getZorder()[i].type == ZENEMY && _bear)
+			_bear->render();
+		if (ZORDER->getZorder()[i].type == ZOBJECT)
 		{
-			if (_tiles[i*TILEX + j].obj == OBJ_NONE || _tiles[i*TILEX + j].keyName =="")continue;
-			if (ITEMMANAGER->KeyCheck(_tiles[i*TILEX + j].keyName) &&
-				(STAGEMEMORYMANAGER->getIsBearPickUp()))	continue;
-
-			string temp = _tiles[i*TILEX + j].keyName;
-			IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(_sceneAlpha);
-
-			//중간에 배치하고 싶다면 이걸쓰세요. 디폴트 센타
-			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
-				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2,
-					_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));
+			if (!STAGEMEMORYMANAGER->getIsBearComing2() && (ZORDER->getZorder()[i].keyName == "obj62" || ZORDER->getZorder()[i].keyName == "obj63"))continue;
+			CAMERAMANAGER->render(ZORDER->getZorder()[i].img,
+				Vector2(ZORDER->getZorder()[i].x + TILESIZE / 2, ZORDER->getZorder()[i].y - ZORDER->getZorder()[i].img->GetSize().y / 2));
+		}
+		if (ZORDER->getZorder()[i].type == ZFRAMEOBJ)
+		{
+			for (int j = 0; j < _vFrameTile.size(); j++)
+			{
+				if (_vFrameTile[j].kinds == PLAYER) continue;
+				if (_vFrameTile[j].kinds == ENEMY)	continue;
+				if (_vFrameTile[j].keyName == "손바닥" && !_isBlood) continue;
+				if (ZORDER->getZorder()[i].keyName == _vFrameTile[j].keyName)
+					CAMERAMANAGER->FrameRender
+					(
+						_vFrameTile[j].img,
+						Vector2((_vFrameTile[j].rc.left + _vFrameTile[j].rc.right) / 2, _vFrameTile[j].rc.bottom - _vFrameTile[j].img->GetSize().y / 2),
+						_vFrameTile[j].frameX, _vFrameTile[j].frameY
+					);
+			}
 		}
 	}
+	//zorder 벡터를 초기화해줌 안하면 느려짐
+	ZORDER->release();
+	if(_dead) _dead->render();
+	//검은색 타일 오브젝트이미지까지 넣게되면 프로그램이 무거워져서 따로 뺌
+	for (int i = 0; i < TILEX*TILEY; i++)
+	{
+		if (_tiles[i].keyName == "obj5" || _tiles[i].keyName == "obj9")
+			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i].keyName),
+				Vector2(_tiles[i].rc.left + TILESIZE / 2, _tiles[i].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i].keyName)->GetSize().y / 2));
+	}
+
+	//if (_bear)	_bear->render();
+
+	if (_vScript.size() > 0) TEXTMANAGER->renderText();
 
 	//폼이 실행되고 있다면
 	if (_isForm)	FormRender();
@@ -139,11 +243,6 @@ void firstFloorStage::getFrameTile()
 			temp.frameY = 0;
 			temp.img = FRAMEINFOMANAGER->FindImage(_tiles[i*TILEX + j].keyName);
 
-			if (tempKinds == ENEMY)
-			{
-				_bear = new bear;
-				_bear->init(i%TILEX, i / TILEX);
-			}
 			_vFrameTile.push_back(temp);
 		}
 	}
@@ -262,17 +361,14 @@ bool firstFloorStage::SelectionForm(wstring leftText, wstring rightText)
 void firstFloorStage::FormRender()
 {
 	//if (!_isForm) return;
-
-
-
 	IMAGEMANAGER->FindImage("bar")->SetScale(1.1f);
 	IMAGEMANAGER->FindImage("bar")->Render(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2 - 50));	//왼쪽
 	IMAGEMANAGER->FindImage("bar")->SetScale(1.1f);
 	IMAGEMANAGER->FindImage("bar")->Render(Vector2(WINSIZEX / 2 + 250, WINSIZEY / 2 - 50)); // 오른쪽
 
-	D2DINS->GetInstance()->RenderText(275, WINSIZEY / 2 - 68, FormInfo[LEFT], RGB(255, 255, 255), 0.85f, 27, DWRITE_TEXT_ALIGNMENT::DWRITE_TEXT_ALIGNMENT_LEADING);
-	D2DINS->GetInstance()->RenderText(760, WINSIZEY / 2 - 68, FormInfo[RIGHT], RGB(255, 255, 255), 0.85f, 27, DWRITE_TEXT_ALIGNMENT::DWRITE_TEXT_ALIGNMENT_LEADING);
-
+	//텍스트 박스로 수정 글자가 길면 알아서 내리더라
+	D2DINS->GetInstance()->RenderTextField(263, WINSIZEY / 2 - 150, FormInfo[LEFT], RGB(255, 255, 255), 27, 280, 200, 0.85f, DWRITE_TEXT_ALIGNMENT_LEADING);
+	D2DINS->GetInstance()->RenderTextField(748, WINSIZEY / 2 - 150, FormInfo[RIGHT], RGB(255, 255, 255), 27, 280, 200, 0.85f, DWRITE_TEXT_ALIGNMENT_LEADING);
 
 	//백그라운드 컬러 렉트
 	D2DINS->FillRectangle
@@ -300,4 +396,270 @@ void firstFloorStage::rcAlphaChange()
 		_rcAlphaChange = 0.03f;
 
 	_rcAlpha += _rcAlphaChange;
+}
+
+void firstFloorStage::playerLocation()
+{
+	int tem = _player->getPlayerLocY();
+	int tem2 = _player->getPlayerLocX();
+	_playerTile->init((_player->getPlayerLocX() + TILESIZE / 2) / TILESIZE,
+		(_player->getPlayerLocY() + TILESIZE / 2) / TILESIZE);
+	_playerTile->setAttribute("player");	// astar타일로 플레이어 적용
+}
+
+void firstFloorStage::enemyLocation()
+{
+	_enemyTile->init(bossLocX, bossLocY);			// astar타일로 지속적인 적용
+	_enemyTile->setAttribute("enemy");			// astar타일로 에너미 적용
+}
+
+void firstFloorStage::objectLocation()
+{
+	for (int i = 0; i < (TILEX * TILEY); i++)
+	{
+		if (_tiles[i].isCollider == true)
+		{
+			_objTile[MaxIndex]->init(_tiles[i].rc.left / TILESIZE, _tiles[i].rc.top / TILESIZE);
+			MaxIndex++;
+		}
+	}
+	for (int i = 0; i < MaxIndex; i++)
+	{
+		_objTile[i]->setAttribute("wall");
+	}
+}
+
+void firstFloorStage::setAstarTile()
+{
+	//현재 타일은 시작타일루다가
+	_currentTile = _playerTile;
+
+	for (int i = 0; i < TILEY; ++i)
+	{
+		for (int j = 0; j < TILEX; ++j)
+		{
+			if (j == _playerTile->getIdx() && i == _playerTile->getIdy())
+			{
+				_playerTile->setColor(D2D1::ColorF::Green);		// 플레이어 타일 색상 - 사실상 구분용 의미없을듯
+				_playerTile->setIsOpen(true);					// 오픈리스트인가?
+				_vTotalList.push_back(_playerTile);				// 토탈리스트에 넣기
+				continue;
+			}
+
+			if (j == _enemyTile->getIdx() && i == _enemyTile->getIdy())
+			{
+				_enemyTile->setColor(D2D1::ColorF::Red);		// 에너미 타일 색상 - 사실상 구분용 의미없을듯
+				_enemyTile->setIsOpen(true);					// 오픈리스트인가?
+				_vTotalList.push_back(_enemyTile);				// 토탈리스트에 넣기
+				continue;
+			}
+
+			//그 외 타일
+			astarTile* node = new astarTile;
+			node->init(j, i);
+			node->setColor(D2D1::ColorF::White);
+			node->setIsOpen(true);
+			node->setAttribute("");
+
+			// 그 외 타일에서 장애물이면 색상 변경 및 통과 불가능하게 변경 - 카메라 적용되면 다시 수정
+			for (int k = 0; k < MaxIndex; k++)
+			{
+				if (j == _objTile[k]->getIdx() && i == _objTile[k]->getIdy())
+				{
+					node->setColor(D2D1::ColorF::Black);
+					node->setIsOpen(false);
+					node->setAttribute("wall");
+				}
+			}
+			_vTotalList.push_back(node);
+		}
+	}
+}
+
+void firstFloorStage::resetEverything()
+{
+	_numCount = 0;
+	_vOpenList.clear();
+	_vCloseList.clear();
+
+	for (int i = 0; i < _vTotalList.size(); ++i)
+	{
+		_vTotalList[i]->setCostFromStart(0);
+		_vTotalList[i]->setCostToGoal(0);
+		_vTotalList[i]->setNumber(0);
+		_vTotalList[i]->setTotalCost(0);
+		_vTotalList[i]->setParentNode(NULL);
+		if (_vTotalList[i]->getAttribute() != "wall") _vTotalList[i]->setIsOpen(true);
+	}
+}
+
+vector<astarTile*> firstFloorStage::addOpenList(astarTile * currentTile)
+{
+	int startX = currentTile->getIdx() - 1;
+	int startY = currentTile->getIdy() - 1;
+
+	//for (int i = 2; i >= 0; --i)
+		for (int i = 0; i < 3; ++i)
+	{
+		//// ############ 벡터 안터지게 #####################
+		if (startY + i < 0)				continue;
+		if (startY + i >= TILEY)		continue;
+		//for (int j = 2; j >= 0; --j)
+			for (int j = 0; j<3; ++j)
+		{
+			// ############ 신항로 개척 방지 #####################
+			if (startX + j < 0)			continue;
+			if (startX + j >= TILEX)	continue;
+
+			int checkIndex = (startY * TILEX) + startX + j + (i * TILEX);
+			if (i == 0 && j == 0) continue; // 왼쪽 위
+			if (i == 2 && j == 0) continue; // 왼쪽 아래
+			if (i == 2 && j == 2) continue; // 오른쪽 아래
+			if (i == 0 && j == 2) continue; // 오른쪽 위
+			astarTile* node = _vTotalList[checkIndex];
+
+			//예외처리!
+			if (!node->getIsOpen()) continue;
+			if (node->getAttribute() == "player") continue;
+			if (node->getAttribute() == "wall") continue;
+
+			// ##################월담 방지#############################
+			string nodeTop;
+			if (startY < 0)				nodeTop = "wall";
+			else nodeTop = _vTotalList[(startY * TILEX) + startX + 1]->getAttribute();
+			// 위막혀있으면 왼쪽위와 오른쪽 위를 못가게함 i==0위 i==2아래 j==0왼 j==2오른
+			if (i == 0 && nodeTop == "wall")	continue;
+			string nodeBottom;
+			if (startY + 2 >= TILEY)	nodeBottom = "wall";
+			else nodeBottom = _vTotalList[(startY * TILEX) + startX + (2 * TILEX) + 1]->getAttribute();
+			// 아래막혀있으면 왼쪽아래와 오른쪽 아래를 못가게함
+			if (i == 2 && nodeBottom == "wall")	continue;
+			string nodeLeft;
+			if (startX < 0)				nodeLeft = "wall";
+			else nodeLeft = _vTotalList[(startY * TILEX) + startX + TILEX]->getAttribute();
+			// 왼쪽막혀있으면 왼쪽위와 왼쪽아래를 못가게함
+			if (j == 0 && nodeLeft == "wall")	continue;
+			string nodeRight;
+			if (startX + 2 >= TILEX)	nodeRight = "wall";
+			else nodeRight = _vTotalList[(startY * TILEX) + startX + TILEX + 2]->getAttribute();
+			// 오른쪽막혀있으면 오른쪽위와 오른쪽 아래로 못가게함
+			if (j == 2 && nodeRight == "wall")	continue;
+
+			//현재 타일을 계속 갱신해준다
+			node->setParentNode(_currentTile);
+
+			bool addObj = true;
+
+			for (_viOpenList = _vOpenList.begin(); _viOpenList != _vOpenList.end(); ++_viOpenList)
+			{
+				if (*_viOpenList == node)
+				{ // 있는거면 추가안함
+					addObj = false;
+					break;
+				}
+			}
+			if (!addObj) continue;
+			_vOpenList.push_back(node);
+		}
+	}
+	return _vOpenList;
+}
+
+void firstFloorStage::pathFinder(astarTile * currentTile)
+{
+	//경로비용을 매우 쉽게 하기 위해서 임의의 경로비용을 둠
+	float tempTotalCost = 5000;
+	astarTile* tempTile = nullptr;
+
+	bool changed = false;
+
+	//갈수 있는 길을 담은 벡터 내부에서 가장 빠른 경로를 뽑아야한다
+	for (int i = 0; i < addOpenList(currentTile).size(); ++i)
+	{ // 여기서 주변방향 넣음과 동시에 리턴으로 총오픈리스트를 가져오는거
+		_vOpenList[i]->setCostToGoal( // H를 계산(끝점과의 수직거리)
+			(abs(_enemyTile->getIdx() - _vOpenList[i]->getIdx()) +
+				abs(_enemyTile->getIdy() - _vOpenList[i]->getIdy())) * 10);
+
+		POINT center1 = _vOpenList[i]->getParentNode()->getCenter();
+		POINT center2 = _vOpenList[i]->getCenter();
+
+		_vOpenList[i]->setCostFromStart((center1.x == center2.x ||
+			center1.y == center2.y) ? 14 : 10);
+		// 직선이면(x,y 둘중하나가 같다면) 10, 아니면 대각선이니 14의 비용
+
+		//F = G + H 니까~ 
+		_vOpenList[i]->setTotalCost(			//F
+			_vOpenList[i]->getCostToGoal() +	//H
+			_vOpenList[i]->getCostFromStart()); //G
+
+		//경로비용(F)이 가장 작은 애로 계속 갱신해준다
+		if (tempTotalCost > _vOpenList[i]->getTotalCost())
+		{
+			tempTotalCost = _vOpenList[i]->getTotalCost();
+			tempTile = _vOpenList[i];
+		} // 열린리스트중 경로비용 가장작은애가 탐색되어 템프타일로 들어옴
+
+		bool addObj = true;
+		for (_viOpenList = _vOpenList.begin(); _viOpenList != _vOpenList.end(); ++_viOpenList)
+		{
+			if (*_viOpenList == tempTile)
+			{ // 열린리스트에 템프타일이 있다면 -> 새로 열린놈들중에서도 비용값이 작은게 없다?
+				addObj = false;
+				changed = true;
+				break;
+			} // 불값만들고 포문에서 잡히면 false로 만드니 이중포문 안돌릴수있음
+		}
+		_vOpenList[i]->setIsOpen(false); // 닫음
+		if (!addObj) continue;
+
+		_vOpenList.push_back(tempTile); // 추가해야된다고 했으니 추가하는거
+	}
+
+	// ############## 경로 못찾으면 끝내는 함수 #####################
+	if (!changed)
+	{// 아무것도 변경안하고 포문이 무사히(?) 돌았다면 끝낸다
+		_stop = true;
+		return;
+	}
+
+	//도착했다면
+	if (tempTile->getAttribute() == "enemy")
+	{
+		_enemyTile->setAttribute("");
+		_enemyTile->setColor(D2D1::ColorF::White);
+		while (_currentTile->getParentNode() != NULL)
+		{
+			++_numCount;
+			_currentTile->setNumber(_numCount); // 숫자를 지정해줄수 있음
+			if (_numCount == 1)
+			{
+				bossLocX = _currentTile->getIdx();
+				bossLocY = _currentTile->getIdy();
+				_vTotalList[bossLocY*TILEX + bossLocX]->setAttribute("enemy");
+				_vTotalList[bossLocY*TILEX + bossLocX]->setColor(D2D1::ColorF::Red);
+				_enemyTile = _vTotalList[bossLocY*TILEX + bossLocX];
+				//_bear->setRect(FloatRect(_enemyTile->getRect()));
+				_bear->setX(_enemyTile->getRect().left);			// 에너미 움직임 X
+				_bear->setY(_enemyTile->getRect().top);				// 에너미 움직임 Y
+			}
+			_currentTile = _currentTile->getParentNode();
+		}
+		_playerTile->setNumber(_numCount + 1);
+		_start = false;
+		return;
+	}
+
+	_vCloseList.push_back(tempTile);
+
+	// 템프타일을 닫힌리스트에 넣고 오픈리스트에선 빼줌. 그리고 현재타일로 해줌
+	for (_viOpenList = _vOpenList.begin(); _viOpenList != _vOpenList.end(); ++_viOpenList)
+	{
+		if (*_viOpenList == tempTile)
+		{
+			_viOpenList = _vOpenList.erase(_viOpenList);
+			break;
+		}
+	}
+	_currentTile = tempTile;
+
 }

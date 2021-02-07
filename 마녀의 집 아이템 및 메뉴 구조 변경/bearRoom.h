@@ -7,6 +7,7 @@ class bearRoom : public firstFloorStage
 	{
 		NONE = 0,
 		DOOR_LEFT_OPEN =496,
+		READ = 321,
 		BEAR_PUT = 501
 	};
 

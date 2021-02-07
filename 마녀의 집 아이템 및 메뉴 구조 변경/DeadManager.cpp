@@ -75,7 +75,7 @@ void DeadManager::update()
 			if (IntersectRectToRect(&_deadRc, &_deadRc2))_gameOver = true;
 		}
 		if (_gameOver)_endCount++;
-		if (_endCount > 100)SCENEMANAGER->changeScene("시작화면");
+		if (_endCount > 150)SCENEMANAGER->changeScene("시작화면");
 
 		break;
 	case DEAD_CLOCK:
@@ -105,6 +105,7 @@ void DeadManager::update()
 		_gameOver = true;
 		if (_gameOver) { _endCount++; }
 		if (_endCount > 100)SCENEMANAGER->changeScene("시작화면");
+		break;
 	case DEAD_FLOWER:
 		//사망 by 꽃
 		//캐릭터이미지를 해골로 변환시키기에 별도의 랜더 등이 필요없음
@@ -119,6 +120,32 @@ void DeadManager::update()
 			_gameOver = true;
 		}
 		if (_gameOver)_endCount++;
+		if (_endCount > 100)SCENEMANAGER->changeScene("시작화면");
+		break;
+	case DEAD_THORN:
+		_player->setChrImg(IMAGEMANAGER->FindImage("thornDeath"));
+		if (!_isDead)
+		{
+			_player->setFrameX(0);
+			_player->setDirec(CHRDIREC_UP);
+		}
+		_player->setFrameY(0);
+		_player->setFrameSpeed(5);
+		_isDead = true;
+		if (_player->getFrameX() >= IMAGEMANAGER->FindImage("thornDeath")->GetMaxFrameX() - 1)
+		{
+			_player->setFrameX(IMAGEMANAGER->FindImage("thornDeath")->GetMaxFrameX() - 1);
+
+			//반복적으로 쑤신당..
+			_endCount++;
+			if (_endCount > 20)
+			{
+				_endCount = 0;
+				_gameOver = true;
+			}
+		}
+		if (_gameOver)
+			_endCount++;
 		if (_endCount > 100)SCENEMANAGER->changeScene("시작화면");
 		break;
 	}

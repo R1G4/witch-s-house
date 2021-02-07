@@ -22,6 +22,7 @@ HRESULT scissorsRoom::init(CHRDIRECTION _chrdirection, LOCATION _location)
 
 	_trigger = NONE;
 
+	getMemory();
 	return S_OK;
 }
 
@@ -34,7 +35,6 @@ void scissorsRoom::update()
 {
 	//프레임 인덱스 셋팅
 	setFrameIndex();
-
 	switch (_trigger)
 	{
 	case scissorsRoom::NONE:
@@ -49,14 +49,36 @@ void scissorsRoom::update()
 	case scissorsRoom::PALM:
 		firstFloorStage::setAlpha();
 		_isBlood = true;
+		break;
+	case scissorsRoom::SCISSORS:
+ 		STAGEMEMORYMANAGER->setIsScissors(true);
+		//해당 프레임 이미지를 찾아서
+		for (int k = 0; k < _vFrameTile.size(); k++)
+		{
+			if (_vFrameTile[k].keyName.find("문") != string::npos && _vFrameTile[k].keyName.size() <= 3)
+			{
+				//트리거를 발동한다.
+				_vFrameTile[k].isTrigger = true;
+				_vScript = TEXTMANAGER->loadFile("dialog/1f/1f_scissorsRoom.txt");
+			}
+		}
 		_trigger = DELAY;
+		break;	
+	case scissorsRoom::BEARCOM:
+		STAGEMEMORYMANAGER->setIsBearComing(true); 
+		//STAGEMEMORYMANAGER->setIsBearComing2(true);
+		_trigger = NONE;
 		break;
 	case scissorsRoom::DELAY:
 		firstFloorStage::setAlpha();
 		_player->setState(CHR_IDLE);
 		_delay++;
 		if (_delay % 60 == 0)
+		{
+			TEXTMANAGER->clearScript();
+			if (_vScript.size() > 0) _vScript.clear();
 			_trigger = NONE;
+		}
 		break;
 	default:
 		_delay= 0 ;
@@ -66,7 +88,7 @@ void scissorsRoom::update()
 		Collision();
 		break;
 	}
-
+	if(_bear)	firstFloorStage::enemyUpdate();
 	firstFloorStage::cameraUpdate();
 }
 
@@ -88,6 +110,44 @@ void scissorsRoom::Collision()
 		for (int j = 0; j < TILEX; j++)
 		{
 			int index = i * TILEX + j;
+
+			//어느 타일과 플레이어 상호작용 렉트가 충돌하였다면
+			if (IntersectRectToRect(&_tiles[index].rc, &_player->getSearchRc()))
+			{
+				//곰을 가져간 상태이며 가위를 자르지 않았고 바구니에 넣지도 않았을때만 
+				if (!STAGEMEMORYMANAGER->getIsScissors() && 
+					!STAGEMEMORYMANAGER->getIsBearPut() &&
+					STAGEMEMORYMANAGER->getIsBearPickUp())
+
+				//텍스를 넣는 동시에 폼 실행
+				if ((TRIGGER)index == SCISSORS && SelectionForm(L"곰인형의 팔 다리를 자른다.", L"아무것도 하지 않는다.") && _fromSelected == LEFT)
+				{
+					//아이템 매니저 - 아이템 제거 후 추가
+					//제거할 아이템의 key를 넣는다
+					//제거 성공 할 경우
+					if (ITEMMANAGER->removeItem("obj58"))
+					{
+						//곰의 몸톰을 추가한다.
+						//추가를 성공 할 경우 트리거를 수정해준다.
+						if (!ITEMMANAGER->addItem("obj11")) continue;
+
+ 						for (int k = 0; k < _vFrameTile.size(); k++)
+						{
+							if (_vFrameTile[k].isMaxframe || _vFrameTile[k].isTrigger)
+								continue;
+
+							if (_vFrameTile[k].keyName == "가위")
+							{
+								//트리거를 발동한다.
+								_vFrameTile[k].isTrigger = true;
+								_trigger = SCISSORS;
+								break;
+							}
+						}
+					}
+				}
+			}
+
 			//어느 타일과 충돌 했을 경우
 			if (!IntersectRectToRect(&_tiles[index].rc, &_player->getPlayerFrc())) continue;
 
@@ -102,30 +162,51 @@ void scissorsRoom::Collision()
 			{
 			case TR_TRIGGER:
 				cout << "x: " << i << "  y: " << j << "  index: " << index << endl;
-				//트리거 받아오기
-				if((TRIGGER)index != PALM && _trigger != DELAY)
-					_trigger = index == 564 ? DOOR_RIGHT_OPEN : (TRIGGER)index;
-				//곰돌이를 바구니에 넣은 상태라면 (미구현 상태 복도에서 임시적으로 true로 만듬)
-				else if (_isBlood && STAGEMEMORYMANAGER->getIsBearPut())
-				{
-					for (int k = 0; k < _vFrameTile.size(); k++)
-					{
-						if (_vFrameTile[k].isMaxframe || _vFrameTile[k].isTrigger)
-							continue;
 
-						if ((TRIGGER)index == PALM && _vFrameTile[k].keyName == "손바닥")
-						{
-							//트리거를 발동한다.
-							_vFrameTile[k].isTrigger = true;
-							_trigger = (TRIGGER)index;
-							STAGEMEMORYMANAGER->setIsPalmRight(true);
-						}
+				_trigger = index == 564 ? DOOR_RIGHT_OPEN :
+					index == DOOR_RIGHT_OPEN ? DOOR_RIGHT_OPEN : NONE;
+
+				for (int k = 0; k < _vFrameTile.size(); k++)
+				{
+					if (_vFrameTile[k].isMaxframe || _vFrameTile[k].isTrigger)
+						continue;
+
+					if (_isBlood && (TRIGGER)index == PALM && _vFrameTile[k].keyName == "손바닥")
+					{
+						//트리거를 발동한다.
+						_vFrameTile[k].isTrigger = true;
+						_trigger = (TRIGGER)index;
+						STAGEMEMORYMANAGER->setIsPalmRight(true);
 					}
-				}//곰돌이 가져간 상태라면 (미구현 상태이므로 true로 해둠)
-				else if (!_isBlood/*STAGEMEMORYMANAGER->getIsBearPickUp()*/)
-					_trigger = (TRIGGER)index;
+				}
 				break;
 			}
+
+			//곰돌이 팔다리를 자른 상태라면
+			if (STAGEMEMORYMANAGER->getIsScissors() &&
+				!STAGEMEMORYMANAGER->getIsBearComing()&&
+				!STAGEMEMORYMANAGER->getIsBearComing2()&&
+				(TRIGGER)index == BEARCOM || (TRIGGER)index == 560)
+			{
+				_bear = new bear;
+				_bear->init(319% TILEX, 319 / TILEX);
+				_playerTile = new astarTile;
+				_enemyTile = new astarTile;
+				_dead = new DeadManager;
+				_dead->init();
+				_dead->setPlayerAddress(_player);
+				for (int y = 0; y < TILEX*TILEY; y++)
+					_objTile[y] = new astarTile;
+				bossLocX = 319 % TILEX;
+				bossLocY = 319 / TILEX;
+
+				firstFloorStage::objectLocation();
+
+				_trigger = BEARCOM;
+
+				break;
+			}
+			
 		}
 	}
 }
@@ -145,7 +226,6 @@ void scissorsRoom::load()
 		{
 			cout << i % TILEX << "&&, " << i / TILEX << endl;
 			_player->setStart(i%TILEX, i / TILEX);
-			break;
 		}
 	}
 	CloseHandle(file);
@@ -155,17 +235,17 @@ void scissorsRoom::getMemory()
 {
 	for (int k = 0; k < _vFrameTile.size(); k++)
 	{
-		if (!STAGEMEMORYMANAGER->getIsCandle())
-			continue;
+		if (STAGEMEMORYMANAGER->getIsPalmLeft() || STAGEMEMORYMANAGER->getIsPalmRight()) _isBlood = true;
 
-		if (_vFrameTile[k].keyName == "가위")
+		if (_vFrameTile[k].keyName == "가위" && STAGEMEMORYMANAGER->getIsScissors())
 		{
 			//트리거가 이미 발동되었던 상태로 셋팅한다.
 			_vFrameTile[k].isMaxframe = true;
 		}
-		else if (_vFrameTile[k].keyName == "곰")
+		if (_vFrameTile[k].keyName == "손바닥" && STAGEMEMORYMANAGER->getIsPalm())
 		{
-			//에너미 트리거 발동
+			//트리거가 이미 발동되었던 상태로 셋팅한다.
+			_vFrameTile[k].isMaxframe = true;
 		}
 	}
 }

@@ -14,15 +14,25 @@ bearRoom::~bearRoom()
 
 HRESULT bearRoom::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
+	//플레이어가 바라보는 방향
 	_player->setDirec(_chrdirection);
 
 	//타일 불러오기
 	load();
 
+	//카메라 셋팅
 	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
+
+	//1층 관련 스테이지 초기화
 	firstFloorStage::init();
+
+	//초기 트리거 상태
 	_trigger = NONE;
+	
+	//스테이지 메모리 불러오기
 	getMemory();
+
+	//프레임 이미지 프레임 셋팅
 	setFrameIndex();
 	return S_OK;
 }
@@ -37,6 +47,7 @@ void bearRoom::update()
 	//프레임 인덱스 셋팅
 	setFrameIndex();
 
+	//트리거 상태에 따른 호출 및 설정
 	switch (_trigger)
 	{
 	case bearRoom::NONE:
@@ -50,6 +61,17 @@ void bearRoom::update()
 	case bearRoom::BEAR_PUT:
 		STAGEMEMORYMANAGER->setIsBearPut(true);
 		_trigger = NONE;
+		break;	
+	case bearRoom::READ:
+		firstFloorStage::setAlpha();
+		_vScript = TEXTMANAGER->loadFile("dialog/1f/1f_bearRoom.txt");
+
+		if (KEYMANAGER->isOnceKeyUp(VK_SPACE) || KEYMANAGER->isOnceKeyUp('x'))
+		{
+			TEXTMANAGER->clearScript();
+			_trigger = NONE;
+			_vScript.clear();
+		}
 		break;
 	default:
 		_trigger = NONE;
@@ -84,9 +106,11 @@ void bearRoom::Collision()
 			//어느 타일과 플레이어 상호작용 렉트가 충돌하였다면
 			if (IntersectRectToRect(&_tiles[index].rc, &_player->getSearchRc()))
 			{
+				if ((TRIGGER)index == READ && KEYMANAGER->isOnceKeyUp(VK_SPACE))
+					_trigger = READ;
+
 				//타일의 인덱스에 해당 아이템이 존재 하고 획득을 시도한다면
-				//테스트로 만든것이므로 추후에 키매니저를 빼고 수정해야함
-				if(!STAGEMEMORYMANAGER->getIsBearPut() && STAGEMEMORYMANAGER->getIsBearPickUp())
+				if(STAGEMEMORYMANAGER->getIsScissors() && !STAGEMEMORYMANAGER->getIsBearPut() && STAGEMEMORYMANAGER->getIsBearPickUp())
 				if ((TRIGGER)index == BEAR_PUT)
 				{
 					for (int k = 0; k < _vFrameTile.size(); k++)
@@ -102,7 +126,7 @@ void bearRoom::Collision()
 								//아이템 키(image.find(key))값 혹은 아이템 파일명을 넣는다
 								//플레이어가 아이템 사용을 시도한다면 보유 아이템은 제거된다.
 								//아이템 사용을 시도하지 않거나 해당 아이템을 갖고 있지 않다면 false를 반환한다. true일 경우 제거(사용)
-								if (!ITEMMANAGER->useItem(58)) continue;
+								if (!ITEMMANAGER->useItem(11)) continue;
 
 								//사용을 하였으면 트리거를 발동한다.
 								_vFrameTile[k].isTrigger = true;
@@ -120,17 +144,15 @@ void bearRoom::Collision()
 			//타일 충돌(이동을 못하는 타일)은 같으므로 참조된 클래스에서 돌린다.
 			firstFloorStage::tileCollision(i, j);
 
-			//해당 타일의 속에 따라
-			//추후에 타일 속성 예외가 적을 경우 스위치문에서 if문으로 변경 할 생각임
-			cout << "x: " << i << "  y: " << j << "  index: " << index << endl;
-
 			switch (_tiles[index].terrain)
 			{
 			case TR_TRIGGER:
 				cout << "x: " << i << "  y: " << j << "  index: " << index << endl;
-				//트리거 받아오기
-				if(index != BEAR_PUT)
-					_trigger = index == 556 ? DOOR_LEFT_OPEN : (TRIGGER)index;
+
+				//그외 트리거 받아오기
+				if(index != BEAR_PUT && _trigger != READ)
+					_trigger = index == 556 ? DOOR_LEFT_OPEN :
+							   index == DOOR_LEFT_OPEN ? DOOR_LEFT_OPEN : NONE;
 
 				break;
 			}
@@ -153,7 +175,6 @@ void bearRoom::load()
 		{
 			cout << i % TILEX << "&&, " << i / TILEX << endl;
 			_player->setStart(i%TILEX, i / TILEX);
-			break;
 		}
 	}
 	CloseHandle(file);
@@ -164,6 +185,11 @@ void bearRoom::getMemory()
 	for (int k = 0; k < _vFrameTile.size(); k++)
 	{
 		if (_vFrameTile[k].keyName == "바구니곰" && STAGEMEMORYMANAGER->getIsBearPut())
+		{
+			//트리거가 이미 발동되었던 상태로 셋팅한다.
+			_vFrameTile[k].isMaxframe = true;
+		}
+		if (_vFrameTile[k].keyName == "손바닥" && (STAGEMEMORYMANAGER->getIsPalmLeft() || (STAGEMEMORYMANAGER->getIsPalmRight())))
 		{
 			//트리거가 이미 발동되었던 상태로 셋팅한다.
 			_vFrameTile[k].isMaxframe = true;

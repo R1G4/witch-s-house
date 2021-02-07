@@ -26,6 +26,7 @@ HRESULT hallway::init(CHRDIRECTION _chrdirection, LOCATION _location)
 	firstFloorStage::init();
 
 	_trigger = NONE;
+
 	return S_OK;
 }
 
@@ -57,7 +58,14 @@ void hallway::update()
 			break;
 		case hallway::CLOCK:
 			firstFloorStage::setAlpha();
-			//상호작용 나중에 넣을 것
+			_vScript = TEXTMANAGER->loadFile("dialog/1f/1f_hallwayClock.txt");
+
+			if (KEYMANAGER->isOnceKeyUp(VK_SPACE) || KEYMANAGER->isOnceKeyUp('x'))
+			{
+				TEXTMANAGER->clearScript();
+				_trigger = NONE;
+				_vScript.clear();
+			}
 			break;
 		default:
 			_trigger = NONE;
@@ -103,9 +111,14 @@ void hallway::Collision()
 				//밞았을때
 				//트리거 받아오기
 				_trigger = index == 1036 ? DOOR_LEFT_OPEN :
+						   index == DOOR_LEFT_OPEN ? DOOR_LEFT_OPEN :
 					       index == 621 ? DOOR_RIGHT_TOP_OPEN :
-						   index == 1041 ? DOOR_RIGHT_BOTTOM_OPEN :
-						   index == 400 ? CLOCK : (TRIGGER)index;
+						   index == DOOR_RIGHT_TOP_OPEN ? DOOR_RIGHT_TOP_OPEN :
+						   index == 1041 ? DOOR_RIGHT_BOTTOM_OPEN:
+						   index == DOOR_RIGHT_BOTTOM_OPEN ? DOOR_RIGHT_BOTTOM_OPEN : NONE;
+
+				if (((TRIGGER)index == CLOCK  || (TRIGGER)index == 499) && KEYMANAGER->isOnceKeyUp(VK_SPACE))
+					_trigger = CLOCK;
 			}
 		}
 	}
@@ -138,7 +151,6 @@ void hallway::load(LOCATION location)
 			_player->setStart(i%TILEX, i / TILEX);
 			break;
 		}
-		break;
 	}
 	CloseHandle(file);
 }

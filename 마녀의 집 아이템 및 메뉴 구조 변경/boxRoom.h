@@ -9,10 +9,22 @@ class boxRoom : public firstFloorStage
 		DOOR_LEFT_OPEN = 496,
 		BEAR_PICKUP = 624,
 		BOX = 560,
+		READ = 381,
+		THORN = 384,
 		DELAY
 	};
 
+	enum READCNT
+	{
+		FIRST,
+		SECOND,
+		THIRD,
+		FOURTH,
+		END
+	};
+
 	TRIGGER _trigger;
+	READCNT _readCnt;
 public:
 	boxRoom();
 	~boxRoom();
@@ -23,5 +35,6 @@ public:
 	void render();
 	void Collision();
 	void load();
+	void getMemory();
 };
 

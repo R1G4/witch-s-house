@@ -7,7 +7,8 @@ class entranceTrap : public firstFloorStage
 	{
 		NONE = 0,
 		DOOR_OPEN = 681,
-		READ = 381
+		READ = 381,
+		WALL
 	};
 
 	struct tagMission

@@ -14,15 +14,28 @@ boxRoom::~boxRoom()
 
 HRESULT boxRoom::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
+	//플레이어가 바라보는 방향
 	_player->setDirec(_chrdirection);
 
 	//타일 불러오기
 	load();
 
+	//카메라 셋팅
 	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
+
+	//1층 관련 스테이지 초기화
 	firstFloorStage::init();
+
+	//초기 트리거 상태
 	_trigger = NONE;
 
+	//스테이지 메모리 불러오기
+	getMemory();
+
+	//데드 변수를 초기화한다.
+	_dead = new DeadManager;
+	_dead->init();
+	_dead->setPlayerAddress(_player);
 	return S_OK;
 }
 
@@ -35,7 +48,8 @@ void boxRoom::update()
 {
 	//프레임 인덱스 셋팅
 	setFrameIndex();
-	
+
+	//트리거 상태에 따른 호출 및 설정
 	switch (_trigger)
 	{
 	case boxRoom::NONE:
@@ -61,6 +75,41 @@ void boxRoom::update()
 	case boxRoom::BEAR_PICKUP:
 		STAGEMEMORYMANAGER->setIsBearPickUp(true);
 		_trigger = NONE;
+		break;
+	case boxRoom::READ:
+		if (KEYMANAGER->isOnceKeyUp(VK_SPACE))
+		{
+			switch (_readCnt)
+			{
+				case boxRoom::FIRST:
+					_vScript = TEXTMANAGER->loadFile("dialog/1f/1f_boxRoom.txt");
+					_readCnt = SECOND;
+					break;
+				case boxRoom::SECOND:
+					TEXTMANAGER->setNextScript(true);
+					_readCnt = THIRD;
+					break;
+				case boxRoom::THIRD:
+					TEXTMANAGER->setNextScript(true);
+					_readCnt = FOURTH;
+					break;
+				case boxRoom::FOURTH:
+					TEXTMANAGER->setNextScript(true);
+					_readCnt = END;
+					break;
+				case boxRoom::END:
+					TEXTMANAGER->clearScript();
+					_trigger = NONE;
+					_vScript.clear();
+					break;
+			}
+		}
+		break;
+	case boxRoom::THORN:
+		firstFloorStage::update();
+		firstFloorStage::setAlpha();
+		_dead->setDead(DEAD_THORN);
+		_dead->update();
 		break;
 	default:
 		_trigger = NONE;
@@ -95,6 +144,21 @@ void boxRoom::Collision()
 			//어느 타일과 플레이어 상호작용 렉트가 충돌하였다면
 			if (IntersectRectToRect(&_tiles[index].rc, &_player->getSearchRc()))
 			{
+				//텍스를 넣는 동시에 폼 실행
+				if (_readCnt != END && (TRIGGER)index == READ && SelectionForm(L"읽는다.", L"읽지 않는다") && _fromSelected == LEFT)
+				{
+					_trigger = READ;
+				}
+				//텍스를 넣는 동시에 폼 실행
+				if ((TRIGGER)index == THORN && SelectionForm(L"장농을 열본다.", L"그만둔다.") && _fromSelected == LEFT)
+				{
+					_trigger = THORN;
+				}
+			}
+
+			//어느 타일과 플레이어 상호작용 렉트가 충돌하였다면
+			if (IntersectRectToRect(&_tiles[index].rc, &_player->getSearchRc()))
+			{
 				//타일의 인덱스에 해당 아이템이 존재 하고 획득을 시도한다면
 				if (!STAGEMEMORYMANAGER->getIsBearPut() && !STAGEMEMORYMANAGER->getIsBearPickUp())
 
@@ -107,29 +171,27 @@ void boxRoom::Collision()
 						//아이템 키(image.find(key))값 혹은 아이템 파일명을 넣는다
 						//보유 아이템이 이미 존재하거나 매니저 안에 키값이 존재 하지 않는 등 실패할 경우 false를 반환한다. true일 경우 추가(획득)
 						if (!ITEMMANAGER->addItem(_tiles[index].keyName)) continue;
-
+						_tiles[index].obj = OBJ_NONE;
+						_tiles[index].keyName = "";
 						_trigger = BEAR_PICKUP;
 					}
 
 				}
 			}
+
 			//어느 타일과 충돌 했을 경우
 			if (!IntersectRectToRect(&_tiles[index].rc, &_player->getPlayerFrc())) continue;
 
 			//타일 충돌(이동을 못하는 타일)은 같으므로 참조된 클래스에서 돌린다.
 			firstFloorStage::tileCollision(i, j);
 
-			//해당 타일의 속에 따라
-			//추후에 타일 속성 예외가 적을 경우 스위치문에서 if문으로 변경 할 생각임
-			cout << "x: " << i << "  y: " << j << "  index: " << index << endl;
-
 			switch (_tiles[index].terrain)
 			{
 			case TR_TRIGGER:
 				cout << "x: " << i << "  y: " << j << "  index: " << index << endl;
-				//트리거 받아오기
-				if((TRIGGER)index != BOX && (TRIGGER)index != BEAR_PICKUP && index != 558 )
-					_trigger = index == 556 ? DOOR_LEFT_OPEN : (TRIGGER)index;
+				//그외 트리거 받아오기
+					_trigger = index == 556 ? DOOR_LEFT_OPEN : 
+						   	   index == DOOR_LEFT_OPEN ? DOOR_LEFT_OPEN :NONE;
 				
 				for (int k = 0; k < _vFrameTile.size(); k++)
 				{
@@ -164,8 +226,25 @@ void boxRoom::load()
 		{
 			cout << i % TILEX << "&&, " << i / TILEX << endl;
 			_player->setStart(i%TILEX, i / TILEX);
-			break;
 		}
 	}
 	CloseHandle(file);
+}
+
+void boxRoom::getMemory()
+{
+	if (STAGEMEMORYMANAGER->getIsBearPickUp())
+	{
+		_tiles[BEAR_PICKUP].obj = OBJ_NONE;
+		_tiles[BEAR_PICKUP].keyName = "";
+
+		for (int k = 0; k < _vFrameTile.size(); k++)
+		{
+			if (_vFrameTile[k].keyName == "상자")
+			{
+				//트리거가 이미 발동되었던 상태로 셋팅한다.
+				_vFrameTile[k].isMaxframe = true;
+			}
+		}
+	}
 }

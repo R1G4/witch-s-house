@@ -7,8 +7,11 @@ class scissorsRoom : public firstFloorStage
 	{
 		NONE = 0,
 		DOOR_RIGHT_OPEN = 504,
+		DOOR_UP_OPEN = 379,
 		BEAR_PUT,
 		PALM = 501,
+		SCISSORS = 618,
+		BEARCOM = 500,
 		DELAY = 10000
 	};
 

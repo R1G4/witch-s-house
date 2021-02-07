@@ -31,8 +31,9 @@ HRESULT playGround::init()
 	//SCENEMANAGER->changeScene("성앞");
 	//SCENEMANAGER->changeScene("entranceFake");
 	//SCENEMANAGER->changeScene("4층홀");
-	
-	SCENEMANAGER->changeScene("prison_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
+
+	SCENEMANAGER->changeScene("entranceFake");
+	//SCENEMANAGER->changeScene("prison_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
 	//SCENEMANAGER->changeScene("thirdMain");
 	//SOUNDMANAGER->play("main");
 
@@ -180,7 +181,8 @@ void playGround::addFrameImg()
 	FRAMEINFOMANAGER->AddFrameInfo("칼든아저씨", L"Image/tempFrameImg/칼든아저씨.png", 6, 1, OBJ, 8, true, 3, false);
 	FRAMEINFOMANAGER->AddFrameInfo("바구니곰", L"Image/tempFrameImg/바구니곰.png", 4, 1, OBJ, 7, true, 1, false);
 	FRAMEINFOMANAGER->AddFrameInfo("가위", L"Image/tempFrameImg/가위.png", 2, 1, OBJ, 5, true, 1, false);
-	FRAMEINFOMANAGER->AddFrameInfo("상자쓰러짐", L"Image/tempFrameImg/상자쓰러짐.png", 1, 4, OBJ, 8, true, 1, false);
+	FRAMEINFOMANAGER->AddFrameInfo("상자쓰러짐", L"Image/tempFrameImg/상자쓰러짐.png", 1, 4, OBJ, 8, true, 1, false);	
+	FRAMEINFOMANAGER->AddFrameInfo("고양이1", L"Image/tempFrameImg/고양이1.png", 8, 1, OBJ, 7);
 	FRAMEINFOMANAGER->AddFrameInfo("손바닥", L"Image/tempFrameImg/손바닥.png", 1, 8, OBJ, 6, true, 1, false);
 
 	//캐릭터 이미지 추가
@@ -201,7 +203,7 @@ void playGround::addFrameImg()
 	IMAGEMANAGER->AddImage("LWall", L"Image/Death/leftWall.png");
 	IMAGEMANAGER->AddImage("RWall", L"Image/Death/rightWall.png");
 	IMAGEMANAGER->AddFrameImage("bearDeath", L"Image/Death/bearDeath.png", 10, 1);
-
+	IMAGEMANAGER->AddFrameImage("thornDeath", L"Image/Death/thornDeath.png", 5, 1);
 	//그외 UI
 	IMAGEMANAGER->AddImage("화살표", L"Image/mapTool/화살표.png");
 	IMAGEMANAGER->AddImage("화살표왼쪽", L"Image/mapTool/화살표왼쪽.png");
