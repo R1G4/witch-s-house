@@ -146,4 +146,8 @@ void castlefront::tileCollision()
 	{
 		SCENEMANAGER->changeScene("Á¤¿ø", CHRDIREC_DOWN);
 	}
+	if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[14*TILEX + 24].rc))
+	{
+		SCENEMANAGER->changeScene("entranceFake", CHRDIREC_UP, LOCATION_DEFAULT);
+	}
 }

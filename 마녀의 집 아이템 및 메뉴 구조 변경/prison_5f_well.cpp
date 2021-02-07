@@ -108,6 +108,9 @@ void prison_5f_well::render()
 	}
 
 	_player->render();
+	IMAGEMANAGER->FindImage("Back2")->SetAlpha(1.0f);
+	IMAGEMANAGER->FindImage("Back2")->SetSize(Vector2(1920, 1280));
+	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("Back2"), Vector2(_player->getPlayerLocX(), _player->getPlayerLocY()));
 
 	if (_isStopToRead)
 		TEXTMANAGER->renderText();
