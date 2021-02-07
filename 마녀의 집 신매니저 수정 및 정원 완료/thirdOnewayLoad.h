@@ -13,6 +13,11 @@ private:
 
 	int _count;
 	int _frame;
+	int _eyesFrameX;
+	int _eyesFrameY;
+	int _candleFrame;
+	bool _moveSword;
+	bool _moveEyes;
 
 public:
 	thirdOnewayLoad();
@@ -22,6 +27,8 @@ public:
 	void release();
 	void update();
 	void render();
+	void changeScene();
+	void trigger();
 	void tileCollision();
 	void load();
 };

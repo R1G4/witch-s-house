@@ -26,6 +26,10 @@ HRESULT thirdOnewayLoad::init()
 
 	_count = 0;
 	_frame = 0;
+	_candleFrame = 0;
+	_eyesFrameX = 0;
+	_eyesFrameY = 0;
+	_moveSword = false;
 
 	return S_OK;
 }
@@ -37,12 +41,22 @@ void thirdOnewayLoad::release()
 void thirdOnewayLoad::update()
 {
 	_count++;
-	if (_count % 4 == 0)
+	if (_count % 8 == 0)
 	{
 		_frame++;
-		if (_frame > 15)
+		_candleFrame++;
+		_eyesFrameX++;
+		_eyesFrameY++;
+		if (_frame > 15) _frame = 0;
+		if (_candleFrame >= 3) _candleFrame = 0;
+
+		if (_eyesFrameX > 2)
 		{
-			_frame = 0;
+			_eyesFrameX = 0;
+		}
+		if (_eyesFrameY > 3)
+		{
+			_eyesFrameY = 0;
 		}
 	}
 
@@ -52,10 +66,10 @@ void thirdOnewayLoad::update()
 	CAMERAMANAGER->setCamera(Vector2(camera.x - WINSIZEX / 2, camera.y - WINSIZEY / 2));
 	_player->update();
 	tileCollision();
-	//trigger();
+	trigger();
+	changeScene();
 
-
-	//if(_count %10 == 0) cout << _player->getPlayerFrc().right / TILESIZE << endl;
+	if (_count % 10 == 0) cout << _player->getPlayerFrc().bottom / TILESIZE << endl;
 
 
 }
@@ -80,7 +94,9 @@ void thirdOnewayLoad::render()
 		}
 	}
 	_player->render();
-	CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("SavePoint"), Vector2(920, 1680), _frame, 2);
+	//CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("SavePoint"), Vector2(920, 1680), _frame, 2);
+
+	//오브젝트 랜더
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
@@ -89,26 +105,98 @@ void thirdOnewayLoad::render()
 			//IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(0.5);
 			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
 				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top));
+		}
+	}
+	//프레임이미지 랜더
+	for (int i = 0; i < TILEY; i++)
+	{
+		for (int j = 0; j < TILEX; j++)
+		{
+			if (_tiles[i*TILEX + j].attribute == NONE)continue;
+			if (_tiles[i*TILEX + j].attribute == PLAYER)continue;
 
-			if (_player->getPlayerFrc().top / TILESIZE <= 21 && _player->getPlayerFrc().top / TILESIZE >= 20)
+
+			if (_tiles[i*TILEX + j].attribute == OBJ)
 			{
-				if (_tiles[i*TILEX + j].obj != OBJ_NONE)
+				CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
+					Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top), _candleFrame, 0);
+			}
+
+			if (_tiles[i*TILEX + j].attribute == ENEMY)
+			{
+				CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
+					Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top), _eyesFrameX, _eyesFrameY);
+
+				//눈알 에너미 이미지가 트리거 발동전에는 안보이다가 발동하면 이미지 보이게
+				if (_player->getPlayerFrc().bottom / TILESIZE >= 22)
 				{
-					_tiles[i*TILEX + j].rc.bottom -= 48;
-					_tiles[i*TILEX + j].rc.top -= 48;
+
+					IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(1);
+				}
+				else
+				{
+					IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(0);
 
 				}
 			}
 
-			if (_player->getPlayerFrc().left / TILESIZE <= 21 || _player->getPlayerFrc().right / TILESIZE >= 23)
-			{
-				cout << _player->getPlayerFrc().right / TILESIZE << endl;
-				SCENEMANAGER->changeScene("thirdOnewayDead");
-			}
-
 		}
 	}
+
 }
+
+void thirdOnewayLoad::changeScene()
+{
+	//플레이어가 옆타일로 이동시 데드씬으로
+	if (_player->getPlayerFrc().left / TILESIZE <= 21 || _player->getPlayerFrc().right / TILESIZE >= 23)
+	{
+		SCENEMANAGER->changeScene("thirdOnewayDead");
+	}
+
+
+}
+
+void thirdOnewayLoad::trigger()
+{
+	for (int i = 0; i < (TILEX * TILEY); ++i)
+	{
+		//플레이어의 타일 인덱스의 바텀이 10보다 커지면 sword 트리거 on
+		if (_player->getPlayerFrc().bottom / TILESIZE >= 10)
+		{
+			_moveSword = true;
+		}
+		//플레이어의 타일 인덱스의 바텀이 22보다 커지면 eyes 트리거 on
+		if (_player->getPlayerFrc().bottom / TILESIZE >= 22)
+		{
+			_moveEyes = true;
+		}
+
+
+		if (_moveSword)
+		{
+			if (_tiles[i].terrain == TR_TRIGGER && _tiles[i].obj == OBJ_LOOK)
+			{
+				_tiles[i].rc.bottom -= 10;
+				_tiles[i].rc.top -= 10;
+			}
+		}
+
+		if (_moveEyes)
+		{
+			if (_tiles[i].terrain == TR_TRIGGER && _tiles[i].attribute == ENEMY)
+			{
+				_tiles[i].rc.bottom += 13;
+				_tiles[i].rc.top += 13;
+			}
+		}
+
+
+	}
+
+
+
+}
+
 
 void thirdOnewayLoad::tileCollision()
 {
@@ -134,19 +222,9 @@ void thirdOnewayLoad::tileCollision()
 					break;
 				}
 
+
 				SCENEMANAGER->changeScene("thirdFrogOutRoom");
 
-			}
-
-			//플레이어 렉트의 현재 탑의 위치가 타일 인덱스 10보다 커질때
-
-			if (_player->getPlayerFrc().bottom / TILESIZE >= 10 /*&& _player->getPlayerFrc().top / TILESIZE <= 30*/)
-			{
-				if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)
-				{
-					_tiles[i*TILEX + j].rc.bottom -= 10;
-					_tiles[i*TILEX + j].rc.top -= 10;
-				}
 			}
 		}
 	}
@@ -156,7 +234,7 @@ void thirdOnewayLoad::load()
 {
 	HANDLE file;
 	DWORD read;
-	file = CreateFile("Stage/3f_first.map", GENERIC_READ, NULL, NULL,
+	file = CreateFile("Stage/3f_sword.map", GENERIC_READ, NULL, NULL,
 		OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	camera = _tiles->camera;
