@@ -15,6 +15,10 @@ private:
 	bool isPalmRight;
 	bool isPalm;
 	bool isScissors;
+	bool isGetTae;
+	bool isGetAkbo;
+	bool isOpen;
+	bool isOpenFake;
 
 	//5Ãþ
 	bool isSkuls_1;
@@ -49,6 +53,10 @@ public:
 	bool getIsPalmRight() { return isPalmRight; }
 	bool getIsPalm() { return isPalm; }
 	bool getIsScissors() { return isScissors; }
+	bool getIsGetTae() { return isGetTae; }
+	bool getIsGetAkbo() { return isGetAkbo; }
+	bool getIsOpen() { return isOpen; }
+	bool getIsOpenFake() { return isOpenFake; }
 
 	//5Ãþ	
 	bool getIsSkul1() { return isSkuls_1; }
@@ -80,6 +88,11 @@ public:
 	void setIsPalmRight(bool IsPalmRight) { isPalmRight = IsPalmRight; }
 	void setIsPalm(bool IsPalm) { isPalm = IsPalm; }
 	void setIsScissors(bool IsScissors) { isScissors = IsScissors; }
+	void setIsGetTae(bool IsGetTae) { isGetTae = IsGetTae; }
+	void setIsGetAkbo(bool IsGetAkbo) { isGetAkbo = IsGetAkbo; }
+	void setIsOpen(bool IsOpen) { isOpen = IsOpen; }
+	void setIsOpenFake(bool IsOpenFake) { isOpenFake = IsOpenFake; }
+
 
 	//5Ãþ
 	void setIsSkul1(bool _skul) { isSkuls_1 = _skul; }

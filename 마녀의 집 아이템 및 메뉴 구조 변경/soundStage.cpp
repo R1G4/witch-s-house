@@ -15,7 +15,7 @@ HRESULT soundStage::init()
 	IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/objSample.png", 2, 3);
 	IMAGEMANAGER->AddFrameImage("SavePoint", L"Image/mapTool/saveCat.png", 16, 4);
 	//IMAGEMANAGER->AddImage("º´Á¤", L"Image/obj/021.png");
-
+	
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
 
 	_player = new Player;
@@ -86,7 +86,7 @@ HRESULT soundStage::init(CHRDIRECTION _CHRDIRECTION)
 		mapChange[2].rc = RectMakeCenter(mapChange[2].x, mapChange[2].y, 24, 72);
 		mapChange[3].rc = RectMakeCenter(mapChange[3].x, mapChange[3].y, 24, 72);
 
-
+	
 	}
 
 	if (_CHRDIRECTION == CHRDIREC_LEFT)
@@ -126,7 +126,7 @@ HRESULT soundStage::init(CHRDIRECTION _CHRDIRECTION)
 		mapChange[2].rc = RectMakeCenter(mapChange[2].x, mapChange[2].y, 24, 72);
 		mapChange[3].rc = RectMakeCenter(mapChange[3].x, mapChange[3].y, 24, 72);
 
-
+	
 	}
 	if (_CHRDIRECTION == CHRDIREC_DOWN)
 	{
@@ -228,7 +228,7 @@ void soundStage::render()
 		}
 	}
 
-
+	
 }
 
 
@@ -292,7 +292,7 @@ void soundStage::tileCollision()
 	}
 	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange[1].rc))
 	{
-
+		
 	}
 	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange[2].rc))
 	{

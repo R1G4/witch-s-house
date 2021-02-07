@@ -1,8 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "Player.h"
-#include "mapTool.h"
-#include "soundStage.h"
+
 
 
 class soundStageW : public gameNode
@@ -16,6 +15,26 @@ private:
 	getRect mapChange;
 	getRect uiTrigger;
 
+	vector<string> _vScript;
+	bool _isStopToRead;
+	bool _isClick;
+	
+	bool _open;
+	bool _choose;
+	bool _left;
+	bool _right;
+	bool _up;
+
+	FloatRect _rc;
+	FloatRect _correct_rc;
+	float _rcAlpha;
+	float _rcAlphaChange;
+	bool _disCover;
+
+	enum Trigger
+	{
+		TRIGGER = 23 + 8 * TILEX
+	};
 
 public:
 	soundStageW();

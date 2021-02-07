@@ -31,7 +31,7 @@ HRESULT soundStageD::init()
 	aniFrame = 0;
 	_player->update();
 
-
+	
 	return S_OK;
 }
 
@@ -57,12 +57,12 @@ HRESULT soundStageD::init(CHRDIRECTION _CHRDIRECTION)
 		CAMERAMANAGER->setCamera(camera);
 		frame = 0.5f;
 		aniFrame = 0;
-
+	
 
 		_player->update();
 	}
 
-
+	
 	return S_OK;
 }
 
@@ -77,11 +77,11 @@ void soundStageD::update()
 			aniFrame = 7;
 		}
 	}
-
+	
 	frame -= 0.05f;
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
-
+	
 	CAMERAMANAGER->setCamera(Vector2(camera.x - WINSIZEX / 2, camera.y - WINSIZEY / 2));
 	tileCollision();
 }
@@ -114,7 +114,7 @@ void soundStageD::render()
 		}
 	}
 	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("º´Á¤"), Vector2(980, 683));
-	CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("»ç¸Á"), Vector2(_player->getPlayerLocX() + 24, _player->getPlayerLocY() - 15), aniFrame, 0);
+	CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("»ç¸Á"), Vector2(_player->getPlayerLocX()+24, _player->getPlayerLocY()-15), aniFrame, 0);
 	//_player->render();
 	for (int i = 0; i < TILEY; i++)
 	{
@@ -184,5 +184,5 @@ void soundStageD::tileCollision()
 			}
 		}
 	}
-
+	
 }
