@@ -55,11 +55,11 @@ private:
 	Image* viola;
 	POINT camera;
 	Player* _player;
-	bossStage_1* _bossStage_1;
-	bossStage_2* _bossStage_2;
-	bossStage_3* _bossStage_3;
-	bossStage_4* _bossStage_4;
-	bossStage_5* _bossStage_5;
+	bossStage* _bossStage_1;
+	bossStage* _bossStage_2;
+	bossStage* _bossStage_3;
+	bossStage* _bossStage_4;
+	bossStage* _bossStage_5;
 	firstFloorStage* _entranceFakeStage;
 	firstFloorStage* _entranceTrapStage;
 	firstFloorStage* _entranceStage;

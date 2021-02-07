@@ -91,7 +91,7 @@ void bossStage_5::activeCorr()
 				_boss->setalpha(alpha);
 				if (alpha <= 0)
 				{
-					SCENEMANAGER->changeScene("BossStage5");
+					SCENEMANAGER->changeScene("Ending");
 					_boss->setalpha(1);
 					_player->setAlpha(1);
 				}

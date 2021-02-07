@@ -212,6 +212,9 @@ void playGround::addFrameImg()
 	IMAGEMANAGER->AddImage("playerMenu", L"image/UI/bar7.png");
 	IMAGEMANAGER->AddImage("menu", L"image/menu.png");
 	IMAGEMANAGER->AddImage("bar", L"Image/obj/bar2.png");
+
+	//°¡¸²¸·
+	IMAGEMANAGER->AddImage("Back2", L"Image/back2.png");
 }
 
 void playGround::addressLink()
