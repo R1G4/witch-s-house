@@ -45,6 +45,9 @@ bool ItemManager::addItem(string itemKey)
 		_item.name = L"°³±¸¸®";
 		_item.contents = L"°³±¼~ °³±¼~ ³ªÁß¿¡ ³Ö¾îÁÖ¼À";
 		break;
+	case ITEM_TAEYUP:
+		_item.name = L"ÅÂ¿±";
+		_item.contents = L"½Ã°è¿¡¼­ ²¨³½ ³ì½¼ÅÂ¿±";
 	}
 	_vItem.push_back(_item);
 

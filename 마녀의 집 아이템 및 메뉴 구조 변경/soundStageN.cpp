@@ -113,29 +113,29 @@ void soundStageN::render()
 	ZORDER->insert(Px, Py, "´ÝÈùÇÇ¾Æ³ë", ZOBJECT);
 	ZORDER->insert(_player->getPlayerLocX(), _player->getPlayerLocY(), ZPLAYER);
 
+	ZORDER->insert(_player->getPlayerLocX(), _player->getPlayerLocY(), ZPLAYER);
+	for (int i = 0; i < TILEY; i++)
+	{
+		for (int j = 0; j < TILEX; j++)
+		{
+			if (_tiles[i*TILEX + j].obj != OBJ_NONE)
+			{
+				ZORDER->insert(_tiles[i*TILEX + j].rc.left, _tiles[i*TILEX + j].rc.top, _tiles[i*TILEX + j].keyName, ZOBJECT);
+			}
+		}
+	}
 	for (int i = 0; i < ZORDER->getZorder().size(); i++)
 	{
 		if (ZORDER->getZorder()[i].type == ZOBJECT)
 		{
-			CAMERAMANAGER->render(ZORDER->getZorder()[i].img, Vector2(Px, Py));
+			CAMERAMANAGER->render(ZORDER->getZorder()[i].img, Vector2(ZORDER->getZorder()[i].x + TILESIZE / 2, ZORDER->getZorder()[i].y));
 		}
 		if (ZORDER->getZorder()[i].type == ZPLAYER)
 		{
 			_player->render();
 		}
-
 	}
 	ZORDER->release();
-
-	for (int i = 0; i < TILEY; i++)
-	{
-		for (int j = 0; j < TILEX; j++)
-		{
-			if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
-			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
-				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top + TILESIZE / 2));
-		}
-	}
 }
 
 void soundStageN::load()
