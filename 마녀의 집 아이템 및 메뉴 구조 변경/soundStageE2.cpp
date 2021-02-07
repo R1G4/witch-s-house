@@ -149,7 +149,7 @@ void soundStageE2::update()
 			}
 			if (IntersectRectToRect(&_tiles[CLOCK].rc, &_player->getSearchRc()))
 			{
-				if (STAGEMEMORYMANAGER->getIsGetTae())
+				if (STAGEMEMORYMANAGER->getIsGetTae() && _disCover)
 				{
 					_vScript = TEXTMANAGER->loadFile("dialog/4f/4f_discover_fail.txt");
 					_isStopToRead = true;
