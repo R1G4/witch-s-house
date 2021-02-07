@@ -9,8 +9,17 @@ HRESULT prison_5f_skul::init(CHRDIRECTION _chrdirection, LOCATION _location)
 	//타일 불러오기
 	load(_location);
 
+	_tiles[SKUL_1].obj = OBJ_NONE;
+	_tiles[SKUL_2].obj = OBJ_NONE;
+	_tiles[SKUL_3].obj = OBJ_NONE;
+	_tiles[SKUL_4].obj = OBJ_NONE;
+
+	getMemory();
+
 	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
 	fifthFloorStage::init();
+
+	cout << STAGEMEMORYMANAGER->getIsSkul1() << endl;
 
 	return S_OK;
 }
@@ -21,13 +30,26 @@ void prison_5f_skul::release()
 
 void prison_5f_skul::update()
 {
-	fifthFloorStage::update();
+	if(!_isStopToRead)
+	{
+		fifthFloorStage::update();
 	//_player->update();
 	setFrameIndex();
 
 	//카메라 관련 업데이트
 	cameraUpdate();
 	setTrigger();
+	}
+	else
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))	// 클릭행동 트리거
+		{
+			_isStopToRead = TEXTMANAGER->setNextScript(true);
+
+			if (_isSkul)
+				_tiles[SKUL_5].obj = OBJ_NONE;
+		}
+	}
 	//cout << "x : " << (int)(_player->getPlayerLocX()) / TILESIZE << " y : " << (int)(_player->getPlayerLocY()) / TILESIZE << endl;
 }
 
@@ -40,6 +62,9 @@ void prison_5f_skul::render()
 			IMAGEMANAGER->FindImage("배경67")->GetSize().y / 2));
 
 	fifthFloorStage::render();
+
+	if (_isStopToRead)
+		TEXTMANAGER->renderText();
 }
 
 void prison_5f_skul::Collision()
@@ -66,7 +91,6 @@ void prison_5f_skul::load(LOCATION _location)
 			_player->setStart(i % TILEX, i / TILEX);
 			break;
 		}
-		break;
 	}
 	CloseHandle(file);
 }
@@ -75,29 +99,52 @@ void prison_5f_skul::setTrigger()
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))	// 클릭행동 트리거
 	{
-		if (IntersectRectToRect(&_tiles[SKUL_1].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[SKUL_1].rc, &_player->getSearchRc()) &&
+			STAGEMEMORYMANAGER->getIsGetSkul1())
 		{
-			cout << "해골1!" << endl;
+			STAGEMEMORYMANAGER->setIsSkul1(true);
+			_tiles[SKUL_1].obj = OBJ_LOOK;
 		}
-		if (IntersectRectToRect(&_tiles[SKUL_2].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[SKUL_2].rc, &_player->getSearchRc()) &&
+			STAGEMEMORYMANAGER->getIsGetSkul2())
 		{
-			cout << "해골2!" << endl;
+			STAGEMEMORYMANAGER->setIsSkul2(true);
+			_tiles[SKUL_2].obj = OBJ_LOOK;
 		}
-		if (IntersectRectToRect(&_tiles[SKUL_3].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[SKUL_3].rc, &_player->getSearchRc()) &&
+			STAGEMEMORYMANAGER->getIsGetSkul3())
 		{
-			cout << "해골3!" << endl;
+			STAGEMEMORYMANAGER->setIsSkul3(true);
+			_tiles[SKUL_3].obj = OBJ_LOOK;
 		}
-		if (IntersectRectToRect(&_tiles[SKUL_4].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[SKUL_4].rc, &_player->getSearchRc()) && 
+			STAGEMEMORYMANAGER->getIsGetSkul4())
 		{
-			cout << "해골4!" << endl;
+			STAGEMEMORYMANAGER->setIsSkul4(true);
+			_tiles[SKUL_4].obj = OBJ_LOOK;
 		}
 		if (IntersectRectToRect(&_tiles[SKUL_5].rc, &_player->getSearchRc()))
 		{
-			cout << "해골5!" << endl;
+			STAGEMEMORYMANAGER->setIsSkul5(true);
+			STAGEMEMORYMANAGER->setIsGetSkul4(true);
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_skul.txt");
+			_isStopToRead = true;
+			_isSkul = true;
 		}
-		if (IntersectRectToRect(&_tiles[LEVER].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[LEVER].rc, &_player->getSearchRc()) && 
+			_tiles[SKUL_1].obj == OBJ_LOOK &&
+			_tiles[SKUL_2].obj == OBJ_LOOK &&
+			_tiles[SKUL_3].obj == OBJ_LOOK &&
+			_tiles[SKUL_4].obj == OBJ_LOOK)
 		{
-			cout << "레버!" << endl;
+			STAGEMEMORYMANAGER->setIsLever(true);
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_lever_1.txt");
+			_isStopToRead = true;
+		}
+		else if (IntersectRectToRect(&_tiles[LEVER].rc, &_player->getSearchRc()))
+		{
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_lever.txt");
+			_isStopToRead = true;
 		}
 	}
 
@@ -107,6 +154,14 @@ void prison_5f_skul::setTrigger()
 	{
 		_isChangeScene = true;
 		sceneChange("prison_5f", CHRDIREC_LEFT, LOCATION_1);
-		cout << "감옥으로!" << endl;
 	}
+}
+
+void prison_5f_skul::getMemory()
+{
+	if (STAGEMEMORYMANAGER->getIsSkul1()) _tiles[SKUL_1].obj = OBJ_LOOK;
+	if (STAGEMEMORYMANAGER->getIsSkul2()) _tiles[SKUL_2].obj = OBJ_LOOK;
+	if (STAGEMEMORYMANAGER->getIsSkul3()) _tiles[SKUL_3].obj = OBJ_LOOK;
+	if (STAGEMEMORYMANAGER->getIsSkul4()) _tiles[SKUL_4].obj = OBJ_LOOK;
+	if (STAGEMEMORYMANAGER->getIsSkul5()) _tiles[SKUL_5].obj = OBJ_NONE;
 }

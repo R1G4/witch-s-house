@@ -15,6 +15,7 @@ private:
 	};
 
 	TRIGGER _trigger;
+	bool _isSkul;
 public:
 	prison_5f_skul() {};
 	~prison_5f_skul() {};
@@ -27,5 +28,7 @@ public:
 	void load(LOCATION location = LOCATION_DEFAULT);
 
 	void setTrigger();
+
+	void getMemory();
 };
 

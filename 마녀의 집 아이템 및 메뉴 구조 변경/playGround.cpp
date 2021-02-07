@@ -30,9 +30,9 @@ HRESULT playGround::init()
 		
 	//SCENEMANAGER->changeScene("¼º¾Õ");
 	//SCENEMANAGER->changeScene("entranceFake");
-	SCENEMANAGER->changeScene("4ÃþÈ¦");
+	//SCENEMANAGER->changeScene("4ÃþÈ¦");
 	
-	//SCENEMANAGER->changeScene("prison_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
+	SCENEMANAGER->changeScene("prison_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
 	//SCENEMANAGER->changeScene("thirdMain");
 	//SOUNDMANAGER->play("main");
 
@@ -174,6 +174,7 @@ void playGround::addFrameImg()
 	FRAMEINFOMANAGER->AddFrameInfo("2ÁßÃ¶Ã¢", L"Image/tempFrameImg/2ÁßÃ¶Ã¢.png", 1, 2, OBJ, 10, true, 1, false);
 	FRAMEINFOMANAGER->AddFrameInfo("ÇÔÁ¤1", L"Image/tempFrameImg/ÇÔÁ¤1.png", 1, 5, OBJ, 6, true, 1, false);
 	FRAMEINFOMANAGER->AddFrameInfo("ÇÏ¾á²É", L"Image/tempFrameImg/ÇÏ¾á²É.png", 1, 4, OBJ, 15);
+	FRAMEINFOMANAGER->AddFrameInfo("ÇÏ¾á²ÉÁ×À½", L"Image/tempFrameImg/ÇÏ¾á²ÉÁ×À½.png", 9, 1, OBJ, 15, true, 1, false);
 	FRAMEINFOMANAGER->AddFrameInfo("Çª¸¥¹°", L"Image/tempFrameImg/Çª¸¥¹°.png", 6, 1, OBJ);
 	FRAMEINFOMANAGER->AddFrameInfo("ºÓÀº¹°", L"Image/tempFrameImg/ºÓÀº¹°.png", 6, 1, OBJ);
 	FRAMEINFOMANAGER->AddFrameInfo("Ä®µç¾ÆÀú¾¾", L"Image/tempFrameImg/Ä®µç¾ÆÀú¾¾.png", 6, 1, OBJ, 8, true, 3, false);
@@ -195,6 +196,7 @@ void playGround::addFrameImg()
 	IMAGEMANAGER->AddFrameImage("bossDead", L"Image/Death/death_boss.png", 3, 1);
 	IMAGEMANAGER->AddFrameImage("skullDeath", L"Image/Death/skullDeath.png", 8, 4);
 	IMAGEMANAGER->AddFrameImage("clockDeath", L"Image/Death/clockDeath.png", 1, 4);
+	IMAGEMANAGER->AddFrameImage("flowerDeath", L"Image/Death/flowerDeath.png", 8, 4);
 	IMAGEMANAGER->AddFrameImage("snakeDeath", L"Image/Death/snakeDeath.png", 3, 4);
 	IMAGEMANAGER->AddImage("LWall", L"Image/Death/leftWall.png");
 	IMAGEMANAGER->AddImage("RWall", L"Image/Death/rightWall.png");

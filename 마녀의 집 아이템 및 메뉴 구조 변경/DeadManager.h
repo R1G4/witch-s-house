@@ -9,7 +9,9 @@ enum DEADVARIABLE
 	DEAD_WALL,
 	DEAD_CLOCK,
 	DEAD_SOLDIER,
-	DEAD_SNAKE
+	DEAD_SNAKE,
+	DEAD_FROG,
+	DEAD_FLOWER
 };
 class DeadManager :
 	public gameNode

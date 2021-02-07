@@ -79,7 +79,6 @@ void gardenToBoss_5f::load(LOCATION _location)
 			_player->setStart(i % TILEX, i / TILEX);
 			break;
 		}
-		break;
 	}
 	CloseHandle(file);
 }
@@ -107,7 +106,7 @@ void gardenToBoss_5f::setTrigger()
 	{
 		_isChangeScene = true;
 		_vFrameTile[0].isTrigger = true;
-		sceneChange("BossStage");
+		sceneChange("BossStage1");
 		fifthFloorStage::release();
 	}
 	if (IntersectRectToRect(&_tiles[DOORTOGARDEN].rc, &_player->getPlayerFrc()))

@@ -63,5 +63,9 @@ public:
 	FloatRect getSearchRc() { return _player.searchRc; }
 	void setAlpha(float x) { _player.alpha = x; }
 	void setFrameSpeed(int speed) { frameSpeed = speed; }
+
+	void setSearchRc(FloatRect rc) { _player.searchRc = rc; }
+	float getPlayerSpeed() { return _player.speed; }
+	STATE getState() { return _player.state; }
 };
 

@@ -100,6 +100,27 @@ void DeadManager::update()
 		if (_gameOver)_endCount++;
 		if (_endCount > 100)SCENEMANAGER->changeScene("시작화면");
 		break;
+	case DEAD_FROG:
+		_isDead = true;
+		_gameOver = true;
+		if (_gameOver) { _endCount++; }
+		if (_endCount > 100)SCENEMANAGER->changeScene("시작화면");
+	case DEAD_FLOWER:
+		//사망 by 꽃
+		//캐릭터이미지를 해골로 변환시키기에 별도의 랜더 등이 필요없음
+		//
+		_player->setChrImg(IMAGEMANAGER->FindImage("flowerDeath"));
+		if (!_isDead)_player->setFrameX(0);
+		_player->setFrameSpeed(12);
+		_isDead = true;
+		if (_player->getFrameX() >= IMAGEMANAGER->FindImage("flowerDeath")->GetMaxFrameX() - 1)
+		{
+			_player->setFrameX(IMAGEMANAGER->FindImage("flowerDeath")->GetMaxFrameX() - 1);
+			_gameOver = true;
+		}
+		if (_gameOver)_endCount++;
+		if (_endCount > 100)SCENEMANAGER->changeScene("시작화면");
+		break;
 	}
 }
 

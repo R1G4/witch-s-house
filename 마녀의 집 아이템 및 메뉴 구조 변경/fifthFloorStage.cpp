@@ -61,46 +61,58 @@ void fifthFloorStage::render()
 		}
 	}
 
-	//타일보다는 상위에 오브젝트보다는 하위에 위치해야함
-	_player->render();
-	if (_isSkulAppeal) _skul->render();
+	ZORDER->insert(_player->getPlayerFrc().left, _player->getPlayerFrc().top, ZPLAYER);
+	if (_isSkulAppeal) ZORDER->insert(_skul->getRect().left, _skul->getRect().top, ZENEMY);
 
-	for (int i = 0; i < TILEY; i++)
+	for (int i = 0; i < TILEX*TILEY; i++)
 	{
-		for (int j = 0; j < TILEX; j++)
+		if (_tiles[i].obj != OBJ_NONE)
 		{
-			if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
-
-			IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(_sceneAlpha);
-
-			//중간에 배치하고 싶다면 이걸쓰세요. 디폴트 센타
-			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
-				Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2,
-					_tiles[i*TILEX + j].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->GetSize().y / 2));
+			if (_tiles[i].keyName == "obj5" || _tiles[i].keyName == "obj9")continue;	// 검은색 배경
+			ZORDER->insert(_tiles[i].rc.left, _tiles[i].rc.bottom, IMAGEMANAGER->FindImage(_tiles[i].keyName), ZOBJECT);
 		}
 	}
-
-	//타일에 프레임 이미지 배치 랜더
 	for (int i = 0; i < _vFrameTile.size(); i++)
 	{
-		if (KEYMANAGER->isToggleKey(VK_TAB))
-		{
-			IMAGEMANAGER->FindImage(_vFrameTile[i].keyName)->SetAlpha(_sceneAlpha);
-			if (_vFrameTile[i].kinds == PLAYER)  CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::Blue, 0.7);
-			else if (_vFrameTile[i].kinds == ENEMY) CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::Black, 0.7);
-			else CAMERAMANAGER->renderFillRc(_vFrameTile[i].rc, D2D1::ColorF::White, 0.7);
-		}
-
-		if (_vFrameTile[i].kinds == PLAYER || _vFrameTile[i].kinds == ENEMY) continue;
-
-		_vFrameTile[i].img->SetAlpha(_sceneAlpha);
-		CAMERAMANAGER->FrameRender
-		(
-			_vFrameTile[i].img,
-			Vector2((_vFrameTile[i].rc.left + _vFrameTile[i].rc.right) / 2, _vFrameTile[i].rc.bottom - _vFrameTile[i].img->GetSize().y / 2),
-			_vFrameTile[i].frameX, _vFrameTile[i].frameY
-		);
+		if (_vFrameTile[i].keyName == "하얀꽃" && _flowerDead) continue;
+		ZORDER->insert(_vFrameTile[i].rc.left, _vFrameTile[i].rc.top, _vFrameTile[i].keyName, ZFRAMEOBJ);
 	}
+	for (int i = 0; i < ZORDER->getZorder().size(); i++)
+	{
+		if (ZORDER->getZorder()[i].type == ZPLAYER)_player->render();
+		if (ZORDER->getZorder()[i].type == ZENEMY) _skul->render();
+		if (ZORDER->getZorder()[i].type == ZOBJECT)
+		{
+			CAMERAMANAGER->render(ZORDER->getZorder()[i].img,
+				Vector2(ZORDER->getZorder()[i].x + TILESIZE / 2, ZORDER->getZorder()[i].y - ZORDER->getZorder()[i].img->GetSize().y / 2));
+		}
+		if (ZORDER->getZorder()[i].type == ZFRAMEOBJ)
+		{
+			for (int j = 0; j < _vFrameTile.size(); j++)
+			{
+				if (_vFrameTile[j].kinds == PLAYER) continue;
+				if (_vFrameTile[j].kinds == ENEMY)continue;
+				if (ZORDER->getZorder()[i].keyName == _vFrameTile[j].keyName)
+					CAMERAMANAGER->FrameRender
+					(
+						_vFrameTile[j].img,
+						Vector2((_vFrameTile[j].rc.left + _vFrameTile[j].rc.right) / 2, _vFrameTile[j].rc.bottom - _vFrameTile[j].img->GetSize().y / 2),
+						_vFrameTile[j].frameX, _vFrameTile[j].frameY
+					);
+			}
+		}
+	}
+	//zorder 벡터를 초기화해줌 안하면 느려짐
+	ZORDER->release();
+
+	//검은색 타일 오브젝트이미지까지 넣게되면 프로그램이 무거워져서 따로 뺌
+	for (int i = 0; i < TILEX*TILEY; i++)
+	{
+		if (_tiles[i].keyName == "obj5" || _tiles[i].keyName == "obj9")
+			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i].keyName),
+				Vector2(_tiles[i].rc.left + TILESIZE / 2, _tiles[i].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i].keyName)->GetSize().y / 2));
+	}
+
 	_dead->render();
 }
 
@@ -146,6 +158,13 @@ void fifthFloorStage::setFrameIndex()
 
 	for (int i = 0; i < _vFrameTile.size(); i++)
 	{
+		if (_vFrameTile[i].isMaxframe)
+		{
+			_vFrameTile[i].frameX = FRAMEINFOMANAGER->FindImage(_vFrameTile[i].keyName)->GetMaxFrameX() - 1;
+			_vFrameTile[i].frameY = FRAMEINFOMANAGER->FindImage(_vFrameTile[i].keyName)->GetMaxFrameY() - 1;
+			continue;
+		}
+
 		Vector2 temp;
 		temp = FRAMEINFOMANAGER->FrameOperation(_vFrameTile[i].keyName, Vector2(_vFrameTile[i].frameX, _vFrameTile[i].frameY), _vFrameTile[i].isTrigger);
 		_vFrameTile[i].frameX = temp.x;
@@ -155,91 +174,33 @@ void fifthFloorStage::setFrameIndex()
 
 void fifthFloorStage::tileCollision()
 {
-	/*
-	int frontTile = (int)(_player->getSearchRc().left / TILESIZE) + (int)(_player->getSearchRc().top / TILESIZE) * TILEX;
-	if(_tiles[frontTile].isCollider)
-		_player->setState(CHR_IDLE);
-	int frontX = (_player->getSearchRc().left + _player->getSearchRc().right) / 2;
-	int frontY = (_player->getSearchRc().top + _player->getSearchRc().bottom) / 2;
-	*/
-	/*
-	int frontTile[3]; 
-	//cout << "x : " << (int)(_player->getPlayerLocX() / TILESIZE) << " y : " << (int)(_player->getPlayerLocY() / TILESIZE) << endl;
-	//cout << frontTile << endl;
-	//cout << _tiles[frontTile].isCollider << endl;
-	switch (_player->getPdirec())
-	{
-	case CHRDIREC_DOWN:
-		//frontTile = (int)(_player->getPlayerLocX() / TILESIZE) + (int)(_player->getPlayerLocY() / TILESIZE) * TILEX + TILEX;
-		frontTile[0] = (int)(_player->getPlayerFrc().left / TILESIZE) + (int)(_player->getPlayerFrc().top / TILESIZE) * TILEX + TILEX;
-		frontTile[1] = frontTile[0] - 1;
-		frontTile[2] = frontTile[0] + 1;
-		break;
-	case CHRDIREC_LEFT:
-		//frontTile = (int)(_player->getPlayerLocX() / TILESIZE) + (int)(_player->getPlayerLocY() / TILESIZE) * TILEX - 1;
-		frontTile[0] = (int)(_player->getPlayerFrc().left / TILESIZE) + (int)(_player->getPlayerFrc().top / TILESIZE) * TILEX - 1;
-		frontTile[1] = frontTile[0] - TILEX;
-		frontTile[2] = frontTile[0] + TILEX;
-		break;
-	case CHRDIREC_RIGHT:
-		//frontTile = (int)(_player->getPlayerLocX() / TILESIZE) + (int)(_player->getPlayerLocY() / TILESIZE) * TILEX + 1;
-		frontTile[0] = (int)(_player->getPlayerFrc().left / TILESIZE) + (int)(_player->getPlayerFrc().top / TILESIZE) * TILEX + 1;
-		frontTile[1] = frontTile[0] - TILEX;
-		frontTile[2] = frontTile[0] + TILEX;
-		break;
-	case CHRDIREC_UP:
-		//frontTile = (int)(_player->getPlayerLocX() / TILESIZE) + (int)(_player->getPlayerLocY() / TILESIZE) * TILEX - TILEX;
-		frontTile[0] = (int)(_player->getPlayerFrc().left / TILESIZE) + (int)(_player->getPlayerFrc().top / TILESIZE) * TILEX - TILEX;
-		frontTile[1] = frontTile[0] - 1;
-		frontTile[2] = frontTile[0] + 1;
-		break;
-	}
-	if (_tiles[frontTile[0]].isCollider)
-		_player->setState(CHR_IDLE);
-	if (_tiles[frontTile[0]].isCollider && _tiles[frontTile[1]].isCollider)
-		_player->setState(CHR_IDLE);
-	if (_tiles[frontTile[0]].isCollider && _tiles[frontTile[2]].isCollider)
-		_player->setState(CHR_IDLE);
-	*/
-	
-	int frontTile;
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
 			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
 			{
-				switch (_player->getPdirec())
-				{
-				case CHRDIREC_DOWN:
-					//frontTile = (int)(_player->getPlayerFrc().left / TILESIZE) + (int)(_player->getPlayerFrc().top / TILESIZE) * TILEX + TILEX;
-					//if (_tiles[frontTile].isCollider)
-						_player->setState(CHR_IDLE);
-					//_player->setPLocaY(_tiles[i*TILEX + j].rc.top - TILESIZE / 4 * 3);
-						_player->setPLocaY(_player->getPlayerLocY() - 1);
-					break;
-				case CHRDIREC_LEFT:
-					//frontTile = (int)(_player->getPlayerFrc().left / TILESIZE) + (int)(_player->getPlayerFrc().top / TILESIZE) * TILEX - 1;
-					//if (_tiles[frontTile].isCollider)
-						_player->setState(CHR_IDLE);
-					//_player->setPLocaX(_tiles[i*TILEX + j].rc.right + 4);
-						_player->setPLocaX(_player->getPlayerLocX() + 1);
+				_player->setState(CHR_IDLE);
 
-					break;
-				case CHRDIREC_RIGHT:
-					//frontTile = (int)(_player->getPlayerFrc().left / TILESIZE) + (int)(_player->getPlayerFrc().top / TILESIZE) * TILEX + 1;
-					//if (_tiles[frontTile].isCollider)
-						_player->setState(CHR_IDLE);
-					//_player->setPLocaX(_tiles[i*TILEX + j].rc.left - TILESIZE / 4 * 3);
-						_player->setPLocaX(_player->getPlayerLocX() - 1);
-					break;
-				case CHRDIREC_UP:
-					//frontTile = (int)(_player->getPlayerFrc().left / TILESIZE) + (int)(_player->getPlayerFrc().top / TILESIZE) * TILEX - TILEX;
-					//if (_tiles[frontTile].isCollider)
-						_player->setState(CHR_IDLE);
-					//_player->setPLocaY(_tiles[i*TILEX + j].rc.bottom + 4);
-						_player->setPLocaY(_player->getPlayerLocY() + 1);
-					break;
+				if ((_tiles[i*TILEX + j].rc.left + _tiles[i*TILEX + j].rc.right) / 2 > (_player->getPlayerFrc().left+ _player->getPlayerFrc().right) / 2)
+				{
+					//박힌 타일이 플레이어보다 왼쪽이면
+					_player->setPLocaX(_player->getPlayerLocX() - 1);
+				}
+				if ((_tiles[i*TILEX + j].rc.left + _tiles[i*TILEX + j].rc.right) / 2 < (_player->getPlayerFrc().left + _player->getPlayerFrc().right) / 2)
+				{
+					//박힌 타일이 플레이어보다 오른쪽이면
+					_player->setPLocaX(_player->getPlayerLocX() + 1);
+				}
+				if ((_tiles[i*TILEX + j].rc.top + _tiles[i*TILEX + j].rc.bottom) / 2 < (_player->getPlayerFrc().top + _player->getPlayerFrc().bottom) / 2)
+				{
+					//박힌 타일이 플레이어보다 위쪽이면
+					_player->setPLocaY(_player->getPlayerLocY() + 1);
+				}
+				if ((_tiles[i*TILEX + j].rc.top + _tiles[i*TILEX + j].rc.bottom) / 2 > (_player->getPlayerFrc().top + _player->getPlayerFrc().bottom) / 2)
+				{
+					//박힌 타일이 플레이어보다 아래쪽이면
+					_player->setPLocaY(_player->getPlayerLocY() - 1);
 				}
 			}
 		}

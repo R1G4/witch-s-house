@@ -3,6 +3,12 @@
 
 class diningRoom_5f : public fifthFloorStage
 {
+	enum CLICKORDER
+	{
+		FIRST,
+		SECOND
+	};
+
 	enum TRIGGER
 	{
 		DOORTOGARDEN = 34 + 14 * TILEX,
@@ -17,6 +23,14 @@ class diningRoom_5f : public fifthFloorStage
 	};
 
 	TRIGGER _trigger;
+	CLICKORDER _co;
+
+	float _x, _y;
+	FloatRect _rc;
+	FloatRect _correct_rc;
+	bool _isClick;
+	bool _isClock;
+
 public:
 	diningRoom_5f() {};
 	~diningRoom_5f() {};
@@ -29,5 +43,7 @@ public:
 	void load(LOCATION location = LOCATION_DEFAULT);
 
 	void setTrigger();
+	void setChoiceScene();
+	void getMemory();
 };
 

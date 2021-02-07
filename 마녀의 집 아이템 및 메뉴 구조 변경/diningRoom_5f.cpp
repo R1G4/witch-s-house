@@ -4,7 +4,7 @@
 
 HRESULT diningRoom_5f::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
-	_player->setDirec(CHRDIREC_LEFT);
+	_player->setDirec(_chrdirection);
 
 	//타일 불러오기
 	load(_location);
@@ -12,6 +12,8 @@ HRESULT diningRoom_5f::init(CHRDIRECTION _chrdirection, LOCATION _location)
 	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
 	fifthFloorStage::init();
 
+	getMemory();
+	_isClock = false;
 	return S_OK;
 }
 
@@ -21,13 +23,29 @@ void diningRoom_5f::release()
 
 void diningRoom_5f::update()
 {
-	fifthFloorStage::update();
+	if (!_isClick && !_isStopToRead)
+	{
+		fifthFloorStage::update();
 
-	setFrameIndex();
+		setFrameIndex();
 
-	//카메라 관련 업데이트
-	cameraUpdate();
-	setTrigger();
+		//카메라 관련 업데이트
+		cameraUpdate();
+		setTrigger();
+	}
+	setChoiceScene(); 
+	
+	if (_isStopToRead)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))	// 클릭행동 트리거
+			_isStopToRead = TEXTMANAGER->setNextScript(true);
+		
+		if (!_isStopToRead && _isClock)
+		{
+			_co = SECOND;
+			_isClick = true;
+		}
+	}
 	//cout << "x : " << (int)(_player->getPlayerLocX()) / TILESIZE << " y : " << (int)(_player->getPlayerLocY()) / TILESIZE << endl;
 }
 
@@ -41,6 +59,20 @@ void diningRoom_5f::render()
 
 	fifthFloorStage::render();
 
+	if (_isStopToRead)
+		TEXTMANAGER->renderText();
+
+	if (_isClick)
+	{
+		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(camera.x - 250, camera.y));	//왼쪽
+		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(camera.x + 250, camera.y));	//오른쪽
+
+		D2DINS->GetInstance()->RenderText(WINSIZEX / 2 - 300, 345, L"만진다.", RGB(255, 255, 255), 0.85f, 27);
+		D2DINS->GetInstance()->RenderText(WINSIZEX / 2 + 117, 345, L"아무것도 하지 않는다.", RGB(255, 255, 255), 0.85f, 27);
+
+		D2DINS->FillRectangle(_rc, D2D1::ColorF::Enum::WhiteSmoke, _rcAlpha / 5.5);
+		D2DINS->GetInstance()->DrawRectangle(_rc, D2D1::ColorF::White, _rcAlpha, 1.0f);
+	}
 }
 
 void diningRoom_5f::Collision()
@@ -67,7 +99,6 @@ void diningRoom_5f::load(LOCATION _location)
 			_player->setStart(i%TILEX, i / TILEX);
 			break;
 		}
-		break;
 	}
 	CloseHandle(file);
 }
@@ -76,33 +107,95 @@ void diningRoom_5f::setTrigger()
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))	// 클릭행동 트리거
 	{
-		if (IntersectRectToRect(&_tiles[Y_FLOWER_1].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[Y_FLOWER_1].rc, &_player->getSearchRc()) &&
+			STAGEMEMORYMANAGER->getIsFlowerDead())
 		{
-			cout << "꽃1!" << endl;
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_flower_1_1.txt");
+			_isStopToRead = true;
+			_isClock = false;
 		}
-		if (IntersectRectToRect(&_tiles[Y_FLOWER_2].rc, &_player->getSearchRc()))
+		else if (IntersectRectToRect(&_tiles[Y_FLOWER_1].rc, &_player->getSearchRc()))
 		{
-			cout << "꽃2!" << endl;
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_flower_1.txt");
+			_isStopToRead = true;
+			_isClock = false;
 		}
-		if (IntersectRectToRect(&_tiles[Y_FLOWER_3].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[Y_FLOWER_2].rc, &_player->getSearchRc()) &&
+			STAGEMEMORYMANAGER->getIsFlowerDead())
 		{
-			cout << "꽃3!" << endl;
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_flower_2_1.txt");
+			_isStopToRead = true;
+			_isClock = false;
 		}
-		if (IntersectRectToRect(&_tiles[Y_FLOWER_4].rc, &_player->getSearchRc()))
+		else if (IntersectRectToRect(&_tiles[Y_FLOWER_2].rc, &_player->getSearchRc()))
 		{
-			cout << "꽃4!" << endl;
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_flower_2.txt");
+			_isStopToRead = true;
+			_isClock = false;
 		}
-		if (IntersectRectToRect(&_tiles[CLOCK].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[Y_FLOWER_3].rc, &_player->getSearchRc()) &&
+			STAGEMEMORYMANAGER->getIsFlowerDead() &&
+			STAGEMEMORYMANAGER->getIsGetSkul3())
 		{
-			cout << "시계!" << endl;
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_flower_2_1.txt");
+			_isStopToRead = true;
+			_isClock = false;
+		}
+		else if (IntersectRectToRect(&_tiles[Y_FLOWER_3].rc, &_player->getSearchRc()) &&
+			STAGEMEMORYMANAGER->getIsFlowerDead())
+		{
+			// 하얀꽃 죽이고 얻을수 잇게 조정
+			STAGEMEMORYMANAGER->setIsGetSkul3(true);
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_flower_3_1.txt");
+			_isStopToRead = true;
+			_isClock = false;
+		}
+		else if (IntersectRectToRect(&_tiles[Y_FLOWER_3].rc, &_player->getSearchRc()))
+		{
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_flower_3.txt");
+			_isStopToRead = true;
+			_isClock = false;
+		}
+		if (IntersectRectToRect(&_tiles[Y_FLOWER_4].rc, &_player->getSearchRc()) &&
+			STAGEMEMORYMANAGER->getIsFlowerDead())
+		{
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_flower_4_1.txt");
+			_isStopToRead = true;
+			_isClock = false;
+		}
+		else if (IntersectRectToRect(&_tiles[Y_FLOWER_4].rc, &_player->getSearchRc()))
+		{
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_flower_4.txt");
+			_isStopToRead = true;
+			_isClock = false;
+		}
+		if (IntersectRectToRect(&_tiles[CLOCK].rc, &_player->getSearchRc()) && _player->getPdirec() == CHRDIREC_UP)
+		{
+			_co = FIRST;
+			switch (_co)
+			{
+			case FIRST:
+				_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_clock.txt");
+				_isStopToRead = true;
+				_isClock = true;
+				break;
+			case SECOND: default:
+				break;
+			}
 		}
 		if (IntersectRectToRect(&_tiles[LIGHT].rc, &_player->getSearchRc()))
 		{
-			cout << "전등!" << endl;
+			STAGEMEMORYMANAGER->setIsGetSkul1(true);
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_light.txt");
+			_isStopToRead = true;
+			_isClock = false;
 		}
 		if (IntersectRectToRect(&_tiles[DOORTODININGROOMITEM].rc, &_player->getPlayerFrc()))
 		{
-			cout << "아이템획득!!" << endl;
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_door.txt");
+			STAGEMEMORYMANAGER->setIsKey(true);
+			_isStopToRead = true;
+			_isClock = false;
 		}
 	}
 
@@ -111,11 +204,50 @@ void diningRoom_5f::setTrigger()
 	{
 		_isChangeScene = true;
 		sceneChange("garden_5f", CHRDIREC_RIGHT, LOCATION_1);
-		cout << "정원으로!" << endl;
 	}
 	if (IntersectRectToRect(&_tiles[DROPFLOWER].rc, &_player->getPlayerFrc()))
 	{
+		STAGEMEMORYMANAGER->setIsFlowerpot(true);
 		_vFrameTile[2].isTrigger = true;
-		cout << "화분!" << endl;
+	}
+
+}
+
+void diningRoom_5f::setChoiceScene()
+{
+	if (_isClick)	// 시계 관련 이벤트
+	{
+		_correct_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+		rcAlphaChange();
+		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+			_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+			_rc = RectMakePivot(Vector2(WINSIZEX / 2 + 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+		{
+			_isClick = false;
+			if (IntersectRectToRect(&_rc, &_correct_rc))
+			{
+				_dead->setDead(DEAD_CLOCK);
+				_dead->setLocXY(_tiles[CLOCK].rc.left, _tiles[CLOCK].rc.top);
+				_tiles[CLOCK].obj = OBJ_NONE;
+				_player->~Player();
+				_isDead = true;
+			}
+		}
+	}
+}
+
+void diningRoom_5f::getMemory()
+{
+	for (int k = 0; k < _vFrameTile.size(); k++)
+	{
+		if (!STAGEMEMORYMANAGER->getIsFlowerpot()) continue;
+
+		if (_vFrameTile[k].keyName == "꽃병프레임")
+		{
+			//트리거가 이미 발동되었던 상태로 셋팅한다.
+			_vFrameTile[k].isMaxframe = true;
+		}
 	}
 }

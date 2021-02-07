@@ -35,7 +35,31 @@ void garden_5f::update()
 		//카메라 관련 업데이트
 		cameraUpdate();
 
-		setTrigger();
+		if(!_isDead)
+			setTrigger();
+
+		if (STAGEMEMORYMANAGER->getIsFlowerDead())
+		{
+			_count++;
+			if (_count % 4 == 0)
+			{
+				_frame++;
+				if (_frame > 8)
+				{
+					_frame = 8;
+					return;
+				}
+				_deadFlowerText = true;
+			}
+		}
+
+
+		if (_frame == 8 && _deadFlowerText)
+		{
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_garden_flower_1.txt");
+			_isStopToRead = true; 
+			_deadFlowerText = false;
+		}
 	}
 	setChoiceScene();
 	
@@ -44,6 +68,7 @@ void garden_5f::update()
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))	// 클릭행동 트리거
 			_isStopToRead = TEXTMANAGER->setNextScript(true);
 	}
+
 	//cout << "x : " << (int)(_player->getPlayerLocX()) / TILESIZE << " y : " << (int)(_player->getPlayerLocY()) / TILESIZE << endl;
 }
 
@@ -55,8 +80,12 @@ void garden_5f::render()
 		Vector2(IMAGEMANAGER->FindImage("배경60")->GetSize().x / 2 + 480,
 			IMAGEMANAGER->FindImage("배경60")->GetSize().y / 2));
 
+	if (STAGEMEMORYMANAGER->getIsFlowerDead())
+		CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("하얀꽃죽음"), Vector2(_tiles[FLOWER].rc.left, _tiles[FLOWER].rc.top), _frame, 0);
+
 	fifthFloorStage::render();
 
+	
 	if (_isStopToRead)
 		TEXTMANAGER->renderText();
 
@@ -75,6 +104,7 @@ void garden_5f::render()
 		D2DINS->FillRectangle(_rc, D2D1::ColorF::Enum::WhiteSmoke, _rcAlpha / 5.5);
 		D2DINS->GetInstance()->DrawRectangle(_rc, D2D1::ColorF::White, _rcAlpha, 1.0f);
 	}
+	
 }
 
 void garden_5f::Collision()
@@ -110,7 +140,6 @@ void garden_5f::load(LOCATION _location)
 			_player->setStart(i%TILEX, i / TILEX);
 			break;
 		}
-		break;
 	}
 	CloseHandle(file);
 }
@@ -119,7 +148,17 @@ void garden_5f::setTrigger()
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))	// 클릭행동 트리거
 	{
-		if (IntersectRectToRect(&_tiles[FLOWER].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[FLOWER].rc, &_player->getSearchRc()) && 
+			STAGEMEMORYMANAGER->getIsPotion() &&
+			STAGEMEMORYMANAGER->getIsRedFlower1() &&
+			STAGEMEMORYMANAGER->getIsRedFlower2() &&
+			STAGEMEMORYMANAGER->getIsRedFlower3()
+			)
+		{
+			_flowerDead = true;
+			STAGEMEMORYMANAGER->setIsFlowerDead(true);
+		}
+		else if (IntersectRectToRect(&_tiles[FLOWER].rc, &_player->getSearchRc()))
 		{
 			switch (_co)
 			{
@@ -148,9 +187,15 @@ void garden_5f::setTrigger()
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_garden_tee.txt");
 			_isStopToRead = true;
 		}
+		if (IntersectRectToRect(&_tiles[DOORTOGARDENTOBOSS].rc, &_player->getSearchRc()))
+		{
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_garden_door.txt");
+			_isStopToRead = true;
+		}
 	}
 
-	if (IntersectRectToRect(&_tiles[DOORTOGARDENTOBOSS].rc, &_player->getPlayerFrc()))
+	if (IntersectRectToRect(&_tiles[DOORTOGARDENTOBOSS].rc, &_player->getPlayerFrc()) &&
+		STAGEMEMORYMANAGER->getIsLever())
 	{
 		_isChangeScene = true;
 		_vFrameTile[1].isTrigger = true;
@@ -188,8 +233,11 @@ void garden_5f::setChoiceScene()
 			_isClick = false;
 			if (IntersectRectToRect(&_rc, &_correct_rc))
 				cout << "정답!" << endl;
-			else
-				cout << "오답!" << endl;
+			else 
+			{
+				_dead->setDead(DEAD_FLOWER);
+				_isDead = true;
+			}
 		}
 	}
 }

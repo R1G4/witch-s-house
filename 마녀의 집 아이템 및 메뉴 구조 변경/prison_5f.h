@@ -29,6 +29,12 @@ private:
 	bool _stop;			// 못찾은거
 
 private:
+	enum IRONDOORORDER
+	{
+		FIRST,
+		SECOND,
+		THIRD
+	};
 	enum TRIGGER
 	{
 		DOORTOGARDEN = 17 + 15 * TILEX,
@@ -47,8 +53,10 @@ private:
 	};
 
 	TRIGGER _trigger;
+	IRONDOORORDER _ido;
 	int _skulX, _skulY;
 	bool _isSummon;
+	bool _isDrop;
 
 public://a스타용
 
@@ -76,5 +84,6 @@ public:
 	void load(LOCATION location = LOCATION_DEFAULT);
 
 	void setTrigger();
+	void getMemory();
 };
 

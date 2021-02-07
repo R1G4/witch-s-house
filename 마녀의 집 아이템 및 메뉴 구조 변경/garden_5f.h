@@ -25,11 +25,16 @@ private:
 	TRIGGER _trigger;
 	CLICKORDER _co;
 
+	int _count;
+	int _frame;
+
 	float _x, _y;
 	FloatRect _rc;
 	FloatRect _correct_rc;
 
 	bool _isClick;
+	bool _deadFlower;
+	bool _deadFlowerText;
 
 public:
 	garden_5f() {};

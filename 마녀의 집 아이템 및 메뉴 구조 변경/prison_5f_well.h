@@ -3,6 +3,13 @@
 class prison_5f_well : public fifthFloorStage
 {
 private:
+	enum FROGORDER
+	{
+		FIRST,
+		SECOND,
+		THIRD,
+		FORTH
+	};
 	enum TRIGGER
 	{
 		DOORTOPRISON = 18 + 12 * TILEX,
@@ -11,6 +18,12 @@ private:
 	};
 
 	TRIGGER _trigger;
+	FROGORDER _fo;
+	bool _timeToDead;
+
+	int rnd_x[300];
+	int rnd_y[300];
+	int _count_line;
 public:
 	prison_5f_well() {};
 	~prison_5f_well() {};
@@ -23,5 +36,7 @@ public:
 	void load(LOCATION location = LOCATION_DEFAULT);
 
 	void setTrigger();
+
+	void deadTime();
 };
 

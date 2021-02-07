@@ -11,7 +11,13 @@ HRESULT prison_5f_well::init(CHRDIRECTION _chrdirection, LOCATION _location)
 
 	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
 	fifthFloorStage::init();
+	_fo = FIRST;
 
+	for (int i = 0; i < 300; i++)
+	{
+		rnd_x[i] = RND->getFromFloatTo(-20, WINSIZEX - 20);
+		rnd_y[i] = RND->getFromFloatTo(-20, WINSIZEY - 20);
+	}
 	return S_OK;
 }
 
@@ -21,14 +27,25 @@ void prison_5f_well::release()
 
 void prison_5f_well::update()
 {
-	fifthFloorStage::update();
-	//_player->update();
-	setFrameIndex();
+	if (!_isStopToRead && !_timeToDead)
+	{
+		fifthFloorStage::update();
 
-	//카메라 관련 업데이트
-	cameraUpdate();
-	setTrigger();
-	//cout << "x : " << (int)(_player->getPlayerLocX()) / TILESIZE << " y : " << (int)(_player->getPlayerLocY()) / TILESIZE << endl;
+		setFrameIndex();
+
+		//카메라 관련 업데이트
+		cameraUpdate();
+		setTrigger();
+	}
+
+	if (_isStopToRead)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))	// 클릭행동 트리거
+			_isStopToRead = TEXTMANAGER->setNextScript(true);
+
+		if(!_isStopToRead && _fo == FORTH)
+			_timeToDead = true;
+	}
 }
 
 void prison_5f_well::render()
@@ -91,6 +108,14 @@ void prison_5f_well::render()
 	}
 
 	_player->render();
+
+	if (_isStopToRead)
+		TEXTMANAGER->renderText();
+
+	if (_timeToDead)
+		deadTime();
+
+	_dead->render();
 }
 
 void prison_5f_well::Collision()
@@ -117,7 +142,6 @@ void prison_5f_well::load(LOCATION _location)
 			_player->setStart(i % TILEX, i / TILEX);
 			break;
 		}
-		break;
 	}
 	CloseHandle(file);
 }
@@ -132,7 +156,28 @@ void prison_5f_well::setTrigger()
 		}
 		if (IntersectRectToRect(&_tiles[FLOG].rc, &_player->getSearchRc()))
 		{
-			cout << "올챙이!" << endl;
+			switch (_fo)
+			{
+			case FIRST:
+				_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_well_frog_1.txt");
+				_isStopToRead = true;
+				_fo = SECOND;
+				break;
+			case SECOND:
+				_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_well_frog_2.txt");
+				_isStopToRead = true;
+				_fo = THIRD;
+				break;
+			case THIRD:
+				_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_well_frog_3.txt");
+				_isStopToRead = true;
+				_fo = FORTH;
+				break;
+			case FORTH:
+				
+			default:
+				break;
+			}
 		}
 	}
 	if (IntersectRectToRect(&_tiles[DOORTOPRISON].rc, &_player->getPlayerFrc()) ||
@@ -142,5 +187,20 @@ void prison_5f_well::setTrigger()
 		_isChangeScene = true;
 		sceneChange("prison_5f", CHRDIREC_DOWN, LOCATION_2);
 		cout << "감옥으로!" << endl;
+	}
+}
+
+void prison_5f_well::deadTime()
+{
+	if (_count_line >= 300)
+	{
+		_dead->setDead(DEAD_FROG);
+		_dead->update();
+	}
+
+	_count_line++;
+	for (int i = 0; i < _count_line; i++)
+	{
+		D2DINS->GetInstance()->RenderText(rnd_x[i], rnd_y[i], L"너가 죽였어.", RGB(0, 0, 255), 1.0f, 30);
 	}
 }

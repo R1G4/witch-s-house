@@ -23,6 +23,7 @@ protected:
 
 	bool _isChangeScene;
 	bool _isDead;
+	bool _isMove;
 
 	Player* _player;
 	skul* _skul;
@@ -31,6 +32,7 @@ protected:
 	int _frameInterval;
 	bool isTrigger;
 	bool _isSkulAppeal;
+	bool _flowerDead;
 
 	float _sceneAlpha;			//æ¿ ≈ı∏Ìµµ
 

@@ -7,11 +7,13 @@ HRESULT prison_5f::init(CHRDIRECTION _chrdirection, LOCATION _location)
 	_player->setDirec(_chrdirection);
 
 	//타일 불러오기
-	load(_location);
+	load(_location); 
 
 	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
 	fifthFloorStage::init();
 
+	getMemory();
+	cout << STAGEMEMORYMANAGER->getIsPotion() << endl;
 	_skulX = _tiles[SUMMONSKUL].rc.left / TILESIZE;
 	_skulY = _tiles[SUMMONSKUL].rc.top / TILESIZE;
 	_playerTile = new astarTile;
@@ -38,7 +40,7 @@ void prison_5f::update()
 		//카메라 관련 업데이트
 		cameraUpdate();
 		setTrigger();
-
+		
 		if (_isSummon)
 		{
 			playerLocation();
@@ -109,7 +111,6 @@ void prison_5f::load(LOCATION _location)
 	camera = _tiles->camera;
 	for (int i = 0; i < TILEX*TILEY; i++)
 	{
-
 		if (_tiles[i].attribute != PLAYER) continue;
 
 		//초기 위치를 잡아준다.
@@ -125,29 +126,39 @@ void prison_5f::load(LOCATION _location)
 			_player->setStart(i % TILEX, i / TILEX);
 			break;
 		}
-		break;
 	}
 	CloseHandle(file);
 }
 
 void prison_5f::setTrigger()
 {
+	if (_vFrameTile[4].isTrigger && _vFrameTile[4].frameY == 3 && !_isDrop)
+	{
+		_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_cage_1.txt");
+		STAGEMEMORYMANAGER->setIsPotion(true);
+		_isStopToRead = true;
+		_isDrop = true;
+	}
+
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))	// 클릭행동 트리거
 	{
 		_isStopToRead = TEXTMANAGER->setNextScript(true);
 
 		if (IntersectRectToRect(&_tiles[R_FLOWER_1].rc, &_player->getSearchRc()))
 		{
+			STAGEMEMORYMANAGER->setIsRedFlower1(true);
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_flower_1.txt");
 			_isStopToRead = true;
 		}
 		if (IntersectRectToRect(&_tiles[R_FLOWER_2].rc, &_player->getSearchRc()))
 		{
+			STAGEMEMORYMANAGER->setIsRedFlower2(true);
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_flower_2.txt");
 			_isStopToRead = true;
 		}
 		if (IntersectRectToRect(&_tiles[R_FLOWER_3].rc, &_player->getSearchRc()))
 		{
+			STAGEMEMORYMANAGER->setIsRedFlower3(true);
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_flower_3.txt");
 			_isStopToRead = true;
 		}
@@ -160,13 +171,42 @@ void prison_5f::setTrigger()
 		{
 			cout << "힌트!" << endl;
 		}
-		if (IntersectRectToRect(&_tiles[CAGE].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[DOOR_2].rc, &_player->getSearchRc()))
 		{
-			cout << "새장!" << endl;
+			switch (_ido)
+			{
+			case prison_5f::FIRST:
+				_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_irondoor_1.txt");
+				_isStopToRead = true;
+				_ido = SECOND;
+				break;
+			case prison_5f::SECOND:
+				STAGEMEMORYMANAGER->setIsGetSkul2(true);
+				_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_irondoor_2.txt");
+				_isStopToRead = true;
+				_ido = THIRD;
+			case prison_5f::THIRD:
+				_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_irondoor_1.txt");
+				_isStopToRead = true;
+				break;
+			default:
+				break;
+			}
+			
+		}
+		if (IntersectRectToRect(&_tiles[CAGE].rc, &_player->getSearchRc()) && STAGEMEMORYMANAGER->getIsKey() == true)
+		{
+			_vFrameTile[4].isTrigger = true;
+		}
+		else if (IntersectRectToRect(&_tiles[CAGE].rc, &_player->getSearchRc()))
+		{
+			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_cage.txt");
+			_isStopToRead = true;
 		}
 	}
 
-	if (IntersectRectToRect(&_tiles[SKUL].rc, &_player->getPlayerFrc()) && !_isSummon && !_setTile)
+	if (IntersectRectToRect(&_tiles[SKUL].rc, &_player->getPlayerFrc()) && 
+		!_isSummon && !_setTile && STAGEMEMORYMANAGER->getIsLever())
 	{
 		_skul->init(_skulX, _skulY);
 		_isSkulAppeal = true;
@@ -190,6 +230,20 @@ void prison_5f::setTrigger()
 	{
 		_isChangeScene = true;
 		sceneChange("prison_skul_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
+	}
+}
+
+void prison_5f::getMemory()
+{
+	for (int k = 0; k < _vFrameTile.size(); k++)
+	{
+		if (!STAGEMEMORYMANAGER->getIsPotion()) continue;
+
+		if (_vFrameTile[k].keyName == "새장")
+		{
+			//트리거가 이미 발동되었던 상태로 셋팅한다.
+			_vFrameTile[k].isMaxframe = true;
+		}
 	}
 }
 
