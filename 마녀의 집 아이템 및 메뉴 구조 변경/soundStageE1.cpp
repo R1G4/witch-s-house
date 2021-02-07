@@ -33,9 +33,40 @@ HRESULT soundStageE1::init(CHRDIRECTION _CHRDIRECTION)
 		mapChange[0].x = WINSIZEX / 2 - 390 + 48 * 12;
 		mapChange[0].y = WINSIZEY / 2 - 120 + 48 * 10;
 
-		mapChange[0].rc = RectMakeCenter(mapChange[0].x, mapChange[0].y, 24, 72);
-	}
+		mapChange[1].x = WINSIZEX / 2 - 378 + 48 * 22;
+		mapChange[1].y = WINSIZEY / 2 - 48;
 
+		mapChange[0].rc = RectMakeCenter(mapChange[0].x, mapChange[0].y, 24, 72);
+		mapChange[1].rc = RectMakeCenter(mapChange[1].x, mapChange[1].y, 24, 24);
+	}
+	if (_CHRDIRECTION == CHRDIREC_DOWN)
+	{
+		IMAGEMANAGER->AddFrameImage("TerrainSample", L"Image/mapTool/Å¸ÀÏ.png", 7, 2);
+		IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/objSample.png", 2, 3);
+		IMAGEMANAGER->AddFrameImage("SavePoint", L"Image/mapTool/saveCat.png", 16, 4);
+
+
+		CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
+
+		_player = new Player;
+		load();
+		_player->setStart((WINSIZEX / 2 - 390 + 48 * 22) / TILESIZE, (WINSIZEY / 2 + 48) / TILESIZE);
+		_player->init();
+		_player->setDirec(CHRDIREC_DOWN);
+		camera.x = _player->getPlayerLocX();
+		camera.y = _player->getPlayerLocY();
+		CAMERAMANAGER->setCamera(camera);
+
+
+		mapChange[0].x = WINSIZEX / 2 - 390 + 48 * 12;
+		mapChange[0].y = WINSIZEY / 2 - 120 + 48 * 10;
+
+		mapChange[1].x = WINSIZEX / 2 - 378 + 48 * 22;
+		mapChange[1].y = WINSIZEY / 2 - 48;
+
+		mapChange[0].rc = RectMakeCenter(mapChange[0].x, mapChange[0].y, 24, 72);
+		mapChange[1].rc = RectMakeCenter(mapChange[1].x, mapChange[1].y, 24, 24);
+	}
 
 	return S_OK;
 }
@@ -70,13 +101,13 @@ void soundStageE1::render()
 				}
 				if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
 				CAMERAMANAGER->renderRc(mapChange[0].rc, D2D1::ColorF::White, 1.0f, 24);
-
+				CAMERAMANAGER->renderRc(mapChange[1].rc, D2D1::ColorF::White, 1.0f, 24);
 			}
 
 		}
 	}
 
-	
+
 	_player->render();
 	for (int i = 0; i < TILEY; i++)
 	{
@@ -145,5 +176,9 @@ void soundStageE1::tileCollision()
 	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange[0].rc))
 	{
 		SCENEMANAGER->changeScene("4ÃþÈ¦", CHRDIREC_LEFT);
+	}
+	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange[1].rc))
+	{
+		SCENEMANAGER->changeScene("4Ãþ¿À¸¥ÂÊ¹æ2", CHRDIREC_UP);
 	}
 }

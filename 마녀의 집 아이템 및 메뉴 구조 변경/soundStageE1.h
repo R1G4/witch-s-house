@@ -1,8 +1,7 @@
 #pragma once
 #include "gameNode.h"
 #include "Player.h"
-#include "mapTool.h"
-#include "soundStage.h"
+
 
 
 class soundStageE1 : public gameNode

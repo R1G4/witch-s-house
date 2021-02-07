@@ -354,6 +354,15 @@
     <ClInclude Include="EndingScene.h">
       <Filter>playGround\scense</Filter>
     </ClInclude>
+    <ClInclude Include="soundStageE2.h">
+      <Filter>playGround\scense\4thFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="soundStageN.h">
+      <Filter>playGround\scense\4thFloor</Filter>
+    </ClInclude>
+    <ClInclude Include="soundStageD.h">
+      <Filter>playGround\scense\4thFloor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -613,6 +622,15 @@
     </ClCompile>
     <ClCompile Include="EndingScene.cpp">
       <Filter>playGround\scense</Filter>
+    </ClCompile>
+    <ClCompile Include="soundStageE2.cpp">
+      <Filter>playGround\scense\4thFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="soundStageN.cpp">
+      <Filter>playGround\scense\4thFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="soundStageD.cpp">
+      <Filter>playGround\scense\4thFloor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

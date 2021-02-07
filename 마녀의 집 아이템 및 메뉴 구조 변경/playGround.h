@@ -38,6 +38,9 @@
 #include "soundStage.h"
 #include "soundStageW.h"
 #include "soundStageE1.h"
+#include "soundStageE2.h"
+#include "soundStageN.h"
+#include "soundStageD.h"
 #include "EndingScene.h"
 
 

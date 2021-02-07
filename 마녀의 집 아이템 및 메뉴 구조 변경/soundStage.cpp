@@ -15,7 +15,7 @@ HRESULT soundStage::init()
 	IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/objSample.png", 2, 3);
 	IMAGEMANAGER->AddFrameImage("SavePoint", L"Image/mapTool/saveCat.png", 16, 4);
 	//IMAGEMANAGER->AddImage("º´Á¤", L"Image/obj/021.png");
-	
+
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
 
 	_player = new Player;
@@ -86,7 +86,7 @@ HRESULT soundStage::init(CHRDIRECTION _CHRDIRECTION)
 		mapChange[2].rc = RectMakeCenter(mapChange[2].x, mapChange[2].y, 24, 72);
 		mapChange[3].rc = RectMakeCenter(mapChange[3].x, mapChange[3].y, 24, 72);
 
-		return S_OK;
+
 	}
 
 	if (_CHRDIRECTION == CHRDIREC_LEFT)
@@ -126,8 +126,47 @@ HRESULT soundStage::init(CHRDIRECTION _CHRDIRECTION)
 		mapChange[2].rc = RectMakeCenter(mapChange[2].x, mapChange[2].y, 24, 72);
 		mapChange[3].rc = RectMakeCenter(mapChange[3].x, mapChange[3].y, 24, 72);
 
-		return S_OK;
+
 	}
+	if (_CHRDIRECTION == CHRDIREC_DOWN)
+	{
+		IMAGEMANAGER->AddFrameImage("TerrainSample", L"Image/mapTool/Å¸ÀÏ.png", 7, 2);
+		IMAGEMANAGER->AddFrameImage("ObjectSample", L"Image/mapTool/objSample.png", 2, 3);
+		IMAGEMANAGER->AddFrameImage("SavePoint", L"Image/mapTool/saveCat.png", 16, 4);
+		//IMAGEMANAGER->AddImage("º´Á¤", L"Image/obj/021.png");
+
+		CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
+
+		_player = new Player;
+		load();
+		_player->setStart((WINSIZEX / 2 + 224 + 48 * 2) / TILESIZE, (WINSIZEY / 2 + 504 - 48 * 11) / TILESIZE);
+		_player->init();
+		_player->setDirec(CHRDIREC_DOWN);
+
+		camera.x = _player->getPlayerLocX();
+		camera.y = _player->getPlayerLocY();
+		CAMERAMANAGER->setCamera(camera);
+		frame = 0;
+
+		mapChange[0].x = WINSIZEX / 2 + 343;
+		mapChange[0].y = WINSIZEY / 2 - 100;
+
+		mapChange[1].x = WINSIZEX / 2 + 343;
+		mapChange[1].y = WINSIZEY / 2 + 522;
+
+		mapChange[2].x = WINSIZEX / 2 + 315 - 48 * 4;
+		mapChange[2].y = WINSIZEY / 2 + 504 - 48 * 4;
+
+		mapChange[3].x = WINSIZEX / 2 + 320 + 48 * 5;
+		mapChange[3].y = WINSIZEY / 2 + 504 - 48 * 4;
+
+		mapChange[0].rc = RectMakeCenter(mapChange[0].x, mapChange[0].y, 24, 24);
+		mapChange[1].rc = RectMakeCenter(mapChange[1].x, mapChange[1].y, 120, 24);
+		mapChange[2].rc = RectMakeCenter(mapChange[2].x, mapChange[2].y, 24, 72);
+		mapChange[3].rc = RectMakeCenter(mapChange[3].x, mapChange[3].y, 24, 72);
+
+	}
+	return S_OK;
 }
 
 void soundStage::update()
@@ -189,7 +228,7 @@ void soundStage::render()
 		}
 	}
 
-	
+
 }
 
 
@@ -249,11 +288,11 @@ void soundStage::tileCollision()
 	}
 	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange[0].rc))
 	{
-		
+		SCENEMANAGER->changeScene("4ÃþÀ­¹æ", CHRDIREC_UP);
 	}
 	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange[1].rc))
 	{
-		
+
 	}
 	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange[2].rc))
 	{

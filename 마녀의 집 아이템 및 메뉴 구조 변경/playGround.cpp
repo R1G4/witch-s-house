@@ -30,7 +30,7 @@ HRESULT playGround::init()
 		
 	//SCENEMANAGER->changeScene("¼º¾Õ");
 	//SCENEMANAGER->changeScene("entranceFake");
-	SCENEMANAGER->changeScene("Ending");
+	SCENEMANAGER->changeScene("4ÃşÈ¦");
 	
 	//SCENEMANAGER->changeScene("prison_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
 	//SCENEMANAGER->changeScene("thirdMain");
@@ -136,6 +136,9 @@ void playGround::addScene()
 	SCENEMANAGER->addScene("4ÃşÈ¦", new soundStage);
 	SCENEMANAGER->addScene("4Ãş¿ŞÂÊ¹æ", new soundStageW);
 	SCENEMANAGER->addScene("4Ãş¿À¸¥ÂÊ¹æ1", new soundStageE1);
+	SCENEMANAGER->addScene("4Ãş¿À¸¥ÂÊ¹æ2", new soundStageE2);
+	SCENEMANAGER->addScene("4ÃşÀ­¹æ", new soundStageN);
+	SCENEMANAGER->addScene("4ÃşÇÔÁ¤", new soundStageD);
 
 	//5Ãş
 	SCENEMANAGER->addScene("garden_5f", _garden_5f_Stage);
