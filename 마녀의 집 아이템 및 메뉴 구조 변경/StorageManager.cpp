@@ -26,11 +26,11 @@ void StorageManager::loadTitle()
 {
 	//해당 폴더 안에 존재하는(최대5개)
 	//파일들의 제목만 가지고옴
-	_vFileSlot[0]=INIDATA->loadDataString("Save1", "스테이지", "스테이지 이름");
-	_vFileSlot[1] = INIDATA->loadDataString("Save2", "스테이지", "스테이지 이름");
-	_vFileSlot[2] = INIDATA->loadDataString("Save3", "스테이지", "스테이지 이름");
-	_vFileSlot[3] = INIDATA->loadDataString("Save4", "스테이지", "스테이지 이름");
-	_vFileSlot[4] = INIDATA->loadDataString("Save5", "스테이지", "스테이지 이름");
+	//_vFileSlot[0]=INIDATA->loadDataString("Save1", "스테이지", "스테이지 이름");
+	//_vFileSlot[1] = INIDATA->loadDataString("Save2", "스테이지", "스테이지 이름");
+	//_vFileSlot[2] = INIDATA->loadDataString("Save3", "스테이지", "스테이지 이름");
+	//_vFileSlot[3] = INIDATA->loadDataString("Save4", "스테이지", "스테이지 이름");
+	//_vFileSlot[4] = INIDATA->loadDataString("Save5", "스테이지", "스테이지 이름");
 }
 
 MENUSTATE StorageManager::saveView()
@@ -42,11 +42,11 @@ MENUSTATE StorageManager::saveView()
 	if (KEYMANAGER->isOnceKeyDown('X') * (int) 'X')
 		return _toggle == true ? MENU_PROGRESS : MENU_BACK;
 	
-	_vFileSlot[0] = INIDATA->loadDataString("Save1", "스테이지", "스테이지 이름");
+	/*_vFileSlot[0] = INIDATA->loadDataString("Save1", "스테이지", "스테이지 이름");
 	_vFileSlot[1] = INIDATA->loadDataString("Save2", "스테이지", "스테이지 이름");
 	_vFileSlot[2] = INIDATA->loadDataString("Save3", "스테이지", "스테이지 이름");
 	_vFileSlot[3] = INIDATA->loadDataString("Save4", "스테이지", "스테이지 이름");
-	_vFileSlot[4] = INIDATA->loadDataString("Save5", "스테이지", "스테이지 이름");
+	_vFileSlot[4] = INIDATA->loadDataString("Save5", "스테이지", "스테이지 이름");*/
 
 	//저장소 오픈
 	storageOpen();
@@ -85,7 +85,9 @@ MENUSTATE StorageManager::loadView()
 
 	}
 
-	return MENU_PROGRESS;
+	if (_toggle)
+		return MENU_PROGRESS;
+	return MENU_BACK;
 }
 
 bool StorageManager::saveData()
@@ -94,7 +96,7 @@ bool StorageManager::saveData()
 	//저장 완료한다면 true를 반환
 	save_enum = (int)_saveStage;
 	save_s_enum = to_string(save_enum);
-	switch (_saveStage)
+	/*switch (_saveStage)
 	{
 	case OPENING:
 		INIDATA->addData("스테이지", "스테이지 이름", "시작의 정원");
@@ -126,7 +128,7 @@ bool StorageManager::saveData()
 		INIDATA->addData("스테이지","스테이지 번호(OPENING:0,FINAL:5)",save_s_enum.c_str());
 		INIDATA->iniSave(fileName);
 		break;
-	}
+	}*/
 	return false;
 }
 

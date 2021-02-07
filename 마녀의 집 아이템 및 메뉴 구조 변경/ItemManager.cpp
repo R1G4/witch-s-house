@@ -48,6 +48,7 @@ bool ItemManager::addItem(string itemKey)
 	case ITEM_TAEYUP:
 		_item.name = L"ÅÂ¿±";
 		_item.contents = L"½Ã°è¿¡¼­ ²¨³½ ³ì½¼ÅÂ¿±";
+		break;
 	}
 	_vItem.push_back(_item);
 
@@ -58,9 +59,9 @@ bool ItemManager::addItem(string itemKey)
 int ItemManager::conversion(string itemKey)
 {
 	return itemKey == "obj58" ? ITEM_TEDDYBEAR :
-		itemKey == "obj59" ? ITEM_TEDDYBEARBODY :
-		itemKey == "obj33" ? ITEM_TAEYUP :
-		itemKey == "obj11" ? ITEM_TEDDYBEARHAND : ITEM_FROH;
+			itemKey == "obj59" ? ITEM_TEDDYBEARBODY :
+			itemKey == "obj33" ? ITEM_TAEYUP :
+			itemKey == "obj11" ? ITEM_TEDDYBEARHAND : ITEM_FROH;
 		//itemKey == "frog" ? ITEM_FROH : ITEM_FROH;
 }
 
