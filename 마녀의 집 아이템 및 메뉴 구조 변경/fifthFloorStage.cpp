@@ -29,8 +29,25 @@ void fifthFloorStage::release()
 
 void fifthFloorStage::update()
 {
+	STORAGEMANAGER->setStage(FOURTHSTAGE);
+	STORAGEMANAGER->setPlayerX(_player->getPlayerLocX());
+	STORAGEMANAGER->setPlayerY(_player->getPlayerLocY());
+	STORAGEMANAGER->setPlayerDirection(_player->getPdirec());
+	STORAGEMANAGER->setFifthFloor(_real_location1);
+
+	if (KEYMANAGER->isOnceKeyDown(VK_F2)) cout << STAGEMEMORYMANAGER->getIsSkul1() << endl;
+
+	if (STORAGEMANAGER->loadView())
+	{
+		STORAGEMANAGER->getFifthFloor();
+		STORAGEMANAGER->getPlayerDirection();
+		STORAGEMANAGER->getPlayerX();
+		STORAGEMANAGER->getPlayerY();
+	}
+
 	if(!_isChangeScene)
-		_player->update();
+		if(!STORAGEMANAGER->saveView())
+			_player->update();
 	_skul->update();
 	tileCollision();
 	if (_isDead)
@@ -116,6 +133,7 @@ void fifthFloorStage::render()
 	IMAGEMANAGER->FindImage("Back2")->SetSize(Vector2(1920, 1280));
 	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("Back2"), Vector2(_player->getPlayerLocX(), _player->getPlayerLocY()));
 
+	STORAGEMANAGER->render();
 	_dead->render();
 }
 

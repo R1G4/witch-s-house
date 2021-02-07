@@ -366,6 +366,9 @@
     <ClInclude Include="stairs_2F.h">
       <Filter>playGround\scense\ThirdFloor</Filter>
     </ClInclude>
+    <ClInclude Include="iniDataManager.h">
+      <Filter>2DGameFramework\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -637,6 +640,9 @@
     </ClCompile>
     <ClCompile Include="stairs_2F.cpp">
       <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClCompile>
+    <ClCompile Include="iniDataManager.cpp">
+      <Filter>2DGameFramework\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

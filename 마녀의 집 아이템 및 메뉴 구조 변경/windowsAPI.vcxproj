@@ -187,6 +187,7 @@
     <ClInclude Include="IDLE.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="imageManager.h" />
+    <ClInclude Include="iniDataManager.h" />
     <ClInclude Include="inMenu.h" />
     <ClInclude Include="item.h" />
     <ClInclude Include="ItemManager.h" />
@@ -284,6 +285,7 @@
     <ClCompile Include="IDLE.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="imageManager.cpp" />
+    <ClCompile Include="iniDataManager.cpp" />
     <ClCompile Include="inMenu.cpp" />
     <ClCompile Include="item.cpp" />
     <ClCompile Include="ItemManager.cpp" />

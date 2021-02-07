@@ -26,11 +26,11 @@ void StorageManager::loadTitle()
 {
 	//해당 폴더 안에 존재하는(최대5개)
 	//파일들의 제목만 가지고옴
-	//_vFileSlot[0]=INIDATA->loadDataString("Save1", "스테이지", "스테이지 이름");
-	//_vFileSlot[1] = INIDATA->loadDataString("Save2", "스테이지", "스테이지 이름");
-	//_vFileSlot[2] = INIDATA->loadDataString("Save3", "스테이지", "스테이지 이름");
-	//_vFileSlot[3] = INIDATA->loadDataString("Save4", "스테이지", "스테이지 이름");
-	//_vFileSlot[4] = INIDATA->loadDataString("Save5", "스테이지", "스테이지 이름");
+	_vFileSlot[0] = INIDATA->loadDataString("Save1", "스테이지", "스테이지 이름");
+	_vFileSlot[1] = INIDATA->loadDataString("Save2", "스테이지", "스테이지 이름");
+	_vFileSlot[2] = INIDATA->loadDataString("Save3", "스테이지", "스테이지 이름");
+	_vFileSlot[3] = INIDATA->loadDataString("Save4", "스테이지", "스테이지 이름");
+	_vFileSlot[4] = INIDATA->loadDataString("Save5", "스테이지", "스테이지 이름");
 }
 
 MENUSTATE StorageManager::saveView()
@@ -42,11 +42,11 @@ MENUSTATE StorageManager::saveView()
 	if (KEYMANAGER->isOnceKeyDown('X') * (int) 'X')
 		return _toggle == true ? MENU_PROGRESS : MENU_BACK;
 	
-	/*_vFileSlot[0] = INIDATA->loadDataString("Save1", "스테이지", "스테이지 이름");
+	_vFileSlot[0] = INIDATA->loadDataString("Save1", "스테이지", "스테이지 이름");
 	_vFileSlot[1] = INIDATA->loadDataString("Save2", "스테이지", "스테이지 이름");
 	_vFileSlot[2] = INIDATA->loadDataString("Save3", "스테이지", "스테이지 이름");
 	_vFileSlot[3] = INIDATA->loadDataString("Save4", "스테이지", "스테이지 이름");
-	_vFileSlot[4] = INIDATA->loadDataString("Save5", "스테이지", "스테이지 이름");*/
+	_vFileSlot[4] = INIDATA->loadDataString("Save5", "스테이지", "스테이지 이름");
 
 	//저장소 오픈
 	storageOpen();
@@ -96,7 +96,7 @@ bool StorageManager::saveData()
 	//저장 완료한다면 true를 반환
 	save_enum = (int)_saveStage;
 	save_s_enum = to_string(save_enum);
-	/*switch (_saveStage)
+	switch (_saveStage)
 	{
 	case OPENING:
 		INIDATA->addData("스테이지", "스테이지 이름", "시작의 정원");
@@ -121,6 +121,72 @@ bool StorageManager::saveData()
 	case FOURTHSTAGE:
 		INIDATA->addData("스테이지", "스테이지 이름", "마녀의 집 4층");
 		INIDATA->addData("스테이지", "스테이지 번호(OPENING:0,FINAL:5)", save_s_enum.c_str());
+
+		_save_x = (int)(_player_x);
+		_save_y = (int)(_player_y);
+		_save_s_x = to_string(_save_x);
+		_save_s_y = to_string(_save_y);
+
+		_save_obj[0] = to_string(STAGEMEMORYMANAGER->getIsSkul1());
+		_save_obj[1] = to_string(STAGEMEMORYMANAGER->getIsSkul2());
+		_save_obj[2] = to_string(STAGEMEMORYMANAGER->getIsSkul3());
+		_save_obj[3] = to_string(STAGEMEMORYMANAGER->getIsSkul4());
+		_save_obj[4] = to_string(STAGEMEMORYMANAGER->getIsSkul5());
+		_save_obj[5] = to_string(STAGEMEMORYMANAGER->getIsRedFlower1());
+		_save_obj[6] = to_string(STAGEMEMORYMANAGER->getIsRedFlower2());
+		_save_obj[7] = to_string(STAGEMEMORYMANAGER->getIsRedFlower3());
+		_save_obj[8] = to_string(STAGEMEMORYMANAGER->getIsGetSkul1());
+		_save_obj[9] = to_string(STAGEMEMORYMANAGER->getIsGetSkul2());
+		_save_obj[10] = to_string(STAGEMEMORYMANAGER->getIsGetSkul3());
+		_save_obj[11] = to_string(STAGEMEMORYMANAGER->getIsGetSkul4());
+		_save_obj[12] = to_string(STAGEMEMORYMANAGER->getIsFlowerDead());
+		_save_obj[13] = to_string(STAGEMEMORYMANAGER->getIsPotion());
+		_save_obj[14] = to_string(STAGEMEMORYMANAGER->getIsKey());
+		_save_obj[15] = to_string(STAGEMEMORYMANAGER->getIsLever());
+		_save_obj[16] = to_string(STAGEMEMORYMANAGER->getIsFlowerpot());
+
+		if (_real_location == GARDEN)
+			INIDATA->addData("스테이지5", "5층씬이름", "garden_5f");
+		else if (_real_location == GARDEN_TO_BOSS)
+			INIDATA->addData("스테이지5", "5층씬이름", "gardenToBoss_5f");
+		else if (_real_location == DININGROOM)
+			INIDATA->addData("스테이지5", "5층씬이름", "diningRoom_5f");
+		else if (_real_location == PRISON)
+			INIDATA->addData("스테이지5", "5층씬이름", "prison_5f");
+		else if (_real_location == PRISON_WELL)
+			INIDATA->addData("스테이지5", "5층씬이름", "prison_well_5f");
+		else if (_real_location == PRISON_SKUL)
+			INIDATA->addData("스테이지5", "5층씬이름", "prison_skul_5f");
+
+		INIDATA->addData("비올라", "x좌표", _save_s_x.c_str());
+		INIDATA->addData("비올라", "y좌표", _save_s_y.c_str());
+		if (_player_direction == CHRDIREC_LEFT)
+			INIDATA->addData("비올라", "포지션", "CHRDIREC_LEFT");
+		else if (_player_direction == CHRDIREC_RIGHT)
+			INIDATA->addData("비올라", "포지션", "CHRDIREC_RIGHT");
+		else if (_player_direction == CHRDIREC_UP)
+			INIDATA->addData("비올라", "포지션", "CHRDIREC_UP");
+		else if (_player_direction == CHRDIREC_DOWN)
+			INIDATA->addData("비올라", "포지션", "CHRDIREC_DOWN");
+
+		INIDATA->addData("오브젝트", "해골1", _save_obj[0].c_str());
+		INIDATA->addData("오브젝트", "해골2", _save_obj[1].c_str());
+		INIDATA->addData("오브젝트", "해골3", _save_obj[2].c_str());
+		INIDATA->addData("오브젝트", "해골4", _save_obj[3].c_str());
+		INIDATA->addData("오브젝트", "해골5", _save_obj[4].c_str());
+		INIDATA->addData("오브젝트", "빨간꽃1", _save_obj[5].c_str());
+		INIDATA->addData("오브젝트", "빨간꽃2", _save_obj[6].c_str());
+		INIDATA->addData("오브젝트", "빨간꽃3", _save_obj[7].c_str());
+		INIDATA->addData("오브젝트", "해골득1", _save_obj[8].c_str());
+		INIDATA->addData("오브젝트", "해골득2", _save_obj[9].c_str());
+		INIDATA->addData("오브젝트", "해골득3", _save_obj[10].c_str());
+		INIDATA->addData("오브젝트", "해골득4", _save_obj[11].c_str());
+		INIDATA->addData("오브젝트", "하얀꽃죽음", _save_obj[12].c_str());
+		INIDATA->addData("오브젝트", "물약", _save_obj[13].c_str());
+		INIDATA->addData("오브젝트", "열쇠", _save_obj[14].c_str());
+		INIDATA->addData("오브젝트", "레버", _save_obj[15].c_str());
+		INIDATA->addData("오브젝트", "꽃병", _save_obj[16].c_str());
+
 		INIDATA->iniSave(fileName);
 		break;
 	case FINALSTAGE:
@@ -128,7 +194,7 @@ bool StorageManager::saveData()
 		INIDATA->addData("스테이지","스테이지 번호(OPENING:0,FINAL:5)",save_s_enum.c_str());
 		INIDATA->iniSave(fileName);
 		break;
-	}*/
+	}
 	return false;
 }
 
@@ -148,6 +214,57 @@ bool StorageManager::loadData()
 	case THIRDSTAGE:
 		break;
 	case FOURTHSTAGE:
+		if (_selectedStorage == FIRST)
+			_load_file_name = "Save1";
+		else if (_selectedStorage == SECOND)
+			_load_file_name = "Save2";
+		else if (_selectedStorage == THIRD)
+			_load_file_name = "Save3";
+		else if (_selectedStorage == FOURTH)
+			_load_file_name = "Save4";
+		else if (_selectedStorage == FIFTH)
+			_load_file_name = "Save5";
+		_load_string_stage = INIDATA->loadDataString(_load_file_name.c_str(), "스테이지5", "5층씬이름");
+
+		//_load_x_i = INIDATA->loadDataInterger(_load_file_name.c_str(), "비올라", "x좌표");
+		//_load_y_i = INIDATA->loadDataInterger(_load_file_name.c_str(), "비올라", "y좌표");
+		//_load_string_position = INIDATA->loadDataString(_load_file_name.c_str(), "비올라", "포지션");
+		_player_x = INIDATA->loadDataInterger(_load_file_name.c_str(), "비올라", "x좌표");
+		_player_y = INIDATA->loadDataInterger(_load_file_name.c_str(), "비올라", "y좌표");
+		_load_string_position = INIDATA->loadDataString(_load_file_name.c_str(), "비올라", "포지션");
+
+		STAGEMEMORYMANAGER->setIsSkul1(INIDATA->loadDataInterger(_load_file_name.c_str(), "오브젝트", "해골1"));
+		STAGEMEMORYMANAGER->setIsSkul2(INIDATA->loadDataInterger(_load_file_name.c_str(), "오브젝트", "해골2"));
+		STAGEMEMORYMANAGER->setIsSkul3(INIDATA->loadDataInterger(_load_file_name.c_str(), "오브젝트", "해골3"));
+		STAGEMEMORYMANAGER->setIsSkul4(INIDATA->loadDataInterger(_load_file_name.c_str(), "오브젝트", "해골4"));
+		STAGEMEMORYMANAGER->setIsSkul5(INIDATA->loadDataInterger(_load_file_name.c_str(), "오브젝트", "해골5"));
+		STAGEMEMORYMANAGER->setIsRedFlower1(INIDATA->loadDataInterger(_load_file_name.c_str(), "오브젝트", "빨간꽃1"));
+		STAGEMEMORYMANAGER->setIsRedFlower2(INIDATA->loadDataInterger(_load_file_name.c_str(), "오브젝트", "빨간꽃2"));
+		STAGEMEMORYMANAGER->setIsRedFlower3(INIDATA->loadDataInterger(_load_file_name.c_str(), "오브젝트", "빨간꽃3"));
+		STAGEMEMORYMANAGER->setIsGetSkul1(INIDATA->loadDataInterger(_load_file_name.c_str(), "오브젝트", "해골득1"));
+		STAGEMEMORYMANAGER->setIsGetSkul2(INIDATA->loadDataInterger(_load_file_name.c_str(), "오브젝트", "해골득2"));
+		STAGEMEMORYMANAGER->setIsGetSkul3(INIDATA->loadDataInterger(_load_file_name.c_str(), "오브젝트", "해골득3"));
+		STAGEMEMORYMANAGER->setIsGetSkul4(INIDATA->loadDataInterger(_load_file_name.c_str(), "오브젝트", "해골득4"));
+		STAGEMEMORYMANAGER->setIsFlowerDead(INIDATA->loadDataInterger(_load_file_name.c_str(), "오브젝트", "하얀꽃죽음"));
+		STAGEMEMORYMANAGER->setIsPotion(INIDATA->loadDataInterger(_load_file_name.c_str(), "오브젝트", "물약"));
+		STAGEMEMORYMANAGER->setIsKey(INIDATA->loadDataInterger(_load_file_name.c_str(), "오브젝트", "열쇠"));
+		STAGEMEMORYMANAGER->setIsLever(INIDATA->loadDataInterger(_load_file_name.c_str(), "오브젝트", "레버"));
+		STAGEMEMORYMANAGER->setIsFlowerpot(INIDATA->loadDataInterger(_load_file_name.c_str(), "오브젝트", "꽃병"));
+
+		/*
+		if (_load_string_position == "CHRDIREC_LEFT")
+			_player->setDirec(CHRDIREC_LEFT);
+		else if (_load_string_position == "CHRDIREC_RIGHT")
+			_player->setDirec(CHRDIREC_RIGHT);
+		else if (_load_string_position == "CHRDIREC_UP")
+			_player->setDirec(CHRDIREC_UP);
+		else if (_load_string_position == "CHRDIREC_DOWN")
+			_player->setDirec(CHRDIREC_DOWN);
+		*/
+		SCENEMANAGER->changeScene(_load_string_stage/*, _player->getPdirec(), LOCATION_DEFAULT*/);
+
+		//_player->setPLocaX(_load_x_i);
+		//_player->setPLocaY(_load_y_i);
 		break;
 	case FINALSTAGE:
 		break;

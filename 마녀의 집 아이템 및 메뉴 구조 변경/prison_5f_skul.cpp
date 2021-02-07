@@ -4,6 +4,7 @@
 
 HRESULT prison_5f_skul::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
+	_real_location1 = PRISON_SKUL;
 	_player->setDirec(_chrdirection);
 
 	//타일 불러오기
@@ -19,7 +20,7 @@ HRESULT prison_5f_skul::init(CHRDIRECTION _chrdirection, LOCATION _location)
 	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
 	fifthFloorStage::init();
 
-	cout << STAGEMEMORYMANAGER->getIsSkul1() << endl;
+	//cout << STAGEMEMORYMANAGER->getIsSkul1() << endl;
 
 	return S_OK;
 }

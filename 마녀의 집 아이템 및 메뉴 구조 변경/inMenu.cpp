@@ -167,7 +167,7 @@ void inMenu::selectedContents()
 	{
 		SOUNDMANAGER->play("cursor", 0.5f);
 		_isConnecting = true;
-		cout << _isConnecting;
+		//cout << _isConnecting;
 	}
 }
 

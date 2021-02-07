@@ -41,6 +41,8 @@ protected:
 
 	bool _isStopToRead;			// 다이어로그용
 	vector<string> _vScript;
+
+	LOCATION5F _real_location1;
 public:
 	fifthFloorStage() {};
 	~fifthFloorStage() {};

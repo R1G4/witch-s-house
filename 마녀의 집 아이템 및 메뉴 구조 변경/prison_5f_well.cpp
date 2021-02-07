@@ -4,6 +4,7 @@
 
 HRESULT prison_5f_well::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
+	_real_location1 = PRISON_WELL;
 	_player->setDirec(_chrdirection);
 
 	//타일 불러오기

@@ -4,6 +4,7 @@
 
 HRESULT prison_5f::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
+	_real_location1 = PRISON;
 	_player->setDirec(_chrdirection);
 
 	//타일 불러오기
@@ -13,7 +14,7 @@ HRESULT prison_5f::init(CHRDIRECTION _chrdirection, LOCATION _location)
 	fifthFloorStage::init();
 
 	getMemory();
-	cout << STAGEMEMORYMANAGER->getIsPotion() << endl;
+	//cout << STAGEMEMORYMANAGER->getIsPotion() << endl;
 	_skulX = _tiles[SUMMONSKUL].rc.left / TILESIZE;
 	_skulY = _tiles[SUMMONSKUL].rc.top / TILESIZE;
 	_playerTile = new astarTile;
@@ -32,6 +33,7 @@ void prison_5f::release()
 
 void prison_5f::update()
 {
+	//if (KEYMANAGER->isOnceKeyDown(VK_F3)) 
 	if (!_isStopToRead)
 	{
 		fifthFloorStage::update();
@@ -94,6 +96,7 @@ void prison_5f::render()
 
 	if (_isStopToRead)
 		TEXTMANAGER->renderText();
+
 }
 
 void prison_5f::Collision()

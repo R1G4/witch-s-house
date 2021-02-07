@@ -33,6 +33,7 @@ HRESULT gameNode::init(bool managerInit)
 		SCENEMANAGER->init();
 
 		TXTDATA->init();
+		INIDATA->init();
 	}
 	return S_OK;
 }
@@ -60,6 +61,7 @@ void gameNode::release()
 
 		TXTDATA->release();
 		TXTDATA->releaseSingleton();
+		INIDATA->releaseSingleton();
 
 		TIMEMANAGER->release();
 		TIMEMANAGER->releaseSingleton();

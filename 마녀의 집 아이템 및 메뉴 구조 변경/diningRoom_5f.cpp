@@ -4,6 +4,7 @@
 
 HRESULT diningRoom_5f::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
+	_real_location1 = DININGROOM;
 	_player->setDirec(_chrdirection);
 
 	//타일 불러오기
