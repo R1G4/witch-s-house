@@ -49,6 +49,10 @@ bool ItemManager::addItem(string itemKey)
 		_item.name = L"ÅÂ¿±";
 		_item.contents = L"½Ã°è¿¡¼­ ²¨³½ ³ì½¼ÅÂ¿±";
 		break;
+	case ITEM_AKBO:
+		_item.name = L"ÇÇ¾Æ³ë ¾Çº¸";
+		_item.contents = L"¿À¼±Áö¿¡ ±×·ÁÁø ¾Çº¸´Ù";
+		break;
 	}
 	_vItem.push_back(_item);
 
@@ -60,6 +64,7 @@ int ItemManager::conversion(string itemKey)
 {
 	return itemKey == "obj58" ? ITEM_TEDDYBEAR :
 			itemKey == "obj59" ? ITEM_TEDDYBEARBODY :
+			itemKey == "obj44" ? ITEM_AKBO :
 			itemKey == "obj33" ? ITEM_TAEYUP :
 			itemKey == "obj11" ? ITEM_TEDDYBEARHAND : ITEM_FROH;
 		//itemKey == "frog" ? ITEM_FROH : ITEM_FROH;

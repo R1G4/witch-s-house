@@ -49,6 +49,7 @@ HRESULT soundStageN::init(CHRDIRECTION _CHRDIRECTION)
 		IMAGEMANAGER->AddFrameImage("SavePoint", L"Image/mapTool/saveCat.png", 16, 4);
 		IMAGEMANAGER->AddImage("닫힌피아노", L"Image/piano-C.png");
 		IMAGEMANAGER->AddImage("열린피아노", L"Image/piano-O.png");
+		IMAGEMANAGER->AddImage("문", L"Image/obj/30.png");
 
 
 
@@ -63,13 +64,14 @@ HRESULT soundStageN::init(CHRDIRECTION _CHRDIRECTION)
 		camera.y = _player->getPlayerLocY();
 		CAMERAMANAGER->setCamera(camera);
 
-		Px = WINSIZEX / 2 - 375 + 48 * 15;
+		Px = WINSIZEX / 2 - 399 + 48 * 15;
 		Py = WINSIZEY / 2 - 114 + 48 * 7;
 
 		mapChange[0].x = WINSIZEX / 2 - 378 + 48 * 20;
 		mapChange[0].y = WINSIZEY / 2 - 120 + 48 * 14;
 
 		mapChange[0].rc = RectMakeCenter(mapChange[0].x, mapChange[0].y, 120, 24);
+	
 	}
 
 	return S_OK;
@@ -81,12 +83,141 @@ void soundStageN::release()
 
 void soundStageN::update()
 {
-	camera.x = _player->getPlayerLocX();
-	camera.y = _player->getPlayerLocY();
+	if (!_isClick && !_isStopToRead)
+	{
+		camera.x = _player->getPlayerLocX();
+		camera.y = _player->getPlayerLocY();
 
-	CAMERAMANAGER->setCamera(Vector2(camera.x - WINSIZEX / 2, camera.y - WINSIZEY / 2));
-	_player->update();
-	tileCollision();
+		CAMERAMANAGER->setCamera(Vector2(camera.x - WINSIZEX / 2, camera.y - WINSIZEY / 2));
+		_player->update();
+		tileCollision();
+		cout << "x : " << (int)(_player->getPlayerLocX()) / TILESIZE << " y : " << (int)(_player->getPlayerLocY()) / TILESIZE << endl;
+		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+		{
+			_isStopToRead = TEXTMANAGER->setNextScript(true);
+			if (IntersectRectToRect(&_tiles[P1].rc, &_player->getSearchRc()))
+			{
+				_isClick = true;
+			}
+			if (IntersectRectToRect(&_tiles[P2].rc, &_player->getSearchRc()))
+			{
+				_isClick = true;
+			}
+			if (IntersectRectToRect(&_tiles[P3].rc, &_player->getSearchRc()))
+			{
+				_isClick = true;
+			}
+		}
+	}
+	else if (_isStopToRead)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+		{
+			_isStopToRead = TEXTMANAGER->setNextScript(true);
+		}
+	}
+	if (_isClick)
+	{
+		_correct_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+		if (_rcAlpha >= 0.9f)
+			_rcAlphaChange = -0.03f;
+
+		if (_rcAlpha <= 0.35f)
+			_rcAlphaChange = 0.03f;
+
+		_rcAlpha += _rcAlphaChange;
+		if (STAGEMEMORYMANAGER->getIsGetAkbo() && !STAGEMEMORYMANAGER->getIsPiano())
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+			{
+				_left = true;
+				_right = false;
+				_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+			}
+			if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+			{
+				_left = false;
+				_right = true;
+				_rc = RectMakePivot(Vector2(WINSIZEX / 2 + 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+			}
+			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+			{
+				if (_left)
+				{
+					_isClick = false;
+					_isStopToRead = true;
+					STAGEMEMORYMANAGER->setIsPiano(true);
+					STAGEMEMORYMANAGER->setIsGetAkbo(false);
+					ITEMMANAGER->useItem("obj44");
+					_vScript = TEXTMANAGER->loadFile("dialog/4f/4f_Piano_On.txt");
+				}
+				if (_right)
+				{
+					_isClick = false;
+				}
+			}
+		}
+		if (!STAGEMEMORYMANAGER->getIsGetAkbo() && !STAGEMEMORYMANAGER->getIsPiano())
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+			{
+				_left = true;
+				_right = false;
+				_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+			}
+			if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+			{
+				_left = false;
+				_right = true;
+				_rc = RectMakePivot(Vector2(WINSIZEX / 2 + 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+			}
+			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+			{
+				if (_left)
+				{
+					_isClick = false;
+					_isStopToRead = true;
+					_vScript = TEXTMANAGER->loadFile("dialog/4f/4f_Piano_No.txt");
+				}
+				if (_right)
+				{
+					_isClick = false;
+				}
+			}
+		}
+		if (!STAGEMEMORYMANAGER->getIsGetAkbo() && STAGEMEMORYMANAGER->getIsPiano())
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+			{
+				_left = true;
+				_right = false;
+				_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+			}
+			if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+			{
+				_left = false;
+				_right = true;
+				_rc = RectMakePivot(Vector2(WINSIZEX / 2 + 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+			}
+			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+			{
+				if (_left)
+				{
+					_isClick = false;
+					_isStopToRead = true;
+					STAGEMEMORYMANAGER->setIsPiano(false);
+					STAGEMEMORYMANAGER->setIsGetAkbo(true);
+					ITEMMANAGER->addItem("obj44");
+					_vScript = TEXTMANAGER->loadFile("dialog/4f/4f_Piano_Close.txt");
+				}
+				if (_right)
+				{
+					_isClick = false;
+				}
+			}
+		}
+	}
+		
 }
 
 void soundStageN::render()
@@ -105,13 +236,23 @@ void soundStageN::render()
 				}
 				if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
 				CAMERAMANAGER->renderRc(mapChange[0].rc, D2D1::ColorF::White, 1.0f, 24);
-
 			}
 
 		}
 	}
-	ZORDER->insert(Px, Py, "닫힌피아노", ZOBJECT);
-	ZORDER->insert(_player->getPlayerLocX(), _player->getPlayerLocY(), ZPLAYER);
+	if (!STAGEMEMORYMANAGER->getIsPiano())
+	{
+		ZORDER->insert(Px, Py, "닫힌피아노", ZOBJECT);
+	}
+	else
+		ZORDER->insert(Px, Py, "열린피아노", ZOBJECT);
+
+	if (STAGEMEMORYMANAGER->getIsPiano() && STAGEMEMORYMANAGER->getIsOpen())
+	{
+		ZORDER->insert(WINSIZEX / 2 + 82 + 48 * 10, WINSIZEY / 2 - 36, "문", ZOBJECT);
+	}
+
+	
 
 	ZORDER->insert(_player->getPlayerLocX(), _player->getPlayerLocY(), ZPLAYER);
 	for (int i = 0; i < TILEY; i++)
@@ -136,6 +277,36 @@ void soundStageN::render()
 		}
 	}
 	ZORDER->release();
+	if (_isStopToRead)
+	{
+		TEXTMANAGER->renderText();
+	}
+	if (_isClick)
+	{
+		if (!STAGEMEMORYMANAGER->getIsPiano())
+		{
+			CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(camera.x - 250, camera.y));
+			CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(camera.x + 250, camera.y));
+
+			D2DINS->GetInstance()->RenderText(WINSIZEX / 2 - 325, 345, L"악보를 올린다", RGB(255, 255, 255), 0.85f, 27);
+			D2DINS->GetInstance()->RenderText(WINSIZEX / 2 + 117, 345, L"아무것도 하지 않는다", RGB(255, 255, 255), 0.85f, 27);
+
+			D2DINS->FillRectangle(_rc, D2D1::ColorF::Enum::WhiteSmoke, _rcAlpha / 5.5f);
+			D2DINS->GetInstance()->DrawRectangle(_rc, D2D1::ColorF::White, _rcAlpha, 1.0f);
+		}
+		if (STAGEMEMORYMANAGER->getIsPiano())
+		{
+			CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(camera.x - 250, camera.y));
+			CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(camera.x + 250, camera.y));
+
+			D2DINS->GetInstance()->RenderText(WINSIZEX / 2 - 330, 345, L"악보를 가져온다", RGB(255, 255, 255), 0.85f, 27);
+			D2DINS->GetInstance()->RenderText(WINSIZEX / 2 + 117, 345, L"아무것도 하지 않는다", RGB(255, 255, 255), 0.85f, 27);
+
+			D2DINS->FillRectangle(_rc, D2D1::ColorF::Enum::WhiteSmoke, _rcAlpha / 5.5f);
+			D2DINS->GetInstance()->DrawRectangle(_rc, D2D1::ColorF::White, _rcAlpha, 1.0f);
+		}
+	}
+	
 }
 
 void soundStageN::load()
@@ -189,10 +360,17 @@ void soundStageN::tileCollision()
 					break;
 				}
 			}
+			
 		}
 	}
 	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange[0].rc))
 	{
 		SCENEMANAGER->changeScene("4층홀", CHRDIREC_DOWN);
+	}
+	if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[DOOR].rc) && STAGEMEMORYMANAGER->getIsPiano() && STAGEMEMORYMANAGER->getIsOpen())
+	{
+		/////////////////////////다음스테이지 넣을곳///////////////////////////
+		SCENEMANAGER->changeScene("garden_5f", CHRDIREC_UP, LOCATION_1);
+		/////////////////////////////////////////////////////////////////////
 	}
 }

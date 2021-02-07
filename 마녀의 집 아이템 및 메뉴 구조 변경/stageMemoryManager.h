@@ -19,6 +19,7 @@ private:
 	bool isGetAkbo;
 	bool isOpen;
 	bool isOpenFake;
+	bool isPiano;
 
 	//5Ãþ
 	bool isSkuls_1;
@@ -57,6 +58,7 @@ public:
 	bool getIsGetAkbo() { return isGetAkbo; }
 	bool getIsOpen() { return isOpen; }
 	bool getIsOpenFake() { return isOpenFake; }
+	bool getIsPiano() { return isPiano; }
 
 	//5Ãþ	
 	bool getIsSkul1() { return isSkuls_1; }
@@ -92,7 +94,7 @@ public:
 	void setIsGetAkbo(bool IsGetAkbo) { isGetAkbo = IsGetAkbo; }
 	void setIsOpen(bool IsOpen) { isOpen = IsOpen; }
 	void setIsOpenFake(bool IsOpenFake) { isOpenFake = IsOpenFake; }
-
+	void setIsPiano(bool IsPiano) { isPiano = IsPiano; }
 
 	//5Ãþ
 	void setIsSkul1(bool _skul) { isSkuls_1 = _skul; }

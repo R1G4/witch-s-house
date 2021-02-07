@@ -17,8 +17,8 @@ HRESULT soundStageW::init()
 	IMAGEMANAGER->AddFrameImage("SavePoint", L"Image/mapTool/saveCat.png", 16, 4);
 	IMAGEMANAGER->AddImage("´ÝÈù ¿À¸£°ñ", L"Image/orgole-C.png");
 	IMAGEMANAGER->AddImage("¿­¸° ¿À¸£°ñ", L"Image/orgole-O.png");
-	
-	
+
+
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
 
 	_player = new Player;
@@ -28,15 +28,15 @@ HRESULT soundStageW::init()
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
 	CAMERAMANAGER->setCamera(camera);
-	
+
 	_isStopToRead = false;
 	_isClick = false;
 	_disCover = false;
 
 
 
-	mapChange.x = WINSIZEX / 2 + 343 + 48*12;
-	mapChange.y = WINSIZEY / 2 - 120 + 48*10;
+	mapChange.x = WINSIZEX / 2 + 343 + 48 * 12;
+	mapChange.y = WINSIZEY / 2 - 120 + 48 * 10;
 
 	mapChange.rc = RectMakeCenter(mapChange.x, mapChange.y, 24, 72);
 
@@ -80,35 +80,33 @@ void soundStageW::update()
 			_isStopToRead = TEXTMANAGER->setNextScript(true);
 		}
 	}
+	_correct_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+	if (_rcAlpha >= 0.9f)
+		_rcAlphaChange = -0.03f;
+
+	if (_rcAlpha <= 0.35f)
+		_rcAlphaChange = 0.03f;
+	_rcAlpha += _rcAlphaChange;
+
 	if (_isClick)
 	{
 		if (!_open && !STAGEMEMORYMANAGER->getIsGetTae())
 		{
-			_correct_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
-			if (_rcAlpha >= 0.9f)
-				_rcAlphaChange = -0.03f;
-
-			if (_rcAlpha <= 0.35f)
-				_rcAlphaChange = 0.03f;
-
-			_rcAlpha += _rcAlphaChange;
 			if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 			{
 				_left = true;
 				_right = false;
 				_choose = true;
-				_disCover = true;
 				_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
-				
+
 			}
 			if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 			{
 				_left = false;
 				_right = true;
 				_choose = true;
-				_disCover = false;
 				_rc = RectMakePivot(Vector2(WINSIZEX / 2 + 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
-		
+
 			}
 			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 			{
@@ -116,6 +114,9 @@ void soundStageW::update()
 				{
 					STAGEMEMORYMANAGER->setIsOpenFake(true);
 					STAGEMEMORYMANAGER->setIsOpen(false);
+					_vScript = TEXTMANAGER->loadFile("dialog/4f/4f_Open.txt");
+					_isStopToRead = true;
+					_open = true;
 				}
 				if (_right)
 				{
@@ -124,146 +125,164 @@ void soundStageW::update()
 				}
 				_choose = false;
 				_isClick = false;
-				if (_disCover)
-				{
-					_vScript = TEXTMANAGER->loadFile("dialog/4f/4f_Open.txt");
-					_isStopToRead = true;
-					_open = true;
-				}
+
 			}
+		}
+
+
+	}
+	if (!_open && STAGEMEMORYMANAGER->getIsGetTae())
+	{
+
+
+		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+		{
+			_left = true;
+			_right = false;
+			_up = false;
+			_choose = true;
+			_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
 
 		}
-		if (!_open && STAGEMEMORYMANAGER->getIsGetTae())
+		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 		{
-			_correct_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
-			if (_rcAlpha >= 0.9f)
-				_rcAlphaChange = -0.03f;
+			_left = false;
+			_right = true;
+			_up = false;
+			_choose = true;
+			_rc = RectMakePivot(Vector2(WINSIZEX / 2 + 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
 
-			if (_rcAlpha <= 0.35f)
-				_rcAlphaChange = 0.03f;
-
-			_rcAlpha += _rcAlphaChange;
-			if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
-			{
-				_left = true;
-				_right = false;
-				_up = false;
-				_choose = true;
-				_disCover = true;
-				_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
-		
-			}
-			if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
-			{
-				_left = false;
-				_right = true;
-				_up = false;
-				_choose = true;
-				_disCover = false;
-				_rc = RectMakePivot(Vector2(WINSIZEX / 2 + 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
-			
-			}
-			if (KEYMANAGER->isOnceKeyDown(VK_UP))
-			{
-				_left = false;
-				_right = false;
-				_up = true;
-				_choose = true;
-				_disCover = true;
-				_rc = RectMakePivot(Vector2(WINSIZEX / 2, WINSIZEY / 2 - 125), Vector2(270, 75), Pivot::Center);
-		
-			}
-			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-			{
-				if (_left)
-				{
-					STAGEMEMORYMANAGER->setIsOpenFake(true);
-					STAGEMEMORYMANAGER->setIsOpen(false);
-				}
-				if (_right)
-				{
-					STAGEMEMORYMANAGER->setIsOpenFake(false);
-					STAGEMEMORYMANAGER->setIsOpen(false);
-				}
-				if (_up)
-				{
-					STAGEMEMORYMANAGER->setIsOpenFake(false);
-					STAGEMEMORYMANAGER->setIsOpen(true);
-					STAGEMEMORYMANAGER->setIsGetTae(false);
-					ITEMMANAGER->useItem("obj33");
-				}
-				_choose = false;
-				_isClick = false;
-				if (_disCover)
-				{
-					_vScript = TEXTMANAGER->loadFile("dialog/4f/4f_Open.txt");
-					_isStopToRead = true;
-					_open = true;
-				}
-			}
-		
 		}
-		else if (_open)
+		if (KEYMANAGER->isOnceKeyDown(VK_UP))
 		{
-			_correct_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
-			if (_rcAlpha >= 0.9f)
-				_rcAlphaChange = -0.03f;
+			_left = false;
+			_right = false;
+			_up = true;
+			_choose = true;
+			_rc = RectMakePivot(Vector2(WINSIZEX / 2, WINSIZEY / 2 - 125), Vector2(270, 75), Pivot::Center);
 
-			if (_rcAlpha <= 0.35f)
-				_rcAlphaChange = 0.03f;
-
-			_rcAlpha += _rcAlphaChange;
-			if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+		}
+		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+		{
+			if (_left)
 			{
-				_choose = true;
-				_disCover = true;
-				_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+				STAGEMEMORYMANAGER->setIsOpenFake(true);
+				STAGEMEMORYMANAGER->setIsOpen(false);
+				_isStopToRead = true;
+				_vScript = TEXTMANAGER->loadFile("dialog/4f/4f_Open.txt");
+				_open = true;
+			}
+			if (_right)
+			{
 				STAGEMEMORYMANAGER->setIsOpenFake(false);
+				STAGEMEMORYMANAGER->setIsOpen(false);
+
 			}
-			if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+			if (_up)
 			{
-				_choose = true;
-				_disCover = false;
-				_rc = RectMakePivot(Vector2(WINSIZEX / 2 + 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+				if (STAGEMEMORYMANAGER->getIsPiano())
+				{
+					_isStopToRead = true;
+					_vScript = TEXTMANAGER->loadFile("dialog/4f/4f_Open.txt");
+				}
+				STAGEMEMORYMANAGER->setIsOpenFake(false);
+				STAGEMEMORYMANAGER->setIsOpen(true);
+				STAGEMEMORYMANAGER->setIsGetTae(false);
+				STAGEMEMORYMANAGER->setIsGetAkbo(true);
+				ITEMMANAGER->useItem("obj33");
+				
+				if (!STAGEMEMORYMANAGER->getIsPiano())
+				{
+					_isStopToRead = true;
+					_vScript = TEXTMANAGER->loadFile("dialog/4f/4f_Open_tae.txt");
+					ITEMMANAGER->addItem("obj44");
+				}
+				
+				_open = true;
+			}
+			_choose = false;
+			_isClick = false;
+
+
+		}
+
+	}
+	else if (_open)
+	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+		{
+			_left = true;
+			_right = false;
+			_choose = true;
+			_disCover = true;
+			_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+
+		}
+		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+		{
+			_left = false;
+			_right = true;
+			_choose = true;
+			_disCover = false;
+			_rc = RectMakePivot(Vector2(WINSIZEX / 2 + 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+
+
+
+		}
+		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+		{
+			if (_left)
+			{
 				if (STAGEMEMORYMANAGER->getIsOpenFake())
 				{
-					STAGEMEMORYMANAGER->setIsOpenFake(true);
-				}
-				if (STAGEMEMORYMANAGER->getIsOpen())
-				{
-					STAGEMEMORYMANAGER->setIsOpen(true);
-				}
-			
-				
-			}
-			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-			{
-				if (STAGEMEMORYMANAGER->getIsOpen())
-				{
-					STAGEMEMORYMANAGER->setIsGetTae(true);
-					ITEMMANAGER->addItem("obj33");
-				}
-				
-				_choose = false;
-				_isClick = false;
-				if (_disCover)
-				{
-					
-					if (STAGEMEMORYMANAGER->getIsOpen())
-					{
-						_vScript = TEXTMANAGER->loadFile("dialog/4f/4f_Close_tae.txt");;
-					}
-					else _vScript = TEXTMANAGER->loadFile("dialog/4f/4f_Close.txt");
 					_isStopToRead = true;
+					_vScript = TEXTMANAGER->loadFile("dialog/4f/4f_Close.txt");
+					STAGEMEMORYMANAGER->setIsOpenFake(false);
 					_open = false;
 				}
+
+				if (STAGEMEMORYMANAGER->getIsOpen())
+				{
+					if (!STAGEMEMORYMANAGER->getIsPiano())
+					{
+						_isStopToRead = true;
+						_vScript = TEXTMANAGER->loadFile("dialog/4f/4f_Close_tae_akbo.txt");
+						ITEMMANAGER->addItem("obj33");
+						ITEMMANAGER->useItem("obj44");
+						STAGEMEMORYMANAGER->setIsGetTae(true);
+						STAGEMEMORYMANAGER->setIsOpen(false);
+						STAGEMEMORYMANAGER->setIsGetAkbo(false);
+						_open = false;
+					}
+
+					if (STAGEMEMORYMANAGER->getIsPiano())
+					{
+						_isStopToRead = true;
+						_vScript = TEXTMANAGER->loadFile("dialog/4f/4f_Close_tae.txt");
+						ITEMMANAGER->addItem("obj33");
+						STAGEMEMORYMANAGER->setIsGetTae(true);
+						STAGEMEMORYMANAGER->setIsOpen(false);
+						_open = false;
+					}
+				
+				}
 			}
-		
-		}
-		
-	}
+			if (_right)
+			{
+				_isClick = false;
+			}
+
+
+			_choose = false;
+			_isClick = false;
 	
+		}
+
+	}
+
 }
+
+
 
 void soundStageW::render()
 {
@@ -281,7 +300,7 @@ void soundStageW::render()
 				}
 				if (_tiles[i*TILEX + j].terrain == TR_TRIGGER)CAMERAMANAGER->renderFillRc(_tiles[i*TILEX + j].rc, D2D1::ColorF::Aqua, 0.5);
 				CAMERAMANAGER->renderRc(mapChange.rc, D2D1::ColorF::White, 1.0f, 24);
-				
+
 			}
 
 		}
@@ -296,8 +315,8 @@ void soundStageW::render()
 	}
 
 
-	
-	
+
+
 	_player->render();
 	for (int i = 0; i < TILEY; i++)
 	{
@@ -359,7 +378,7 @@ void soundStageW::render()
 				D2DINS->FillRectangle(_rc, D2D1::ColorF::Enum::WhiteSmoke, _rcAlpha / 5.5f);
 				D2DINS->GetInstance()->DrawRectangle(_rc, D2D1::ColorF::White, _rcAlpha, 1.0f);
 			}
-			
+
 		}
 
 	}
@@ -414,7 +433,7 @@ void soundStageW::tileCollision()
 		}
 	}
 	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange.rc))
-	{	
+	{
 		if (STAGEMEMORYMANAGER->getIsOpen())
 		{
 			SCENEMANAGER->changeScene("4ÃþÈ¦", CHRDIREC_RIGHT);

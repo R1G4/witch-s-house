@@ -18,6 +18,7 @@ stageMemoryManager::stageMemoryManager() :
 	isGetAkbo(false),
 	isOpen(false),
 	isOpenFake(false),
+	isPiano(false),
 
 	// 5Ãþ
 	isSkuls_1(false),

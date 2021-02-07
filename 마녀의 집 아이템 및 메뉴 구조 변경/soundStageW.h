@@ -19,6 +19,7 @@ private:
 	bool _isStopToRead;
 	bool _isClick;
 	
+	
 	bool _open;
 	bool _choose;
 	bool _left;
