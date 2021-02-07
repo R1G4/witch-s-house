@@ -62,6 +62,29 @@ void bearRoom::update()
 		STAGEMEMORYMANAGER->setIsBearPut(true);
 		_trigger = NONE;
 		break;	
+	case bearRoom::BEAR_ACCESS:
+		_bearAccess = true;
+		_player->setState(CHR_IDLE);
+		int index;
+		for (int i = 0; i < _vFrameTile.size(); i++)
+		{
+			if (_vFrameTile[i].keyName == "바구니곰")
+			{
+				index = i;
+				break;
+			}
+		}
+		_vFrameTile[index].indexX = (cnt % 3) + 1;
+		_vFrameTile[index].rc.left -= 2;
+		_vFrameTile[index].rc.right -= 2;
+		cnt ++;
+
+		if (cnt > 10)
+		{
+			_trigger = NONE;
+			cnt = 0;
+		}
+		break;
 	case bearRoom::READ:
 		firstFloorStage::setAlpha();
 		_vScript = TEXTMANAGER->loadFile("dialog/1f/1f_bearRoom.txt");
@@ -149,8 +172,14 @@ void bearRoom::Collision()
 			case TR_TRIGGER:
 				cout << "x: " << i << "  y: " << j << "  index: " << index << endl;
 
+				if ((index == BEAR_ACCESS || index == 557) && !_bearAccess)
+				{
+					if (STAGEMEMORYMANAGER->getIsScissors() && STAGEMEMORYMANAGER->getIsBearPut() && STAGEMEMORYMANAGER->getIsBearPickUp())
+						_trigger = BEAR_ACCESS;
+				}
+
 				//그외 트리거 받아오기
-				if(index != BEAR_PUT && _trigger != READ)
+				if(index != BEAR_PUT && _trigger != READ && _trigger != BEAR_ACCESS)
 					_trigger = index == 556 ? DOOR_LEFT_OPEN :
 							   index == DOOR_LEFT_OPEN ? DOOR_LEFT_OPEN : NONE;
 

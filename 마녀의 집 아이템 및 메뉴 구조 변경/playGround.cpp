@@ -32,7 +32,7 @@ HRESULT playGround::init()
 	//SCENEMANAGER->changeScene("MapToolScene");
 	//SCENEMANAGER->changeScene("4ÃşÈ¦");
 
-	SCENEMANAGER->changeScene("stairs_2F");
+	SCENEMANAGER->changeScene("entranceFake");
 	//SCENEMANAGER->changeScene("prison_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
 	//SCENEMANAGER->changeScene("thirdMain");
 	//SOUNDMANAGER->play("main");

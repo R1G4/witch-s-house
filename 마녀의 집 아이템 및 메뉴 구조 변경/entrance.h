@@ -8,7 +8,7 @@ class entrance : public firstFloorStage
 		NONE = 0,
 		DOOR_LEFT_OPEN = 496,
 		DOOR_RIGHT_OPEN = 508,
-		CAT_TALK,
+		CAT_TALK = 381,
 		CANDLE_OFF = 442,
 		VASE_DOWN = 499,
 		DELAY,

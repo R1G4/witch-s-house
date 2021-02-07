@@ -138,7 +138,7 @@ void DeadManager::update()
 
 			//반복적으로 쑤신당..
 			_endCount++;
-			if (_endCount > 20)
+			if (_endCount > 20 && !_gameOver)
 			{
 				_endCount = 0;
 				_gameOver = true;
@@ -146,7 +146,8 @@ void DeadManager::update()
 		}
 		if (_gameOver)
 			_endCount++;
-		if (_endCount > 100)SCENEMANAGER->changeScene("시작화면");
+		if (_endCount > 100)
+			SCENEMANAGER->changeScene("시작화면");
 		break;
 	}
 }

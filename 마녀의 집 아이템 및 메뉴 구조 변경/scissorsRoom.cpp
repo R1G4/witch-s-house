@@ -14,6 +14,7 @@ HRESULT scissorsRoom::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
 	_player->setDirec(_chrdirection);
 
+	int temp = (int)"sdas";
 	//타일 불러오기
 	load();
 
@@ -33,6 +34,7 @@ void scissorsRoom::release()
 
 void scissorsRoom::update()
 {
+	//
 	//프레임 인덱스 셋팅
 	setFrameIndex();
 	switch (_trigger)
@@ -80,6 +82,14 @@ void scissorsRoom::update()
 			_trigger = NONE;
 		}
 		break;
+	case scissorsRoom::DOOR_UP_OPEN:
+		firstFloorStage::setAlpha();
+		_isBlood = true;
+		break;
+	case scissorsRoom::DOOR_UP_OPEN2:
+		SCENEMANAGER->changeScene("stairs_2F");
+		//firstFloorStage::sceneChange("stairs_2F");
+		break;
 	default:
 		_delay= 0 ;
 		_trigger = NONE;
@@ -117,6 +127,7 @@ void scissorsRoom::Collision()
 				//곰을 가져간 상태이며 가위를 자르지 않았고 바구니에 넣지도 않았을때만 
 				if (!STAGEMEMORYMANAGER->getIsScissors() && 
 					!STAGEMEMORYMANAGER->getIsBearPut() &&
+					!STAGEMEMORYMANAGER->getIsBearComing() &&
 					STAGEMEMORYMANAGER->getIsBearPickUp())
 
 				//텍스를 넣는 동시에 폼 실행
@@ -154,10 +165,6 @@ void scissorsRoom::Collision()
 			//타일 충돌(이동을 못하는 타일)은 같으므로 참조된 클래스에서 돌린다.
 			firstFloorStage::tileCollision(i, j);
 
-			//해당 타일의 속에 따라
-			//추후에 타일 속성 예외가 적을 경우 스위치문에서 if문으로 변경 할 생각임
-			cout << "x: " << i << "  y: " << j << "  index: " << index << endl;
-
 			switch (_tiles[index].terrain)
 			{
 			case TR_TRIGGER:
@@ -177,6 +184,23 @@ void scissorsRoom::Collision()
 						_vFrameTile[k].isTrigger = true;
 						_trigger = (TRIGGER)index;
 						STAGEMEMORYMANAGER->setIsPalmRight(true);
+					}
+					//만약 타일의 프레임 이미지가 문.. 머시기라면
+					if (_tiles[index].keyName.find("문") != string::npos && _tiles[index].keyName.size() <= 3)
+					{
+						//해당 프레임 이미지를 찾아서
+						for (int k = 0; k < _vFrameTile.size(); k++)
+						{
+							if (_vFrameTile[k].indexX == i && _vFrameTile[k].indexY == j && _vFrameTile[k].keyName == _tiles[index].keyName)
+							{
+								if (STAGEMEMORYMANAGER->getIsBearComing() && STAGEMEMORYMANAGER->getIsBearComing2())
+									_trigger = DOOR_UP_OPEN2;
+								else
+									_trigger = DOOR_UP_OPEN;
+								//트리거를 발동한다.
+								_vFrameTile[k].isTrigger = true;
+							}
+						}
 					}
 				}
 				break;

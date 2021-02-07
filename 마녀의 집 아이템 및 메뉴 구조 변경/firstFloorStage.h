@@ -29,6 +29,7 @@ protected:
 	int _delay;					//딜레이(특정 트리거 밞을 시 멈칫 하는 ?)
 	bool isTrigger;
 	bool _isBlood;
+	float _light;
 
 	//A* 관련 변수
 //private:
@@ -67,7 +68,7 @@ public:
 	void getFrameTile();
 	void setFrameIndex();			// 배치된 프레임 이미지의 인덱스 설정 
 	void tileCollision(int i, int j);
-	void sceneChange(string name, CHRDIRECTION _chrdirection, LOCATION _location);
+	void sceneChange(string name, CHRDIRECTION _chrdirection = CHRDIREC_UP, LOCATION _location = LOCATION_DEFAULT);
 	void setAlpha();
 	void addresslink(Player* player) { _player = player; }
 

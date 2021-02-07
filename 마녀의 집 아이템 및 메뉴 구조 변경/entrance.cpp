@@ -181,10 +181,24 @@ void entrance::Collision()
 		for (int j = 0; j < TILEX; j++)
 		{
 			int index = i * TILEX + j;
+
+			//어느 타일과 플레이어 상호작용 렉트가 충돌하였다면
+			if (IntersectRectToRect(&_tiles[index].rc, &_player->getSearchRc()))
+			{
+				//텍스를 넣는 동시에 폼 실행
+				if ((TRIGGER)index == CAT_TALK)
+				{
+					STORAGEMANAGER->loadView();
+
+					//_trigger = CAT_TALK;
+				}
+			}
+
+
 			//어느 타일과 충돌 했을 경우
 			if (!IntersectRectToRect(&_tiles[index].rc, &_player->getPlayerFrc())) continue;
-			cout << "x: " << j << "  y: " << i << "  index: " << index << endl;
-			//타일 충돌(이동을 못하는 타일)은 같으므로 참조된 클래스에서 돌린다.
+
+
 			firstFloorStage::tileCollision(i, j);
 			//해당 타일의 속에 따라
 			//추후에 타일 속성 예외가 적을 경우 스위치문에서 if문으로 변경 할 생각임
@@ -222,7 +236,7 @@ void entrance::Collision()
 					else if(!_isBlood/*STAGEMEMORYMANAGER->getIsBearPickUp()*/)
 						_trigger = (TRIGGER)index;
 				}
-				else if ((TRIGGER)index != CANDLE_OFF && (TRIGGER)index != VASE_DOWN)
+				else if ((TRIGGER)index != CANDLE_OFF && (TRIGGER)index != VASE_DOWN && (TRIGGER)index != CAT_TALK)
 				{
 					_trigger = index == 556 ? DOOR_LEFT_OPEN : 
 							   index == 568 ? DOOR_RIGHT_OPEN : (TRIGGER)index;

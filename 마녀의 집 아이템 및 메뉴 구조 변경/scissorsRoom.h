@@ -8,6 +8,7 @@ class scissorsRoom : public firstFloorStage
 		NONE = 0,
 		DOOR_RIGHT_OPEN = 504,
 		DOOR_UP_OPEN = 379,
+		DOOR_UP_OPEN2 =1,
 		BEAR_PUT,
 		PALM = 501,
 		SCISSORS = 618,

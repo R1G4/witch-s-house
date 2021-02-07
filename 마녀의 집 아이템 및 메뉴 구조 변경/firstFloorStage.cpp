@@ -22,7 +22,7 @@ HRESULT firstFloorStage::init()
 	getFrameTile();
 	_sceneAlpha = 0.05;
 	_delay = 0;
-
+	_light = 1.f;
 	return S_OK;
 }
 
@@ -62,7 +62,16 @@ void firstFloorStage::release()
 
 void firstFloorStage::update()
 {
-	if (!_isForm) _player->update();
+
+	//플레이어 선택창이 열렸거나 혹은 데드씬이 존재하며 데드씬이 실행된 경우
+	if (_isForm || (_dead && _dead->getIsDead()))
+	{
+		//업데이트를 제외하고 프레임만 돌린다
+		_player->framePlay();
+	}
+	else
+		_player->update();
+	
 }
 
 void firstFloorStage::enemyUpdate()
@@ -83,7 +92,7 @@ void firstFloorStage::enemyUpdate()
 		}
 
 		_follow_count++;
-		if (_follow_count >= 15)
+		if (_follow_count >= 13)
 		{
 			resetEverything();
 			_currentTile = _playerTile;
@@ -205,8 +214,9 @@ void firstFloorStage::render()
 			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i].keyName),
 				Vector2(_tiles[i].rc.left + TILESIZE / 2, _tiles[i].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i].keyName)->GetSize().y / 2));
 	}
-
-	//if (_bear)	_bear->render();
+	IMAGEMANAGER->FindImage("Back2")->SetAlpha(_light);
+	IMAGEMANAGER->FindImage("Back2")->SetSize(Vector2(1920, 1280));
+	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("Back2"), Vector2(_player->getPlayerLocX(), _player->getPlayerLocY()));
 
 	if (_vScript.size() > 0) TEXTMANAGER->renderText();
 
