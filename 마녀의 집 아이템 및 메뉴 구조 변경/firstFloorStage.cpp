@@ -108,7 +108,6 @@ void firstFloorStage::enemyUpdate()
 
 				//데드씬 설정
 				_dead->setDead(DEAD_BEAR);
-				_dead->update();
 
 				//에너미 메모리 해지 및제거
 				SAFE_RELEASE(_bear);

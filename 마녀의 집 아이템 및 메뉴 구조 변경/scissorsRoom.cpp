@@ -73,14 +73,18 @@ void scissorsRoom::update()
 		break;
 	case scissorsRoom::DELAY:
 		firstFloorStage::setAlpha();
-		_player->setState(CHR_IDLE);
-		_delay++;
-		if (_delay % 60 == 0)
+		if (!_dead)
 		{
-			TEXTMANAGER->clearScript();
-			if (_vScript.size() > 0) _vScript.clear();
-			_trigger = NONE;
+			_player->setState(CHR_IDLE);
+			_delay++;
+			if (_delay % 60 == 0)
+			{
+				TEXTMANAGER->clearScript();
+				if (_vScript.size() > 0) _vScript.clear();
+				_trigger = NONE;
+			}
 		}
+		else _trigger = NONE;
 		break;
 	case scissorsRoom::DOOR_UP_OPEN:
 		firstFloorStage::setAlpha();
@@ -99,6 +103,7 @@ void scissorsRoom::update()
 		break;
 	}
 	if(_bear)	firstFloorStage::enemyUpdate();
+	if (!_bear && _dead) _dead->update();
 	firstFloorStage::cameraUpdate();
 }
 

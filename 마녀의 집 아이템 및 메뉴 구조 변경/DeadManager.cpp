@@ -49,8 +49,10 @@ void DeadManager::update()
 			_player->setFrameX(IMAGEMANAGER->FindImage("bearDeath")->GetMaxFrameX() - 1);
 			_gameOver = true;
 		}
-		if (_gameOver)_endCount++;
-		if (_endCount > 100)SCENEMANAGER->changeScene("시작화면");
+		if (_gameOver)
+			_endCount++;
+		if (_endCount > 100)
+			SCENEMANAGER->changeScene("시작화면");
 		break;
 	case DEAD_WALL:
 		//사망씬-by 벽

@@ -94,10 +94,6 @@ void entrance::getMemory()
 			//트리거가 이미 발동되었던 상태로 셋팅한다.
 			_vFrameTile[k].isMaxframe = true;
 		}
-		else if (_vFrameTile[k].keyName == "곰")
-		{
-			//에너미 트리거 발동
-		}
 	}
 }
 
@@ -146,7 +142,7 @@ void entrance::update()
 		break;
 	case entrance::DELAY:
 		firstFloorStage::setAlpha();
-		_player->setState(CHR_IDLE);
+		if(_bear) _player->setState(CHR_IDLE);
 		_delay++;
 		if (_delay % 60 == 0)
 			_trigger = NONE;
@@ -160,6 +156,8 @@ void entrance::update()
 
 	//카메라 관련 업데이트
 	if (_bear)	firstFloorStage::enemyUpdate();
+
+	if(!_bear && _dead) _dead->update();
 	firstFloorStage::cameraUpdate();
 }
 
