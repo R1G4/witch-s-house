@@ -84,7 +84,7 @@ public:
 	void setIsBearPickUp(bool IsBearPickUp) { isBearPickUp = IsBearPickUp; }
 	void setIsBearPut(bool IsBearPut) { isBearPut = IsBearPut; }
 	void setIsBearComing(bool IsBearComing) { isBearComing = IsBearComing; }
-	void setIsBearComing2(bool IsBearComing) { isBearComing2 = IsBearComing; }
+	void setIsBearComing2(bool IsBearComing2) { isBearComing2 = IsBearComing2; }
 	void setIsBox(bool IsBox) { isBox = IsBox; }
 	void setIsPalmLeft(bool IsPalmLeft) { isPalmLeft = IsPalmLeft; }
 	void setIsPalmRight(bool IsPalmRight) { isPalmRight = IsPalmRight; }

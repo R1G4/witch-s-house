@@ -18,7 +18,7 @@ HRESULT stairs_2F::init()
 
 	_player->init();
 	_player->setState(CHR_IDLE);
-	_player->setDirec(CHRDIREC_DOWN);
+	_player->setDirec(CHRDIREC_UP);
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
 	CAMERAMANAGER->setCamera(camera);

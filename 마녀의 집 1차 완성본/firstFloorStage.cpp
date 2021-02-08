@@ -12,6 +12,8 @@ firstFloorStage::~firstFloorStage()
 
 HRESULT firstFloorStage::init()
 {
+	//bgm재생
+	autoSound("1층BGM");
 	_player->init();
 	_player->setAlpha(1.f);
 
@@ -28,6 +30,9 @@ HRESULT firstFloorStage::init()
 
 void firstFloorStage::release()
 {
+	//BGM종료
+	SOUNDMANAGER->stop("1층BGM");
+
 	//에너미가 존재할 시 메모리 해제 및 제거
 	if (_bear)
 	{
@@ -209,7 +214,12 @@ void firstFloorStage::render()
 			CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i].keyName),
 				Vector2(_tiles[i].rc.left + TILESIZE / 2, _tiles[i].rc.bottom - IMAGEMANAGER->FindImage(_tiles[i].keyName)->GetSize().y / 2));
 	}
-	IMAGEMANAGER->FindImage("Back2")->SetAlpha(_light);
+	if (STAGEMEMORYMANAGER->getIsCandle())
+	{
+		IMAGEMANAGER->FindImage("Back")->SetAlpha(0.47f);
+		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("Back"), Vector2(_player->getPlayerLocX(), _player->getPlayerLocY()));
+	}
+	IMAGEMANAGER->FindImage("Back2")->SetAlpha(0.72f);
 	IMAGEMANAGER->FindImage("Back2")->SetSize(Vector2(1920, 1280));
 	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("Back2"), Vector2(_player->getPlayerLocX(), _player->getPlayerLocY()));
 
@@ -667,4 +677,29 @@ void firstFloorStage::pathFinder(astarTile * currentTile)
 	}
 	_currentTile = tempTile;
 
+}
+
+void firstFloorStage::autoSound(string key)
+{
+	float volume = 1.f;
+
+	if (key == "1층BGM")
+		volume = 0.33f;
+
+	if (key == "노크")
+		volume = 0.74f;
+
+	if (key == "openDoarShort" || key == "openDoarLong")
+		volume = 0.50f;
+
+	if (key == "getItem" || key == "박스" || key == "깨짐1" || key == "곰등장")
+		volume = 0.60f;
+
+	if (key == "nextPage" || key == "곰짜를때"  || key == "피1" || key == "피2" || key == "openBook")
+		volume = 0.78f;
+
+	if (key == "여자" || key == "호로1" || key == "호로2"  || key == "호러3" || key == "여자비웃음")
+		volume = 0.87f;
+
+	SOUNDMANAGER->play(key, volume);
 }

@@ -50,8 +50,11 @@ void entrance::bearCom()
 		return;
 
 	_enemyInterval++;
-	if (_enemyInterval == 80)
+	if (_enemyInterval == 1)
+		autoSound("호러3");
+	if (_enemyInterval == 88)
 	{
+		autoSound("곰등장");
 		_bear = new bear;
 		_bear->init(496 % TILEX, 496 / TILEX);
 		_playerTile = new astarTile;
@@ -216,6 +219,7 @@ void entrance::Collision()
 							if ((TRIGGER)index == PALM_LEFT && _vFrameTile[k].keyName == "손바닥"
 								&& ((_vFrameTile[k].indexX == 5 && _vFrameTile[k].indexY == 18) || (_vFrameTile[k].indexX == 7 && _vFrameTile[k].indexY == 17)))
 							{
+								autoSound("피2");
 								//트리거를 발동한다.
 								_vFrameTile[k].isTrigger = true;
 								_trigger = (TRIGGER)index;
@@ -223,6 +227,7 @@ void entrance::Collision()
 							}
 							else if ((TRIGGER)index == PALM_RIGHT && _vFrameTile[k].keyName == "손바닥" && _vFrameTile[k].indexX == 7 && _vFrameTile[k].indexY == 27)
 							{
+								autoSound("피1");
 								//트리거를 발동한다.
 								_vFrameTile[k].isTrigger = true;
 								_trigger = (TRIGGER)index;
@@ -236,6 +241,7 @@ void entrance::Collision()
 				}
 				else if ((TRIGGER)index != CANDLE_OFF && (TRIGGER)index != VASE_DOWN && (TRIGGER)index != CAT_TALK)
 				{
+					autoSound("openDoarShort");
 					_trigger = index == 556 ? DOOR_LEFT_OPEN : 
 							   index == 568 ? DOOR_RIGHT_OPEN : (TRIGGER)index;
 
@@ -250,6 +256,7 @@ void entrance::Collision()
 
 						if ((TRIGGER)index == CANDLE_OFF && _vFrameTile[k].keyName == "켜진초꺼진초")
 						{
+							autoSound("호로1");
 							//트리거를 발동한다.
 							_vFrameTile[k].isTrigger = true;
 							_trigger = CANDLE_OFF;
@@ -257,6 +264,8 @@ void entrance::Collision()
 						//곰돌이를 바구니에 넣은 상태
 						else if (STAGEMEMORYMANAGER->getIsBearPut() && (TRIGGER)index == VASE_DOWN && _vFrameTile[k].keyName == "꽃병프레임")
 						{
+							//사운드 추가 쨍그랑
+							autoSound("깨짐1");
 							//트리거를 발동한다.
 							_vFrameTile[k].isTrigger = true;
 							_trigger = VASE_DOWN;

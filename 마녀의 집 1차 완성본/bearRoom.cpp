@@ -34,6 +34,9 @@ HRESULT bearRoom::init(CHRDIRECTION _chrdirection, LOCATION _location)
 
 	//프레임 이미지 프레임 셋팅
 	setFrameIndex();
+
+	if (STAGEMEMORYMANAGER->getIsBearComing2())
+		autoSound("호러3");
 	return S_OK;
 }
 
@@ -79,6 +82,7 @@ void bearRoom::update()
 		_vFrameTile[index].rc.right -= 2;
 		cnt ++;
 
+		if (cnt == 2) autoSound("호로2");
 		if (cnt > 10)
 		{
 			_trigger = NONE;
@@ -151,7 +155,6 @@ void bearRoom::Collision()
 								//아이템 사용을 시도하지 않거나 해당 아이템을 갖고 있지 않다면 false를 반환한다. true일 경우 제거(사용)
 								if (!ITEMMANAGER->useItem(11)) continue;
 
-								//사용을 하였으면 트리거를 발동한다.
 								_vFrameTile[k].isTrigger = true;
 								_trigger = BEAR_PUT;
 							}
@@ -170,7 +173,7 @@ void bearRoom::Collision()
 			switch (_tiles[index].terrain)
 			{
 			case TR_TRIGGER:
-				
+
 				if ((index == BEAR_ACCESS || index == 557) && !_bearAccess)
 				{
 					if (STAGEMEMORYMANAGER->getIsScissors() && STAGEMEMORYMANAGER->getIsBearPut() && STAGEMEMORYMANAGER->getIsBearPickUp())
@@ -178,9 +181,14 @@ void bearRoom::Collision()
 				}
 
 				//그외 트리거 받아오기
-				if(index != BEAR_PUT && _trigger != READ && _trigger != BEAR_ACCESS)
+				if (_trigger != DOOR_LEFT_OPEN && index != BEAR_PUT && _trigger != READ && _trigger != BEAR_ACCESS)
+				{
 					_trigger = index == 556 ? DOOR_LEFT_OPEN :
-							   index == DOOR_LEFT_OPEN ? DOOR_LEFT_OPEN : NONE;
+						index == DOOR_LEFT_OPEN ? DOOR_LEFT_OPEN : NONE;
+
+					if(_trigger == DOOR_LEFT_OPEN)
+						autoSound("openDoarLong");
+				}
 
 				break;
 			}

@@ -36,16 +36,10 @@ HRESULT playGround::init()
 	//SCENEMANAGER->changeScene("4층홀");
 	STORAGEMANAGER->init();
 
-	SCENEMANAGER->changeScene("garden_5f", CHRDIREC_UP, LOCATION_DEFAULT);
+	SCENEMANAGER->changeScene("entranceFake");
 	//SCENEMANAGER->changeScene("stairs_2F");
 	//SCENEMANAGER->changeScene("thirdMain",CHRDIREC_DOWN);
 	//SOUNDMANAGER->play("main");
-
-	SOUNDMANAGER->addSound("main", "sound/main.OGG", true, true);
-	SOUNDMANAGER->addSound("firstMap", "sound/firstMap.OGG", false, true);
-	SOUNDMANAGER->addSound("wind", "sound/wind.OGG", false, true);
-	SOUNDMANAGER->addSound("cursor", "sound/cursor.OGG", false, false);
-	SOUNDMANAGER->addSound("click", "sound/click.OGG", false, false);
 
 	return S_OK;
 }
@@ -83,8 +77,6 @@ void playGround::render()
 	}
 	//백버퍼에 그린 내용들을 화면에 뿌려라~
 	D2DRenderer::GetInstance()->EndRender();
-
-	
 }
 
 void playGround::addAutoImage()
@@ -223,13 +215,17 @@ void playGround::addFrameImg()
 	IMAGEMANAGER->AddImage("playerMenu", L"image/UI/bar7.png");
 	IMAGEMANAGER->AddImage("menu", L"image/menu.png");
 	IMAGEMANAGER->AddImage("bar", L"Image/obj/bar2.png");
+	IMAGEMANAGER->AddImage("곰들", L"Image/obj/곰들.png");
 
+	//검은색판
+	IMAGEMANAGER->AddImage("Back", L"Image/back.png");
 	//가림막
 	IMAGEMANAGER->AddImage("Back2", L"Image/back2.png");
 }
 
 void playGround::addSound()
 {
+	//가능하다면 중복되되지 않게해주세요^^
 	SOUNDMANAGER->addSound("할로윈", "sound/bgm/할로윈 공포 브금.mp3", false, false);
 	SOUNDMANAGER->addSound("main", "sound/bgm/main.OGG", false, false);
 	SOUNDMANAGER->addSound("firstMap", "sound/bgm/firstMap.OGG", false, true);
@@ -239,6 +235,7 @@ void playGround::addSound()
 	SOUNDMANAGER->addSound("cursor", "sound/effect/cursor.OGG", false, false);
 	SOUNDMANAGER->addSound("click", "sound/effect/click.OGG", false, false);
 	SOUNDMANAGER->addSound("openDoarLong", "sound/effect/openDoarLong.OGG", false, false);
+	SOUNDMANAGER->addSound("openDoarShort", "sound/effect/openDoarShort.OGG", false, false);
 	SOUNDMANAGER->addSound("rockDoar", "sound/effect/rockDoar.OGG", false, false);
 	SOUNDMANAGER->addSound("getItem", "sound/effect/getItem.OGG", false, false);
 	SOUNDMANAGER->addSound("sword", "sound/effect/sword.OGG", false, false);
@@ -246,12 +243,19 @@ void playGround::addSound()
 	SOUNDMANAGER->addSound("cat", "sound/effect/cat.OGG", false, false);
 	SOUNDMANAGER->addSound("nextPage", "sound/effect/nextPage.OGG", false, false);
 	SOUNDMANAGER->addSound("openBook", "sound/effect/openBook.OGG", false, false);
-
-
-
-
-
-
+	SOUNDMANAGER->addSound("1층BGM", "sound/bgm/종욱이 맵.ogg", false, true);
+	SOUNDMANAGER->addSound("노크", "sound/effect/똑똑똑똑.ogg", false, false);
+	SOUNDMANAGER->addSound("사망", "sound/effect/dead.ogg", false, false);
+	SOUNDMANAGER->addSound("박스", "sound/effect/downBox.ogg", false, false);
+	SOUNDMANAGER->addSound("호로1", "sound/귀신효과음 쓰는사람 없으면 폴더 삭제하기/s038horror.ogg", false, false);
+	SOUNDMANAGER->addSound("깨짐1", "sound/effect/mv_Break.ogg", false, false);
+	SOUNDMANAGER->addSound("여자", "sound/effect/여자애들목소리.ogg", false, false);
+	SOUNDMANAGER->addSound("호로2", "sound/귀신효과음 쓰는사람 없으면 폴더 삭제하기/t019ghost.ogg.ogg", false, false);
+	SOUNDMANAGER->addSound("곰등장", "sound/effect/bear.ogg", false, false);
+	SOUNDMANAGER->addSound("피1", "sound/effect/피1.ogg", false, false);
+	SOUNDMANAGER->addSound("피2", "sound/effect/피2.ogg", false, false);
+	SOUNDMANAGER->addSound("여자비웃음", "sound/effect/여자비웃음.ogg", false, false);
+	SOUNDMANAGER->addSound("호러3", "sound/귀신효과음 쓰는사람 없으면 폴더 삭제하기/t024horror_a.ogg", false, false);
 }
 
 void playGround::addressLink()

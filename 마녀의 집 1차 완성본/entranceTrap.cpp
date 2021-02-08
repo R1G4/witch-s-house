@@ -127,6 +127,7 @@ void entranceTrap::Collision()
 						//트리거를 발동한다.
 						//_vFrameTile[k].isTrigger = true;
 						_trigger = WALL;
+						autoSound("여자");
 					}
 				}
 				break;

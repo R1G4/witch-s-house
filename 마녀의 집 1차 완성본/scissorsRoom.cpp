@@ -12,9 +12,9 @@ scissorsRoom::~scissorsRoom()
 
 HRESULT scissorsRoom::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
+	lastEvent = false;
 	_player->setDirec(_chrdirection);
 
-	int temp = (int)"sdas";
 	//타일 불러오기
 	load();
 
@@ -51,20 +51,33 @@ void scissorsRoom::update()
 	case scissorsRoom::PALM:
 		firstFloorStage::setAlpha();
 		_isBlood = true;
+		_trigger = DELAY;
 		break;
 	case scissorsRoom::SCISSORS:
  		STAGEMEMORYMANAGER->setIsScissors(true);
 		//해당 프레임 이미지를 찾아서
-		for (int k = 0; k < _vFrameTile.size(); k++)
+		_player->setState(CHR_IDLE);
+		_delay++;
+		if (_delay % 110 == 0)	autoSound("노크");
+		if (_delay % 150 == 0)	_vScript = TEXTMANAGER->loadFile("dialog/1f/1f_scissorsRoom.txt");
+		if (_delay % 205 == 0)
 		{
-			if (_vFrameTile[k].keyName.find("문") != string::npos && _vFrameTile[k].keyName.size() <= 3)
+			if (_vScript.size() > 0) _vScript.clear();
+			_trigger = NONE;
+			_delay = 0;
+			//해당 프레임 이미지를 찾아서
+			for (int k = 0; k < _vFrameTile.size(); k++)
 			{
-				//트리거를 발동한다.
-				_vFrameTile[k].isTrigger = true;
-				_vScript = TEXTMANAGER->loadFile("dialog/1f/1f_scissorsRoom.txt");
+				if (_vFrameTile[k].keyName.find("문") != string::npos && _vFrameTile[k].keyName.size() <= 3)
+				{
+					TEXTMANAGER->clearScript();
+					//트리거를 발동한다.
+					_vFrameTile[k].isTrigger = true;
+					_vScript.clear();
+					break;
+				}
 			}
 		}
-		_trigger = DELAY;
 		break;	
 	case scissorsRoom::BEARCOM:
 		STAGEMEMORYMANAGER->setIsBearComing(true); 
@@ -82,6 +95,7 @@ void scissorsRoom::update()
 				TEXTMANAGER->clearScript();
 				if (_vScript.size() > 0) _vScript.clear();
 				_trigger = NONE;
+				_delay = 0;
 			}
 		}
 		else _trigger = NONE;
@@ -91,7 +105,21 @@ void scissorsRoom::update()
 		_isBlood = true;
 		break;
 	case scissorsRoom::DOOR_UP_OPEN2:
-		SCENEMANAGER->changeScene("stairs_2F");
+		lastEvent = true;
+		if(_sceneAlpha > 0)
+		{
+			_sceneAlpha -= 0.008f;
+			if (_sceneAlpha <= 0.65f)
+				_sceneAlpha -= 0.021f;
+
+			_player->setAlpha(_sceneAlpha);
+		}
+		if (_sceneAlpha <= 0.f)
+		{
+			_delay++;
+			if(_delay > 140)
+				SCENEMANAGER->changeScene("stairs_2F");
+		}
 		//firstFloorStage::sceneChange("stairs_2F");
 		break;
 	default:
@@ -115,7 +143,24 @@ void scissorsRoom::render()
 		Vector2(IMAGEMANAGER->FindImage("배경14")->GetSize().x / 2 + 480,
 			IMAGEMANAGER->FindImage("배경14")->GetSize().y / 2));
 
-	firstFloorStage::render();
+	
+	//WINSIZEX / 2 - 250, WINSIZEY / 2 - 50
+	if (lastEvent && _sceneAlpha < 0.1f)
+	{
+		////백그라운드 컬러 렉트
+		//D2DINS->FillRectangle
+		//(Vector2(_player->getPlayerLocX(), _player->getPlayerLocY()),
+		//	Vector2(1920, 1280), 
+		//	Pivot::LeftTop, 
+		//	D2D1::ColorF::DarkGray, 1.f);
+		IMAGEMANAGER->FindImage("Back2")->SetAlpha(0.7f);
+		IMAGEMANAGER->FindImage("Back2")->SetSize(Vector2(1920, 1280));
+		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("Back2"), Vector2(_player->getPlayerLocX(), _player->getPlayerLocY()));
+		IMAGEMANAGER->FindImage("곰들")->SetScale(1.1f);
+		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("곰들"), Vector2(_player->getPlayerLocX(), _player->getPlayerLocY()));
+	}
+	else
+		firstFloorStage::render();
 }
 
 void scissorsRoom::Collision()
@@ -157,6 +202,7 @@ void scissorsRoom::Collision()
 								//트리거를 발동한다.
 								_vFrameTile[k].isTrigger = true;
 								_trigger = SCISSORS;
+								autoSound("곰짜를때");
 								break;
 							}
 						}
@@ -173,9 +219,11 @@ void scissorsRoom::Collision()
 			switch (_tiles[index].terrain)
 			{
 			case TR_TRIGGER:
-
 				_trigger = index == 564 ? DOOR_RIGHT_OPEN :
 					index == DOOR_RIGHT_OPEN ? DOOR_RIGHT_OPEN : NONE;
+
+				if (_trigger == DOOR_RIGHT_OPEN)
+					autoSound("openDoarShort");
 
 				for (int k = 0; k < _vFrameTile.size(); k++)
 				{
@@ -188,6 +236,7 @@ void scissorsRoom::Collision()
 						_vFrameTile[k].isTrigger = true;
 						_trigger = (TRIGGER)index;
 						STAGEMEMORYMANAGER->setIsPalmRight(true);
+						autoSound("피1");
 					}
 					//만약 타일의 프레임 이미지가 문.. 머시기라면
 					if (_tiles[index].keyName.find("문") != string::npos && _tiles[index].keyName.size() <= 3)
@@ -199,10 +248,11 @@ void scissorsRoom::Collision()
 							{
 								if (STAGEMEMORYMANAGER->getIsBearComing() && STAGEMEMORYMANAGER->getIsBearComing2())
 									_trigger = DOOR_UP_OPEN2;
-								else
+								else if (!STAGEMEMORYMANAGER->getIsBearComing())
 									_trigger = DOOR_UP_OPEN;
 								//트리거를 발동한다.
 								_vFrameTile[k].isTrigger = true;
+								autoSound("openDoarLong");
 							}
 						}
 					}
@@ -211,10 +261,7 @@ void scissorsRoom::Collision()
 			}
 
 			//곰돌이 팔다리를 자른 상태라면
-			if (STAGEMEMORYMANAGER->getIsScissors() &&
-				!STAGEMEMORYMANAGER->getIsBearComing()&&
-				!STAGEMEMORYMANAGER->getIsBearComing2()&&
-				(TRIGGER)index == BEARCOM || (TRIGGER)index == 560)
+			if (STAGEMEMORYMANAGER->getIsScissors() && !STAGEMEMORYMANAGER->getIsBearComing() && !STAGEMEMORYMANAGER->getIsBearComing2()&&(TRIGGER)index == BEARCOM || (TRIGGER)index == 560)
 			{
 				_bear = new bear;
 				_bear->init(319% TILEX, 319 / TILEX);
@@ -231,7 +278,6 @@ void scissorsRoom::Collision()
 				firstFloorStage::objectLocation();
 
 				_trigger = BEARCOM;
-
 				break;
 			}
 			

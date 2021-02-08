@@ -97,6 +97,7 @@ public:
 	void resetEverything();
 	vector<astarTile*> addOpenList(astarTile * currentTile);
 	void pathFinder(astarTile * currentTile);
+	void autoSound(string key);
 	void FormRender();
 	//bool SelectionForm();
 

@@ -116,6 +116,11 @@ void hallway::Collision()
 						   index == 1041 ? DOOR_RIGHT_BOTTOM_OPEN:
 						   index == DOOR_RIGHT_BOTTOM_OPEN ? DOOR_RIGHT_BOTTOM_OPEN : NONE;
 
+				if (_trigger == DOOR_RIGHT_TOP_OPEN || _trigger == DOOR_RIGHT_BOTTOM_OPEN)
+					autoSound("openDoarLong");
+				else if(_trigger == DOOR_LEFT_OPEN)
+					autoSound("openDoarShort");
+
 				if (((TRIGGER)index == CLOCK  || (TRIGGER)index == 499) && KEYMANAGER->isOnceKeyUp(VK_SPACE))
 					_trigger = CLOCK;
 			}
