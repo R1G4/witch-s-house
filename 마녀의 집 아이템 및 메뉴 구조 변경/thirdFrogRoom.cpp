@@ -184,22 +184,10 @@ void thirdFrogRoom::changeScene()
 {
 	if (_player->getPlayerFrc().right / TILESIZE >= 23.5f)
 	{
+		SOUNDMANAGER->play("openDoarLong");
 		SCENEMANAGER->changeScene("thirdMain", CHRDIREC_RIGHT);
 	}
-
-	/*if (_player->getPlayerFrc().right / TILESIZE >= 23.5f)
-	{
-		_sceneAlpha -= 0.008f;
-		if (_sceneAlpha <= 0.65f)
-			_sceneAlpha -= 0.021f;
-		if (_sceneAlpha <= 0.f)
-		{
-			cout << "ttt" << endl;
-			SCENEMANAGER->changeScene("thirdMain", CHRDIREC_RIGHT);
-		}
-		_player->setAlpha(_sceneAlpha);
-
-	}*/
+	
 
 }
 
@@ -214,6 +202,8 @@ void thirdFrogRoom::openText()
 		{
 			if (KEYMANAGER->isOnceKeyDown(VK_SPACE) && _alpha > 0)
 			{
+				_rc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
+
 				//개구리 프레임 이미지 변경
 				_frameY = 2;
 				_frameX = 2;
@@ -221,18 +211,6 @@ void thirdFrogRoom::openText()
 			}
 		}
 	}
-
-	//2월6일 21시 전에 쓰던거 일단 킵
-	//if (_player->getPlayerFrc().left / TILESIZE <= 21 && _player->getPlayerFrc().bottom / TILESIZE >= 7)
-	//{
-	//	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-	//	{
-	//		//개구리 프레임 이미지 변경
-	//		_frameY = 2;
-	//		_frameX = 2;
-	//		_isText = true;
-	//	}
-	//}
 
 	//개구리와 상호작용 하고 텍스트on 상태일때
 	if (_isText)
@@ -261,6 +239,7 @@ void thirdFrogRoom::openText()
 	if (_text == TEXTLEFT && !_isText)
 	{
 		//소지품에 프로그 아이템 생성
+		SOUNDMANAGER->play("getItem",1);
 		ITEMMANAGER->addItem("frog");
 		_frameX = 2;
 		_y2 - 20;

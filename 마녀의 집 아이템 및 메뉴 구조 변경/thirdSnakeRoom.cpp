@@ -23,6 +23,7 @@ HRESULT thirdSnakeRoom::init()
 	camera.y = _player->getPlayerLocY();
 	CAMERAMANAGER->setCamera(camera);
 
+	_count = 0;
 	return S_OK;
 }
 
@@ -38,6 +39,9 @@ void thirdSnakeRoom::update()
 	CAMERAMANAGER->setCamera(Vector2(camera.x - WINSIZEX / 2, camera.y - WINSIZEY / 2));
 	_player->update();
 	tileCollision();
+	changeScene();
+	//_count++;
+	//if(_count %10 == 0) cout << _player->getPlayerFrc().bottom / TILESIZE << endl;
 }
 
 void thirdSnakeRoom::render()
@@ -73,6 +77,12 @@ void thirdSnakeRoom::render()
 	}
 }
 
+//¾À ÀüÈ¯
+void thirdSnakeRoom::changeScene()
+{
+	if(_player->getPlayerFrc().bottom / TILESIZE >= 13)
+	SCENEMANAGER->changeScene("thirdTo4thLoad");
+}
 void thirdSnakeRoom::tileCollision()
 {
 	for (int i = 0; i < TILEY; i++)

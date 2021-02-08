@@ -188,7 +188,7 @@ void thirdFrogOutRoom::update()
 	//첫번째 텍스트에서 왼쪽(엿보기 창으로 엿본다) 눌렀을때
 	if (_text == OPENLEFT && _dialogue)
 	{
-		if (KEYMANAGER->isStayKeyDown(VK_SPACE))
+		if (KEYMANAGER->isStayKeyDown('B'))
 		{
 			_dialogue = false;
 			_leftText2 = true;
@@ -231,7 +231,7 @@ void thirdFrogOutRoom::update()
 		}
 	}
 
-	if (_leftText3 && !_leftText2)
+	if (_leftText3)
 	{
 		//세번째 텍스트창에서 좌측 눌렀을때
 		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
@@ -251,23 +251,29 @@ void thirdFrogOutRoom::update()
 		}
 
 		//세번째 텍스트창에서 왼쪽 텍스트 누르면 개구리 넣기
-		if (_leftClick && KEYMANAGER->isOnceKeyDown('A') || KEYMANAGER->isOnceKeyDown('B'))
+		if (_leftClick && (KEYMANAGER->isOnceKeyDown('A') || KEYMANAGER->isOnceKeyDown('B')))
 		{
 			cout << "left" << endl;
 			_text = CHANGEIMG;
-			_leftClick = false;
 			_rightClick = false;
 			_leftText3 = false;
+			_leftClick = false;
+
 		}
 
-		if (_rightClick && KEYMANAGER->isOnceKeyDown('B') || _rightClick && KEYMANAGER->isOnceKeyDown('A'))
+		if (_rightClick && (KEYMANAGER->isOnceKeyDown('A') || KEYMANAGER->isOnceKeyDown('B')))
 		{
 			cout << "right" << endl;
 			_rightClick = false;
-			_leftClick = false;
 			_leftText3 = false;
 			_isText = true;
+
 		}
+
+		/*if (!_leftText3)
+		{
+			_isText = true;
+		}*/
 	}
 
 
@@ -290,14 +296,13 @@ void thirdFrogOutRoom::update()
 		//아이템(개구리) 없이 문을열고 들어가면 바로 데드신으로 
 		if (_leftClick && KEYMANAGER->isOnceKeyDown('A') /*&& 개구리 예외처리 해주기*/)
 		{
-			cout << "changeScene" << endl;
 			changeScene();
 			_leftClick = false;
 		}
 		//우측키 눌렀을때(일단 다른대에 되어있어서 주석처리함. 안되면 이거부터 풀기)////////////////////////////////////////////
 		if (_rightClick && KEYMANAGER->isOnceKeyDown('A'))
 		{
-			cout << "rwgfrew" << endl;
+			_rc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
 			_isText = true;
 			_rightClick = false;
 		}
@@ -444,12 +449,20 @@ void thirdFrogOutRoom::render()
 
 	}
 
+	//다이어로그 on일때
 	//첫번째 텍스트에서 위에(귀를 댄다) 눌렀을때
 	if (_dialogue)
 	{
-		if (_isStopToRead)
-			TEXTMANAGER->renderText();
-		if (KEYMANAGER->isOnceKeyDown(VK_SPACE)) _dialogue = false;
+		if (_isStopToRead) TEXTMANAGER->renderText();
+
+		if (_text == TEXTUP)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+			{
+				_isText = true;
+				_dialogue = false;
+			}
+		}
 	}
 
 	//다이어로그 꺼지면 이미지 일단 안보이는곳으로 치워뒀음
@@ -482,7 +495,7 @@ void thirdFrogOutRoom::render()
 		D2DINS->GetInstance()->DrawRectangle(_rc, D2D1::ColorF::White, _rcAlpha, 1.0f);
 	}
 	//왼쪽텍스트 눌렀을때 세번째 텍스트
-	if (_leftText3)
+	if (_leftText3 && !_leftText2 && !_isText && !_dialogue)
 	{
 		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(camera.x - 180, camera.y - 10));	//왼쪽
 		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("bar"), Vector2(WINSIZEX / 2 + 470, WINSIZEY / 2 + 120)); // 오른쪽
@@ -532,6 +545,7 @@ void thirdFrogOutRoom::render()
 			_playerRender = true;
 			_player->setState(CHR_IDLE);
 			_player->setDirec(CHRDIREC_LEFT);
+			ITEMMANAGER->useItem("frog");
 		}
 	}
 
@@ -539,7 +553,19 @@ void thirdFrogOutRoom::render()
 
 void thirdFrogOutRoom::changeScene()
 {
-	SCENEMANAGER->changeScene("thirdSnakeDead");
+	//아이템창에 개구리가 없다면
+	if (ITEMMANAGER->getItemKinds("frog"))
+	{
+		//다음신으로
+		SCENEMANAGER->changeScene("thirdSnakeRoom");
+	}
+	//아이템창에 개구리가 있다면
+	else
+	{
+		//데드신으로
+		SCENEMANAGER->changeScene("thirdSnakeDead");
+	}
+	
 }
 
 void thirdFrogOutRoom::rcAlphaChange()

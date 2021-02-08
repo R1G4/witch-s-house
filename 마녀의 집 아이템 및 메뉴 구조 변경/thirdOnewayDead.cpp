@@ -24,6 +24,7 @@ HRESULT thirdOnewayDead::init()
 	camera.y = _player->getPlayerLocY();
 	CAMERAMANAGER->setCamera(camera);
 	_count = 0;
+	_isDead = false;
 	return S_OK;
 }
 
@@ -46,10 +47,14 @@ void thirdOnewayDead::update()
 	//양 옆으로 조금 이동하면 데드신으로 전환
 	if (_player->getPlayerFrc().right / TILESIZE >= 19 || _player->getPlayerFrc().left / TILESIZE <= 17.7f)
 	{
+		_isDead = true;
+	}
+
+	if (_isDead)
+	{
 		_deadManager->setDead(DEAD_WALL);
 		_deadManager->update();
 	}
-
 
 
 

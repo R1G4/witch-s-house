@@ -22,6 +22,9 @@ HRESULT playGround::init()
 
 	addAutoImage();
 	addFrameImg();
+	//사운드 추가
+	addSound();
+
 	_inMenu = new inMenu;
 	_inMenu->init();
 	//_playerMenu = new playerMenu;
@@ -34,7 +37,7 @@ HRESULT playGround::init()
 	STORAGEMANAGER->init();
 	//SCENEMANAGER->changeScene("BossStage1");
 	//SCENEMANAGER->changeScene("prison_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
-	SCENEMANAGER->changeScene("시작화면");
+	SCENEMANAGER->changeScene("stairs_2F");
 	//SCENEMANAGER->changeScene("thirdMain",CHRDIREC_DOWN);
 	//SOUNDMANAGER->play("main");
 
@@ -223,6 +226,32 @@ void playGround::addFrameImg()
 
 	//가림막
 	IMAGEMANAGER->AddImage("Back2", L"Image/back2.png");
+}
+
+void playGround::addSound()
+{
+	SOUNDMANAGER->addSound("할로윈", "sound/bgm/할로윈 공포 브금.mp3", false, false);
+	SOUNDMANAGER->addSound("main", "sound/bgm/main.OGG", false, false);
+	SOUNDMANAGER->addSound("firstMap", "sound/bgm/firstMap.OGG", false, true);
+	SOUNDMANAGER->addSound("다운받은거1", "sound/bgm/다운받은거1.mp3", false, false);
+	SOUNDMANAGER->addSound("다운받은거2", "sound/bgm/다운받은거2.mp3", false, false);
+	SOUNDMANAGER->addSound("wind", "sound/bgm/wind.OGG", false, true);
+	SOUNDMANAGER->addSound("cursor", "sound/effect/cursor.OGG", false, false);
+	SOUNDMANAGER->addSound("click", "sound/effect/click.OGG", false, false);
+	SOUNDMANAGER->addSound("openDoarLong", "sound/effect/openDoarLong.OGG", false, false);
+	SOUNDMANAGER->addSound("rockDoar", "sound/effect/rockDoar.OGG", false, false);
+	SOUNDMANAGER->addSound("getItem", "sound/effect/getItem.OGG", false, false);
+	SOUNDMANAGER->addSound("sword", "sound/effect/sword.OGG", false, false);
+	SOUNDMANAGER->addSound("곰짜를때", "sound/effect/곰짜를때.OGG", false, false);
+	SOUNDMANAGER->addSound("cat", "sound/effect/cat.OGG", false, false);
+	SOUNDMANAGER->addSound("nextPage", "sound/effect/nextPage.OGG", false, false);
+	SOUNDMANAGER->addSound("openBook", "sound/effect/openBook.OGG", false, false);
+
+
+
+
+
+
 }
 
 void playGround::addressLink()

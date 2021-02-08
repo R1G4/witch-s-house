@@ -15,6 +15,9 @@ private:
 	int _catFrameX;
 	int _catFrameY;
 	int _candleFrame;
+	bool _dialogue;
+	bool _isStopToRead;			//텍스트매니저용 변수
+	vector<string> _vScript;
 
 
 public:
@@ -28,6 +31,7 @@ public:
 	void render();
 	void changeScene();
 	void tileCollision();
+	void save();
 	void load();
 };
 

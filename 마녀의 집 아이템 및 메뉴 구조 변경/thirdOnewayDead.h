@@ -12,6 +12,7 @@ private:
 	Player* _player;
 	DeadManager* _deadManager;
 	int _count;
+	bool _isDead;
 
 public:
 	thirdOnewayDead();

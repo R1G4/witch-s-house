@@ -1,0 +1,3 @@
+﻿  thirdMain.cpp
+c:\팀포폴\witch's house\witch-s-house\마녀의 집 아이템 및 메뉴 구조 변경\thirdmain.cpp(123): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+  windowsAPI.vcxproj -> C:\팀포폴\witch's House\witch-s-house\마녀의 집 아이템 및 메뉴 구조 변경\x64\Debug\windowsAPI.exe

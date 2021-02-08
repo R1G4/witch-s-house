@@ -8,6 +8,7 @@ private:
 	tagTile _tiles[TILEX*TILEY];
 	Vector2 camera;
 	Player* _player;
+	int _count;
 public:
 	thirdSnakeRoom();
 	~thirdSnakeRoom();
@@ -16,6 +17,7 @@ public:
 	void release();
 	void update();
 	void render();
+	void changeScene();
 	void tileCollision();
 	void load();
 };

@@ -84,8 +84,8 @@ void stairs_2F::render()
 
 void stairs_2F::changeScene()
 {
-	//1층으로 내려가기
-	for (int i = 0; i < TILEY; i++)
+	//1층으로 내려가기.. 안함
+	/*for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
@@ -95,7 +95,8 @@ void stairs_2F::changeScene()
 				SCENEMANAGER->changeScene("scissorsRoom", CHRDIREC_DOWN, LOCATION_DEFAULT);
 			}
 		}
-	}
+	}*/
+
 	//3층으로 올라가기
 	for (int i = 0; i < TILEY; i++)
 	{
@@ -104,6 +105,8 @@ void stairs_2F::changeScene()
 			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc)
 				&& _tiles[i*TILEX + j].terrain == TR_TRIGGER && _player->getPlayerFrc().right / TILESIZE >= 20)
 			{
+				SOUNDMANAGER->play("다운받은거1");
+				SOUNDMANAGER->play("openDoarLong", 0.8f);
 				SCENEMANAGER->changeScene("thirdMain", CHRDIREC_DOWN);
 			}
 		}

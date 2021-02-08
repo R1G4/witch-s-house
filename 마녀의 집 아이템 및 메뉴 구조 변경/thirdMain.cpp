@@ -13,6 +13,7 @@ HRESULT thirdMain::init(CHRDIRECTION _chrdirection)
 {
 	_saveCat = IMAGEMANAGER->AddFrameImage("SavePoint", L"Image/mapTool/saveCat.png", 16, 4);
 	IMAGEMANAGER->AddFrameImage("켜진초", L"Image/tempFrameImg/켜진초.png", 3, 0);
+	IMAGEMANAGER->AddImage("loadTop", L"image/UI/loadTop.png");
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
 	_count = 0;
 	_catFrameX = 0;
@@ -36,6 +37,7 @@ HRESULT thirdMain::init(CHRDIRECTION _chrdirection)
 		camera.x = _player->getPlayerLocX();
 		camera.y = _player->getPlayerLocY();
 		CAMERAMANAGER->setCamera(camera);
+		_dialogue = false;
 	}
 	//다른스테이지에서 씬전환 했을때 플레이어 모션이 right였다면
 	if (_chrdirection == CHRDIREC_RIGHT)
@@ -54,6 +56,7 @@ HRESULT thirdMain::init(CHRDIRECTION _chrdirection)
 		camera.x = _player->getPlayerLocX();
 		camera.y = _player->getPlayerLocY();
 		CAMERAMANAGER->setCamera(camera);
+		_dialogue = false;
 	}
 	//다른스테이지에서 씬전환 했을때 플레이어 모션이 down였다면
 	if (_chrdirection == CHRDIREC_DOWN)
@@ -68,6 +71,8 @@ HRESULT thirdMain::init(CHRDIRECTION _chrdirection)
 		camera.x = _player->getPlayerLocX();
 		camera.y = _player->getPlayerLocY();
 		CAMERAMANAGER->setCamera(camera);
+
+		_dialogue = false;
 	}
 
 
@@ -99,6 +104,7 @@ void thirdMain::update()
 	_player->update();
 	tileCollision();
 	changeScene();
+	save();
 	//if(_count %10 == 0) cout << _player->getPlayerFrc().right / TILESIZE << endl;
 }
 
@@ -124,6 +130,8 @@ void thirdMain::render()
 	_player->render();
 	CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("SavePoint"), Vector2(WINSIZEX / 2 + 440, WINSIZEY / 2 + 210), _catFrameX, _catFrameY);
 	CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("켜진초"), Vector2(WINSIZEX / 2 + 440, WINSIZEY / 2 + 90), _candleFrame, 0);
+	
+	//오브젝트 랜더
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
@@ -135,16 +143,57 @@ void thirdMain::render()
 
 		}
 	}
+
+	if (_dialogue)
+	{
+		if (_isStopToRead) TEXTMANAGER->renderText();
+
+		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+		{
+
+		}
+
+	}
 }
 
 void thirdMain::changeScene()
 {
-	//17, 26
+	//개구리방으로 이동
 	if (_player->getPlayerFrc().right / TILESIZE <= 17)
+	{
+		SOUNDMANAGER->play("openDoarLong", 0.8f);
 		SCENEMANAGER->changeScene("thirdFrogRoom");
 
-	if (_player->getPlayerFrc().right / TILESIZE >= 26)
+	}
+
+	//서재로 이동
+	//if (_player->getPlayerFrc().right / TILESIZE >= 25.5f)
+	//{
+	//	//아이템창에 개구리가 없다면
+	//	if (ITEMMANAGER->getItemKinds("frog"))
+	//	{
+	//		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+	//		{
+	//			_dialogue = true;
+	//			_isStopToRead = TEXTMANAGER->setNextScript(true);
+	//			_vScript = TEXTMANAGER->loadFile("dialog/3f/3f_frog.txt");
+	//			_isStopToRead = true;
+	//		}
+	//		
+	//	}
+	//	else
+	//	{
+	//		SOUNDMANAGER->play("openDoarLong", 0.8f);
+	//		SCENEMANAGER->changeScene("thirdLibrary");
+	//	}
+	//	
+	//}
+
+	if (_player->getPlayerFrc().right / TILESIZE >= 25.5f)
+	{
+		SOUNDMANAGER->play("openDoarLong", 0.8f);
 		SCENEMANAGER->changeScene("thirdLibrary");
+	}
 }
 
 //캐릭터, 콜라이더 타일 충돌했을때
@@ -173,15 +222,32 @@ void thirdMain::tileCollision()
 				}
 			}
 
-			if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc)
-				&& _tiles[i*TILEX + j].terrain == TR_TRIGGER)
-			{
-				if (KEYMANAGER->isOnceKeyDown(VK_SPACE)) _catFrameY = 1;
-			}
+			
 		}
 	}
 }
 
+///////////////////////////////////////////////////////////////////////////////////////
+//고양이 눌렀을때 세이브창 뜨고 세이브 되게
+void thirdMain::save()
+{
+	for (int i = 0; i < (TILEX*TILEY); ++i)
+	{
+		if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i].rc)
+			&& _tiles[i].terrain == TR_TRIGGER)
+		{
+			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+			{
+				SOUNDMANAGER->play("cat");
+				_catFrameY = 1;
+				//요기
+			}
+		}
+	}
+	
+}
+
+///////////////////////////////////////////////////////////////////////////////////
 void thirdMain::load()
 {
 	HANDLE file;

@@ -89,6 +89,7 @@ public:
 	void addAutoImage();
 	void addScene();
 	void addFrameImg();
+	void addSound();
 	void addressLink();
 
 };

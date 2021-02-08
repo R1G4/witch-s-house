@@ -11,6 +11,7 @@ thirdLibrary::~thirdLibrary()
 
 HRESULT thirdLibrary::init()
 {
+	IMAGEMANAGER->AddImage("3f_doar", L"Image/obj/3f_2_doar.png");
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
 
 	_player = new Player;
@@ -81,6 +82,7 @@ void thirdLibrary::render()
 
 		}
 	}
+	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("3f_doar"), Vector2(WINSIZEX / 2 + 130, WINSIZEY / 2 - 60 ));
 	_player->render();
 
 	//타일 오브젝트 or 프레임이미지 랜더 
@@ -110,7 +112,6 @@ void thirdLibrary::render()
 	//다이어로그 켜졌을때
 	if (_dialogue)
 	{
-		cout << "yyy" << endl;
 		if (_isStopToRead)
 			TEXTMANAGER->renderText();
 	}
@@ -120,11 +121,18 @@ void thirdLibrary::changeScene()
 {
 	//다음 스테이지로 이동
 	if (_player->getPlayerFrc().bottom / TILESIZE >= 10.7f)
+	{
 		SCENEMANAGER->changeScene("thirdOnewayLoad");
+
+	}
 
 	//이전  스테이지로 이동
 	if (_player->getPlayerFrc().left / TILESIZE <= 16.3f)
+	{
+		SOUNDMANAGER->play("openDoarLong");
 		SCENEMANAGER->changeScene("thirdMain", CHRDIREC_LEFT);
+
+	}
 }
 
 void thirdLibrary::readBook()
@@ -140,6 +148,7 @@ void thirdLibrary::readBook()
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 				{
+					SOUNDMANAGER->play("nextPage");
 					_dialogue = true;
 					_isStopToRead = TEXTMANAGER->setNextScript(true);
 					_vScript = TEXTMANAGER->loadFile("dialog/3f/3f_library_message.txt");
@@ -152,6 +161,7 @@ void thirdLibrary::readBook()
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 				{
+					SOUNDMANAGER->play("nextPage");
 					_dialogue = true;
 					_isStopToRead = TEXTMANAGER->setNextScript(true);
 					_vScript = TEXTMANAGER->loadFile("dialog/3f/3f_library_book.txt");
@@ -160,7 +170,7 @@ void thirdLibrary::readBook()
 			}
 
 			//다이어로그 켜져있을때 스페이스바 누르면 원래대로 돌아가게. 모든 다이어로그 다 포함
-			if (_dialogue)
+			if (_dialogue )
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 				{
