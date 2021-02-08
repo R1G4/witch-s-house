@@ -289,6 +289,7 @@ void StorageManager::storageOpen()
 	if (!_isClick && KEYMANAGER->isOnceKeyDown(VK_UP)*0x26)
 		_selectedStorage = (STORAGE)(_selectedStorage == FIRST ? FIFTH : (int)_selectedStorage - 1);
 
+	//선택되어있는 컨텐츠
 	switch (_selectedStorage)
 	{
 	case StorageManager::FIRST:

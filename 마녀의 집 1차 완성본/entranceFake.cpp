@@ -14,14 +14,19 @@ entranceFake::~entranceFake()
 
 HRESULT entranceFake::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
+	//플레이어가 바라보는 방향
 	_player->setDirec(_chrdirection);
 
 	//타일 불러오기
 	load(_location);
 
+	//카메라 셋팅
 	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
+
+	//1층 관련 스테이지 초기화
 	firstFloorStage::init();
 
+	//초기 트리거 상태
 	_trigger = NONE;
 
 	return S_OK;
@@ -29,14 +34,19 @@ HRESULT entranceFake::init(CHRDIRECTION _chrdirection, LOCATION _location)
 
 HRESULT entranceFake::init()
 {
+	//플레이어가 바라보는 방향
 	_player->setDirec(CHRDIREC_UP);
 
 	//타일 불러오기
 	load();
 
+	//카메라 셋팅
 	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
+
+	//1층 관련 스테이지 초기화
 	firstFloorStage::init();
 
+	//초기 트리거 상태
 	_trigger = NONE;
 
 	return S_OK;
@@ -52,6 +62,7 @@ void entranceFake::update()
 	//프레임 인덱스 셋팅
 	setFrameIndex();
 
+	//트리거 상태에 따른 호출 및 설정
 	switch (_trigger)
 	{
 	 case entranceFake::NONE:
@@ -66,6 +77,7 @@ void entranceFake::update()
 		firstFloorStage::sceneChange("entranceTrap", CHRDIREC_UP, LOCATION_DEFAULT);
 		break;
 	default:
+		//그외의 상태는 NONE과 같다.
 		_trigger = NONE;
 		firstFloorStage::update();
 		firstFloorStage::setAlpha();

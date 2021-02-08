@@ -164,18 +164,20 @@ void ItemManager::render()
 
 MENUSTATE ItemManager::itemOpen()
 {
-	//Z키를 누르지 않았을 경우 창이 열리지 않는다. 
-	//임시로 추가한 keyinput 메뉴랑 합치면 추후 제거할것
+	//선택유무
 	bool _isClick = false;
 
 	if (!_isOpenCheck) _isOpenCheck = MENU_PROGRESS;
 
+	//해당 키를 입력 시 선택유무 true로 한다.
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))	_isClick = true;	
 
+	//해당 키를 입력 하고 아이템 창이 열려있다면 창을 닫는다.
 	if (KEYMANAGER->isOnceKeyDown('X') && _isOpenCheck)
 	{
 		_isOpenCheck = MENU_BACK;
 		_isClick = false;
+		return _isOpenCheck;
 	}
 
 	//백터의 사이즈가 0 이하라면(아이템이 존재 하지 않다면) 아래 코드는 무시한다.

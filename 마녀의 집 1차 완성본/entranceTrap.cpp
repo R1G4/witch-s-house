@@ -12,16 +12,22 @@ entranceTrap::~entranceTrap()
 
 HRESULT entranceTrap::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
+	//플레이어가 바라보는 방향
 	_player->setDirec(_chrdirection);
 
 	//타일 불러오기
 	load();
 
+	//카메라 셋팅
 	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
+
+	//1층 관련 스테이지 초기화
 	firstFloorStage::init();
 
+	//초기 트리거 상태
 	_trigger = NONE;
 
+	//데드씬이 존재하므로 초기화를 해둔다.
 	_dead = new DeadManager;
 	_dead->init();
 	_dead->setPlayerAddress(_player);
@@ -32,6 +38,7 @@ HRESULT entranceTrap::init(CHRDIRECTION _chrdirection, LOCATION _location)
 void entranceTrap::release()
 {
 	firstFloorStage::release();
+	//데드씬이 존재한다면 데드씬도 메모리 해제를 해준다.
 	if (_dead)	_dead->release();
 }
 
@@ -40,6 +47,7 @@ void entranceTrap::update()
 	//프레임 인덱스 셋팅
 	setFrameIndex();;
 
+	//트리거 상태에 따른 호출 및 설정
 	switch (_trigger)
 	{
 	case entranceTrap::NONE:
@@ -69,11 +77,15 @@ void entranceTrap::update()
 
 		break;
 	case entranceTrap::WALL:
+		//함정 발동 시
 		firstFloorStage::setAlpha();
+		
+		//데드씬을 활성화한다.
 		_dead->setDead(DEAD_WALL);
 		_dead->update();
 		break;
 	default:
+		//그외의 상태는 NONE과 같다.
 		_trigger = NONE;
 		firstFloorStage::setAlpha();
 		firstFloorStage::update();

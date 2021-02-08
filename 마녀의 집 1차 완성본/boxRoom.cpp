@@ -58,27 +58,34 @@ void boxRoom::update()
 		Collision();
 		break;
 	case boxRoom::DOOR_LEFT_OPEN:
+		//복도로 이동한다.
 		firstFloorStage::sceneChange("hallway", CHRDIREC_LEFT, LOCATION_1);
 		break;
 	case boxRoom::BOX:
 		firstFloorStage::setAlpha();
+		//박스가 떨어진 상태를 메모리에 저장한다.
 		STAGEMEMORYMANAGER->setIsBox(true);
 		_trigger = DELAY;
 		break;
 	case boxRoom::DELAY:
 		firstFloorStage::setAlpha();
+
+		//실제 게임에서 트리거 발동 시 멈칫 멈칫 하는걸 구현한거
 		_player->setState(CHR_IDLE);
 		_delay++;
 		if (_delay % 70 == 0)
 			_trigger = NONE;
 		break;
 	case boxRoom::BEAR_PICKUP:
+		//곰을 주운 상태를 메모리에 저장한다.
 		STAGEMEMORYMANAGER->setIsBearPickUp(true);
 		_trigger = NONE;
 		break;
 	case boxRoom::READ:
+		//읽고 있는 상태에서 해당 키를 입력 시
 		if (KEYMANAGER->isOnceKeyUp(VK_SPACE))
 		{
+			//페이지에 따른 이벤트 발생
 			switch (_readCnt)
 			{
 			case boxRoom::FIRST:
@@ -110,17 +117,20 @@ void boxRoom::update()
 		}
 		break;
 	case boxRoom::THORN:
+		//플레이어가 함정에 걸렸다면
 		firstFloorStage::update();
 		firstFloorStage::setAlpha();
+		//데드매니저를 실행한다.
 		_dead->setDead(DEAD_THORN);
 		_dead->update();
 
 		_delay++;
-		//풍부함을 위해서.. 여러번 재생한다
+		//사운드의 풍부함을 위해서.. 여러번 재생한다
 		if (!(_delay % 57))
 			autoSound("여자");
 		break;
 	default:
+		//그외의 상태는 NONE과 같다.
 		_trigger = NONE;
 		firstFloorStage::update();
 		firstFloorStage::setAlpha();
@@ -156,6 +166,7 @@ void boxRoom::Collision()
 				//텍스를 넣는 동시에 폼 실행
 				if (_readCnt != END && (TRIGGER)index == READ && SelectionForm(L"읽는다.", L"읽지 않는다") && _fromSelected == LEFT)
 				{
+					//트리거를 읽는 상태로 설정
 					_trigger = READ;
 				}
 				//텍스를 넣는 동시에 폼 실행

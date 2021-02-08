@@ -13,16 +13,23 @@ scissorsRoom::~scissorsRoom()
 HRESULT scissorsRoom::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
 	lastEvent = false;
+
+	//플레이어가 바라보는 방향
 	_player->setDirec(_chrdirection);
 
 	//타일 불러오기
 	load();
 
+	//카메라 셋팅
 	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
+
+	//1층 관련 스테이지 초기화
 	firstFloorStage::init();
 
+	//초기 트리거 상태
 	_trigger = NONE;
 
+	//스테이지 메모리 불러오기
 	getMemory();
 	return S_OK;
 }
@@ -194,6 +201,7 @@ void scissorsRoom::Collision()
 
  						for (int k = 0; k < _vFrameTile.size(); k++)
 						{
+							//트리거가 이미 발동된 상태이거나 혹은 마지막 프레임만 보여준다면 무시한다.
 							if (_vFrameTile[k].isMaxframe || _vFrameTile[k].isTrigger)
 								continue;
 
@@ -219,6 +227,7 @@ void scissorsRoom::Collision()
 			switch (_tiles[index].terrain)
 			{
 			case TR_TRIGGER:
+				//트리거를 바로 받아와 본다.
 				_trigger = index == 564 ? DOOR_RIGHT_OPEN :
 					index == DOOR_RIGHT_OPEN ? DOOR_RIGHT_OPEN : NONE;
 
@@ -260,9 +269,11 @@ void scissorsRoom::Collision()
 				break;
 			}
 
-			//곰돌이 팔다리를 자른 상태라면
+			//곰돌이 팔다리를 자른 상태이며 에너미 곰1이 나오지 않았다면
+			//해당 타일의 속성이 BEARCOM이라면
 			if (STAGEMEMORYMANAGER->getIsScissors() && !STAGEMEMORYMANAGER->getIsBearComing() && !STAGEMEMORYMANAGER->getIsBearComing2()&&(TRIGGER)index == BEARCOM || (TRIGGER)index == 560)
 			{
+				//에너미를 생성한다.
 				_bear = new bear;
 				_bear->init(319% TILEX, 319 / TILEX);
 				_playerTile = new astarTile;
@@ -308,8 +319,10 @@ void scissorsRoom::getMemory()
 {
 	for (int k = 0; k < _vFrameTile.size(); k++)
 	{
+		//손바닥이 트리거가 발동되지 않은 경우 이 씬에서는 손바닥을 보여주지 않는다.
 		if (STAGEMEMORYMANAGER->getIsPalmLeft() || STAGEMEMORYMANAGER->getIsPalmRight()) _isBlood = true;
 
+		//해당 타일에 가위가 존재하며 가위를 사용하지 않은 상태라면
 		if (_vFrameTile[k].keyName == "가위" && STAGEMEMORYMANAGER->getIsScissors())
 		{
 			//트리거가 이미 발동되었던 상태로 셋팅한다.

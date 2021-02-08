@@ -43,15 +43,20 @@ HRESULT entrance::init(CHRDIRECTION _chrdirection, LOCATION _location)
 
 void entrance::bearCom()
 {
+	//곰 생성 조건
+	//에너미 곰1 이 등장한 적이 없거나 에너미 곰2 이 등장한적 없거나 곰돌이 미션을 전부 실패하지 않은 경우를 제외한다.
 	if (!STAGEMEMORYMANAGER->getIsBearComing() ||
 		STAGEMEMORYMANAGER->getIsBearComing2() ||
 		!STAGEMEMORYMANAGER->getIsBearPickUp() ||
 		!STAGEMEMORYMANAGER->getIsBearPut())
 		return;
 
+	//바로 등장하지 않고 이벤트 발생 및 뜸을 들인 후
 	_enemyInterval++;
 	if (_enemyInterval == 1)
 		autoSound("호러3");
+
+	//해당 간격이 도달 했을때 생성한다.
 	if (_enemyInterval == 88)
 	{
 		autoSound("곰등장");
@@ -82,6 +87,7 @@ void entrance::getMemory()
 {
 	for (int k = 0; k < _vFrameTile.size(); k++)
 	{
+		//타일에 켜진초꺼진초가 존재하며 메모리에 트리거가 이미 발생된 적이 있다면
 		if (_vFrameTile[k].keyName == "켜진초꺼진초" && STAGEMEMORYMANAGER->getIsCandle())
 		{
 			//트리거가 이미 발동되었던 상태로 셋팅한다.
@@ -106,6 +112,8 @@ void entrance::update()
 
 	//프레임 인덱스 셋팅
 	setFrameIndex();
+
+	//트리거 상태에 따른 호출 및 설정
 	switch (_trigger)
 	{
 	case entrance::NONE:
@@ -115,52 +123,80 @@ void entrance::update()
 		Collision();
 		break;
 	case entrance::DOOR_LEFT_OPEN:
+		//가위방을 이동
 		firstFloorStage::sceneChange("scissorsRoom", CHRDIREC_LEFT, LOCATION_DEFAULT);
 		break;
 	case entrance::DOOR_RIGHT_OPEN:	
+		//복도로 이동
 		firstFloorStage::sceneChange("hallway", CHRDIREC_RIGHT, LOCATION_DEFAULT);
 		break;
 	case entrance::CAT_TALK:
+		//고양이와 대화
 		firstFloorStage::setAlpha();
 		break;
 	case entrance::CANDLE_OFF:
+		//촛불이 꺼진 상태
 		firstFloorStage::setAlpha();
+
+		//메모리에 저장한다.
 		STAGEMEMORYMANAGER->setIsCandle(true);
+
+		//트리거가 발생되었으므로 멈칫하는 트리거로 설정한다.
 		_trigger = DELAY;
 		break;
 	case entrance::VASE_DOWN:
+		//화분이 떨어진 상태
 		firstFloorStage::setAlpha();
+
+		//메모리에 저장한다.
 		STAGEMEMORYMANAGER->setIsVase(true);
+
+		//트리거가 발생되었으므로 멈칫하는 트리거로 설정한다.
 		_trigger = DELAY;
 		break;
 	case entrance::PALM_LEFT:
+		//왼쪽 손자국을 찍는 상태
 		firstFloorStage::setAlpha();
+
+		//기존에는 랜더하지 않다가 _isBlood true로 하면서 랜더한다.
 		_isBlood = true;
+
+		//트리거가 발생되었으므로 멈칫하는 트리거로 설정한다.
 		_trigger = DELAY;
 		break;
 	case entrance::PALM_RIGHT:
+		//오른쪽 손자국을 찍는 상태
 		firstFloorStage::setAlpha();
+
+		//기존에는 랜더하지 않다가 _isBlood true로 하면서 랜더한다.
 		_isBlood = true;
+
+		//트리거가 발생되었으므로 멈칫하는 트리거로 설정한다.
 		_trigger = DELAY;
 		break;
 	case entrance::DELAY:
 		firstFloorStage::setAlpha();
+
+		//실제 게임에서 트리거 발동 시 멈칫 멈칫 하는걸 구현한거
 		if(_bear) _player->setState(CHR_IDLE);
 		_delay++;
 		if (_delay % 60 == 0)
 			_trigger = NONE;
 		break;
 	default:
+		//그외의 상태는 NONE과 같다.
 		_trigger = NONE;
 		firstFloorStage::update();
 		Collision();
 		break;
 	}	
 
-	//카메라 관련 업데이트
+	//에너미 곰이 존재 한다면 해당 함수를 호출한다.
 	if (_bear)	firstFloorStage::enemyUpdate();
 
+	//에너미 곰이 존재 하지 않으며 데드씬이 존재한다면 데드씬 함수를 호출한다.
 	if(!_bear && _dead) _dead->update();
+
 	firstFloorStage::cameraUpdate();
 }
 
@@ -194,7 +230,6 @@ void entrance::Collision()
 					//_trigger = CAT_TALK;
 				}
 			}
-
 
 			//어느 타일과 충돌 했을 경우
 			if (!IntersectRectToRect(&_tiles[index].rc, &_player->getPlayerFrc())) continue;

@@ -16,10 +16,13 @@ protected:
 	};
 	//프레임 이미지(플레이어, 에너미, 오브젝트) 타일
 	vector<tagFrameTile> _vFrameTile;
+
 	//맵타일
 	tagTile _tiles[TILEX*TILEY];
+
 	//케뭬라
 	Vector2 camera;
+
 	vector<string> _vScript;
 	Player* _player;
 	bear* _bear;
@@ -32,7 +35,6 @@ protected:
 	float _light;
 
 	//A* 관련 변수
-//private:
 	vector<astarTile*>			_vTotalList;
 	vector<astarTile*>::iterator _viTotalList;
 
@@ -99,7 +101,6 @@ public:
 	void pathFinder(astarTile * currentTile);
 	void autoSound(string key);
 	void FormRender();
-	//bool SelectionForm();
 
 	//텍스를 넣는 동시에 폼 실행
 	bool SelectionForm(wstring leftText, wstring rightText);
@@ -110,11 +111,5 @@ public:
 		FormInfo[LEFT] = leftText;
 		FormInfo[RIGHT] = rightText;
 	};
-
-	////폼 실행
-	//void startForm()	{_isForm = true;};
-
-	////폼 종료
-	//void stopForm()		{_isForm = false;};
 };
 

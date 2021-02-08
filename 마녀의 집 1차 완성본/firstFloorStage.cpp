@@ -14,16 +14,25 @@ HRESULT firstFloorStage::init()
 {
 	//bgm재생
 	autoSound("1층BGM");
+
+	//플레이어를 초기화한다.
 	_player->init();
 	_player->setAlpha(1.f);
 
-	//카메라 아직 잘 모르겠다 다 초기화 하자..
+	//카메라 관련 초기화한다.
 	CAMERAMANAGER->setConfig(0, 0, TILESIZEX, TILESIZEY, 0, 0, TILESIZEX, TILESIZEY);
 	CAMERAMANAGER->setCamera(camera);
 
+	//프레임 이미지의 데이터를 받아온다.
 	getFrameTile();
+	
+	//해당 씬의 투명도를 초기화한다.
 	_sceneAlpha = 0.05;
+
+	//딜레이를 초기화한다.
 	_delay = 0;
+
+	//밝기를 초기화한다.
 	_light = 1.f;
 	return S_OK;
 }
@@ -87,24 +96,30 @@ void firstFloorStage::enemyUpdate()
 	//에너미가 존재한다면 A* 적용한다. 
 	if (_bear)
 	{
+		//플레이어 위치르 계속 받아온다.
 		playerLocation();
 
+		//_setTile이 true일 경우 위치를 다시 잡아준다.
 		if (!_setTile)
 		{
 			enemyLocation();
 			setAstarTile();
 			_setTile = true;
 		}
-
+		
+		//사실상 접근 속도와 같다. 
 		_follow_count++;
 		if (_follow_count >= 13)
 		{
 			resetEverything();
+			
+			//현재 타일을 플레이어 타일로 치환한다.
 			_currentTile = _playerTile;
 			while (_numCount <= 0 && !_stop)
 			{
 				pathFinder(_currentTile);
 			}
+			//A* 상에서 에너미가 플레이어에게 완전 접근 했다면
 			if (Math::GetDistance(_playerTile->getIdx(), _playerTile->getIdy(), _enemyTile->getIdx(), _enemyTile->getIdy()) < 1.1f)
 			{
 				//에너미가 존재하지 않다면 반환한다.
@@ -118,6 +133,7 @@ void firstFloorStage::enemyUpdate()
 				SAFE_RELEASE(_bear);
 				SAFE_DELETE(_bear);
 
+				//멈춘다.
 				_stop = true;
 				return;
 			}
@@ -128,6 +144,7 @@ void firstFloorStage::enemyUpdate()
 
 void firstFloorStage::cameraUpdate()
 {
+	//카메라 관련 함수 업데이트를 한다.
 	CAMERAMANAGER->setWorldMouse(_ptMouse);
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
@@ -150,10 +167,12 @@ void firstFloorStage::render()
 		}
 	}
 	//Z-order 벡터에 데이터를 넣어주는 과정
-		//플레이어와 에너미의 경우 각 객체의 랜더함수를 호출할 것이므로 z-order비교를 위한 y값과 타입값만 넣어주면 충분
+	//플레이어와 에너미의 경우 각 객체의 랜더함수를 호출할 것이므로 z-order비교를 위한 y값과 타입값만 넣어주면 충분
 	ZORDER->insert(_player->getPlayerFrc().left, _player->getPlayerFrc().top, ZPLAYER);
+
+	//에너미 곰이 존재한다면 Zorder에 추가한다.
 	if(_bear)	ZORDER->insert(_bear->getRect().left, _bear->getRect().top, ZENEMY);
-//	if (_isBossAppeal)ZORDER->insert(_bear->getRect().left, _bear->getRect().top, ZENEMY);
+
 	//오브젝트를 넣어주는 과정
 	//오브젝트의 경우 랜딩을 해줘야하므로 이미지를 넣어주거나 키값을 넣어주는게 맞음
 	//특정 트리거로 예외처리를 해야한다면, 이미지를 바로 넣기보다는 키값을 넣어주는 방식을 사용하는게 좋아보임
@@ -206,7 +225,10 @@ void firstFloorStage::render()
 	}
 	//zorder 벡터를 초기화해줌 안하면 느려짐
 	ZORDER->release();
+
+	//데드씬이 존재한다면 랜더를 한다.
 	if(_dead) _dead->render();
+
 	//검은색 타일 오브젝트이미지까지 넣게되면 프로그램이 무거워져서 따로 뺌
 	for (int i = 0; i < TILEX*TILEY; i++)
 	{
@@ -223,14 +245,17 @@ void firstFloorStage::render()
 	IMAGEMANAGER->FindImage("Back2")->SetSize(Vector2(1920, 1280));
 	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("Back2"), Vector2(_player->getPlayerLocX(), _player->getPlayerLocY()));
 
+	//다이어로그가 존재 한다면 랜더를 한다.
 	if (_vScript.size() > 0) TEXTMANAGER->renderText();
 
-	//폼이 실행되고 있다면
+	//폼이 실행되고 있다면 랜더를 한다.
 	if (_isForm)	FormRender();
 }
 
 void firstFloorStage::getFrameTile()
 {
+	//프레임 이미지 타일을 가지고 온다.
+	//관리하기가 용이다
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
@@ -239,6 +264,7 @@ void firstFloorStage::getFrameTile()
 			if (!FRAMEINFOMANAGER->GetSize())
 				return;
 
+			//키값이 존재 하지 않는다면 무시한다.
 			if (!FRAMEINFOMANAGER->KeyCheck(_tiles[i*TILEX + j].keyName))
 				continue;
 
@@ -246,6 +272,7 @@ void firstFloorStage::getFrameTile()
 			FloatRect rc;
 			rc = RectMakePivot(Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top + TILESIZE / 2), Vector2(TILESIZE, TILESIZE), Pivot::Center);
 
+			//속성
 			FRAMEATTRIBUTE tempKinds = FRAMEINFOMANAGER->GetAttribute(_tiles[i*TILEX + j].keyName);
 
 			tagFrameTile temp;
@@ -271,13 +298,18 @@ void firstFloorStage::setFrameIndex()
 
 	for (int i = 0; i < _vFrameTile.size(); i++)
 	{
+		//프레임 이미지가 마지막 프레임으로 설정되어 있다면
 		if (_vFrameTile[i].isMaxframe)
 		{
+			//인덱스를 마지막 프레임으로 받아온다.
 			_vFrameTile[i].frameX = FRAMEINFOMANAGER->FindImage(_vFrameTile[i].keyName)->GetMaxFrameX() - 1;
 			_vFrameTile[i].frameY = FRAMEINFOMANAGER->FindImage(_vFrameTile[i].keyName)->GetMaxFrameY() - 1;
 			continue;
 		}
 
+		//프레임 오브젝트는 불규칙적이라서(가로 정렬, 세로 정렬)
+		//한 줄로만 정렬되어 있다면 FrameOperation 함수에 넣어서 알고리즘을 통해 인덱스를 받아온다.
+		//함수에 해당 프레임 이미지의 트리거 상태도 같이 넣는다.
 		Vector2 temp;
 		temp = FRAMEINFOMANAGER->FrameOperation(_vFrameTile[i].keyName, Vector2(_vFrameTile[i].frameX, _vFrameTile[i].frameY), _vFrameTile[i].isTrigger);
 		_vFrameTile[i].frameX = temp.x;
@@ -291,18 +323,18 @@ void firstFloorStage::tileCollision(int i, int j)
 
 	switch (_player->getPdirec())
 	{
-	case CHRDIREC_DOWN:
-		_player->setPLocaY(_tiles[i*TILEX + j].rc.top - TILESIZE / 4 * 3);
-		break;
-	case CHRDIREC_LEFT:
-		_player->setPLocaX(_tiles[i*TILEX + j].rc.right + 4);
-		break;
-	case CHRDIREC_RIGHT:
-		_player->setPLocaX(_tiles[i*TILEX + j].rc.left - TILESIZE / 4 * 3);
-		break;
-	case CHRDIREC_UP:
-		_player->setPLocaY(_tiles[i*TILEX + j].rc.bottom + 4);
-		break;
+		case CHRDIREC_DOWN:
+			_player->setPLocaY(_tiles[i*TILEX + j].rc.top - TILESIZE / 4 * 3);
+			break;
+		case CHRDIREC_LEFT:
+			_player->setPLocaX(_tiles[i*TILEX + j].rc.right + 4);
+			break;
+		case CHRDIREC_RIGHT:
+			_player->setPLocaX(_tiles[i*TILEX + j].rc.left - TILESIZE / 4 * 3);
+			break;
+		case CHRDIREC_UP:
+			_player->setPLocaY(_tiles[i*TILEX + j].rc.bottom + 4);
+			break;	
 	}
 }
 
@@ -319,6 +351,7 @@ void firstFloorStage::sceneChange(string name, CHRDIRECTION _chrdirection, LOCAT
 
 void firstFloorStage::setAlpha()
 {
+	//씬 체인이를 하게 된다면 투명도를 줄여준다.
 	if (_sceneAlpha < 1.f)
 	{
 		if (_sceneAlpha <= 0.65f)
@@ -334,9 +367,13 @@ void firstFloorStage::setAlpha()
 
 bool firstFloorStage::SelectionForm(wstring leftText, wstring rightText)
 {
+	//자주 사용하게 되는 폼 포맷을 함수로 만들어서 사용한다.
+
+	//폼이 종료되어 있으며 해당 키를 입력 시 폼 화면을 띄운다.
 	if (!_isForm && KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		_isForm = true;
 
+	//폼이 종료되어 있다면 반환한다.
 	if (!_isForm) return false;
 
 	FormInfo[LEFT] = leftText;
@@ -375,6 +412,7 @@ bool firstFloorStage::SelectionForm(wstring leftText, wstring rightText)
 
 void firstFloorStage::FormRender()
 {
+	//폼에 대한 랜더
 	//if (!_isForm) return;
 	IMAGEMANAGER->FindImage("bar")->SetScale(1.1f);
 	IMAGEMANAGER->FindImage("bar")->Render(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2 - 50));	//왼쪽
@@ -404,6 +442,7 @@ void firstFloorStage::FormRender()
 
 void firstFloorStage::rcAlphaChange()
 {
+	//선택된 효과를 보여주기 위한 함수
 	if (_rcAlpha >= 0.9f)
 		_rcAlphaChange = -0.03f;
 
@@ -415,8 +454,6 @@ void firstFloorStage::rcAlphaChange()
 
 void firstFloorStage::playerLocation()
 {
-	int tem = _player->getPlayerLocY();
-	int tem2 = _player->getPlayerLocX();
 	_playerTile->init((_player->getPlayerLocX() + TILESIZE / 2) / TILESIZE,
 		(_player->getPlayerLocY() + TILESIZE / 2) / TILESIZE);
 	_playerTile->setAttribute("player");	// astar타일로 플레이어 적용
@@ -513,8 +550,7 @@ vector<astarTile*> firstFloorStage::addOpenList(astarTile * currentTile)
 	int startX = currentTile->getIdx() - 1;
 	int startY = currentTile->getIdy() - 1;
 
-	//for (int i = 2; i >= 0; --i)
-		for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < 3; ++i)
 	{
 		//// ############ 벡터 안터지게 #####################
 		if (startY + i < 0)				continue;
@@ -681,6 +717,7 @@ void firstFloorStage::pathFinder(astarTile * currentTile)
 
 void firstFloorStage::autoSound(string key)
 {
+	//사운드 파일에 따라 불륨이 다 다르고 개인적인 취향에 맞게 고정하여 매니저를 호출한다.
 	float volume = 1.f;
 
 	if (key == "1층BGM")

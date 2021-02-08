@@ -327,9 +327,6 @@
     <ClInclude Include="ItemManager.h">
       <Filter>2DGameFramework\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="menu.h">
-      <Filter>playGround\temp</Filter>
-    </ClInclude>
     <ClInclude Include="load.h">
       <Filter>playGround\temp</Filter>
     </ClInclude>
@@ -368,6 +365,9 @@
     </ClInclude>
     <ClInclude Include="iniDataManager.h">
       <Filter>2DGameFramework\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="menu.h">
+      <Filter>playGround\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -602,9 +602,6 @@
     <ClCompile Include="ItemManager.cpp">
       <Filter>2DGameFramework\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="menu.cpp">
-      <Filter>playGround\temp</Filter>
-    </ClCompile>
     <ClCompile Include="load.cpp">
       <Filter>playGround\temp</Filter>
     </ClCompile>
@@ -643,6 +640,9 @@
     </ClCompile>
     <ClCompile Include="iniDataManager.cpp">
       <Filter>2DGameFramework\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="menu.cpp">
+      <Filter>playGround\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

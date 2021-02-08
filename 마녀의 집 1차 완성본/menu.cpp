@@ -55,123 +55,6 @@ void menu::update()
 {
 	//메뉴가 열린다.
 	openMenu();
-
-#pragma region 혹시몰라 내가 건들기 전에꺼는 냅두게
-	//SOUNDMANAGER->setVolume(_volume);
-	////방향키 조작
-	//if (!_isClick && KEYMANAGER->isOnceKeyDown(VK_DOWN))
-	//{
-	//	_contents = (CONTENTS)(_contents == END ? 0 : (int)_contents + 1);
-	//	SOUNDMANAGER->play("cursor", 0.5f);
-	//}
-
-	//if (!_isClick && KEYMANAGER->isOnceKeyDown(VK_UP))
-	//{
-	//	_contents = (CONTENTS)(_contents == NEW ? 3 : (int)_contents - 1);
-	//	SOUNDMANAGER->play("cursor", 0.5f);
-	//}
-
-	//if (!_isClick)
-	//{
-	//	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-	//	{
-	//		//새로하기(난이도 선택으로)
-	//		if (_contents == NEW)
-	//		{
-
-	//			_isClick = true;
-	//			SOUNDMANAGER->play("click", 0.5f);
-	//			sceneAlphaChange();
-	//			SCENEMANAGER->changeScene("레벨선택");
-	//			SOUNDMANAGER->stop("main");
-	//		}
-	//		//옵션 설정
-	//		if (_contents == OPTION)
-	//		{
-	//			_openOption = true;
-	//		}
-	//		//맵툴설정으로
-	//		if (_contents == MAPTOOL)
-	//		{
-	//			_isClick = true;
-	//			SOUNDMANAGER->play("click", 0.5f);
-	//			//sceneAlphaChange();
-	//			SCENEMANAGER->changeScene("MapToolScene");
-	//			SOUNDMANAGER->stop("main");
-	//		}
-	//	}
-
-	//	if (_openOption)
-	//	{
-	//		_settings->update();
-	//		if (KEYMANAGER->isOnceKeyDown(VK_BACK))
-	//		{
-	//			_openOption = false;
-	//		}
-	//	}
-	//}
-	////메인메뉴 설정 창
-
-
-	//if (_isClick)
-	//{
-	//	sceneAlphaChange();
-	//}
-
-	//if (!_isClick)
-	//{
-	//	rcAlphaChange();
-	//}
-	////else
-	////{
-	////	sceneAlphaChange();
-	////}
-
-	////선택된 메뉴(항목)에 렉트 위치 변경
-	//switch (_contents)
-	//{
-	//case menu::NEW:
-	//	_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2 - 10, WINSIZEY / 2 + 20), Vector2(220, 60), Pivot::Center);
-	//	break;
-	//case menu::CONTINUE:
-	//	_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2 - 10, WINSIZEY / 2 + 90), Vector2(220, 60), Pivot::Center);
-	//	break;
-	//case menu::MAPTOOL:
-	//	_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2 - 10, WINSIZEY / 2 + 160), Vector2(220, 60), Pivot::Center);
-	//	break;
-	//case menu::OPTION:
-	//	_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2 - 10, WINSIZEY / 2 + 230), Vector2(220, 60), Pivot::Center);
-	//	break;
-	//case menu::END:
-	//	_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2 - 10, WINSIZEY / 2 + 300), Vector2(220, 60), Pivot::Center);
-	//	if (_isClick)
-	//	{
-	//		//투명도 1이하라면 종료한다.
-	//		if (sceneAlphaChange())
-	//			PostQuitMessage(0);
-	//	}
-	//	//원키다운이 먹히지 않으므로 스테이로 수정함
-	//	if (KEYMANAGER->isStayKeyDown(VK_SPACE))
-	//		_isClick = true;
-	//	break;
-	//}
-
-	////선택 키를 누르지 않았다면 렉트 반짝 효과
-	////if (!_isClick)
-	////{
-	////	rcAlphaChange();
-	////}
-	////선택 키를 눌렀다면 백그라운드 및 이미지 투명도 조절
-	////else
-	////{
-	////	
-	////	if (sceneAlphaChange())
-	////	{
-	////		SCENEMANAGER->changeScene("레벨선택");
-	////	}
-	////	//투명도 조절 후 다음씬으로 휙
-	////}
-#pragma endregion
 }
 
 void menu::openMenu()
@@ -203,24 +86,9 @@ void menu::openMenu()
 
 	case menu::CONTINUE:
 		_rcSelected = RectMakePivot(Vector2(WINSIZEX / 2 - 10, WINSIZEY / 2 + 90), Vector2(220, 60), Pivot::Center);
-		//if (_isClick)
-		{
-			//저장소 창을 열어 재끼고 컨텐츠의 상태를 받아온다(뒤로가기, 진행~)
-			_isMenuState = STORAGEMANAGER->loadView();
-			_isClick = _isMenuState ? true : false;
-		}
-		//if (_isClick)
-		//{
-		//   //저장소 창을 열어 재끼고 컨텐츠의 상태를 받아온다(뒤로가기, 진행~)
-		//   _isMenuState = STORAGEMANAGER->loadView();
-		//   //if(_isMenuState == MENU_END)
-		//   //여기서 불러온다? 혹은 매니저에서 불러와야하나 생각좀
-
-		//   if (!_isMenuState)   _isClick = false;
-		//}
-		////원키다운이 먹히지 않으므로 스테이로 수정함
-		//if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-		//   _isClick = true;
+		//저장소 창을 열어 재끼고 컨텐츠의 상태를 받아온다(뒤로가기, 진행~)
+		_isMenuState = STORAGEMANAGER->loadView();
+		_isClick = _isMenuState ? true : false;
 		break;
 
 	case menu::MAPTOOL:

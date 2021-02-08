@@ -14,17 +14,19 @@ hallway::~hallway()
 
 HRESULT hallway::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
+	//플레이어가 바라보는 방향
 	_player->setDirec(_chrdirection);
 
 	//타일 불러오기
 	load(_location);
 
-	//테스트로 넣어둠 원래 곰돌이를 넣었을때 초기화 해야함 추후에 지울것!
-	//STAGEMEMORYMANAGER->setIsBearPut(true);
+	//카메라 셋팅
 	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
 
+	//1층 관련 스테이지 초기화
 	firstFloorStage::init();
 
+	//초기 트리거 상태
 	_trigger = NONE;
 
 	return S_OK;
@@ -40,6 +42,7 @@ void hallway::update()
 	//프레임 인덱스 셋팅
 	setFrameIndex();
 
+	//트리거 상태에 따른 호출 및 설정
 	switch (_trigger)
 	{
 		case hallway::NONE:
@@ -48,19 +51,24 @@ void hallway::update()
 			Collision();
 			break;
 		case hallway::DOOR_LEFT_OPEN:
+			//현관으로 이동한다.
 			firstFloorStage::sceneChange("entrance", CHRDIREC_LEFT, LOCATION_1);
 			break;
 		case hallway::DOOR_RIGHT_TOP_OPEN:
+			//선물상자 방으로 이동한다.
 			firstFloorStage::sceneChange("boxRoom", CHRDIREC_RIGHT, LOCATION_DEFAULT);
 			break;
 		case hallway::DOOR_RIGHT_BOTTOM_OPEN:
+			//곰돌이 방으로 이동한다.
 			firstFloorStage::sceneChange("bearRoom", CHRDIREC_RIGHT, LOCATION_DEFAULT);
 			break;
 		case hallway::CLOCK:
+			//시계 다이어로그 이벤트
 			firstFloorStage::setAlpha();
 			_vScript = TEXTMANAGER->loadFile("dialog/1f/1f_hallwayClock.txt");
 
-			if (KEYMANAGER->isOnceKeyUp(VK_SPACE) || KEYMANAGER->isOnceKeyUp('x'))
+			//해당 키를 입력 시 넘어가거나 종료한다.
+			if (KEYMANAGER->isOnceKeyUp(VK_SPACE)))
 			{
 				TEXTMANAGER->clearScript();
 				_trigger = NONE;
@@ -68,6 +76,7 @@ void hallway::update()
 			}
 			break;
 		default:
+			//그외의 상태는 NONE과 같다.
 			_trigger = NONE;
 			firstFloorStage::update();
 			firstFloorStage::setAlpha();
@@ -107,8 +116,8 @@ void hallway::Collision()
 			switch (_tiles[index].terrain)
 			{
 			case TR_TRIGGER:
-				//밞았을때
-				//트리거 받아오기
+				//이 씬은 프레임이 존재하지 않으므로 형변환해서 바로 받아온다.
+
 				_trigger = index == 1036 ? DOOR_LEFT_OPEN :
 						   index == DOOR_LEFT_OPEN ? DOOR_LEFT_OPEN :
 					       index == 621 ? DOOR_RIGHT_TOP_OPEN :
