@@ -4,6 +4,7 @@
 
 HRESULT prison_5f::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
+	SOUNDMANAGER->play("°¨¿Á");
 	_real_location1 = PRISON;
 	_player->setDirec(_chrdirection);
 
@@ -23,16 +24,19 @@ HRESULT prison_5f::init(CHRDIRECTION _chrdirection, LOCATION _location)
 		_objTile[i] = new astarTile;
 	}
 	objectLocation();
+	_sound = false;
 	return S_OK;
 }
 
 void prison_5f::release()
 {
+	SOUNDMANAGER->stop("°¨¿Á");
+	SOUNDMANAGER->stop("ÀûÀÌ¦iÀ»¶§");
+	_sound = false;
 }
 
 void prison_5f::update()
 {
-	//if (KEYMANAGER->isOnceKeyDown(VK_F3)) 
 	if (!_isStopToRead)
 	{
 		fifthFloorStage::update();
@@ -61,6 +65,7 @@ void prison_5f::update()
 				while (_numCount == 0 && !_stop) pathFinder(_currentTile);
 				if (Math::GetDistance(_playerTile->getCenter().x, _playerTile->getCenter().y, _enemyTile->getCenter().x, _enemyTile->getCenter().y) <= 48.0f)
 				{
+					SOUNDMANAGER->play("ÇØ°ñµ¥½º");
 					_dead->setDead(DEAD_SKULL);
 					_isDead = true;
 					_skul->~skul();
@@ -77,6 +82,13 @@ void prison_5f::update()
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))	// Å¬¸¯Çàµ¿ Æ®¸®°Å
 		{
 			_isStopToRead = TEXTMANAGER->setNextScript(true);
+			_sound = false;
+
+			if (_sound_item && !_isStopToRead)
+			{
+				SOUNDMANAGER->play("getItem");
+				_sound_item = false;
+			}
 		}
 	}
 }
@@ -93,7 +105,6 @@ void prison_5f::render()
 
 	if (_isStopToRead)
 		TEXTMANAGER->renderText();
-
 }
 
 void prison_5f::Collision()
@@ -146,24 +157,36 @@ void prison_5f::setTrigger()
 
 		if (IntersectRectToRect(&_tiles[R_FLOWER_1].rc, &_player->getSearchRc()))
 		{
+			if (!_sound)
+				SOUNDMANAGER->play("¿©ÀÚºñ¿ôÀ½");
+			_sound = true;
 			STAGEMEMORYMANAGER->setIsRedFlower1(true);
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_flower_1.txt");
 			_isStopToRead = true;
 		}
 		if (IntersectRectToRect(&_tiles[R_FLOWER_2].rc, &_player->getSearchRc()))
 		{
+			if (!_sound)
+				SOUNDMANAGER->play("¿©ÀÚºñ¿ôÀ½");
+			_sound = true;
 			STAGEMEMORYMANAGER->setIsRedFlower2(true);
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_flower_2.txt");
 			_isStopToRead = true;
 		}
 		if (IntersectRectToRect(&_tiles[R_FLOWER_3].rc, &_player->getSearchRc()))
 		{
+			if (!_sound)
+				SOUNDMANAGER->play("¿©ÀÚºñ¿ôÀ½");
+			_sound = true;
 			STAGEMEMORYMANAGER->setIsRedFlower3(true);
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_flower_3.txt");
 			_isStopToRead = true;
 		}
 		if (IntersectRectToRect(&_tiles[BOOK].rc, &_player->getSearchRc()))
 		{
+			if (!_sound)
+				SOUNDMANAGER->play("openBook");
+			_sound = true;
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_book.txt");
 			_isStopToRead = true;
 		}
@@ -173,6 +196,9 @@ void prison_5f::setTrigger()
 		}
 		if (IntersectRectToRect(&_tiles[DOOR_2].rc, &_player->getSearchRc()))
 		{
+			if (!_sound)
+				SOUNDMANAGER->play("Ã¶¹®");
+			_sound = true;
 			switch (_ido)
 			{
 			case prison_5f::FIRST:
@@ -181,6 +207,7 @@ void prison_5f::setTrigger()
 				_ido = SECOND;
 				break;
 			case prison_5f::SECOND:
+				_sound_item = true;
 				STAGEMEMORYMANAGER->setIsGetSkul2(true);
 				_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_irondoor_2.txt");
 				_isStopToRead = true;
@@ -194,9 +221,13 @@ void prison_5f::setTrigger()
 			}
 			
 		}
-		if (IntersectRectToRect(&_tiles[CAGE].rc, &_player->getSearchRc()) && STAGEMEMORYMANAGER->getIsKey() == true)
+		if (IntersectRectToRect(&_tiles[CAGE].rc, &_player->getSearchRc()) && STAGEMEMORYMANAGER->getIsKey())
 		{
 			_vFrameTile[4].isTrigger = true;
+			if (!_sound)
+				SOUNDMANAGER->play("»õ");
+			_sound = true;
+			_sound_item = true;
 		}
 		else if (IntersectRectToRect(&_tiles[CAGE].rc, &_player->getSearchRc()))
 		{
@@ -205,9 +236,17 @@ void prison_5f::setTrigger()
 		}
 	}
 
-	if (IntersectRectToRect(&_tiles[SKUL].rc, &_player->getPlayerFrc()) && 
+	if ((IntersectRectToRect(&_tiles[SKUL].rc, &_player->getPlayerFrc()) ||
+		IntersectRectToRect(&_tiles[SKUL - 1].rc, &_player->getPlayerFrc()))&&
 		!_isSummon && !_setTile && STAGEMEMORYMANAGER->getIsLever())
 	{
+		if (!_sound)
+		{
+			SOUNDMANAGER->stop("°¨¿Á");
+			SOUNDMANAGER->play("ÀûÀÌ¦iÀ»¶§");
+			SOUNDMANAGER->play("Äç");
+		}
+		_sound = true;
 		_skul->init(_skulX, _skulY);
 		_isSkulAppeal = true;
 		_isSummon = true;
@@ -215,12 +254,18 @@ void prison_5f::setTrigger()
 	if (IntersectRectToRect(&_tiles[DOORTOGARDEN].rc, &_player->getPlayerFrc()) ||
 		IntersectRectToRect(&_tiles[DOORTOGARDEN + TILEX].rc, &_player->getPlayerFrc()))
 	{
+		if (!_sound)
+			SOUNDMANAGER->play("Ã¶¹®");
+		_sound = true;
 		_isChangeScene = true;
 		sceneChange("garden_5f", CHRDIREC_LEFT, LOCATION_3);
 	}
 	if (IntersectRectToRect(&_tiles[DOORTOPRISONWELL].rc, &_player->getPlayerFrc()) ||
 		IntersectRectToRect(&_tiles[DOORTOPRISONWELL + 1].rc, &_player->getPlayerFrc()))
 	{
+		if (!_sound)
+			SOUNDMANAGER->play("Ã¶¹®");
+		_sound = true;
 		_vFrameTile[0].isTrigger = true;
 		_isChangeScene = true;
 		sceneChange("prison_well_5f", CHRDIREC_UP, LOCATION_DEFAULT);
@@ -228,6 +273,9 @@ void prison_5f::setTrigger()
 	if (IntersectRectToRect(&_tiles[DOORTOPRISONSKUL].rc, &_player->getPlayerFrc()) ||
 		IntersectRectToRect(&_tiles[DOORTOPRISONSKUL + TILEX].rc, &_player->getPlayerFrc()))
 	{
+		if (!_sound)
+			SOUNDMANAGER->play("Ã¶¹®");
+		_sound = true;
 		_isChangeScene = true;
 		sceneChange("prison_skul_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
 	}

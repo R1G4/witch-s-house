@@ -16,6 +16,7 @@ private:
 
 	TRIGGER _trigger;
 	bool _isSkul;
+	bool _sound;
 public:
 	prison_5f_skul() {};
 	~prison_5f_skul() {};

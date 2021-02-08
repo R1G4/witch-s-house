@@ -4,6 +4,7 @@
 
 HRESULT gardenToBoss_5f::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
+	SOUNDMANAGER->play("정원1");
 	IMAGEMANAGER->AddFrameImage("SavePoint", L"Image/mapTool/saveCat.png", 16, 4);
 	_real_location1 = GARDEN_TO_BOSS;
 	_player->setDirec(_chrdirection);
@@ -16,11 +17,14 @@ HRESULT gardenToBoss_5f::init(CHRDIRECTION _chrdirection, LOCATION _location)
 
 	// 다이얼로그 저장
 
+	_sound = false;
 	return S_OK;
 }
 
 void gardenToBoss_5f::release()
 {
+	SOUNDMANAGER->stop("정원1");
+	_sound = false;
 }
 
 void gardenToBoss_5f::update()
@@ -106,6 +110,7 @@ void gardenToBoss_5f::setTrigger()
 
 		if (IntersectRectToRect(&_tiles[BOOK].rc, &_player->getSearchRc()))
 		{
+			SOUNDMANAGER->play("openBook");
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_gardenToBossBook.txt");
 			_isStopToRead = true;
 		}
@@ -118,6 +123,10 @@ void gardenToBoss_5f::setTrigger()
 
 	if (IntersectRectToRect(&_tiles[DOORTOBOSS].rc, &_player->getPlayerFrc()))
 	{
+		if (!_sound)
+			SOUNDMANAGER->play("openDoarLong");
+		SOUNDMANAGER->stop("정원1");
+		_sound = true;
 		_isChangeScene = true;
 		_vFrameTile[0].isTrigger = true;
 		sceneChange("BossStage1");
@@ -125,6 +134,9 @@ void gardenToBoss_5f::setTrigger()
 	}
 	if (IntersectRectToRect(&_tiles[DOORTOGARDEN].rc, &_player->getPlayerFrc()))
 	{
+		if (!_sound)
+			SOUNDMANAGER->play("openDoarLong");
+		_sound = true;
 		_isChangeScene = true;
 		sceneChange("garden_5f", CHRDIREC_DOWN, LOCATION_2);
 	}

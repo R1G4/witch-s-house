@@ -15,6 +15,7 @@ private:
 	int _count_cat;
 	int _frame_cat;
 
+	int _sound;
 public:
 	gardenToBoss_5f() {};
 	~gardenToBoss_5f() {};

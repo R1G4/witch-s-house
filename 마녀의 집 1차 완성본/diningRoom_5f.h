@@ -31,6 +31,8 @@ class diningRoom_5f : public fifthFloorStage
 	bool _isClick;
 	bool _isClock;
 
+	bool _sound;
+	bool _sound_item;
 public:
 	diningRoom_5f() {};
 	~diningRoom_5f() {};

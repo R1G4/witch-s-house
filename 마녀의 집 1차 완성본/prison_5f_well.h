@@ -24,6 +24,8 @@ private:
 	int rnd_x[300];
 	int rnd_y[300];
 	int _count_line;
+
+	bool _sound;
 public:
 	prison_5f_well() {};
 	~prison_5f_well() {};

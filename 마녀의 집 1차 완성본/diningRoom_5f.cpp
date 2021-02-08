@@ -4,6 +4,7 @@
 
 HRESULT diningRoom_5f::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
+	SOUNDMANAGER->play("´ÙÀÌ´×·ë");
 	_real_location1 = DININGROOM;
 	_player->setDirec(_chrdirection);
 
@@ -15,11 +16,14 @@ HRESULT diningRoom_5f::init(CHRDIRECTION _chrdirection, LOCATION _location)
 
 	getMemory();
 	_isClock = false;
+	_sound = false;
 	return S_OK;
 }
 
 void diningRoom_5f::release()
 {
+	SOUNDMANAGER->stop("´ÙÀÌ´×·ë");
+	_sound = false;
 }
 
 void diningRoom_5f::update()
@@ -40,7 +44,11 @@ void diningRoom_5f::update()
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))	// Å¬¸¯Çàµ¿ Æ®¸®°Å
 			_isStopToRead = TEXTMANAGER->setNextScript(true);
-		
+		if (_sound_item && !_isStopToRead)
+		{
+			SOUNDMANAGER->play("getItem");
+			_sound_item = false;
+		}
 		if (!_isStopToRead && _isClock)
 		{
 			_co = SECOND;
@@ -110,6 +118,7 @@ void diningRoom_5f::setTrigger()
 		if (IntersectRectToRect(&_tiles[Y_FLOWER_1].rc, &_player->getSearchRc()) &&
 			STAGEMEMORYMANAGER->getIsFlowerDead())
 		{
+			SOUNDMANAGER->play("¿©ÀÚºñ¿ôÀ½");
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_flower_1_1.txt");
 			_isStopToRead = true;
 			_isClock = false;
@@ -123,6 +132,7 @@ void diningRoom_5f::setTrigger()
 		if (IntersectRectToRect(&_tiles[Y_FLOWER_2].rc, &_player->getSearchRc()) &&
 			STAGEMEMORYMANAGER->getIsFlowerDead())
 		{
+			SOUNDMANAGER->play("¿©ÀÚºñ¿ôÀ½");
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_flower_2_1.txt");
 			_isStopToRead = true;
 			_isClock = false;
@@ -137,6 +147,7 @@ void diningRoom_5f::setTrigger()
 			STAGEMEMORYMANAGER->getIsFlowerDead() &&
 			STAGEMEMORYMANAGER->getIsGetSkul3())
 		{
+			SOUNDMANAGER->play("¿©ÀÚºñ¿ôÀ½");
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_flower_2_1.txt");
 			_isStopToRead = true;
 			_isClock = false;
@@ -144,8 +155,9 @@ void diningRoom_5f::setTrigger()
 		else if (IntersectRectToRect(&_tiles[Y_FLOWER_3].rc, &_player->getSearchRc()) &&
 			STAGEMEMORYMANAGER->getIsFlowerDead())
 		{
-			// ÇÏ¾á²É Á×ÀÌ°í ¾òÀ»¼ö ÀÕ°Ô Á¶Á¤
+			SOUNDMANAGER->play("¿©ÀÚºñ¿ôÀ½");
 			STAGEMEMORYMANAGER->setIsGetSkul3(true);
+			_sound_item = true;
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_flower_3_1.txt");
 			_isStopToRead = true;
 			_isClock = false;
@@ -159,6 +171,7 @@ void diningRoom_5f::setTrigger()
 		if (IntersectRectToRect(&_tiles[Y_FLOWER_4].rc, &_player->getSearchRc()) &&
 			STAGEMEMORYMANAGER->getIsFlowerDead())
 		{
+			SOUNDMANAGER->play("¿©ÀÚºñ¿ôÀ½");
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_flower_4_1.txt");
 			_isStopToRead = true;
 			_isClock = false;
@@ -185,6 +198,7 @@ void diningRoom_5f::setTrigger()
 		}
 		if (IntersectRectToRect(&_tiles[LIGHT].rc, &_player->getSearchRc()))
 		{
+			_sound_item = true;
 			STAGEMEMORYMANAGER->setIsGetSkul1(true);
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_light.txt");
 			_isStopToRead = true;
@@ -192,6 +206,7 @@ void diningRoom_5f::setTrigger()
 		}
 		if (IntersectRectToRect(&_tiles[DOORTODININGROOMITEM].rc, &_player->getPlayerFrc()))
 		{
+			_sound_item = true;
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_door.txt");
 			STAGEMEMORYMANAGER->setIsKey(true);
 			_isStopToRead = true;
@@ -202,6 +217,11 @@ void diningRoom_5f::setTrigger()
 	if (IntersectRectToRect(&_tiles[DOORTOGARDEN].rc, &_player->getPlayerFrc()) ||
 		IntersectRectToRect(&_tiles[DOORTOGARDEN + TILEX].rc, &_player->getPlayerFrc()))
 	{
+		if (!_sound)
+			SOUNDMANAGER->play("openDoarLong");
+		if (STAGEMEMORYMANAGER->getIsGetSkul3() && !_sound)
+			SOUNDMANAGER->play("¿©ÀÚ");
+		_sound = true;
 		_isChangeScene = true;
 		sceneChange("garden_5f", CHRDIREC_RIGHT, LOCATION_1);
 	}
@@ -220,20 +240,29 @@ void diningRoom_5f::setChoiceScene()
 		_correct_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
 		rcAlphaChange();
 		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+		{
+			SOUNDMANAGER->play("cursor");
 			_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+		}
 		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+		{
+			SOUNDMANAGER->play("cursor");
 			_rc = RectMakePivot(Vector2(WINSIZEX / 2 + 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+		}
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
 			_isClick = false;
 			if (IntersectRectToRect(&_rc, &_correct_rc))
 			{
+				SOUNDMANAGER->play("Äç");
 				_dead->setDead(DEAD_CLOCK);
 				_dead->setLocXY(_tiles[CLOCK].rc.left, _tiles[CLOCK].rc.top);
 				_tiles[CLOCK].obj = OBJ_NONE;
 				_player->~Player();
 				_isDead = true;
 			}
+			else
+				SOUNDMANAGER->play("cursor");
 		}
 	}
 }

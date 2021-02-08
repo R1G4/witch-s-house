@@ -11,6 +11,7 @@ menu::~menu()
 
 HRESULT menu::init()
 {
+	SOUNDMANAGER->play("main");
 	_settings = new settings;
 	_settings->init();
 
@@ -49,6 +50,7 @@ HRESULT menu::init()
 
 void menu::release()
 {
+	SOUNDMANAGER->stop("main");
 }
 
 void menu::update()

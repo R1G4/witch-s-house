@@ -4,6 +4,7 @@
 
 HRESULT prison_5f_well::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
+	SOUNDMANAGER->play("물소리");
 	_real_location1 = PRISON_WELL;
 	_player->setDirec(_chrdirection);
 
@@ -19,11 +20,14 @@ HRESULT prison_5f_well::init(CHRDIRECTION _chrdirection, LOCATION _location)
 		rnd_x[i] = RND->getFromFloatTo(-20, WINSIZEX - 20);
 		rnd_y[i] = RND->getFromFloatTo(-20, WINSIZEY - 20);
 	}
+	_sound = false;
 	return S_OK;
 }
 
 void prison_5f_well::release()
 {
+	SOUNDMANAGER->stop("물소리");
+	_sound = false;
 }
 
 void prison_5f_well::update()
@@ -173,6 +177,7 @@ void prison_5f_well::setTrigger()
 				_fo = THIRD;
 				break;
 			case THIRD:
+				SOUNDMANAGER->stop("물소리");
 				_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_well_frog_3.txt");
 				_isStopToRead = true;
 				_fo = FORTH;
@@ -188,6 +193,9 @@ void prison_5f_well::setTrigger()
 		IntersectRectToRect(&_tiles[DOORTOPRISON + 1].rc, &_player->getPlayerFrc()) ||
 		IntersectRectToRect(&_tiles[DOORTOPRISON - 1].rc, &_player->getPlayerFrc()))
 	{
+		if(!_sound)
+			SOUNDMANAGER->play("철문");
+		_sound = true;
 		_isChangeScene = true;
 		sceneChange("prison_5f", CHRDIREC_DOWN, LOCATION_2);
 	}
@@ -202,6 +210,11 @@ void prison_5f_well::deadTime()
 	}
 
 	_count_line++;
+	if(_count_line % 8 == 0)
+		SOUNDMANAGER->play("사망");
+	if(_count_line == 200)
+		SOUNDMANAGER->play("남자웃음소리");
+
 	for (int i = 0; i < _count_line; i++)
 	{
 		D2DINS->GetInstance()->RenderText(rnd_x[i], rnd_y[i], L"너가 죽였어.", RGB(0, 0, 255), 1.0f, 30);

@@ -36,7 +36,8 @@ HRESULT playGround::init()
 	//SCENEMANAGER->changeScene("4층홀");
 	STORAGEMANAGER->init();
 
-	SCENEMANAGER->changeScene("MapToolScene");
+	SCENEMANAGER->changeScene("시작화면");
+	//SCENEMANAGER->changeScene("garden_5f", CHRDIREC_DOWN, LOCATION_DEFAULT);
 	//SCENEMANAGER->changeScene("stairs_2F");
 	//SCENEMANAGER->changeScene("thirdMain",CHRDIREC_DOWN);
 	//SOUNDMANAGER->play("main");
@@ -256,6 +257,22 @@ void playGround::addSound()
 	SOUNDMANAGER->addSound("피2", "sound/effect/피2.ogg", false, false);
 	SOUNDMANAGER->addSound("여자비웃음", "sound/effect/여자비웃음.ogg", false, false);
 	SOUNDMANAGER->addSound("호러3", "sound/귀신효과음 쓰는사람 없으면 폴더 삭제하기/t024horror_a.ogg", false, false);
+	SOUNDMANAGER->addSound("물소리", "sound/bgm/성훈이 물 맵.OGG", true, true);
+	SOUNDMANAGER->addSound("해골두기", "sound/effect/해골두기.ogg", false, false);
+	SOUNDMANAGER->addSound("남자웃음소리", "sound/effect/남자웃음소리.ogg", false, false);
+	SOUNDMANAGER->addSound("쾅", "sound/effect/쾅.ogg", false, false);
+	SOUNDMANAGER->addSound("새", "sound/effect/bird.ogg", false, false);
+	SOUNDMANAGER->addSound("비명소리", "sound/effect/비명소리.mp3", false, false);
+	SOUNDMANAGER->addSound("해골데스", "sound/effect/해골데스.ogg", false, false);
+	SOUNDMANAGER->addSound("스위치", "sound/effect/스위치.ogg", false, false);
+	SOUNDMANAGER->addSound("blood", "sound/effect/blood.ogg", false, false);
+	SOUNDMANAGER->addSound("철문", "sound/effect/ironDoar.ogg", false, false);
+	SOUNDMANAGER->addSound("정원", "sound/bgm/정원.ogg", true, true);
+	SOUNDMANAGER->addSound("정원1", "sound/bgm/정원.ogg", true, true);
+	SOUNDMANAGER->addSound("감옥", "sound/bgm/감옥.ogg", true, true);
+	SOUNDMANAGER->addSound("감옥1", "sound/bgm/감옥.ogg", true, true);
+	SOUNDMANAGER->addSound("다이닝룸", "sound/bgm/다이닝룸.ogg", true, true);
+	SOUNDMANAGER->addSound("적이쫒을때", "sound/bgm/적이쫒을때.ogg", true, true);
 }
 
 void playGround::addressLink()

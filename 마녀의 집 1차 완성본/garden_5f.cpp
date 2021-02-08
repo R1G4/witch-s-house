@@ -4,6 +4,7 @@
 
 HRESULT garden_5f::init(CHRDIRECTION _chrdirection, LOCATION _location)
 {
+	SOUNDMANAGER->play("정원");
 	_real_location1 = GARDEN;
 	_player->setDirec(_chrdirection);
 
@@ -18,11 +19,13 @@ HRESULT garden_5f::init(CHRDIRECTION _chrdirection, LOCATION _location)
 	_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
 	_correct_rc = RectMakePivot(Vector2(WINSIZEX / 2 + 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
 	_co = FIRST;
+	_sound = false;
 	return S_OK;
 }
 
 HRESULT garden_5f::init(int x, int y, CHRDIRECTION _direction)
 {
+	SOUNDMANAGER->play("정원");
 	_real_location1 = GARDEN;
 	_player->setDirec(_direction);
 
@@ -42,11 +45,14 @@ HRESULT garden_5f::init(int x, int y, CHRDIRECTION _direction)
 	_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
 	_correct_rc = RectMakePivot(Vector2(WINSIZEX / 2 + 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
 	_co = FIRST;
+	_sound = false;
 	return S_OK;
 }
 
 void garden_5f::release()
 {
+	SOUNDMANAGER->stop("정원");
+	_sound = false;
 }
 
 void garden_5f::update()
@@ -194,6 +200,7 @@ void garden_5f::setTrigger()
 			STAGEMEMORYMANAGER->getIsRedFlower3()
 			)
 		{
+			SOUNDMANAGER->play("비명소리");
 			_flowerDead = true;
 			STAGEMEMORYMANAGER->setIsFlowerDead(true);
 		}
@@ -224,6 +231,7 @@ void garden_5f::setTrigger()
 		}
 		if (IntersectRectToRect(&_tiles[DOORTOGARDENTOBOSS].rc, &_player->getSearchRc()))
 		{
+			SOUNDMANAGER->play("openDoarShort");
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_garden_door.txt");
 			_isStopToRead = true;
 		}
@@ -234,6 +242,9 @@ void garden_5f::setTrigger()
 	if (IntersectRectToRect(&_tiles[DOORTOGARDENTOBOSS].rc, &_player->getPlayerFrc()) &&
 		STAGEMEMORYMANAGER->getIsLever())
 	{
+		if (!_sound)
+			SOUNDMANAGER->play("openDoarLong");
+		_sound = true;
 		_isChangeScene = true;
 		_vFrameTile[1].isTrigger = true;
 		sceneChange("gardenToBoss_5f", CHRDIREC_UP, LOCATION_DEFAULT);
@@ -241,12 +252,18 @@ void garden_5f::setTrigger()
 	if (IntersectRectToRect(&_tiles[DOORTOPRISON].rc, &_player->getPlayerFrc()) ||
 		IntersectRectToRect(&_tiles[DOORTOPRISON + TILEX].rc, &_player->getPlayerFrc()))
 	{
+		if (!_sound)
+			SOUNDMANAGER->play("철문");
+		_sound = true;
 		_isChangeScene = true;
 		sceneChange("prison_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
 	}
 	if (IntersectRectToRect(&_tiles[DOORTODININGROOM].rc, &_player->getPlayerFrc()) ||
 		IntersectRectToRect(&_tiles[DOORTODININGROOM + TILEX].rc, &_player->getPlayerFrc()))
 	{
+		if (!_sound)
+			SOUNDMANAGER->play("openDoarLong");
+		_sound = true;
 		_isChangeScene = true;
 		sceneChange("diningRoom_5f", CHRDIREC_LEFT, LOCATION_DEFAULT);
 	}
@@ -258,20 +275,33 @@ void garden_5f::setChoiceScene()
 	{
 		rcAlphaChange();
 		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
+		{
+			SOUNDMANAGER->play("cursor");
 			_rc = RectMakePivot(Vector2(WINSIZEX / 2 - 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+		}
 		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+		{
+			SOUNDMANAGER->play("cursor");
 			_rc = RectMakePivot(Vector2(WINSIZEX / 2 + 250, WINSIZEY / 2), Vector2(270, 75), Pivot::Center);
+		}
 		if (KEYMANAGER->isOnceKeyDown(VK_UP))
+		{
+			SOUNDMANAGER->play("cursor");
 			_rc = RectMakePivot(Vector2(WINSIZEX / 2, WINSIZEY / 2 - 150), Vector2(270, 75), Pivot::Center);
+		}
 		if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
+		{
+			SOUNDMANAGER->play("cursor");
 			_rc = RectMakePivot(Vector2(WINSIZEX / 2, WINSIZEY / 2 + 150), Vector2(270, 75), Pivot::Center);
+		}
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
 			_isClick = false;
 			if (IntersectRectToRect(&_rc, &_correct_rc))
-				;
+				SOUNDMANAGER->play("cursor");
 			else 
 			{
+				SOUNDMANAGER->play("blood");
 				_dead->setDead(DEAD_FLOWER);
 				_isDead = true;
 			}

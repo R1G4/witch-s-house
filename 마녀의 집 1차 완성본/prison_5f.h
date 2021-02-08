@@ -57,7 +57,8 @@ private:
 	int _skulX, _skulY;
 	bool _isSummon;
 	bool _isDrop;
-
+	bool _sound;
+	bool _sound_item;
 public://a½ºÅ¸¿ë
 
 	void playerLocation();

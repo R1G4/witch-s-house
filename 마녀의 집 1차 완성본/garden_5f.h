@@ -38,7 +38,7 @@ private:
 	bool _isClick;
 	bool _deadFlower;
 	bool _deadFlowerText;
-
+	bool _sound;
 public:
 	garden_5f() {};
 	~garden_5f() {};
