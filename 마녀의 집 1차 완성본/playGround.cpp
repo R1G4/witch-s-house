@@ -36,7 +36,7 @@ HRESULT playGround::init()
 	//SCENEMANAGER->changeScene("4ÃþÈ¦");
 	STORAGEMANAGER->init();
 
-	SCENEMANAGER->changeScene("½ÃÀÛÈ­¸é");
+	SCENEMANAGER->changeScene("entranceFake");
 	//SCENEMANAGER->changeScene("garden_5f", CHRDIREC_DOWN, LOCATION_DEFAULT);
 	//SCENEMANAGER->changeScene("stairs_2F");
 	//SCENEMANAGER->changeScene("thirdMain",CHRDIREC_DOWN);

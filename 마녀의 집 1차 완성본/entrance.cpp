@@ -126,7 +126,7 @@ void entrance::update()
 		//가위방을 이동
 		firstFloorStage::sceneChange("scissorsRoom", CHRDIREC_LEFT, LOCATION_DEFAULT);
 		break;
-	case entrance::DOOR_RIGHT_OPEN:	
+	case entrance::DOOR_RIGHT_OPEN:
 		//복도로 이동
 		firstFloorStage::sceneChange("hallway", CHRDIREC_RIGHT, LOCATION_DEFAULT);
 		break;
@@ -178,7 +178,7 @@ void entrance::update()
 		firstFloorStage::setAlpha();
 
 		//실제 게임에서 트리거 발동 시 멈칫 멈칫 하는걸 구현한거
-		if(_bear) _player->setState(CHR_IDLE);
+		if (_bear) _player->setState(CHR_IDLE);
 		_delay++;
 		if (_delay % 60 == 0)
 			_trigger = NONE;
@@ -189,13 +189,18 @@ void entrance::update()
 		firstFloorStage::update();
 		Collision();
 		break;
-	}	
+	}
 
 	//에너미 곰이 존재 한다면 해당 함수를 호출한다.
 	if (_bear)	firstFloorStage::enemyUpdate();
-
+	if (_dead && _dead->getIsDead())
+	{
+		SAFE_RELEASE(_bear);
+		SAFE_DELETE(_bear);
+		_dead->update();
+	}
 	//에너미 곰이 존재 하지 않으며 데드씬이 존재한다면 데드씬 함수를 호출한다.
-	if(!_bear && _dead) _dead->update();
+	//if(!_bear && _dead) _dead->update();
 
 	firstFloorStage::cameraUpdate();
 }
@@ -241,7 +246,7 @@ void entrance::Collision()
 			switch (_tiles[index].terrain)
 			{
 			case TR_TRIGGER:
-				
+
 				if ((TRIGGER)index == PALM_LEFT || (TRIGGER)index == PALM_RIGHT)
 				{
 					if (_isBlood && STAGEMEMORYMANAGER->getIsScissors())
@@ -271,14 +276,14 @@ void entrance::Collision()
 							}
 						}
 					}//곰돌이 가져간 상태라면 (미구현 상태이므로 true로 해둠)
-					else if(!_isBlood/*STAGEMEMORYMANAGER->getIsBearPickUp()*/)
+					else if (!_isBlood/*STAGEMEMORYMANAGER->getIsBearPickUp()*/)
 						_trigger = (TRIGGER)index;
 				}
 				else if ((TRIGGER)index != CANDLE_OFF && (TRIGGER)index != VASE_DOWN && (TRIGGER)index != CAT_TALK)
 				{
 					autoSound("openDoarShort");
-					_trigger = index == 556 ? DOOR_LEFT_OPEN : 
-							   index == 568 ? DOOR_RIGHT_OPEN : (TRIGGER)index;
+					_trigger = index == 556 ? DOOR_LEFT_OPEN :
+						index == 568 ? DOOR_RIGHT_OPEN : (TRIGGER)index;
 
 					break;
 				}
@@ -326,21 +331,21 @@ void entrance::load(LOCATION location)
 	{
 		switch (_tiles[i].attribute)
 		{
-			case PLAYER:
-				//초기 위치를 잡아준다.
-				switch (location)
-				{
-					case LOCATION_1:
-						_player->setStart(507 % TILEX, 507 / TILEX);
-						break;
-					case LOCATION_2:
-						_player->setStart(498 % TILEX, 498 / TILEX);
-						break;
-					case LOCATION_DEFAULT: default:
-						_player->setStart(i%TILEX, i / TILEX);
-						break;
-				}
+		case PLAYER:
+			//초기 위치를 잡아준다.
+			switch (location)
+			{
+			case LOCATION_1:
+				_player->setStart(507 % TILEX, 507 / TILEX);
 				break;
+			case LOCATION_2:
+				_player->setStart(498 % TILEX, 498 / TILEX);
+				break;
+			case LOCATION_DEFAULT: default:
+				_player->setStart(i%TILEX, i / TILEX);
+				break;
+			}
+			break;
 		}
 	}
 	CloseHandle(file);
