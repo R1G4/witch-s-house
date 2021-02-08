@@ -87,7 +87,6 @@ void scissorsRoom::update()
 		}
 		break;	
 	case scissorsRoom::BEARCOM:
-		STAGEMEMORYMANAGER->setIsBearComing(true); 
 		//STAGEMEMORYMANAGER->setIsBearComing2(true);
 		_trigger = NONE;
 		break;
@@ -273,22 +272,27 @@ void scissorsRoom::Collision()
 			//해당 타일의 속성이 BEARCOM이라면
 			if (STAGEMEMORYMANAGER->getIsScissors() && !STAGEMEMORYMANAGER->getIsBearComing() && !STAGEMEMORYMANAGER->getIsBearComing2()&&(TRIGGER)index == BEARCOM || (TRIGGER)index == 560)
 			{
+				STAGEMEMORYMANAGER->setIsBearComing(true);
 				//에너미를 생성한다.
-				_bear = new bear;
-				_bear->init(319% TILEX, 319 / TILEX);
-				_playerTile = new astarTile;
-				_enemyTile = new astarTile;
-				_dead = new DeadManager;
-				_dead->init();
-				_dead->setPlayerAddress(_player);
-				for (int y = 0; y < TILEX*TILEY; y++)
-					_objTile[y] = new astarTile;
-				bossLocX = 319 % TILEX;
-				bossLocY = 319 / TILEX;
+				if (!_bear)
+				{
+					_bear = new bear;
+					_bear->init(319 % TILEX, 319 / TILEX);
+					_playerTile = new astarTile;
+					_enemyTile = new astarTile;
+					_dead = new DeadManager;
+					_dead->init();
+					_dead->setPlayerAddress(_player);
+					for (int y = 0; y < TILEX*TILEY; y++)
+						_objTile[y] = new astarTile;
+					bossLocX = 319 % TILEX;
+					bossLocY = 319 / TILEX;
 
-				firstFloorStage::objectLocation();
+					firstFloorStage::objectLocation();
 
-				_trigger = BEARCOM;
+					_trigger = BEARCOM;
+				}
+
 				break;
 			}
 			

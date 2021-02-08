@@ -68,7 +68,7 @@ void hallway::update()
 			_vScript = TEXTMANAGER->loadFile("dialog/1f/1f_hallwayClock.txt");
 
 			//해당 키를 입력 시 넘어가거나 종료한다.
-			if (KEYMANAGER->isOnceKeyUp(VK_SPACE)))
+			if (KEYMANAGER->isOnceKeyUp(VK_SPACE))
 			{
 				TEXTMANAGER->clearScript();
 				_trigger = NONE;

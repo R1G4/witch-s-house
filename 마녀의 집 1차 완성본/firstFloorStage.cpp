@@ -130,8 +130,8 @@ void firstFloorStage::enemyUpdate()
 				_dead->setDead(DEAD_BEAR);
 
 				//에너미 메모리 해지 및제거
-				SAFE_RELEASE(_bear);
-				SAFE_DELETE(_bear);
+			/*	SAFE_RELEASE(_bear);
+				SAFE_DELETE(_bear);*/
 
 				//멈춘다.
 				_stop = true;

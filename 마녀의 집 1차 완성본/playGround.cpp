@@ -36,7 +36,7 @@ HRESULT playGround::init()
 	//SCENEMANAGER->changeScene("4ÃşÈ¦");
 	STORAGEMANAGER->init();
 
-	SCENEMANAGER->changeScene("entranceFake");
+	SCENEMANAGER->changeScene("MapToolScene");
 	//SCENEMANAGER->changeScene("stairs_2F");
 	//SCENEMANAGER->changeScene("thirdMain",CHRDIREC_DOWN);
 	//SOUNDMANAGER->play("main");
