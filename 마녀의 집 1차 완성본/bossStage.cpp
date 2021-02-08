@@ -57,7 +57,7 @@ void bossStage::update()
 	CAMERAMANAGER->setCamera(Vector2(camera.x - WINSIZEX / 2, camera.y - WINSIZEY / 2));
 	//if (STORAGEMANAGER->getToggle())_Stop = true;
 	//if (!STORAGEMANAGER->getToggle())_Stop = false;
-	if (!_Stop&&!STORAGEMANAGER->getToggle())
+	if (!_Stop&&!STORAGEMANAGER->getIsOpen())
 	{
 		_boss->update();
 		_player->update();

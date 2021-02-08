@@ -34,7 +34,7 @@ void fifthFloorStage::release()
 
 void fifthFloorStage::update()
 {
-	if(!_isChangeScene && !STORAGEMANAGER->getToggle())
+	if(!_isChangeScene && !STORAGEMANAGER->getIsOpen())
 		_player->update();
 	_skul->update();
 	tileCollision();

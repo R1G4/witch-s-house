@@ -122,14 +122,16 @@ void inMenu::render()
 
 bool inMenu::openInMenu()
 {
+	//현재 백그라운드를 씬 매니저에서 가져온다
 	//플레이어가 시작화면(메뉴)에서 조작하고 있다면
-	//바로 false를 반환한다.
+	//바로 false를 반환한다. (플레이어 메뉴 무시)
 	if (SCENEMANAGER->getKeyCheck("시작화면"))
 		return false;
 
-	//다른 컨텐츠를 이용하고 있다면 무시한다.
+	//인게임에서 save창이 열렸거나 다른 컨텐츠를 이용하고 있다면 무시한다.
 	//X키를 누를 시 토글형식의 불 변수로 메뉴 시작과 종료를 구분한다.
-	if (!_isConnecting && KEYMANAGER->isOnceKeyDown('X'))	_isOpen = !_isOpen;
+	if (!STORAGEMANAGER->getIsOpen() && !_isConnecting && KEYMANAGER->isOnceKeyDown('X'))
+		_isOpen = !_isOpen;
 
 	//메뉴가 닫힌 경우 false를 반환한다,
 	if(!_isOpen)	return _isOpen;
@@ -163,7 +165,8 @@ void inMenu::selectedContents()
 		_contents = (CONTENTS)(_contents - 1 > -1 ? _contents - 1 : _contents);
 	}
 
-	if (_contents != LOAD && KEYMANAGER->isOnceKeyDown(VK_SPACE/*'Z'*/))
+	//불러오기는 제외하여 체크한다.
+	if (_contents != LOAD && KEYMANAGER->isOnceKeyDown(VK_SPACE))
 	{
 		SOUNDMANAGER->play("cursor", 0.5f);
 		_isConnecting = true;
@@ -178,6 +181,7 @@ void inMenu::connect()
 	switch (_contents)
 	{
 		case ITEM:
+			//아이템 창을 ㅎ ㅗ중한다.
 			//아이템 창에서 스페이스바 누르면 전체 메뉴 창 종료
 			//아이템 창에서 x키 누르면 뒤로가기
 			//아이템이 존재 하지 않는다면 뒤로가기만 가능
@@ -191,8 +195,9 @@ void inMenu::connect()
 			}
 			break;
 		case LOAD:
+			//불러오기 창을 호출한다.			
 			//불러오기 창에서 x키 누르면 뒤로가기
-			//아이템이 존재 하지 않는다면 뒤로가기만 가능
+			//불러왔다면 종료를 한다.
  			_isMenuState = STORAGEMANAGER->loadView();
 
 			if(_isMenuState == MENU_PROGRESS)	_isConnecting = true;
@@ -201,14 +206,17 @@ void inMenu::connect()
 			{
 				_isOpen = false;
 				_isConnecting = false;
-
-				//여기서 불러올지 아니면 매니저에서 불러올지?
+				return;
 			}
 			break;
-		case SETTINGS:	
+		case SETTINGS:
+			//설정창을 호출한다.
+			//설정창 반환에 따라 종료 혹은 뒤로가기를 구분한다.
 			_isMenuState = _settings->settingOpen();
 
 			if (!_isMenuState)	_isConnecting = false;
+
+			//설정창 같은 경우는 창 종료인 경우 시작화면으로 돌아간다.
 			if (_isMenuState == MENU_END)
 			{
 				_isOpen = false;

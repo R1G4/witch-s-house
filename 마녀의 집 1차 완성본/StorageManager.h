@@ -46,10 +46,11 @@ class StorageManager : public singletonBase<StorageManager>
 	STAGE _saveStage;//세이브할 스테이지
 	const char* fileName;//파일이름 
 	bool _isSave;
-	bool _toggle;
+	bool _isOpen;
 	int save_enum;
 	string save_s_enum;
 	vector<string>_vFileSlot;
+	wstring _divisionText;
 protected:
 
 	bool saveData();
@@ -94,8 +95,7 @@ public:
 	MENUSTATE loadView();
 	virtual void render();
 	void setStage(STAGE stage) { _saveStage = stage; }
-	bool getToggle() { return _toggle; }
-//	void setToggle(bool toggle) { _toggle = toggle; }
+	bool getIsOpen() { return _isOpen; }
 	wstring stringToWstring(string src)
 	{
 		USES_CONVERSION;
@@ -111,5 +111,6 @@ public:
 	int getPlayerY() { return _player_y; }
 	string getPlayerDirection() { return _load_string_position; }
 	LOCATION5F getFifthFloor() { return _real_location; }
+	const char* getFileName() {return fileName;}
 };
 
