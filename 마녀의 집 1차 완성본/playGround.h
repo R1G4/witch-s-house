@@ -28,6 +28,7 @@
 #include "thirdOnewayDead.h"
 #include "thirdSnakeDead.h"
 #include "thirdFrogRoom.h"
+#include "thirdTo4thLoad.h"
 #include "garden_5f.h"
 #include "gardenToBoss_5f.h"
 #include "diningRoom_5f.h"

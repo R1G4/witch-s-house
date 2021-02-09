@@ -67,6 +67,9 @@ void thirdFrogOutRoom::update()
 	//바닥에 떨어진 일지 읽기
 	readBook();
 
+	//_count++;
+	//if(_count %10 == 0) cout << _player->getPlayerFrc().left / TILESIZE << endl;
+
 	switch (_text)
 	{
 	case TEXTLEFT:
@@ -122,22 +125,26 @@ void thirdFrogOutRoom::update()
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 		{
+			SOUNDMANAGER->play("cursor", 0.5f);
 			_rc = RectMakePivot(Vector2(_x + 290, _y - 5), Vector2(270, 75), Pivot::Center);
 			_text = TEXTRIGHT;
 		}
 		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 		{
+			SOUNDMANAGER->play("cursor", 0.5f);
 			//_rc = RectMakePivot(Vector2(_x - 160, _y - 8), Vector2(270, 75), Pivot::Center);
 			_rc = RectMakePivot(Vector2(camera.x - 360, camera.y - 135), Vector2(270, 75), Pivot::Center);
 			_text = TEXTLEFT;
 		}
 		if (KEYMANAGER->isOnceKeyDown(VK_UP))
 		{
+			SOUNDMANAGER->play("cursor", 0.5f);
 			_rc = RectMakePivot(Vector2(_x + 70, _y - 145), Vector2(270, 75), Pivot::Center);
 			_text = TEXTUP;
 		}
 		if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
 		{
+			SOUNDMANAGER->play("cursor", 0.5f);
 			_rc = RectMakePivot(Vector2(_x + 70, _y + 125), Vector2(270, 75), Pivot::Center);
 			_text = TEXTDOWN;
 		}
@@ -147,6 +154,7 @@ void thirdFrogOutRoom::update()
 		//우측 텍스트 눌렀을때(아무것도 하지 않는다) 플레이어 업데이트on, 첫번째 텍스트창 닫음
 		if (_text == TEXTRIGHT && KEYMANAGER->isStayKeyDown('A'))
 		{
+			SOUNDMANAGER->play("click", 0.3f);
 			//상호작용 키 눌렀을때 렉트 사라지게하고 텍스트창 꺼주기
 			_rc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
 			_isText = false;
@@ -154,6 +162,7 @@ void thirdFrogOutRoom::update()
 		//좌측 텍스트 눌렀을때(엿보기 구멍으로 본다) 다이어로그 on
 		if (_text == TEXTLEFT && KEYMANAGER->isOnceKeyDown('A'))
 		{
+			SOUNDMANAGER->play("click", 0.3f);
 			_rc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
 			_isText = false;
 			_text = OPENLEFT;		//개구리 던질때로 바까야함
@@ -165,6 +174,7 @@ void thirdFrogOutRoom::update()
 		//위에 텍스트 눌렀을때(귀를 댄다) 다이어로그 on
 		if (_text == TEXTUP && KEYMANAGER->isOnceKeyDown('A'))
 		{
+			SOUNDMANAGER->play("click", 0.3f);
 			_rc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
 			_isText = false;
 			_dialogue = true;
@@ -176,13 +186,14 @@ void thirdFrogOutRoom::update()
 		//아래 텍스트 눌렀을때(문을 연다)
 		if (_text == TEXTDOWN && KEYMANAGER->isOnceKeyDown('A'))
 		{
+			SOUNDMANAGER->play("click", 0.3f);
 			_rc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
 			_isText = false;
 			_text = OPENDOWN;
 		}
 	}
 
-	//첫번째 텍스트에서 왼쪽(엿보기 창으로 엿본다) 눌렀을때
+	//첫번째 텍스트에서 왼쪽(엿보기 창으로 엿본다) 눌렀을때 다이어로그 off
 	if (_text == OPENLEFT && _dialogue)
 	{
 		if (KEYMANAGER->isStayKeyDown('B'))
@@ -198,6 +209,7 @@ void thirdFrogOutRoom::update()
 		//두번째 텍스트창에서 좌측 눌렀을때
 		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 		{
+			SOUNDMANAGER->play("cursor", 0.3f);
 			_rc = RectMakePivot(Vector2(camera.x - 360, camera.y - 135), Vector2(270, 75), Pivot::Center);
 			_leftClick = true;
 			_rightClick = false;
@@ -205,6 +217,7 @@ void thirdFrogOutRoom::update()
 		//두번째 텍스트창에서 우측 눌렀을때
 		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 		{
+			SOUNDMANAGER->play("cursor", 0.3f);
 			_rc = RectMakePivot(Vector2(_x + 290, _y - 5), Vector2(270, 75), Pivot::Center);
 			_rightClick = true;
 			_leftClick = false;
@@ -213,6 +226,7 @@ void thirdFrogOutRoom::update()
 		//두번째 텍스트창에서 좌측 텍스트 클릭하면 3번째 텍스트 오픈
 		if (_leftClick && KEYMANAGER->isOnceKeyDown('A'))
 		{
+			SOUNDMANAGER->play("click", 0.3f);
 			_leftClick = false;
 			_isText = false;
 			_leftText2 = false;
@@ -222,6 +236,7 @@ void thirdFrogOutRoom::update()
 
 		if (_rightClick && KEYMANAGER->isOnceKeyDown('A'))
 		{
+			SOUNDMANAGER->play("click", 0.3f);
 			_rightClick = false;
 			_leftText2 = false;
 			_isText = true;
@@ -233,6 +248,7 @@ void thirdFrogOutRoom::update()
 		//세번째 텍스트창에서 좌측 눌렀을때
 		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 		{
+			SOUNDMANAGER->play("cursor", 0.3f);
 			_rc = RectMakePivot(Vector2(camera.x - 360, camera.y - 145), Vector2(270, 75), Pivot::Center);
 			_leftClick = true;
 			_rightClick = false;
@@ -240,6 +256,7 @@ void thirdFrogOutRoom::update()
 		//세번째 텍스트창에서 우측 눌렀을때
 		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 		{
+			SOUNDMANAGER->play("cursor", 0.3f);
 			_rc = RectMakePivot(Vector2(_x + 290, _y - 5), Vector2(270, 75), Pivot::Center);
 			_rightClick = true;
 			_leftClick = false;
@@ -248,6 +265,8 @@ void thirdFrogOutRoom::update()
 		//세번째 텍스트창에서 왼쪽 텍스트 누르면 개구리 넣기
 		if (_leftClick && (KEYMANAGER->isOnceKeyDown('A') || KEYMANAGER->isOnceKeyDown('B')))
 		{
+			SOUNDMANAGER->play("getItem", 0.5f);
+			cout << "left" << endl;
 			_text = CHANGEIMG;
 			_rightClick = false;
 			_leftText3 = false;
@@ -257,6 +276,7 @@ void thirdFrogOutRoom::update()
 
 		if (_rightClick && (KEYMANAGER->isOnceKeyDown('A') || KEYMANAGER->isOnceKeyDown('B')))
 		{
+			SOUNDMANAGER->play("click", 0.3f);
 			_rightClick = false;
 			_leftText3 = false;
 			_isText = true;
@@ -275,12 +295,14 @@ void thirdFrogOutRoom::update()
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 		{
+			SOUNDMANAGER->play("cursor", 0.3f);
 			_rc = RectMakePivot(Vector2(camera.x - 360, camera.y - 135), Vector2(270, 75), Pivot::Center);
 			_leftClick = true;
 			_rightClick = false;
 		}
 		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 		{
+			SOUNDMANAGER->play("cursor", 0.3f);
 			_rc = RectMakePivot(Vector2(_x + 290, _y - 15), Vector2(270, 75), Pivot::Center);
 			_rightClick = true;
 			_leftClick = false;
@@ -289,21 +311,19 @@ void thirdFrogOutRoom::update()
 		//아이템(개구리) 없이 문을열고 들어가면 바로 데드신으로 
 		if (_leftClick && KEYMANAGER->isOnceKeyDown('A') /*&& 개구리 예외처리 해주기*/)
 		{
+			SOUNDMANAGER->play("click", 0.3f);
 			changeScene();
 			_leftClick = false;
 		}
 		//우측키 눌렀을때(일단 다른대에 되어있어서 주석처리함. 안되면 이거부터 풀기)////////////////////////////////////////////
 		if (_rightClick && KEYMANAGER->isOnceKeyDown('A'))
 		{
+			SOUNDMANAGER->play("click", 0.3f);
 			_rc = RectMakePivot(Vector2(0, 0), Vector2(0, 0), Pivot::Center);
 			_isText = true;
 			_rightClick = false;
 		}
 	}
-
-
-
-
 
 }
 
@@ -330,14 +350,9 @@ void thirdFrogOutRoom::render()
 			}
 		}
 		//Z-order 벡터에 데이터를 넣어주는 과정
-		//플레이어와 에너미의 경우 각 객체의 랜더함수를 호출할 것이므로 z-order비교를 위한 y값과 타입값만 넣어주면 충분
-
 		ZORDER->insert(_player->getPlayerFrc().left, _player->getPlayerFrc().top, ZPLAYER);
 
 		//오브젝트를 넣어주는 과정
-		//오브젝트의 경우 랜딩을 해줘야하므로 이미지를 넣어주거나 키값을 넣어주는게 맞음
-		//특정 트리거로 예외처리를 해야한다면, 이미지를 바로 넣기보다는 키값을 넣어주는 방식을 사용하는게 좋아보임
-		//오브젝트중 검은 타일까지 넣게되면 프로그램이 느려져서 제외하기로함
 
 		for (int i = 0; i < TILEX*TILEY; i++)
 		{
@@ -350,7 +365,6 @@ void thirdFrogOutRoom::render()
 
 		//정렬된 순서대로 랜딩
 		//각 인덱스의 타입을 확인하여 타입에 따라 이미지를 랜딩하도록 설계함
-		//이 부분에서 FrameInfoManager가 잘 돌아가게 될지는 모르겠음 적용필요
 		for (int i = 0; i < ZORDER->getZorder().size(); i++)
 		{
 			if (ZORDER->getZorder()[i].type == ZPLAYER)_player->render();
@@ -362,27 +376,11 @@ void thirdFrogOutRoom::render()
 			}
 
 		}
-
-
 		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("3f_doar"), Vector2(WINSIZEX / 2 + 180, WINSIZEY / 2 + 60));
 
 		//zorder 벡터를 초기화해줌 안하면 느려짐
 		ZORDER->release();
 
-
-		//_player->render();
-
-		//오브젝트 or 프레임이미지 랜더
-		//for (int i = 0; i < TILEY; i++)
-		//{
-		//	for (int j = 0; j < TILEX; j++)
-		//	{
-		//		if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
-		//		//IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(0.5);
-		//		CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
-		//			Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top));
-		//	}
-		//}
 	}
 
 
@@ -408,19 +406,37 @@ void thirdFrogOutRoom::render()
 
 			}
 		}
-		_player->render();
+		//Z-order 벡터에 데이터를 넣어주는 과정
+		ZORDER->insert(_player->getPlayerFrc().left, _player->getPlayerFrc().top, ZPLAYER);
 
-		//오브젝트 or 프레임오브젝트 랜더
-		for (int i = 0; i < TILEY; i++)
+		//오브젝트를 넣어주는 과정
+
+		for (int i = 0; i < TILEX*TILEY; i++)
 		{
-			for (int j = 0; j < TILEX; j++)
+			if (_tiles[i].obj != OBJ_NONE)
 			{
-				if (_tiles[i*TILEX + j].obj == OBJ_NONE)continue;
-				//IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName)->SetAlpha(0.5);
-				CAMERAMANAGER->render(IMAGEMANAGER->FindImage(_tiles[i*TILEX + j].keyName),
-					Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top));
+				//if (_tiles[i].keyName == "obj5" || _tiles[i].keyName == "obj9")
+				ZORDER->insert(_tiles[i].rc.left, _tiles[i].rc.top, IMAGEMANAGER->FindImage(_tiles[i].keyName), ZOBJECT);
 			}
 		}
+
+		//정렬된 순서대로 랜딩
+		//각 인덱스의 타입을 확인하여 타입에 따라 이미지를 랜딩하도록 설계함
+		for (int i = 0; i < ZORDER->getZorder().size(); i++)
+		{
+			if (ZORDER->getZorder()[i].type == ZPLAYER)_player->render();
+
+			if (ZORDER->getZorder()[i].type == ZOBJECT)
+			{
+				CAMERAMANAGER->render(ZORDER->getZorder()[i].img,
+					Vector2(ZORDER->getZorder()[i].x + TILESIZE / 2, ZORDER->getZorder()[i].y - ZORDER->getZorder()[i].img->GetSize().y / 2));
+			}
+
+		}
+		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("3f_doar"), Vector2(WINSIZEX / 2 + 180, WINSIZEY / 2 + 60));
+
+		//zorder 벡터를 초기화해줌 안하면 느려짐
+		ZORDER->release();
 
 		CAMERAMANAGER->render(IMAGEMANAGER->FindImage("3f_doar"), Vector2(WINSIZEX / 2 + 180, WINSIZEY / 2 + 60));
 
@@ -546,19 +562,34 @@ void thirdFrogOutRoom::render()
 
 void thirdFrogOutRoom::changeScene()
 {
-	//아이템창에 개구리가 없다면
-	if (ITEMMANAGER->getItemKinds("frog"))
-	{
-		//다음신으로
-		SCENEMANAGER->changeScene("thirdSnakeRoom");
-	}
 	//아이템창에 개구리가 있다면
-	else
+	if (ITEMMANAGER->KeyCheck("frog"))
 	{
-		//데드신으로
+		SOUNDMANAGER->play("blood");
 		SCENEMANAGER->changeScene("thirdSnakeDead");
 	}
-	
+	//개구리가 없다면
+	else
+	{
+		SOUNDMANAGER->play("openDoarLong");
+		SCENEMANAGER->changeScene("thirdSnakeRoom");
+	}
+
+
+	////아이템창에 개구리가 없다면
+	//if (ITEMMANAGER->getItemKinds("frog"))
+	//{
+	//	//다음신으로
+	//	SOUNDMANAGER->play("blood");
+	//	SCENEMANAGER->changeScene("thirdSnakeDead");
+	//}
+	////아이템창에 개구리가 있다면
+	//else
+	//{
+	//	//데드신으로
+	//	SCENEMANAGER->changeScene("thirdSnakeDead");
+	//}
+
 }
 
 void thirdFrogOutRoom::rcAlphaChange()
@@ -584,6 +615,7 @@ void thirdFrogOutRoom::readBook()
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 				{
+					SOUNDMANAGER->play("nextPage");
 					_dialogue = true;
 					_isStopToRead = TEXTMANAGER->setNextScript(true);
 					_vScript = TEXTMANAGER->loadFile("dialog/3f/3f_book.txt");
@@ -591,13 +623,13 @@ void thirdFrogOutRoom::readBook()
 				}
 			}
 			//다이어로그 켜져있을때 스페이스바 누르면 원래대로 돌아가게. 모든 다이어로그 다 포함
-			/*if (_dialogue)
+			if (_dialogue)
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 				{
 					_dialogue = false;
 				}
-			}*/
+			}
 		}
 	}
 }

@@ -39,6 +39,13 @@ void stairs_2F::update()
 	_player->update();
 	tileCollision();
 	changeScene();
+	//if (_count % 10 == 0) cout << _player->getPlayerFrc().right / TILESIZE << endl;
+
+
+	//바로 눈알
+	/*if(_player->getPlayerFrc().right / TILESIZE >= 20)
+	_deadManager->setDead(DEAD_WALL);
+	_deadManager->update();*/
 }
 
 void stairs_2F::render()
@@ -98,7 +105,7 @@ void stairs_2F::changeScene()
 			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc)
 				&& _tiles[i*TILEX + j].terrain == TR_TRIGGER && _player->getPlayerFrc().right / TILESIZE >= 20)
 			{
-				SOUNDMANAGER->play("다운받은거1");
+				SOUNDMANAGER->play("다운받은거2", 0.1f);
 				SOUNDMANAGER->play("openDoarLong", 0.8f);
 				SCENEMANAGER->changeScene("thirdMain", CHRDIREC_DOWN);
 			}
@@ -143,6 +150,7 @@ void stairs_2F::load()
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	camera = _tiles->camera;
 	_backGround = IMAGEMANAGER->FindImage(_tiles->backGroundName);
+	cout << _tiles->camera.x;
 	for (int i = 0; i < TILEX*TILEY; i++)
 	{
 		if (_tiles[i].attribute == PLAYER)

@@ -36,7 +36,7 @@ HRESULT playGround::init()
 	//SCENEMANAGER->changeScene("4ÃşÈ¦");
 	STORAGEMANAGER->init();
 
-	SCENEMANAGER->changeScene("entranceFake");
+	SCENEMANAGER->changeScene("½ÃÀÛÈ­¸é");
 	//SCENEMANAGER->changeScene("garden_5f", CHRDIREC_DOWN, LOCATION_DEFAULT);
 	//SCENEMANAGER->changeScene("stairs_2F");
 	//SCENEMANAGER->changeScene("thirdMain",CHRDIREC_DOWN);
@@ -134,6 +134,7 @@ void playGround::addScene()
 	SCENEMANAGER->addScene("thirdSnakeRoom", new thirdSnakeRoom);
 	SCENEMANAGER->addScene("thirdOnewayDead", new thirdOnewayDead);
 	SCENEMANAGER->addScene("thirdSnakeDead", new thirdSnakeDead);
+	SCENEMANAGER->addScene("thirdTo4thLoad", new thirdTo4thLoad);
 
 	//4Ãş
 	SCENEMANAGER->addScene("4ÃşÈ¦", new soundStage);
@@ -267,12 +268,14 @@ void playGround::addSound()
 	SOUNDMANAGER->addSound("½ºÀ§Ä¡", "sound/effect/½ºÀ§Ä¡.ogg", false, false);
 	SOUNDMANAGER->addSound("blood", "sound/effect/blood.ogg", false, false);
 	SOUNDMANAGER->addSound("Ã¶¹®", "sound/effect/ironDoar.ogg", false, false);
+	SOUNDMANAGER->addSound("ghost", "sound/effect/ghost.ogg", false, false);
 	SOUNDMANAGER->addSound("Á¤¿ø", "sound/bgm/Á¤¿ø.ogg", true, true);
 	SOUNDMANAGER->addSound("Á¤¿ø1", "sound/bgm/Á¤¿ø.ogg", true, true);
 	SOUNDMANAGER->addSound("°¨¿Á", "sound/bgm/°¨¿Á.ogg", true, true);
 	SOUNDMANAGER->addSound("°¨¿Á1", "sound/bgm/°¨¿Á.ogg", true, true);
 	SOUNDMANAGER->addSound("´ÙÀÌ´×·ë", "sound/bgm/´ÙÀÌ´×·ë.ogg", true, true);
 	SOUNDMANAGER->addSound("ÀûÀÌ¦iÀ»¶§", "sound/bgm/ÀûÀÌ¦iÀ»¶§.ogg", true, true);
+	
 }
 
 void playGround::addressLink()

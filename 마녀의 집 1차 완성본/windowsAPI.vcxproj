@@ -236,6 +236,7 @@
     <ClInclude Include="thirdSnakeRoom.h" />
     <ClInclude Include="thirdOnewayDead.h" />
     <ClInclude Include="thirdFrogRoom.h" />
+    <ClInclude Include="thirdTo4thLoad.h" />
     <ClInclude Include="timeManager.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="Triangle.h" />
@@ -334,6 +335,7 @@
     <ClCompile Include="thirdSnakeRoom.cpp" />
     <ClCompile Include="thirdOnewayDead.cpp" />
     <ClCompile Include="thirdFrogRoom.cpp" />
+    <ClCompile Include="thirdTo4thLoad.cpp" />
     <ClCompile Include="timeManager.cpp" />
     <ClCompile Include="timer.cpp" />
     <ClCompile Include="Triangle.cpp" />

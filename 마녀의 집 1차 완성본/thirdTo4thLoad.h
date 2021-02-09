@@ -28,7 +28,6 @@ public:
 	void update();
 	void render();
 	void changeScene();
-	void trigger();
 	void tileCollision();
 	void load();
 };

@@ -369,6 +369,9 @@
     <ClInclude Include="menu.h">
       <Filter>playGround\Player</Filter>
     </ClInclude>
+    <ClInclude Include="thirdTo4thLoad.h">
+      <Filter>playGround\scense\ThirdFloor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="windowsAPI.cpp">
@@ -643,6 +646,9 @@
     </ClCompile>
     <ClCompile Include="menu.cpp">
       <Filter>playGround\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="thirdTo4thLoad.cpp">
+      <Filter>playGround\scense\ThirdFloor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

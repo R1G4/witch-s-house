@@ -187,7 +187,7 @@ void thirdFrogRoom::changeScene()
 		SOUNDMANAGER->play("openDoarLong");
 		SCENEMANAGER->changeScene("thirdMain", CHRDIREC_RIGHT);
 	}
-	
+
 
 }
 
@@ -217,13 +217,14 @@ void thirdFrogRoom::openText()
 	{
 		if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 		{
+			SOUNDMANAGER->play("cursor");
 			_rc = RectMakePivot(Vector2(_x + 180, _y - 10), Vector2(270, 75), Pivot::Center);
 			_text = TEXTRIGHT;
 		}
 		if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 		{
+			SOUNDMANAGER->play("cursor");
 			_rc = RectMakePivot(Vector2(_x - 250, _y - 8), Vector2(270, 75), Pivot::Center);
-
 			_text = TEXTLEFT;
 		}
 	}
@@ -239,7 +240,7 @@ void thirdFrogRoom::openText()
 	if (_text == TEXTLEFT && !_isText)
 	{
 		//소지품에 프로그 아이템 생성
-		SOUNDMANAGER->play("getItem",1);
+		SOUNDMANAGER->play("getItem", 0.5f);
 		ITEMMANAGER->addItem("frog");
 		_frameX = 2;
 		_y2 - 20;

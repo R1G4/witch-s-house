@@ -163,19 +163,23 @@ void thirdOnewayLoad::trigger()
 		//플레이어의 타일 인덱스의 바텀이 10보다 커지면 sword 트리거 on
 		if (_player->getPlayerFrc().bottom / TILESIZE >= 10)
 		{
+
 			_moveSword = true;
 		}
+
+
 		//플레이어의 타일 인덱스의 바텀이 22보다 커지면 eyes 트리거 on
 		if (_player->getPlayerFrc().bottom / TILESIZE >= 22)
 		{
+
 			_moveEyes = true;
 		}
-
 
 		if (_moveSword)
 		{
 			if (_tiles[i].terrain == TR_TRIGGER && _tiles[i].obj == OBJ_LOOK)
 			{
+				//SOUNDMANAGER->play("sword");
 				_tiles[i].rc.bottom -= 10;
 				_tiles[i].rc.top -= 10;
 			}
@@ -185,6 +189,7 @@ void thirdOnewayLoad::trigger()
 		{
 			if (_tiles[i].terrain == TR_TRIGGER && _tiles[i].attribute == ENEMY)
 			{
+				SOUNDMANAGER->play("ghost");
 				_tiles[i].rc.bottom += 13;
 				_tiles[i].rc.top += 13;
 			}

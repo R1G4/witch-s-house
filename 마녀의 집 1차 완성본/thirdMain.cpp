@@ -75,9 +75,6 @@ HRESULT thirdMain::init(CHRDIRECTION _chrdirection)
 		_dialogue = false;
 	}
 
-
-
-
 	return S_OK;
 }
 
@@ -130,7 +127,7 @@ void thirdMain::render()
 	_player->render();
 	CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("SavePoint"), Vector2(WINSIZEX / 2 + 440, WINSIZEY / 2 + 210), _catFrameX, _catFrameY);
 	CAMERAMANAGER->FrameRender(IMAGEMANAGER->FindImage("켜진초"), Vector2(WINSIZEX / 2 + 440, WINSIZEY / 2 + 90), _candleFrame, 0);
-	
+
 	//오브젝트 랜더
 	for (int i = 0; i < TILEY; i++)
 	{
@@ -148,9 +145,9 @@ void thirdMain::render()
 	{
 		if (_isStopToRead) TEXTMANAGER->renderText();
 
-		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+		if (KEYMANAGER->isOnceKeyDown('B'))
 		{
-
+			_dialogue = false;
 		}
 
 	}
@@ -167,33 +164,65 @@ void thirdMain::changeScene()
 	}
 
 	//서재로 이동
-	//if (_player->getPlayerFrc().right / TILESIZE >= 25.5f)
-	//{
-	//	//아이템창에 개구리가 없다면
-	//	if (ITEMMANAGER->getItemKinds("frog"))
-	//	{
-	//		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
-	//		{
-	//			_dialogue = true;
-	//			_isStopToRead = TEXTMANAGER->setNextScript(true);
-	//			_vScript = TEXTMANAGER->loadFile("dialog/3f/3f_frog.txt");
-	//			_isStopToRead = true;
-	//		}
-	//		
-	//	}
-	//	else
-	//	{
-	//		SOUNDMANAGER->play("openDoarLong", 0.8f);
-	//		SCENEMANAGER->changeScene("thirdLibrary");
-	//	}
-	//	
-	//}
-
 	if (_player->getPlayerFrc().right / TILESIZE >= 25.5f)
+	{
+
+		//if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+		//{
+		//	
+
+		//	//아이템창에 개구리가 없다면
+		//	if (ITEMMANAGER->getItemKinds("frog"))
+		//	{
+		//		SOUNDMANAGER->play("rockDoar");
+		//		_dialogue = true;
+		//		_isStopToRead = TEXTMANAGER->setNextScript(true);
+		//		_vScript = TEXTMANAGER->loadFile("dialog/3f/3f_frog.txt");
+		//		_isStopToRead = true;
+		//	}
+		//	else
+		//	{
+		//		SOUNDMANAGER->play("openDoarLong", 0.8f);
+		//		SCENEMANAGER->changeScene("thirdLibrary");
+		//	}
+		//}
+
+		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+		{
+			//개구리가 있다면 씬전환
+			if (ITEMMANAGER->KeyCheck("frog"))
+			{
+				SOUNDMANAGER->play("openDoarLong", 0.8f);
+				SCENEMANAGER->changeScene("thirdLibrary");
+			}
+			//개구리가 없다면
+			else
+			{
+				_dialogue = true;
+				_isStopToRead = TEXTMANAGER->setNextScript(true);
+				_vScript = TEXTMANAGER->loadFile("dialog/3f/3f_frog.txt");
+				_isStopToRead = true;
+
+			}
+		}
+
+
+
+
+		/*else
+		{
+			cout << "rrr" << endl;
+			SOUNDMANAGER->play("openDoarLong", 0.8f);
+			SCENEMANAGER->changeScene("thirdLibrary");
+		}*/
+
+	}
+
+	/*if (_player->getPlayerFrc().right / TILESIZE >= 25.5f)
 	{
 		SOUNDMANAGER->play("openDoarLong", 0.8f);
 		SCENEMANAGER->changeScene("thirdLibrary");
-	}
+	}*/
 }
 
 //캐릭터, 콜라이더 타일 충돌했을때
@@ -222,7 +251,7 @@ void thirdMain::tileCollision()
 				}
 			}
 
-			
+
 		}
 	}
 }
@@ -244,7 +273,7 @@ void thirdMain::save()
 			}
 		}
 	}
-	
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////

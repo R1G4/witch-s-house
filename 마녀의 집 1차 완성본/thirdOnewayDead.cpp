@@ -47,11 +47,15 @@ void thirdOnewayDead::update()
 	//양 옆으로 조금 이동하면 데드신으로 전환
 	if (_player->getPlayerFrc().right / TILESIZE >= 19 || _player->getPlayerFrc().left / TILESIZE <= 17.7f)
 	{
+		//SOUNDMANAGER->play("rolling");
+
 		_isDead = true;
 	}
 
 	if (_isDead)
 	{
+		if (KEYMANAGER->isOnceKeyDown(VK_LEFT) || KEYMANAGER->isOnceKeyDown(VK_RIGHT))
+			SOUNDMANAGER->play("blood");
 		_deadManager->setDead(DEAD_WALL);
 		_deadManager->update();
 	}

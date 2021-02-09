@@ -18,7 +18,7 @@ HRESULT thirdSnakeRoom::init()
 
 	_player->init();
 	_player->setState(CHR_IDLE);
-	_player->setDirec(CHRDIREC_DOWN);
+	_player->setDirec(CHRDIREC_LEFT);
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
 	CAMERAMANAGER->setCamera(camera);
@@ -80,8 +80,11 @@ void thirdSnakeRoom::render()
 //¾À ÀüÈ¯
 void thirdSnakeRoom::changeScene()
 {
-	if(_player->getPlayerFrc().bottom / TILESIZE >= 13)
-	SCENEMANAGER->changeScene("thirdTo4thLoad");
+	if (_player->getPlayerFrc().bottom / TILESIZE >= 13)
+	{
+		SOUNDMANAGER->play("openDoarLong");
+		SCENEMANAGER->changeScene("thirdTo4thLoad");
+	}
 }
 void thirdSnakeRoom::tileCollision()
 {

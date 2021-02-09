@@ -57,8 +57,9 @@ void thirdLibrary::update()
 	CAMERAMANAGER->setCamera(Vector2(camera.x - WINSIZEX / 2, camera.y - WINSIZEY / 2));
 	_player->update();
 	tileCollision();
-	changeScene();
 	readBook();
+
+	changeScene();
 
 	if (_count % 10 == 0) cout << _player->getPlayerFrc().left / TILESIZE << endl;
 }
@@ -82,7 +83,7 @@ void thirdLibrary::render()
 
 		}
 	}
-	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("3f_doar"), Vector2(WINSIZEX / 2 + 130, WINSIZEY / 2 - 60 ));
+	CAMERAMANAGER->render(IMAGEMANAGER->FindImage("3f_doar"), Vector2(WINSIZEX / 2 + 130, WINSIZEY / 2 - 60));
 	_player->render();
 
 	//타일 오브젝트 or 프레임이미지 랜더 
@@ -122,8 +123,9 @@ void thirdLibrary::changeScene()
 	//다음 스테이지로 이동
 	if (_player->getPlayerFrc().bottom / TILESIZE >= 10.7f)
 	{
+		SOUNDMANAGER->stop("다운받은거2");
+		SOUNDMANAGER->play("openDoarLong");
 		SCENEMANAGER->changeScene("thirdOnewayLoad");
-
 	}
 
 	//이전  스테이지로 이동
@@ -156,12 +158,12 @@ void thirdLibrary::readBook()
 				}
 			}
 			//마녀의 책 읽을때
-			else if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc)
+			if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc)
 				&& _tiles[i*TILEX + j].terrain == TR_TRIGGER && _player->getPlayerFrc().right / TILESIZE >= 21)
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 				{
-					SOUNDMANAGER->play("nextPage");
+					SOUNDMANAGER->play("openBook");
 					_dialogue = true;
 					_isStopToRead = TEXTMANAGER->setNextScript(true);
 					_vScript = TEXTMANAGER->loadFile("dialog/3f/3f_library_book.txt");
@@ -170,9 +172,9 @@ void thirdLibrary::readBook()
 			}
 
 			//다이어로그 켜져있을때 스페이스바 누르면 원래대로 돌아가게. 모든 다이어로그 다 포함
-			if (_dialogue )
+			if (_dialogue)
 			{
-				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
+				if (KEYMANAGER->isOnceKeyDown('B'))
 				{
 					_dialogue = false;
 				}
