@@ -25,7 +25,7 @@ HRESULT firstFloorStage::init()
 
 	//프레임 이미지의 데이터를 받아온다.
 	getFrameTile();
-
+	
 	//해당 씬의 투명도를 초기화한다.
 	_sceneAlpha = 0.05;
 
@@ -85,7 +85,7 @@ void firstFloorStage::update()
 	}
 	else
 		_player->update();
-
+	
 }
 
 void firstFloorStage::enemyUpdate()
@@ -106,13 +106,13 @@ void firstFloorStage::enemyUpdate()
 			setAstarTile();
 			_setTile = true;
 		}
-
+		
 		//사실상 접근 속도와 같다. 
 		_follow_count++;
 		if (_follow_count >= 13)
 		{
 			resetEverything();
-
+			
 			//현재 타일을 플레이어 타일로 치환한다.
 			_currentTile = _playerTile;
 			while (_numCount <= 0 && !_stop)
@@ -124,7 +124,7 @@ void firstFloorStage::enemyUpdate()
 			{
 				//에너미가 존재하지 않다면 반환한다.
 				//if (!_bear)	return;
-				resetEverything();
+				resetEverything();			
 
 				//데드씬 설정
 				_dead->setDead(DEAD_BEAR);
@@ -171,7 +171,7 @@ void firstFloorStage::render()
 	ZORDER->insert(_player->getPlayerFrc().left, _player->getPlayerFrc().top, ZPLAYER);
 
 	//에너미 곰이 존재한다면 Zorder에 추가한다.
-	if (_bear)	ZORDER->insert(_bear->getRect().left, _bear->getRect().top, ZENEMY);
+	if(_bear)	ZORDER->insert(_bear->getRect().left, _bear->getRect().top, ZENEMY);
 
 	//오브젝트를 넣어주는 과정
 	//오브젝트의 경우 랜딩을 해줘야하므로 이미지를 넣어주거나 키값을 넣어주는게 맞음
@@ -227,7 +227,7 @@ void firstFloorStage::render()
 	ZORDER->release();
 
 	//데드씬이 존재한다면 랜더를 한다.
-	if (_dead) _dead->render();
+	if(_dead) _dead->render();
 
 	//검은색 타일 오브젝트이미지까지 넣게되면 프로그램이 무거워져서 따로 뺌
 	for (int i = 0; i < TILEX*TILEY; i++)
@@ -323,18 +323,18 @@ void firstFloorStage::tileCollision(int i, int j)
 
 	switch (_player->getPdirec())
 	{
-	case CHRDIREC_DOWN:
-		_player->setPLocaY(_tiles[i*TILEX + j].rc.top - TILESIZE / 4 * 3);
-		break;
-	case CHRDIREC_LEFT:
-		_player->setPLocaX(_tiles[i*TILEX + j].rc.right + 4);
-		break;
-	case CHRDIREC_RIGHT:
-		_player->setPLocaX(_tiles[i*TILEX + j].rc.left - TILESIZE / 4 * 3);
-		break;
-	case CHRDIREC_UP:
-		_player->setPLocaY(_tiles[i*TILEX + j].rc.bottom + 4);
-		break;
+		case CHRDIREC_DOWN:
+			_player->setPLocaY(_tiles[i*TILEX + j].rc.top - TILESIZE / 4 * 3);
+			break;
+		case CHRDIREC_LEFT:
+			_player->setPLocaX(_tiles[i*TILEX + j].rc.right + 4);
+			break;
+		case CHRDIREC_RIGHT:
+			_player->setPLocaX(_tiles[i*TILEX + j].rc.left - TILESIZE / 4 * 3);
+			break;
+		case CHRDIREC_UP:
+			_player->setPLocaY(_tiles[i*TILEX + j].rc.bottom + 4);
+			break;	
 	}
 }
 
@@ -556,7 +556,7 @@ vector<astarTile*> firstFloorStage::addOpenList(astarTile * currentTile)
 		if (startY + i < 0)				continue;
 		if (startY + i >= TILEY)		continue;
 		//for (int j = 2; j >= 0; --j)
-		for (int j = 0; j < 3; ++j)
+			for (int j = 0; j<3; ++j)
 		{
 			// ############ 신항로 개척 방지 #####################
 			if (startX + j < 0)			continue;
@@ -732,10 +732,10 @@ void firstFloorStage::autoSound(string key)
 	if (key == "getItem" || key == "박스" || key == "깨짐1" || key == "곰등장")
 		volume = 0.60f;
 
-	if (key == "nextPage" || key == "곰짜를때" || key == "피1" || key == "피2" || key == "openBook")
+	if (key == "nextPage" || key == "곰짜를때"  || key == "피1" || key == "피2" || key == "openBook")
 		volume = 0.78f;
 
-	if (key == "여자" || key == "호로1" || key == "호로2" || key == "호러3" || key == "여자비웃음")
+	if (key == "여자" || key == "호로1" || key == "호로2"  || key == "호러3" || key == "여자비웃음")
 		volume = 0.87f;
 
 	SOUNDMANAGER->play(key, volume);

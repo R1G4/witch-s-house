@@ -19,6 +19,7 @@ class scissorsRoom : public firstFloorStage
 	TRIGGER _trigger;
 
 	bool lastEvent;
+	int temp;
 public:
 	scissorsRoom();
 	~scissorsRoom();

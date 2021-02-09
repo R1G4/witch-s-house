@@ -41,6 +41,35 @@ HRESULT entrance::init(CHRDIRECTION _chrdirection, LOCATION _location)
 	return S_OK;
 }
 
+HRESULT entrance::init(int x, int y, CHRDIRECTION _direction)
+{
+	//플레이어가 바라보는 방향
+	_player->setDirec(CHRDIREC_UP);
+
+	//타일 불러오기
+	load(LOCATION_3);
+
+	//카메라 셋팅
+	camera = Vector2(_player->getPlayerLocX(), _player->getPlayerLocY());
+
+	//1층 관련 스테이지 초기화
+	firstFloorStage::init();
+
+	//초기 트리거 상태
+	_trigger = NONE;
+
+	//에너미 등장 인터벌
+	_enemyInterval = 0;
+
+	//스테이지 메모리 불러오기
+	getMemory();
+
+	//프레임 이미지 프레임 셋팅
+	setFrameIndex();
+
+	return S_OK;
+}
+
 void entrance::bearCom()
 {
 	//곰 생성 조건
@@ -104,6 +133,15 @@ void entrance::getMemory()
 			_vFrameTile[k].isMaxframe = true;
 		}
 	}
+	bool temp = ITEMMANAGER->KeyCheck("obj59");
+	if (STAGEMEMORYMANAGER->getIsBearPickUp() && !STAGEMEMORYMANAGER->getIsScissors() && !STAGEMEMORYMANAGER->getIsBearPut() && !ITEMMANAGER->KeyCheck("obj58"))
+	{
+		ITEMMANAGER->addItem("obj58");
+	}
+	else if (STAGEMEMORYMANAGER->getIsBearPickUp() && STAGEMEMORYMANAGER->getIsScissors() && !STAGEMEMORYMANAGER->getIsBearPut() && !ITEMMANAGER->KeyCheck("obj59"))
+	{
+		ITEMMANAGER->addItem("obj59");
+	}
 }
 
 void entrance::update()
@@ -112,7 +150,7 @@ void entrance::update()
 
 	//프레임 인덱스 셋팅
 	setFrameIndex();
-
+	bool temp;
 	//트리거 상태에 따른 호출 및 설정
 	switch (_trigger)
 	{
@@ -126,13 +164,20 @@ void entrance::update()
 		//가위방을 이동
 		firstFloorStage::sceneChange("scissorsRoom", CHRDIREC_LEFT, LOCATION_DEFAULT);
 		break;
-	case entrance::DOOR_RIGHT_OPEN:
+	case entrance::DOOR_RIGHT_OPEN:	
 		//복도로 이동
 		firstFloorStage::sceneChange("hallway", CHRDIREC_RIGHT, LOCATION_DEFAULT);
 		break;
 	case entrance::CAT_TALK:
 		//고양이와 대화
 		firstFloorStage::setAlpha();
+		if (!STORAGEMANAGER->getIsOpen())
+		{
+			firstFloorStage::update();
+			Collision();
+		}
+
+		setSave();
 		break;
 	case entrance::CANDLE_OFF:
 		//촛불이 꺼진 상태
@@ -178,7 +223,7 @@ void entrance::update()
 		firstFloorStage::setAlpha();
 
 		//실제 게임에서 트리거 발동 시 멈칫 멈칫 하는걸 구현한거
-		if (_bear) _player->setState(CHR_IDLE);
+		if(_bear) _player->setState(CHR_IDLE);
 		_delay++;
 		if (_delay % 60 == 0)
 			_trigger = NONE;
@@ -189,7 +234,7 @@ void entrance::update()
 		firstFloorStage::update();
 		Collision();
 		break;
-	}
+	}	
 
 	//에너미 곰이 존재 한다면 해당 함수를 호출한다.
 	if (_bear)	firstFloorStage::enemyUpdate();
@@ -214,6 +259,8 @@ void entrance::render()
 			IMAGEMANAGER->FindImage("배경8")->GetSize().y / 2));
 
 	firstFloorStage::render();
+
+	STORAGEMANAGER->render();
 }
 
 void entrance::Collision()
@@ -230,9 +277,7 @@ void entrance::Collision()
 				//텍스를 넣는 동시에 폼 실행
 				if ((TRIGGER)index == CAT_TALK)
 				{
-					STORAGEMANAGER->loadView();
-
-					//_trigger = CAT_TALK;
+					_trigger = CAT_TALK;
 				}
 			}
 
@@ -246,7 +291,7 @@ void entrance::Collision()
 			switch (_tiles[index].terrain)
 			{
 			case TR_TRIGGER:
-
+				
 				if ((TRIGGER)index == PALM_LEFT || (TRIGGER)index == PALM_RIGHT)
 				{
 					if (_isBlood && STAGEMEMORYMANAGER->getIsScissors())
@@ -276,14 +321,14 @@ void entrance::Collision()
 							}
 						}
 					}//곰돌이 가져간 상태라면 (미구현 상태이므로 true로 해둠)
-					else if (!_isBlood/*STAGEMEMORYMANAGER->getIsBearPickUp()*/)
+					else if(!_isBlood/*STAGEMEMORYMANAGER->getIsBearPickUp()*/)
 						_trigger = (TRIGGER)index;
 				}
 				else if ((TRIGGER)index != CANDLE_OFF && (TRIGGER)index != VASE_DOWN && (TRIGGER)index != CAT_TALK)
 				{
 					autoSound("openDoarShort");
-					_trigger = index == 556 ? DOOR_LEFT_OPEN :
-						index == 568 ? DOOR_RIGHT_OPEN : (TRIGGER)index;
+					_trigger = index == 556 ? DOOR_LEFT_OPEN : 
+							   index == 568 ? DOOR_RIGHT_OPEN : (TRIGGER)index;
 
 					break;
 				}
@@ -331,22 +376,41 @@ void entrance::load(LOCATION location)
 	{
 		switch (_tiles[i].attribute)
 		{
-		case PLAYER:
-			//초기 위치를 잡아준다.
-			switch (location)
-			{
-			case LOCATION_1:
-				_player->setStart(507 % TILEX, 507 / TILEX);
+			case PLAYER:
+				//초기 위치를 잡아준다.
+				switch (location)
+				{
+					case LOCATION_1:
+						_player->setStart(507 % TILEX, 507 / TILEX);
+						break;
+					case LOCATION_2:
+						_player->setStart(498 % TILEX, 498 / TILEX);
+						break;
+					case LOCATION_3:
+						_player->setStart(381 % TILEX, 381 / TILEX);
+						break;
+					case LOCATION_DEFAULT: default:
+						_player->setStart(i%TILEX, i / TILEX);
+						break;
+				}
 				break;
-			case LOCATION_2:
-				_player->setStart(498 % TILEX, 498 / TILEX);
-				break;
-			case LOCATION_DEFAULT: default:
-				_player->setStart(i%TILEX, i / TILEX);
-				break;
-			}
-			break;
 		}
 	}
 	CloseHandle(file);
+}
+
+void entrance::setSave()
+{
+	STORAGEMANAGER->setStage(FIRSTSTAGE);
+	float _player_x = _player->getPlayerLocX();
+	float _player_y = _player->getPlayerLocY();
+	CHRDIRECTION _player_direction = _player->getPdirec();
+	string _save_s_x = to_string(_player_x);
+	string _save_s_y = to_string(_player_y);
+	string _save_string_position = to_string(_player_direction);
+
+	INIDATA->addData("비올라", "x좌표", _save_s_x.c_str());
+	INIDATA->addData("비올라", "y좌표", _save_s_y.c_str());
+	INIDATA->addData("비올라", "방향", _save_string_position.c_str());
+	STORAGEMANAGER->saveView();
 }

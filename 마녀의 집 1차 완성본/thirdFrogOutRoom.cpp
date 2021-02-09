@@ -67,9 +67,6 @@ void thirdFrogOutRoom::update()
 	//바닥에 떨어진 일지 읽기
 	readBook();
 
-	//_count++;
-	//if(_count %10 == 0) cout << _player->getPlayerFrc().left / TILESIZE << endl;
-
 	switch (_text)
 	{
 	case TEXTLEFT:
@@ -266,7 +263,6 @@ void thirdFrogOutRoom::update()
 		if (_leftClick && (KEYMANAGER->isOnceKeyDown('A') || KEYMANAGER->isOnceKeyDown('B')))
 		{
 			SOUNDMANAGER->play("getItem", 0.5f);
-			cout << "left" << endl;
 			_text = CHANGEIMG;
 			_rightClick = false;
 			_leftText3 = false;
@@ -538,7 +534,6 @@ void thirdFrogOutRoom::render()
 	//두번째 텍스트창에서 좌측 눌렀을때 플레이어 렌더 false해주고
 	if (_text == CHANGEIMG)
 	{
-		cout << "Rrr" << endl;
 		_player->setFrameX(0);
 		_player->setFrameSpeed(20);
 		_playerRender = false;
@@ -671,7 +666,6 @@ void thirdFrogOutRoom::load()
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	camera = _tiles->camera;
 	_backGround = IMAGEMANAGER->FindImage(_tiles->backGroundName);
-	cout << _tiles->camera.x;
 	for (int i = 0; i < TILEX*TILEY; i++)
 	{
 		if (_tiles[i].attribute == PLAYER)

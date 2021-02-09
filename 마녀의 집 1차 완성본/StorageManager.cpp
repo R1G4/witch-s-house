@@ -64,21 +64,17 @@ MENUSTATE StorageManager::saveView()
 	//클릭이 된 상태이고
 	if (_isClick)
 	{
-		//불러오기를 성공 했으며
-		if (loadData())
+		//저장이 완료 된 경우.
+		if (saveData())
 		{
-			//저장이 완료 된 경우.
-			if (saveData())
-			{
-				//저장소 창을 종료한다.
-				_isOpen = false;
+			//저장소 창을 종료한다.
+			_isOpen = false;
 
-				//선택 상태를 초기화 한다.
-				_isClick = false;
+			//선택 상태를 초기화 한다.
+			_isClick = false;
 				
-				//뒤로가기를 반환한다. ( SAVE는 메뉴창을 열지 않기에 바로 뒤로가기를 한다.)
-				return MENU_BACK;
-			}
+			//뒤로가기를 반환한다. ( SAVE는 메뉴창을 열지 않기에 바로 뒤로가기를 한다.)
+			return MENU_BACK;
 		}
 	}
 
@@ -129,6 +125,12 @@ bool StorageManager::saveData()
 	//저장 성공 할 경우 true를 반환하며 옵션 창과 선택상태를 초기화 한다.
 	save_enum = (int)_saveStage;
 	save_s_enum = to_string(save_enum);
+
+	_save_x = (int)(_player_x);
+	_save_y = (int)(_player_y);
+	_save_s_x = to_string(_save_x);
+	_save_s_y = to_string(_save_y);
+
 	switch (_saveStage)
 	{
 	case OPENING:
@@ -138,6 +140,28 @@ bool StorageManager::saveData()
 		INIDATA->iniSave(fileName);
 		return true;
 	case FIRSTSTAGE:
+		_save_obj[0] = to_string(STAGEMEMORYMANAGER->getIsCandle());
+		_save_obj[1] = to_string(STAGEMEMORYMANAGER->getIsVase());
+		_save_obj[2] = to_string(STAGEMEMORYMANAGER->getIsBearPickUp());
+		_save_obj[3] = to_string(STAGEMEMORYMANAGER->getIsBearPut());
+		_save_obj[4] = to_string(STAGEMEMORYMANAGER->getIsBearComing());
+		_save_obj[5] = to_string(STAGEMEMORYMANAGER->getIsBearComing2());
+		_save_obj[6] = to_string(STAGEMEMORYMANAGER->getIsBox());
+		_save_obj[7] = to_string(STAGEMEMORYMANAGER->getIsPalmLeft());
+		_save_obj[8] = to_string(STAGEMEMORYMANAGER->getIsPalmRight());
+		_save_obj[9] = to_string(STAGEMEMORYMANAGER->getIsPalm());
+		_save_obj[10] = to_string(STAGEMEMORYMANAGER->getIsScissors());
+		INIDATA->addData("오브젝트", "켜진초꺼진초", _save_obj[0].c_str());
+		INIDATA->addData("오브젝트", "꽃병프레임", _save_obj[1].c_str());
+		INIDATA->addData("오브젝트", "겟곰돌이", _save_obj[2].c_str());
+		INIDATA->addData("오브젝트", "풋곰돌이", _save_obj[3].c_str());
+		INIDATA->addData("오브젝트", "곰등장1", _save_obj[4].c_str());
+		INIDATA->addData("오브젝트", "곰등장2", _save_obj[5].c_str());
+		INIDATA->addData("오브젝트", "박스", _save_obj[6].c_str());
+		INIDATA->addData("오브젝트", "왼쪽손바닥", _save_obj[7].c_str());
+		INIDATA->addData("오브젝트", "오른쪽손바닥", _save_obj[8].c_str());
+		INIDATA->addData("오브젝트", "손바닥", _save_obj[9].c_str());
+		INIDATA->addData("오브젝트", "가위", _save_obj[10].c_str());
 		INIDATA->addData("스테이지", "스테이지 이름", "마녀의 집 1층");
 		INIDATA->addData("스테이지", "스테이지 씬", "entrance");
 		INIDATA->addData("스테이지", "스테이지 번호(OPENING:0,FINAL:5)", save_s_enum.c_str());
@@ -158,11 +182,6 @@ bool StorageManager::saveData()
 	case FOURTHSTAGE:
 		INIDATA->addData("스테이지", "스테이지 이름", "마녀의 집 4층");
 		INIDATA->addData("스테이지", "스테이지 번호(OPENING:0,FINAL:5)", save_s_enum.c_str());
-
-		_save_x = (int)(_player_x);
-		_save_y = (int)(_player_y);
-		_save_s_x = to_string(_save_x);
-		_save_s_y = to_string(_save_y);
 
 		_save_obj[0] = to_string(STAGEMEMORYMANAGER->getIsSkul1());
 		_save_obj[1] = to_string(STAGEMEMORYMANAGER->getIsSkul2());
@@ -236,6 +255,24 @@ bool StorageManager::loadData()
 	case OPENING:
 		return true;
 	case FIRSTSTAGE:
+		STAGEMEMORYMANAGER->setIsCandle(INIDATA->loadDataInterger(fileName, "오브젝트", "켜진초꺼진초"));
+		STAGEMEMORYMANAGER->setIsVase(INIDATA->loadDataInterger(fileName, "오브젝트", "꽃병프레임"));
+		STAGEMEMORYMANAGER->setIsBearPickUp(INIDATA->loadDataInterger(fileName, "오브젝트", "겟곰돌이"));
+		STAGEMEMORYMANAGER->setIsBearPut(INIDATA->loadDataInterger(fileName, "오브젝트", "풋곰돌이"));
+		STAGEMEMORYMANAGER->setIsBearComing(INIDATA->loadDataInterger(fileName, "오브젝트", "곰등장1"));
+		STAGEMEMORYMANAGER->setIsBearComing2(INIDATA->loadDataInterger(fileName, "오브젝트", "곰등장2"));
+		STAGEMEMORYMANAGER->setIsBox(INIDATA->loadDataInterger(fileName, "오브젝트", "박스"));
+		STAGEMEMORYMANAGER->setIsPalmLeft(INIDATA->loadDataInterger(fileName, "오브젝트", "왼쪽손바닥"));
+		STAGEMEMORYMANAGER->setIsPalmRight(INIDATA->loadDataInterger(fileName, "오브젝트", "오른쪽손바닥"));
+		STAGEMEMORYMANAGER->setIsPalm(INIDATA->loadDataInterger(fileName, "오브젝트", "손바닥"));
+		STAGEMEMORYMANAGER->setIsScissors(INIDATA->loadDataInterger(fileName, "오브젝트", "가위"));
+
+		_stage = INIDATA->loadDataString(fileName, "스테이지", "스테이지 씬");
+		_playerDirection = (CHRDIRECTION)INIDATA->loadDataInterger(fileName, "비올라", "방향");
+		_playerX = INIDATA->loadDataInterger(fileName, "비올라", "x좌표");
+		_playerY = INIDATA->loadDataInterger(fileName, "비올라", "y좌표");
+		//SCENEMANAGER->changeScene(381, 381, CHRDIREC_UP);
+		SCENEMANAGER->changeScene("entrance", _playerX, _playerY, _playerDirection);
 		return true;
 	case SECONDSTAGE:
 		return true;

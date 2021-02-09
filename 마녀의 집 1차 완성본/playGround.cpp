@@ -27,20 +27,10 @@ HRESULT playGround::init()
 
 	_inMenu = new inMenu;
 	_inMenu->init();
-	//_playerMenu = new playerMenu;
-	//_playerMenu->init();
 	SCENEMANAGER->addScene("MapToolScene", new mapTool);
-		
-	//SCENEMANAGER->changeScene("성앞");
-	//SCENEMANAGER->changeScene("MapToolScene");
-	//SCENEMANAGER->changeScene("4층홀");
 	STORAGEMANAGER->init();
 
 	SCENEMANAGER->changeScene("시작화면");
-	//SCENEMANAGER->changeScene("garden_5f", CHRDIREC_DOWN, LOCATION_DEFAULT);
-	//SCENEMANAGER->changeScene("stairs_2F");
-	//SCENEMANAGER->changeScene("thirdMain",CHRDIREC_DOWN);
-	//SOUNDMANAGER->play("main");
 
 	return S_OK;
 }
@@ -73,7 +63,6 @@ void playGround::render()
 
 		SCENEMANAGER->render();
 		_inMenu->render();
-		//_playerMenu->render();
 
 	}
 	//백버퍼에 그린 내용들을 화면에 뿌려라~

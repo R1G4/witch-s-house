@@ -521,7 +521,7 @@ void mapTool::setup()
 			_tiles[i*TILEX + j].rc = RectMakePivot(Vector2(j*TILESIZE + TILESIZE / 2 , i*TILESIZE + TILESIZE / 2 ), Vector2(TILESIZE, TILESIZE), Pivot::Center);
 		}
 	}
-	cout << _tiles[0].rc.left << endl << _tiles[0].rc.top << endl;
+	//cout << _tiles[0].rc.left << endl << _tiles[0].rc.top << endl;
 	//ÀÜµð·Î ÃÊ±â Å¸ÀÏ¸Ê ¼¼ÆÃ
 	for (int i = 0; i < TILEX * TILEY; ++i)
 	{
@@ -577,7 +577,7 @@ void mapTool::setMap()
 							{						
 								_tiles[i*TILEX + j].isCollider = true;
 								_leftButtonDown = false;
-								cout << _tiles[i*TILEX + j].isCollider<<endl;
+								//cout << _tiles[i*TILEX + j].isCollider<<endl;
 							}
 							
 							else 
@@ -667,24 +667,24 @@ void mapTool::mapMove()
 	if (KEYMANAGER->isOnceKeyDown(VK_RIGHT))
 	{
 		camera.x+= 48;
-		cout << camera.x << endl;
+		//cout << camera.x << endl;
 
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_LEFT))
 	{
 		camera.x -= 48;
-		cout << camera.x << endl;
+		//cout << camera.x << endl;
 
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_UP))
 	{
 		camera.y -= 48;
-		cout << camera.y<<endl;
+		//cout << camera.y<<endl;
 	}
 	if (KEYMANAGER->isOnceKeyDown(VK_DOWN))
 	{
 		camera.y += 48;
-		cout << camera.y << endl;
+		//cout << camera.y << endl;
 
 	}
 }
@@ -733,7 +733,7 @@ void mapTool::save()
 			_tiles->camera = camera;
 			temp = backName + to_string(backCount);
 			_tiles->backGroundName = temp;
-			cout << _tiles->camera.x;
+			//cout << _tiles->camera.x;
 			file = CreateFile(strFilePath, GENERIC_WRITE, NULL, NULL,
 				CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 			WriteFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &write, NULL);

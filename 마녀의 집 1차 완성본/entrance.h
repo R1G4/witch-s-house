@@ -22,6 +22,8 @@ public:
 	~entrance();
 
 	HRESULT init(CHRDIRECTION _chrdirection = CHRDIREC_DOWN, LOCATION _location = LOCATION_DEFAULT);
+	HRESULT init(int x, int y, CHRDIRECTION _direction);
+	//HRESULT init(int x, int y, CHRDIRECTION _direction);
 	void bearCom();
 	void release();
 	void getMemory();
@@ -29,5 +31,6 @@ public:
 	void render();
 	void Collision();
 	void load(LOCATION location = LOCATION_DEFAULT);
+	void setSave();
 };
 

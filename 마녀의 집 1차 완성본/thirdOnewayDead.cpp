@@ -47,8 +47,6 @@ void thirdOnewayDead::update()
 	//양 옆으로 조금 이동하면 데드신으로 전환
 	if (_player->getPlayerFrc().right / TILESIZE >= 19 || _player->getPlayerFrc().left / TILESIZE <= 17.7f)
 	{
-		//SOUNDMANAGER->play("rolling");
-
 		_isDead = true;
 	}
 
@@ -141,7 +139,6 @@ void thirdOnewayDead::load()
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	camera = _tiles->camera;
 	_backGround = IMAGEMANAGER->FindImage(_tiles->backGroundName);
-	cout << _tiles->camera.x;
 	for (int i = 0; i < TILEX*TILEY; i++)
 	{
 		if (_tiles[i].attribute == PLAYER)
@@ -149,11 +146,6 @@ void thirdOnewayDead::load()
 			_player->setStart(i%TILEX, i / TILEX);
 			break;
 		}
-		/*if (_tiles[i].attribute == ENEMY)
-		{
-			bossLocX = i % TILEX;
-			bossLocY = i / TILEX;
-		}*/
 		if (_tiles[i].attribute == OBJ)
 		{
 

@@ -26,13 +26,9 @@ public:
 
 	virtual HRESULT init();
 	virtual void release();
-	virtual void update();
 	void rcAlphaChange();
 	MENUSTATE settingOpen();
 	virtual void render();
-
-
-	//bool getIsMenu() { return _isMenu; }
 
 };
 

@@ -189,18 +189,15 @@
     <ClInclude Include="imageManager.h" />
     <ClInclude Include="iniDataManager.h" />
     <ClInclude Include="inMenu.h" />
-    <ClInclude Include="item.h" />
     <ClInclude Include="ItemManager.h" />
     <ClInclude Include="keyManager.h" />
     <ClInclude Include="levelChoiceScene.h" />
     <ClInclude Include="LibraryHeader.h" />
     <ClInclude Include="Line.h" />
-    <ClInclude Include="load.h" />
     <ClInclude Include="mapTool.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="playerMenu.h" />
     <ClInclude Include="playGround.h" />
     <ClInclude Include="prison_5f.h" />
     <ClInclude Include="prison_5f_skul.h" />
@@ -222,7 +219,6 @@
     <ClInclude Include="soundStageW.h" />
     <ClInclude Include="stageMemoryManager.h" />
     <ClInclude Include="stairs_2F.h" />
-    <ClInclude Include="status.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StorageManager.h" />
     <ClInclude Include="StringHelper.h" />
@@ -288,17 +284,14 @@
     <ClCompile Include="imageManager.cpp" />
     <ClCompile Include="iniDataManager.cpp" />
     <ClCompile Include="inMenu.cpp" />
-    <ClCompile Include="item.cpp" />
     <ClCompile Include="ItemManager.cpp" />
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="levelChoiceScene.cpp" />
     <ClCompile Include="Line.cpp" />
-    <ClCompile Include="load.cpp" />
     <ClCompile Include="mapTool.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="playerMenu.cpp" />
     <ClCompile Include="playGround.cpp" />
     <ClCompile Include="prison_5f.cpp" />
     <ClCompile Include="prison_5f_skul.cpp" />
@@ -317,7 +310,6 @@
     <ClCompile Include="soundStageW.cpp" />
     <ClCompile Include="stageMemoryManager.cpp" />
     <ClCompile Include="stairs_2F.cpp" />
-    <ClCompile Include="status.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

@@ -11,9 +11,6 @@ settings::~settings()
 
 HRESULT settings::init()
 {
-
-	//_sound = new sound;
-	//_sound->init();
 	_x = 640;
 	_y = WINSIZEY / 2 + 20;
 	_rcAlpha = 1.0f;
@@ -34,65 +31,6 @@ HRESULT settings::init()
 
 void settings::release()
 {
-}
-
-void settings::update()
-{
-	//SOUNDMANAGER->setVolume(_volume);
-	//rcAlphaChange();
-
-	//if (KEYMANAGER->isOnceKeyDown('S') && _rcSettingChoice.bottom <= _rcSettings[6].top)
-	//{
-	//	SOUNDMANAGER->play("cursor", 0.5f);
-	//	_y += 50;
-	//}
-	//if (KEYMANAGER->isOnceKeyDown('W') && _rcSettingChoice.top >= _rcSettings[0].bottom)
-	//{
-	//	SOUNDMANAGER->play("cursor", 0.5f);
-	//	_y -= 50;
-	//}
-
-	////볼륨 문자열 조절하려고
-	//mv = "Master Volume              " + to_string(_percent) + "%";
-	//mv_w = L"";
-	//mv_w.assign(mv.begin(), mv.end());
-
-	//FloatRect _temp;
-	////마스터 볼륨 조절
-	//if (IntersectRectToRect(&_temp, &_rcSettingChoice, &_rcSettings[2]))
-	//{
-	//	if (KEYMANAGER->isOnceKeyDown('V') && _percent <= 100)
-	//	{
-	//		_percent += 5;
-	//		_volume += 0.025;
-	//		
-	//	}
-	//	if (_percent >= 105)
-	//	{
-	//		_volume = 0;
-	//		_percent = 0;
-	//	}
-	//}
-
-	////기타 다른볼륨 조절은 할지말지
-	//bgv = "backGround Volume     " + to_string(_bgvPercent) + "%";
-	//bgv_w = L"";
-	//bgv_w.assign(bgv.begin(), bgv.end());
-	//if (IntersectRectToRect(&_temp, &_rcSettingChoice, &_rcSettings[3]))
-	//{
-	//	if (KEYMANAGER->isOnceKeyDown('V') && _bgvPercent <= 100)
-	//	{
-	//		_bgvPercent += 5;
-	//		_bgv += 0.05;
-	//		SOUNDMANAGER->setVolume(_bgv);
-	//	}
-	//	if (_bgvPercent >= 105)
-	//	{
-	//		_volume = 0;
-	//		_bgvPercent = 0;
-	//		SOUNDMANAGER->setVolume(_bgv);
-	//	}
-	//}
 }
 
 //해당 컨텐츠 상태 반환 추가

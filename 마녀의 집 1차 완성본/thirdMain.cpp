@@ -102,7 +102,6 @@ void thirdMain::update()
 	tileCollision();
 	changeScene();
 	save();
-	//if(_count %10 == 0) cout << _player->getPlayerFrc().right / TILESIZE << endl;
 }
 
 void thirdMain::render()
@@ -205,24 +204,7 @@ void thirdMain::changeScene()
 
 			}
 		}
-
-
-
-
-		/*else
-		{
-			cout << "rrr" << endl;
-			SOUNDMANAGER->play("openDoarLong", 0.8f);
-			SCENEMANAGER->changeScene("thirdLibrary");
-		}*/
-
 	}
-
-	/*if (_player->getPlayerFrc().right / TILESIZE >= 25.5f)
-	{
-		SOUNDMANAGER->play("openDoarLong", 0.8f);
-		SCENEMANAGER->changeScene("thirdLibrary");
-	}*/
 }
 
 //캐릭터, 콜라이더 타일 충돌했을때
@@ -286,7 +268,6 @@ void thirdMain::load()
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	camera = _tiles->camera;
 	_backGround = IMAGEMANAGER->FindImage(_tiles->backGroundName);
-	cout << _tiles->camera.x;
 	for (int i = 0; i < TILEX*TILEY; i++)
 	{
 		if (_tiles[i].attribute == PLAYER)
@@ -294,11 +275,6 @@ void thirdMain::load()
 			_player->setStart(i%TILEX, i / TILEX);
 			break;
 		}
-		/*if (_tiles[i].attribute == ENEMY)
-		{
-			bossLocX = i % TILEX;
-			bossLocY = i / TILEX;
-		}*/
 		if (_tiles[i].attribute == OBJ)
 		{
 

@@ -33,7 +33,6 @@ protected:
 	bool isTrigger;
 	bool _isBlood;
 	float _light;
-
 	//A* 관련 변수
 	vector<astarTile*>			_vTotalList;
 	vector<astarTile*>::iterator _viTotalList;

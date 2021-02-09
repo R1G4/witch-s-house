@@ -61,7 +61,7 @@ void scissorsRoom::update()
 		_trigger = DELAY;
 		break;
 	case scissorsRoom::SCISSORS:
-		STAGEMEMORYMANAGER->setIsScissors(true);
+ 		STAGEMEMORYMANAGER->setIsScissors(true);
 		//해당 프레임 이미지를 찾아서
 		_player->setState(CHR_IDLE);
 		_delay++;
@@ -85,7 +85,7 @@ void scissorsRoom::update()
 				}
 			}
 		}
-		break;
+		break;	
 	case scissorsRoom::BEARCOM:
 		//STAGEMEMORYMANAGER->setIsBearComing2(true);
 		_trigger = NONE;
@@ -112,7 +112,7 @@ void scissorsRoom::update()
 		break;
 	case scissorsRoom::DOOR_UP_OPEN2:
 		lastEvent = true;
-		if (_sceneAlpha > 0)
+		if(_sceneAlpha > 0)
 		{
 			_sceneAlpha -= 0.008f;
 			if (_sceneAlpha <= 0.65f)
@@ -123,20 +123,20 @@ void scissorsRoom::update()
 		if (_sceneAlpha <= 0.f)
 		{
 			_delay++;
-			if (_delay > 140)
+			if(_delay > 140)
 				SCENEMANAGER->changeScene("stairs_2F");
 		}
 		//firstFloorStage::sceneChange("stairs_2F");
 		break;
 	default:
-		_delay = 0;
+		_delay= 0 ;
 		_trigger = NONE;
 		firstFloorStage::update();
 		firstFloorStage::setAlpha();
 		Collision();
 		break;
 	}
-	if (_bear)	firstFloorStage::enemyUpdate();
+	if(_bear)	firstFloorStage::enemyUpdate();
 	if (_dead && _dead->getIsDead())
 	{
 		SAFE_RELEASE(_bear);
@@ -154,7 +154,7 @@ void scissorsRoom::render()
 		Vector2(IMAGEMANAGER->FindImage("배경14")->GetSize().x / 2 + 480,
 			IMAGEMANAGER->FindImage("배경14")->GetSize().y / 2));
 
-
+	
 	//WINSIZEX / 2 - 250, WINSIZEY / 2 - 50
 	if (lastEvent && _sceneAlpha < 0.1f)
 	{
@@ -186,40 +186,40 @@ void scissorsRoom::Collision()
 			if (IntersectRectToRect(&_tiles[index].rc, &_player->getSearchRc()))
 			{
 				//곰을 가져간 상태이며 가위를 자르지 않았고 바구니에 넣지도 않았을때만 
-				if (!STAGEMEMORYMANAGER->getIsScissors() &&
+				if (!STAGEMEMORYMANAGER->getIsScissors() && 
 					!STAGEMEMORYMANAGER->getIsBearPut() &&
 					!STAGEMEMORYMANAGER->getIsBearComing() &&
 					STAGEMEMORYMANAGER->getIsBearPickUp())
 
-					//텍스를 넣는 동시에 폼 실행
-					if ((TRIGGER)index == SCISSORS && SelectionForm(L"곰인형의 팔 다리를 자른다.", L"아무것도 하지 않는다.") && _fromSelected == LEFT)
+				//텍스를 넣는 동시에 폼 실행
+				if ((TRIGGER)index == SCISSORS && SelectionForm(L"곰인형의 팔 다리를 자른다.", L"아무것도 하지 않는다.") && _fromSelected == LEFT)
+				{
+					//아이템 매니저 - 아이템 제거 후 추가
+					//제거할 아이템의 key를 넣는다
+					//제거 성공 할 경우
+					if (ITEMMANAGER->removeItem("obj58"))
 					{
-						//아이템 매니저 - 아이템 제거 후 추가
-						//제거할 아이템의 key를 넣는다
-						//제거 성공 할 경우
-						if (ITEMMANAGER->removeItem("obj58"))
+						//곰의 몸톰을 추가한다.
+						//추가를 성공 할 경우 트리거를 수정해준다.
+						if (!ITEMMANAGER->addItem("obj59")) continue;
+
+ 						for (int k = 0; k < _vFrameTile.size(); k++)
 						{
-							//곰의 몸톰을 추가한다.
-							//추가를 성공 할 경우 트리거를 수정해준다.
-							if (!ITEMMANAGER->addItem("obj11")) continue;
+							//트리거가 이미 발동된 상태이거나 혹은 마지막 프레임만 보여준다면 무시한다.
+							if (_vFrameTile[k].isMaxframe || _vFrameTile[k].isTrigger)
+								continue;
 
-							for (int k = 0; k < _vFrameTile.size(); k++)
+							if (_vFrameTile[k].keyName == "가위")
 							{
-								//트리거가 이미 발동된 상태이거나 혹은 마지막 프레임만 보여준다면 무시한다.
-								if (_vFrameTile[k].isMaxframe || _vFrameTile[k].isTrigger)
-									continue;
-
-								if (_vFrameTile[k].keyName == "가위")
-								{
-									//트리거를 발동한다.
-									_vFrameTile[k].isTrigger = true;
-									_trigger = SCISSORS;
-									autoSound("곰짜를때");
-									break;
-								}
+								//트리거를 발동한다.
+								_vFrameTile[k].isTrigger = true;
+								_trigger = SCISSORS;
+								autoSound("곰짜를때");
+								break;
 							}
 						}
 					}
+				}
 			}
 
 			//어느 타일과 충돌 했을 경우
@@ -275,7 +275,7 @@ void scissorsRoom::Collision()
 
 			//곰돌이 팔다리를 자른 상태이며 에너미 곰1이 나오지 않았다면
 			//해당 타일의 속성이 BEARCOM이라면
-			if (STAGEMEMORYMANAGER->getIsScissors() && !STAGEMEMORYMANAGER->getIsBearComing() && !STAGEMEMORYMANAGER->getIsBearComing2() && (TRIGGER)index == BEARCOM || (TRIGGER)index == 560)
+			if (STAGEMEMORYMANAGER->getIsScissors() && !STAGEMEMORYMANAGER->getIsBearComing() && !STAGEMEMORYMANAGER->getIsBearComing2()&&(TRIGGER)index == BEARCOM || (TRIGGER)index == 560)
 			{
 				STAGEMEMORYMANAGER->setIsBearComing(true);
 				//에너미를 생성한다.
@@ -297,12 +297,12 @@ void scissorsRoom::Collision()
 					firstFloorStage::objectLocation();
 
 					_trigger = BEARCOM;
-
+					
 				}
 
 				break;
 			}
-
+			
 		}
 	}
 }

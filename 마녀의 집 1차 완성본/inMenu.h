@@ -1,7 +1,6 @@
 #pragma once
 #include "gameNode.h"
 #include "settings.h"
-#include "load.h"
 
 class inMenu : public gameNode
 {

@@ -174,7 +174,7 @@ void bearRoom::Collision()
 								//아이템 키(image.find(key))값 혹은 아이템 파일명을 넣는다
 								//플레이어가 아이템 사용을 시도한다면 보유 아이템은 제거된다.
 								//아이템 사용을 시도하지 않거나 해당 아이템을 갖고 있지 않다면 false를 반환한다. true일 경우 제거(사용)
-								if (!ITEMMANAGER->useItem(11)) continue;
+								if (!ITEMMANAGER->useItem(59)) continue;
 
 								_vFrameTile[k].isTrigger = true;
 								_trigger = BEAR_PUT;

@@ -61,8 +61,6 @@ void thirdFrogRoom::update()
 			_frameX = 0;
 		}
 	}
-	//_count++;
-	//if(_count %10 == 0) cout << _player->getPlayerFrc().bottom / TILESIZE << endl;
 
 	camera.x = _player->getPlayerLocX();
 	camera.y = _player->getPlayerLocY();
@@ -156,7 +154,6 @@ void thirdFrogRoom::render()
 	//다이어로그 켜졌을때
 	if (_dialogue)
 	{
-		cout << "yyy" << endl;
 		if (_isStopToRead)
 			TEXTMANAGER->renderText();
 	}
@@ -254,7 +251,6 @@ void thirdFrogRoom::openText()
 	//아이템창 열렸다면?? << 이걸 판단해야하는데 아직 모름
 	if (_menustate == MENU_PROGRESS)
 	{
-		cout << "rtt" << endl;
 		if (KEYMANAGER->isOnceKeyDown('W'))
 		{
 			ITEMMANAGER->useItem("frog");
@@ -349,7 +345,6 @@ void thirdFrogRoom::load()
 	ReadFile(file, _tiles, sizeof(tagTile) * TILEX * TILEY, &read, NULL);
 	camera = _tiles->camera;
 	_backGround = IMAGEMANAGER->FindImage(_tiles->backGroundName);
-	cout << _tiles->camera.x;
 	for (int i = 0; i < TILEX*TILEY; i++)
 	{
 		if (_tiles[i].attribute == PLAYER)

@@ -1,6 +1,5 @@
 #pragma once
 #include "gameNode.h"
-#include "playerMenu.h"
 class characterState;
 
 enum STATE
@@ -27,7 +26,6 @@ class Player :
 	public gameNode
 {
 private:
-	playerMenu* _playerMenu;
 	tagPlayer _player;
 	Vector2 _startPosition;
 	characterState* chr_State;
@@ -45,7 +43,6 @@ public:
 	bool getIsDash() { return _player.isDash; }
 	void framePlay();
 	void move();
-	//Vector2 getPlayerLoc() { return Vector2(_player.x, _player.y); }
 	//플레이어 관련 getter,setter
 	float getPlayerLocX() { return _player.x; }
 	float getPlayerLocY() { return _player.y; }
