@@ -272,7 +272,8 @@ void entrance::Collision()
 			int index = i * TILEX + j;
 
 			//어느 타일과 플레이어 상호작용 렉트가 충돌하였다면
-			if (IntersectRectToRect(&_tiles[index].rc, &_player->getSearchRc()))
+			FloatRect pSRc = _player->getSearchRc();
+			if (IntersectRectToRect(&_tiles[index].rc, &pSRc))
 			{
 				//텍스를 넣는 동시에 폼 실행
 				if ((TRIGGER)index == CAT_TALK)
@@ -282,7 +283,8 @@ void entrance::Collision()
 			}
 
 			//어느 타일과 충돌 했을 경우
-			if (!IntersectRectToRect(&_tiles[index].rc, &_player->getPlayerFrc())) continue;
+			FloatRect pFrc = _player->getPlayerFrc();
+			if (!IntersectRectToRect(&_tiles[index].rc, &pFrc)) continue;
 
 
 			firstFloorStage::tileCollision(i, j);

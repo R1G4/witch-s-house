@@ -66,7 +66,8 @@ void soundStageW::update()
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
 			_isStopToRead = TEXTMANAGER->setNextScript(true);
-			if (IntersectRectToRect(&_tiles[TRIGGER].rc, &_player->getSearchRc()))
+			FloatRect pSRc = _player->getSearchRc();
+			if (IntersectRectToRect(&_tiles[TRIGGER].rc, &pSRc))
 			{
 				_isClick = true;
 			}
@@ -407,11 +408,13 @@ void soundStageW::load()
 
 void soundStageW::tileCollision()
 {
+	FloatRect pFrc = _player->getPlayerFrc();
+
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
+			if (IntersectRectToRect(&pFrc, &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
 			{
 				switch (_player->getPdirec())
 				{
@@ -431,7 +434,7 @@ void soundStageW::tileCollision()
 			}
 		}
 	}
-	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange.rc))
+	if (IntersectRectToRect(&pFrc, &mapChange.rc))
 	{
 		if (STAGEMEMORYMANAGER->getIsOpen())
 		{

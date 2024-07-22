@@ -164,7 +164,8 @@ void soundStageD::tileCollision()
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
+			FloatRect pFrc = _player->getPlayerFrc();
+			if (IntersectRectToRect(&pFrc, &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
 			{
 				switch (_player->getPdirec())
 				{

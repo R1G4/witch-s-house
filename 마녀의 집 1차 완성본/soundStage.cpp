@@ -262,11 +262,13 @@ void soundStage::load()
 
 void soundStage::tileCollision()
 {
+	FloatRect pFrc = _player->getPlayerFrc();
+
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
+			if (IntersectRectToRect(&pFrc, &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
 			{
 				switch (_player->getPdirec())
 				{
@@ -286,19 +288,19 @@ void soundStage::tileCollision()
 			}
 		}
 	}
-	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange[0].rc))
+	if (IntersectRectToRect(&pFrc, &mapChange[0].rc))
 	{
 		SCENEMANAGER->changeScene("4摸拉规", CHRDIREC_UP);
 	}
-	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange[1].rc))
+	if (IntersectRectToRect(&pFrc, &mapChange[1].rc))
 	{
 		
 	}
-	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange[2].rc))
+	if (IntersectRectToRect(&pFrc, &mapChange[2].rc))
 	{
 		SCENEMANAGER->changeScene("4摸哭率规");
 	}
-	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange[3].rc))
+	if (IntersectRectToRect(&pFrc, &mapChange[3].rc))
 	{
 		SCENEMANAGER->changeScene("4摸坷弗率规1", CHRDIREC_RIGHT);
 	}

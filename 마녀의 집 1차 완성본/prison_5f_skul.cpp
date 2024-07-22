@@ -100,37 +100,40 @@ void prison_5f_skul::load(LOCATION _location)
 
 void prison_5f_skul::setTrigger()
 {
+	FloatRect pSRc = _player->getSearchRc();
+	FloatRect pFrc = _player->getPlayerFrc();
+
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))	// 클릭행동 트리거
 	{
-		if (IntersectRectToRect(&_tiles[SKUL_1].rc, &_player->getSearchRc()) &&
+		if (IntersectRectToRect(&_tiles[SKUL_1].rc, &pSRc) &&
 			STAGEMEMORYMANAGER->getIsGetSkul1())
 		{
 			SOUNDMANAGER->play("해골두기");
 			STAGEMEMORYMANAGER->setIsSkul1(true);
 			_tiles[SKUL_1].obj = OBJ_LOOK;
 		}
-		if (IntersectRectToRect(&_tiles[SKUL_2].rc, &_player->getSearchRc()) &&
+		if (IntersectRectToRect(&_tiles[SKUL_2].rc, &pSRc) &&
 			STAGEMEMORYMANAGER->getIsGetSkul2())
 		{
 			SOUNDMANAGER->play("해골두기");
 			STAGEMEMORYMANAGER->setIsSkul2(true);
 			_tiles[SKUL_2].obj = OBJ_LOOK;
 		}
-		if (IntersectRectToRect(&_tiles[SKUL_3].rc, &_player->getSearchRc()) &&
+		if (IntersectRectToRect(&_tiles[SKUL_3].rc, &pSRc) &&
 			STAGEMEMORYMANAGER->getIsGetSkul3())
 		{
 			SOUNDMANAGER->play("해골두기");
 			STAGEMEMORYMANAGER->setIsSkul3(true);
 			_tiles[SKUL_3].obj = OBJ_LOOK;
 		}
-		if (IntersectRectToRect(&_tiles[SKUL_4].rc, &_player->getSearchRc()) && 
+		if (IntersectRectToRect(&_tiles[SKUL_4].rc, &pSRc) && 
 			STAGEMEMORYMANAGER->getIsGetSkul4())
 		{
 			SOUNDMANAGER->play("해골두기");
 			STAGEMEMORYMANAGER->setIsSkul4(true);
 			_tiles[SKUL_4].obj = OBJ_LOOK;
 		}
-		if (IntersectRectToRect(&_tiles[SKUL_5].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[SKUL_5].rc, &pSRc))
 		{
 			STAGEMEMORYMANAGER->setIsSkul5(true);
 			STAGEMEMORYMANAGER->setIsGetSkul4(true);
@@ -138,7 +141,7 @@ void prison_5f_skul::setTrigger()
 			_isStopToRead = true;
 			_isSkul = true;
 		}
-		if (IntersectRectToRect(&_tiles[LEVER].rc, &_player->getSearchRc()) && 
+		if (IntersectRectToRect(&_tiles[LEVER].rc, &pSRc) && 
 			_tiles[SKUL_1].obj == OBJ_LOOK &&
 			_tiles[SKUL_2].obj == OBJ_LOOK &&
 			_tiles[SKUL_3].obj == OBJ_LOOK &&
@@ -149,7 +152,7 @@ void prison_5f_skul::setTrigger()
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_lever_1.txt");
 			_isStopToRead = true;
 		}
-		else if (IntersectRectToRect(&_tiles[LEVER].rc, &_player->getSearchRc()))
+		else if (IntersectRectToRect(&_tiles[LEVER].rc, &pSRc))
 		{
 			SOUNDMANAGER->play("스위치");
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_lever.txt");
@@ -157,9 +160,9 @@ void prison_5f_skul::setTrigger()
 		}
 	}
 
-	if (IntersectRectToRect(&_tiles[DOORTOPRISON].rc, &_player->getPlayerFrc()) ||
-		IntersectRectToRect(&_tiles[DOORTOPRISON + 1].rc, &_player->getPlayerFrc()) ||
-		IntersectRectToRect(&_tiles[DOORTOPRISON - 1].rc, &_player->getPlayerFrc()))
+	if (IntersectRectToRect(&_tiles[DOORTOPRISON].rc, &pFrc) ||
+		IntersectRectToRect(&_tiles[DOORTOPRISON + 1].rc, &pFrc) ||
+		IntersectRectToRect(&_tiles[DOORTOPRISON - 1].rc, &pFrc))
 	{
 		if (!_sound)
 			SOUNDMANAGER->play("철문");

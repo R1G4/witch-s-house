@@ -1,5 +1,7 @@
 #pragma once
 #include "singletonBase.h"
+#include<string>
+
 enum  STAGE:int
 {
 	OPENING,

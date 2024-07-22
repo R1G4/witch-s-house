@@ -83,6 +83,8 @@ void soundStageN::release()
 
 void soundStageN::update()
 {
+	FloatRect pSRc = _player->getSearchRc();
+
 	if (!_isClick && !_isStopToRead)
 	{
 		camera.x = _player->getPlayerLocX();
@@ -94,15 +96,15 @@ void soundStageN::update()
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
 			_isStopToRead = TEXTMANAGER->setNextScript(true);
-			if (IntersectRectToRect(&_tiles[P1].rc, &_player->getSearchRc()))
+			if (IntersectRectToRect(&_tiles[P1].rc, &pSRc))
 			{
 				_isClick = true;
 			}
-			if (IntersectRectToRect(&_tiles[P2].rc, &_player->getSearchRc()))
+			if (IntersectRectToRect(&_tiles[P2].rc, &pSRc))
 			{
 				_isClick = true;
 			}
-			if (IntersectRectToRect(&_tiles[P3].rc, &_player->getSearchRc()))
+			if (IntersectRectToRect(&_tiles[P3].rc, &pSRc))
 			{
 				_isClick = true;
 			}
@@ -337,11 +339,13 @@ void soundStageN::load()
 
 void soundStageN::tileCollision()
 {
+	FloatRect pFrc = _player->getPlayerFrc();
+
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
+			if (IntersectRectToRect(&pFrc, &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
 			{
 				switch (_player->getPdirec())
 				{
@@ -362,11 +366,11 @@ void soundStageN::tileCollision()
 			
 		}
 	}
-	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange[0].rc))
+	if (IntersectRectToRect(&pFrc, &mapChange[0].rc))
 	{
 		SCENEMANAGER->changeScene("4층홀", CHRDIREC_DOWN);
 	}
-	if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[DOOR].rc) && STAGEMEMORYMANAGER->getIsPiano() && STAGEMEMORYMANAGER->getIsOpen())
+	if (IntersectRectToRect(&pFrc, &_tiles[DOOR].rc) && STAGEMEMORYMANAGER->getIsPiano() && STAGEMEMORYMANAGER->getIsOpen())
 	{
 		/////////////////////////다음스테이지 넣을곳///////////////////////////
 		SCENEMANAGER->changeScene("garden_5f", CHRDIREC_UP, LOCATION_DEFAULT);

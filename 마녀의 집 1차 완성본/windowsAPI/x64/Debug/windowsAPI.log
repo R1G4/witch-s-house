@@ -1,0 +1,6 @@
+﻿  stairs_2F.cpp
+C:\Users\zzana\Desktop\포트폴리오 정리\witch-s-house\마녀의 집 1차 완성본\stairs_2F.cpp(63,77): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+  thirdLibrary.cpp
+C:\Users\zzana\Desktop\포트폴리오 정리\witch-s-house\마녀의 집 1차 완성본\thirdLibrary.cpp(79,77): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+  코드를 생성하고 있습니다...
+  windowsAPI.vcxproj -> C:\Users\zzana\Desktop\포트폴리오 정리\witch-s-house\마녀의 집 1차 완성본\x64\Debug\windowsAPI.exe

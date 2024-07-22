@@ -113,9 +113,10 @@ void diningRoom_5f::load(LOCATION _location)
 
 void diningRoom_5f::setTrigger()
 {
+	FloatRect pFrc = _player->getPlayerFrc();
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))	// 클릭행동 트리거
 	{
-		if (IntersectRectToRect(&_tiles[Y_FLOWER_1].rc, &_player->getSearchRc()) &&
+		if (IntersectRectToRect(&_tiles[Y_FLOWER_1].rc, &pFrc) &&
 			STAGEMEMORYMANAGER->getIsFlowerDead())
 		{
 			SOUNDMANAGER->play("여자비웃음");
@@ -123,13 +124,13 @@ void diningRoom_5f::setTrigger()
 			_isStopToRead = true;
 			_isClock = false;
 		}
-		else if (IntersectRectToRect(&_tiles[Y_FLOWER_1].rc, &_player->getSearchRc()))
+		else if (IntersectRectToRect(&_tiles[Y_FLOWER_1].rc, &pFrc))
 		{
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_flower_1.txt");
 			_isStopToRead = true;
 			_isClock = false;
 		}
-		if (IntersectRectToRect(&_tiles[Y_FLOWER_2].rc, &_player->getSearchRc()) &&
+		if (IntersectRectToRect(&_tiles[Y_FLOWER_2].rc, &pFrc) &&
 			STAGEMEMORYMANAGER->getIsFlowerDead())
 		{
 			SOUNDMANAGER->play("여자비웃음");
@@ -137,13 +138,13 @@ void diningRoom_5f::setTrigger()
 			_isStopToRead = true;
 			_isClock = false;
 		}
-		else if (IntersectRectToRect(&_tiles[Y_FLOWER_2].rc, &_player->getSearchRc()))
+		else if (IntersectRectToRect(&_tiles[Y_FLOWER_2].rc, &pFrc))
 		{
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_flower_2.txt");
 			_isStopToRead = true;
 			_isClock = false;
 		}
-		if (IntersectRectToRect(&_tiles[Y_FLOWER_3].rc, &_player->getSearchRc()) &&
+		if (IntersectRectToRect(&_tiles[Y_FLOWER_3].rc, &pFrc) &&
 			STAGEMEMORYMANAGER->getIsFlowerDead() &&
 			STAGEMEMORYMANAGER->getIsGetSkul3())
 		{
@@ -152,7 +153,7 @@ void diningRoom_5f::setTrigger()
 			_isStopToRead = true;
 			_isClock = false;
 		}
-		else if (IntersectRectToRect(&_tiles[Y_FLOWER_3].rc, &_player->getSearchRc()) &&
+		else if (IntersectRectToRect(&_tiles[Y_FLOWER_3].rc, &pFrc) &&
 			STAGEMEMORYMANAGER->getIsFlowerDead())
 		{
 			SOUNDMANAGER->play("여자비웃음");
@@ -162,13 +163,13 @@ void diningRoom_5f::setTrigger()
 			_isStopToRead = true;
 			_isClock = false;
 		}
-		else if (IntersectRectToRect(&_tiles[Y_FLOWER_3].rc, &_player->getSearchRc()))
+		else if (IntersectRectToRect(&_tiles[Y_FLOWER_3].rc, &pFrc))
 		{
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_flower_3.txt");
 			_isStopToRead = true;
 			_isClock = false;
 		}
-		if (IntersectRectToRect(&_tiles[Y_FLOWER_4].rc, &_player->getSearchRc()) &&
+		if (IntersectRectToRect(&_tiles[Y_FLOWER_4].rc, &pFrc) &&
 			STAGEMEMORYMANAGER->getIsFlowerDead())
 		{
 			SOUNDMANAGER->play("여자비웃음");
@@ -176,13 +177,14 @@ void diningRoom_5f::setTrigger()
 			_isStopToRead = true;
 			_isClock = false;
 		}
-		else if (IntersectRectToRect(&_tiles[Y_FLOWER_4].rc, &_player->getSearchRc()))
+		else if (IntersectRectToRect(&_tiles[Y_FLOWER_4].rc, &pFrc))
 		{
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_flower_4.txt");
 			_isStopToRead = true;
 			_isClock = false;
 		}
-		if (IntersectRectToRect(&_tiles[CLOCK].rc, &_player->getSearchRc()) && _player->getPdirec() == CHRDIREC_UP)
+		FloatRect pSRc = _player->getSearchRc();
+		if (IntersectRectToRect(&_tiles[CLOCK].rc, &pSRc) && _player->getPdirec() == CHRDIREC_UP)
 		{
 			_co = FIRST;
 			switch (_co)
@@ -196,7 +198,7 @@ void diningRoom_5f::setTrigger()
 				break;
 			}
 		}
-		if (IntersectRectToRect(&_tiles[LIGHT].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[LIGHT].rc, &pSRc))
 		{
 			_sound_item = true;
 			STAGEMEMORYMANAGER->setIsGetSkul1(true);
@@ -204,7 +206,7 @@ void diningRoom_5f::setTrigger()
 			_isStopToRead = true;
 			_isClock = false;
 		}
-		if (IntersectRectToRect(&_tiles[DOORTODININGROOMITEM].rc, &_player->getPlayerFrc()))
+		if (IntersectRectToRect(&_tiles[DOORTODININGROOMITEM].rc, &pFrc))
 		{
 			_sound_item = true;
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_diningRoom_door.txt");
@@ -214,8 +216,8 @@ void diningRoom_5f::setTrigger()
 		}
 	}
 
-	if (IntersectRectToRect(&_tiles[DOORTOGARDEN].rc, &_player->getPlayerFrc()) ||
-		IntersectRectToRect(&_tiles[DOORTOGARDEN + TILEX].rc, &_player->getPlayerFrc()))
+	if (IntersectRectToRect(&_tiles[DOORTOGARDEN].rc, &pFrc) ||
+		IntersectRectToRect(&_tiles[DOORTOGARDEN + TILEX].rc, &pFrc))
 	{
 		if (!_sound)
 			SOUNDMANAGER->play("openDoarLong");
@@ -225,7 +227,7 @@ void diningRoom_5f::setTrigger()
 		_isChangeScene = true;
 		sceneChange("garden_5f", CHRDIREC_RIGHT, LOCATION_1);
 	}
-	if (IntersectRectToRect(&_tiles[DROPFLOWER].rc, &_player->getPlayerFrc()))
+	if (IntersectRectToRect(&_tiles[DROPFLOWER].rc, &pFrc))
 	{
 		STAGEMEMORYMANAGER->setIsFlowerpot(true);
 		_vFrameTile[2].isTrigger = true;

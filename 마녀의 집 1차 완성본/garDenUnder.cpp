@@ -115,11 +115,12 @@ void garDenUnder::load()
 
 void garDenUnder::tileCollision()
 {
+	FloatRect pFrc = _player->getPlayerFrc();
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
+			if (IntersectRectToRect(&pFrc, &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
 			{
 				switch (_player->getPdirec())
 				{
@@ -139,7 +140,7 @@ void garDenUnder::tileCollision()
 			}
 		}
 	}
-	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange.rc))
+	if (IntersectRectToRect(&pFrc, &mapChange.rc))
 	{
 		SCENEMANAGER->changeScene("Á¤¿ø", CHRDIREC_UP);
 	}

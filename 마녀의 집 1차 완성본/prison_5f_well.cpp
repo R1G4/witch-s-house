@@ -156,13 +156,16 @@ void prison_5f_well::load(LOCATION _location)
 
 void prison_5f_well::setTrigger()
 {
+	FloatRect pSRc = _player->getSearchRc();
+	FloatRect pFrc = _player->getPlayerFrc();
+
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))	// 클릭행동 트리거
 	{
-		if (IntersectRectToRect(&_tiles[WATER].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[WATER].rc, &pSRc))
 		{
 			cout << "물!" << endl;
 		}
-		if (IntersectRectToRect(&_tiles[FLOG].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[FLOG].rc, &pSRc))
 		{
 			switch (_fo)
 			{
@@ -189,9 +192,9 @@ void prison_5f_well::setTrigger()
 			}
 		}
 	}
-	if (IntersectRectToRect(&_tiles[DOORTOPRISON].rc, &_player->getPlayerFrc()) ||
-		IntersectRectToRect(&_tiles[DOORTOPRISON + 1].rc, &_player->getPlayerFrc()) ||
-		IntersectRectToRect(&_tiles[DOORTOPRISON - 1].rc, &_player->getPlayerFrc()))
+	if (IntersectRectToRect(&_tiles[DOORTOPRISON].rc, &pFrc) ||
+		IntersectRectToRect(&_tiles[DOORTOPRISON + 1].rc, &pFrc) ||
+		IntersectRectToRect(&_tiles[DOORTOPRISON - 1].rc, &pFrc))
 	{
 		if(!_sound)
 			SOUNDMANAGER->play("철문");

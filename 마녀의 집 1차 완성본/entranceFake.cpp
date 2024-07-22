@@ -109,7 +109,8 @@ void entranceFake::Collision()
 			int index = i * TILEX + j;
 
 			//어느 타일과 충돌하지 못한 경우 무시
-			if (!IntersectRectToRect(&_tiles[index].rc, &_player->getPlayerFrc())) continue;
+			FloatRect pFrc = _player->getPlayerFrc();
+			if (!IntersectRectToRect(&_tiles[index].rc, &pFrc)) continue;
 
 			//타일 충돌(이동을 못하는 타일)은 같으므로 참조된 클래스에서 돌린다.
 			firstFloorStage::tileCollision(i, j);

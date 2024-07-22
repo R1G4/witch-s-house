@@ -214,7 +214,8 @@ void thirdMain::tileCollision()
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
+			FloatRect pFrc = _player->getPlayerFrc();
+			if (IntersectRectToRect(&pFrc, &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
 			{
 				switch (_player->getPdirec())
 				{
@@ -244,7 +245,8 @@ void thirdMain::save()
 {
 	for (int i = 0; i < (TILEX*TILEY); ++i)
 	{
-		if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i].rc)
+		FloatRect pSRc = _player->getSearchRc();
+		if (IntersectRectToRect(&pSRc, &_tiles[i].rc)
 			&& _tiles[i].terrain == TR_TRIGGER)
 		{
 			if (KEYMANAGER->isOnceKeyDown(VK_SPACE))

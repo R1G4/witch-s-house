@@ -143,6 +143,9 @@ void prison_5f::load(LOCATION _location)
 
 void prison_5f::setTrigger()
 {
+	FloatRect pSRc = _player->getSearchRc();
+	FloatRect pFrc = _player->getPlayerFrc();
+
 	if (_vFrameTile[4].isTrigger && _vFrameTile[4].frameY == 3 && !_isDrop)
 	{
 		_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_cage_1.txt");
@@ -155,7 +158,7 @@ void prison_5f::setTrigger()
 	{
 		_isStopToRead = TEXTMANAGER->setNextScript(true);
 
-		if (IntersectRectToRect(&_tiles[R_FLOWER_1].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[R_FLOWER_1].rc, &pSRc))
 		{
 			if (!_sound)
 				SOUNDMANAGER->play("¿©ÀÚºñ¿ôÀ½");
@@ -164,7 +167,7 @@ void prison_5f::setTrigger()
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_flower_1.txt");
 			_isStopToRead = true;
 		}
-		if (IntersectRectToRect(&_tiles[R_FLOWER_2].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[R_FLOWER_2].rc, &pSRc))
 		{
 			if (!_sound)
 				SOUNDMANAGER->play("¿©ÀÚºñ¿ôÀ½");
@@ -173,7 +176,7 @@ void prison_5f::setTrigger()
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_flower_2.txt");
 			_isStopToRead = true;
 		}
-		if (IntersectRectToRect(&_tiles[R_FLOWER_3].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[R_FLOWER_3].rc, &pSRc))
 		{
 			if (!_sound)
 				SOUNDMANAGER->play("¿©ÀÚºñ¿ôÀ½");
@@ -182,7 +185,7 @@ void prison_5f::setTrigger()
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_flower_3.txt");
 			_isStopToRead = true;
 		}
-		if (IntersectRectToRect(&_tiles[BOOK].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[BOOK].rc, &pSRc))
 		{
 			if (!_sound)
 				SOUNDMANAGER->play("openBook");
@@ -190,11 +193,11 @@ void prison_5f::setTrigger()
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_book.txt");
 			_isStopToRead = true;
 		}
-		if (IntersectRectToRect(&_tiles[PAPER].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[PAPER].rc, &pSRc))
 		{
 			cout << "ÈùÆ®!" << endl;
 		}
-		if (IntersectRectToRect(&_tiles[DOOR_2].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[DOOR_2].rc, &pSRc))
 		{
 			if (!_sound)
 				SOUNDMANAGER->play("Ã¶¹®");
@@ -221,7 +224,7 @@ void prison_5f::setTrigger()
 			}
 			
 		}
-		if (IntersectRectToRect(&_tiles[CAGE].rc, &_player->getSearchRc()) && STAGEMEMORYMANAGER->getIsKey())
+		if (IntersectRectToRect(&_tiles[CAGE].rc, &pSRc) && STAGEMEMORYMANAGER->getIsKey())
 		{
 			_vFrameTile[4].isTrigger = true;
 			if (!_sound)
@@ -229,15 +232,15 @@ void prison_5f::setTrigger()
 			_sound = true;
 			_sound_item = true;
 		}
-		else if (IntersectRectToRect(&_tiles[CAGE].rc, &_player->getSearchRc()))
+		else if (IntersectRectToRect(&_tiles[CAGE].rc, &pSRc))
 		{
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_prison_cage.txt");
 			_isStopToRead = true;
 		}
 	}
 
-	if ((IntersectRectToRect(&_tiles[SKUL].rc, &_player->getPlayerFrc()) ||
-		IntersectRectToRect(&_tiles[SKUL - 1].rc, &_player->getPlayerFrc()))&&
+	if ((IntersectRectToRect(&_tiles[SKUL].rc, &pFrc) ||
+		IntersectRectToRect(&_tiles[SKUL - 1].rc, &pFrc))&&
 		!_isSummon && !_setTile && STAGEMEMORYMANAGER->getIsLever())
 	{
 		if (!_sound)
@@ -251,8 +254,8 @@ void prison_5f::setTrigger()
 		_isSkulAppeal = true;
 		_isSummon = true;
 	}
-	if (IntersectRectToRect(&_tiles[DOORTOGARDEN].rc, &_player->getPlayerFrc()) ||
-		IntersectRectToRect(&_tiles[DOORTOGARDEN + TILEX].rc, &_player->getPlayerFrc()))
+	if (IntersectRectToRect(&_tiles[DOORTOGARDEN].rc, &pFrc) ||
+		IntersectRectToRect(&_tiles[DOORTOGARDEN + TILEX].rc, &pFrc))
 	{
 		if (!_sound)
 			SOUNDMANAGER->play("Ã¶¹®");
@@ -260,8 +263,8 @@ void prison_5f::setTrigger()
 		_isChangeScene = true;
 		sceneChange("garden_5f", CHRDIREC_LEFT, LOCATION_3);
 	}
-	if (IntersectRectToRect(&_tiles[DOORTOPRISONWELL].rc, &_player->getPlayerFrc()) ||
-		IntersectRectToRect(&_tiles[DOORTOPRISONWELL + 1].rc, &_player->getPlayerFrc()))
+	if (IntersectRectToRect(&_tiles[DOORTOPRISONWELL].rc, &pFrc) ||
+		IntersectRectToRect(&_tiles[DOORTOPRISONWELL + 1].rc, &pFrc))
 	{
 		if (!_sound)
 			SOUNDMANAGER->play("Ã¶¹®");
@@ -270,8 +273,8 @@ void prison_5f::setTrigger()
 		_isChangeScene = true;
 		sceneChange("prison_well_5f", CHRDIREC_UP, LOCATION_DEFAULT);
 	}
-	if (IntersectRectToRect(&_tiles[DOORTOPRISONSKUL].rc, &_player->getPlayerFrc()) ||
-		IntersectRectToRect(&_tiles[DOORTOPRISONSKUL + TILEX].rc, &_player->getPlayerFrc()))
+	if (IntersectRectToRect(&_tiles[DOORTOPRISONSKUL].rc, &pFrc) ||
+		IntersectRectToRect(&_tiles[DOORTOPRISONSKUL + TILEX].rc, &pFrc))
 	{
 		if (!_sound)
 			SOUNDMANAGER->play("Ã¶¹®");

@@ -2,6 +2,7 @@
 #include "gameNode.h"
 #include "skul.h"
 #include "DeadManager.h"
+#include<string>
 
 class Player;
 

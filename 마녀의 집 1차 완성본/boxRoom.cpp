@@ -161,7 +161,8 @@ void boxRoom::Collision()
 			int index = i * TILEX + j;
 
 			//어느 타일과 플레이어 상호작용 렉트가 충돌하였다면
-			if (IntersectRectToRect(&_tiles[index].rc, &_player->getSearchRc()))
+			FloatRect pSRc = _player->getSearchRc();
+			if (IntersectRectToRect(&_tiles[index].rc, &pSRc))
 			{
 				//텍스를 넣는 동시에 폼 실행
 				if (_readCnt != END && (TRIGGER)index == READ && SelectionForm(L"읽는다.", L"읽지 않는다") && _fromSelected == LEFT)
@@ -179,7 +180,7 @@ void boxRoom::Collision()
 			}
 
 			//어느 타일과 플레이어 상호작용 렉트가 충돌하였다면
-			if (IntersectRectToRect(&_tiles[index].rc, &_player->getSearchRc()))
+			if (IntersectRectToRect(&_tiles[index].rc, &pSRc))
 			{
 				//타일의 인덱스에 해당 아이템이 존재 하고 획득을 시도한다면
 				if (!STAGEMEMORYMANAGER->getIsBearPut() && !STAGEMEMORYMANAGER->getIsBearPickUp())
@@ -203,7 +204,8 @@ void boxRoom::Collision()
 			}
 
 			//어느 타일과 충돌 했을 경우
-			if (!IntersectRectToRect(&_tiles[index].rc, &_player->getPlayerFrc())) continue;
+			FloatRect pFrc = _player->getPlayerFrc();
+			if (!IntersectRectToRect(&_tiles[index].rc, &pFrc)) continue;
 
 			//타일 충돌(이동을 못하는 타일)은 같으므로 참조된 클래스에서 돌린다.
 			firstFloorStage::tileCollision(i, j);

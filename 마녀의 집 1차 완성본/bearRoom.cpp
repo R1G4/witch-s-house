@@ -147,7 +147,8 @@ void bearRoom::Collision()
 			int index = i * TILEX + j;
 
 			//어느 타일과 플레이어 상호작용 렉트가 충돌하였다면
-			if (IntersectRectToRect(&_tiles[index].rc, &_player->getSearchRc()))
+			FloatRect pSRc = _player->getSearchRc();
+			if (IntersectRectToRect(&_tiles[index].rc, &pSRc))
 			{
 				//해당 타일 속성이 READ이면서 해당 키를 입력하였다면 트리거 상태를 READ로 변환한다.
 				if ((TRIGGER)index == READ && KEYMANAGER->isOnceKeyUp(VK_SPACE))
@@ -186,7 +187,8 @@ void bearRoom::Collision()
 			}
 
 			//어느 타일과 충돌 했을 경우
-			if (!IntersectRectToRect(&_tiles[index].rc, &_player->getPlayerFrc())) continue;
+			FloatRect pFrc = _player->getPlayerFrc();
+			if (!IntersectRectToRect(&_tiles[index].rc, &pFrc)) continue;
 
 			//타일 충돌(이동을 못하는 타일)은 같으므로 참조된 클래스에서 돌린다.
 			firstFloorStage::tileCollision(i, j);

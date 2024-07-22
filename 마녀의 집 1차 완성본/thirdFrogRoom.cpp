@@ -194,7 +194,8 @@ void thirdFrogRoom::openText()
 	//개구리 앞에서 상호작용키 눌렀을때
 	for (int i = 0; i < TILEX*TILEY; i++)
 	{
-		if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i].rc)
+		FloatRect pSRc = _player->getSearchRc();
+		if (IntersectRectToRect(&pSRc, &_tiles[i].rc)
 			&& _tiles[i].terrain == TR_TRIGGER && _player->getPlayerFrc().left / TILESIZE <= 21)
 		{
 			if (KEYMANAGER->isOnceKeyDown(VK_SPACE) && _alpha > 0)
@@ -285,7 +286,8 @@ void thirdFrogRoom::readBook()
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc)
+			FloatRect pSRc = _player->getSearchRc();
+			if (IntersectRectToRect(&pSRc, &_tiles[i*TILEX + j].rc)
 				&& _tiles[i*TILEX + j].terrain == TR_TRIGGER && _player->getPlayerFrc().bottom / TILESIZE <= 7)
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
@@ -314,7 +316,8 @@ void thirdFrogRoom::tileCollision()
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
+			FloatRect pFrc = _player->getPlayerFrc();
+			if (IntersectRectToRect(&pFrc, &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
 			{
 				switch (_player->getPdirec())
 				{

@@ -104,24 +104,27 @@ void gardenToBoss_5f::load(LOCATION _location)
 
 void gardenToBoss_5f::setTrigger()
 {
+	FloatRect pSRc = _player->getSearchRc();
+	FloatRect pFrc = _player->getPlayerFrc();
+
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))	// 클릭행동 트리거
 	{
 		_isStopToRead = TEXTMANAGER->setNextScript(true);
 
-		if (IntersectRectToRect(&_tiles[BOOK].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[BOOK].rc, &pSRc))
 		{
 			SOUNDMANAGER->play("openBook");
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_gardenToBossBook.txt");
 			_isStopToRead = true;
 		}
-		if (IntersectRectToRect(&_tiles[NEKO].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[NEKO].rc, &pSRc))
 		{
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_gardenToBossNeko.txt");
 			_isStopToRead = true;
 		}
 	}
 
-	if (IntersectRectToRect(&_tiles[DOORTOBOSS].rc, &_player->getPlayerFrc()))
+	if (IntersectRectToRect(&_tiles[DOORTOBOSS].rc, &pFrc))
 	{
 		if (!_sound)
 			SOUNDMANAGER->play("openDoarLong");
@@ -132,7 +135,7 @@ void gardenToBoss_5f::setTrigger()
 		sceneChange("BossStage1");
 		fifthFloorStage::release();
 	}
-	if (IntersectRectToRect(&_tiles[DOORTOGARDEN].rc, &_player->getPlayerFrc()))
+	if (IntersectRectToRect(&_tiles[DOORTOGARDEN].rc, &pFrc))
 	{
 		if (!_sound)
 			SOUNDMANAGER->play("openDoarLong");

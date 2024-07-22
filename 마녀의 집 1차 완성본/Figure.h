@@ -380,10 +380,16 @@ namespace Figure
 		else
 		{
 			//4꼭지점에 대한 원과의 충돌을 실시한다.
-			if (Vector2InEllipse(&Vector2(pRect->left, pRect->top), pEllipse))return true;
-			if (Vector2InEllipse(&Vector2(pRect->right, pRect->top), pEllipse))return true;
-			if (Vector2InEllipse(&Vector2(pRect->left, pRect->bottom), pEllipse))return true;
-			if (Vector2InEllipse(&Vector2(pRect->right, pRect->bottom), pEllipse))return true;
+
+			Vector2 v_lt = Vector2(pRect->left, pRect->top);
+			Vector2 v_rt = Vector2(pRect->right, pRect->top);
+			Vector2 v_lb = Vector2(pRect->left, pRect->bottom);
+			Vector2 v_rb = Vector2(pRect->right, pRect->bottom);
+
+			if (Vector2InEllipse(&v_lt, pEllipse))return true;
+			if (Vector2InEllipse(&v_rt, pEllipse))return true;
+			if (Vector2InEllipse(&v_lb, pEllipse))return true;
+			if (Vector2InEllipse(&v_rb, pEllipse))return true;
 		}
 
 		return false;

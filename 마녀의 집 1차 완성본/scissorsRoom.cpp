@@ -176,6 +176,9 @@ void scissorsRoom::render()
 
 void scissorsRoom::Collision()
 {
+	FloatRect pSRc = _player->getSearchRc();
+	FloatRect pFrc = _player->getPlayerFrc();
+
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
@@ -183,7 +186,7 @@ void scissorsRoom::Collision()
 			int index = i * TILEX + j;
 
 			//어느 타일과 플레이어 상호작용 렉트가 충돌하였다면
-			if (IntersectRectToRect(&_tiles[index].rc, &_player->getSearchRc()))
+			if (IntersectRectToRect(&_tiles[index].rc, &pSRc))
 			{
 				//곰을 가져간 상태이며 가위를 자르지 않았고 바구니에 넣지도 않았을때만 
 				if (!STAGEMEMORYMANAGER->getIsScissors() && 
@@ -223,7 +226,7 @@ void scissorsRoom::Collision()
 			}
 
 			//어느 타일과 충돌 했을 경우
-			if (!IntersectRectToRect(&_tiles[index].rc, &_player->getPlayerFrc())) continue;
+			if (!IntersectRectToRect(&_tiles[index].rc, &pFrc)) continue;
 
 			//타일 충돌(이동을 못하는 타일)은 같으므로 참조된 클래스에서 돌린다.
 			firstFloorStage::tileCollision(i, j);

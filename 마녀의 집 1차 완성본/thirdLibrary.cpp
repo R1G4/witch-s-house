@@ -139,13 +139,15 @@ void thirdLibrary::changeScene()
 
 void thirdLibrary::readBook()
 {
+	FloatRect pSRc = _player->getSearchRc();
+
 	//책 읽기
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
 			//일지 읽을때
-			if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc)
+			if (IntersectRectToRect(&pSRc, &_tiles[i*TILEX + j].rc)
 				&& _tiles[i*TILEX + j].terrain == TR_TRIGGER && _player->getPlayerFrc().right / TILESIZE <= 20)
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
@@ -158,7 +160,7 @@ void thirdLibrary::readBook()
 				}
 			}
 			//마녀의 책 읽을때
-			if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc)
+			if (IntersectRectToRect(&pSRc, &_tiles[i*TILEX + j].rc)
 				&& _tiles[i*TILEX + j].terrain == TR_TRIGGER && _player->getPlayerFrc().right / TILESIZE >= 21)
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
@@ -189,7 +191,8 @@ void thirdLibrary::tileCollision()
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
+			FloatRect pFrc = _player->getPlayerFrc();
+			if (IntersectRectToRect(&pFrc, &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
 			{
 				switch (_player->getPdirec())
 				{

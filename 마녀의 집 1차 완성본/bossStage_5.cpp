@@ -67,7 +67,8 @@ void bossStage_5::activeTrigger()
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].terrain == TR_TRIGGER && !_isBossAppeal)
+			FloatRect pSRc = _player->getSearchRc();
+			if (IntersectRectToRect(&pSRc, &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].terrain == TR_TRIGGER && !_isBossAppeal)
 			{
 					_boss->init(bossLocX, bossLocY);
 					_isBossAppeal = true;
@@ -82,7 +83,8 @@ void bossStage_5::activeCorr()
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].obj == OBJ_CORELATION)
+			FloatRect pFrc = _player->getPlayerFrc();
+			if (IntersectRectToRect(&pFrc, &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].obj == OBJ_CORELATION)
 			{
 				_Stop = true;
 				alpha -= 0.01;

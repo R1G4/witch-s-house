@@ -98,11 +98,13 @@ void stairs_2F::changeScene()
 	}*/
 
 	//3층으로 올라가기
+	FloatRect pFrc = _player->getPlayerFrc();
+
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc)
+			if (IntersectRectToRect(&pFrc, &_tiles[i*TILEX + j].rc)
 				&& _tiles[i*TILEX + j].terrain == TR_TRIGGER && _player->getPlayerFrc().right / TILESIZE >= 20)
 			{
 				SOUNDMANAGER->play("다운받은거2", 0.1f);
@@ -115,11 +117,13 @@ void stairs_2F::changeScene()
 
 void stairs_2F::tileCollision()
 {
+	FloatRect pFrc = _player->getPlayerFrc();
+
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
+			if (IntersectRectToRect(&pFrc, &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
 			{
 				switch (_player->getPdirec())
 				{

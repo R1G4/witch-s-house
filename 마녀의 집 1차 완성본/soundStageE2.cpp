@@ -56,6 +56,7 @@ void soundStageE2::release()
 
 void soundStageE2::update()
 {
+	FloatRect pSRc = _player->getSearchRc();
 
 	if (!_isClick && !_isStopToRead)
 	{
@@ -68,24 +69,24 @@ void soundStageE2::update()
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
 			_isStopToRead = TEXTMANAGER->setNextScript(true);
-			if (IntersectRectToRect(&_tiles[PAPER].rc, &_player->getSearchRc()))
+			if (IntersectRectToRect(&_tiles[PAPER].rc, &pSRc))
 			{
 				_vScript = TEXTMANAGER->loadFile("dialog/4f/4f_quiz.txt");
 				_isStopToRead = true;
 			}
-			if (IntersectRectToRect(&_tiles[BOOKS].rc, &_player->getSearchRc()))
+			if (IntersectRectToRect(&_tiles[BOOKS].rc, &pSRc))
 			{
 				_isClick = true;
 			}
-			if (IntersectRectToRect(&_tiles[DOLL].rc, &_player->getSearchRc()))
+			if (IntersectRectToRect(&_tiles[DOLL].rc, &pSRc))
 			{
 				_isClick = true;
 			}
-			if (IntersectRectToRect(&_tiles[CLOCK].rc, &_player->getSearchRc()))
+			if (IntersectRectToRect(&_tiles[CLOCK].rc, &pSRc))
 			{
 				_isClick = true;
 			}
-			if (IntersectRectToRect(&_tiles[PUMPKIN].rc, &_player->getSearchRc()))
+			if (IntersectRectToRect(&_tiles[PUMPKIN].rc, &pSRc))
 			{
 				_isClick = true;
 			}
@@ -122,7 +123,7 @@ void soundStageE2::update()
 		if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 		{
 			_isClick = false;
-			if (IntersectRectToRect(&_tiles[BOOKS].rc, &_player->getSearchRc()))
+			if (IntersectRectToRect(&_tiles[BOOKS].rc, &pSRc))
 			{
 				if (_disCover)
 				{
@@ -130,7 +131,7 @@ void soundStageE2::update()
 					_isStopToRead = true;
 				}
 			}
-			if (IntersectRectToRect(&_tiles[DOLL].rc, &_player->getSearchRc()))
+			if (IntersectRectToRect(&_tiles[DOLL].rc, &pSRc))
 			{
 				if (_disCover)
 				{
@@ -138,7 +139,7 @@ void soundStageE2::update()
 					_isStopToRead = true;
 				}
 			}
-			if (IntersectRectToRect(&_tiles[PUMPKIN].rc, &_player->getSearchRc()))
+			if (IntersectRectToRect(&_tiles[PUMPKIN].rc, &pSRc))
 			{
 				if (_disCover)
 				{
@@ -146,7 +147,7 @@ void soundStageE2::update()
 					_isStopToRead = true;
 				}
 			}
-			if (IntersectRectToRect(&_tiles[CLOCK].rc, &_player->getSearchRc()))
+			if (IntersectRectToRect(&_tiles[CLOCK].rc, &pSRc))
 			{
 				if (STAGEMEMORYMANAGER->getIsGetTae() && _disCover)
 				{
@@ -256,11 +257,13 @@ void soundStageE2::load()
 
 void soundStageE2::tileCollision()
 {
+	FloatRect pFrc = _player->getPlayerFrc();
+
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
+			if (IntersectRectToRect(&pFrc, &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
 			{
 				switch (_player->getPdirec())
 				{
@@ -280,7 +283,7 @@ void soundStageE2::tileCollision()
 			}
 		}
 	}
-	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange[0].rc))
+	if (IntersectRectToRect(&pFrc, &mapChange[0].rc))
 	{
 		SCENEMANAGER->changeScene("4층오른쪽방1", CHRDIREC_DOWN);
 	}

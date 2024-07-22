@@ -1,5 +1,7 @@
 #pragma once
 #include "gameNode.h"
+#include<string>
+
 class mapTool :
 	public gameNode
 {

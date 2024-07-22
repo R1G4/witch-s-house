@@ -160,11 +160,13 @@ void soundStageE1::load()
 
 void soundStageE1::tileCollision()
 {
+	FloatRect pFrc = _player->getPlayerFrc();
+
 	for (int i = 0; i < TILEY; i++)
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
+			if (IntersectRectToRect(&pFrc, &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
 			{
 				switch (_player->getPdirec())
 				{
@@ -184,11 +186,11 @@ void soundStageE1::tileCollision()
 			}
 		}
 	}
-	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange[0].rc))
+	if (IntersectRectToRect(&pFrc, &mapChange[0].rc))
 	{
 		SCENEMANAGER->changeScene("4ÃþÈ¦", CHRDIREC_LEFT);
 	}
-	if (IntersectRectToRect(&_player->getPlayerFrc(), &mapChange[1].rc))
+	if (IntersectRectToRect(&pFrc, &mapChange[1].rc))
 	{
 		SCENEMANAGER->changeScene("4Ãþ¿À¸¥ÂÊ¹æ2", CHRDIREC_UP);
 	}

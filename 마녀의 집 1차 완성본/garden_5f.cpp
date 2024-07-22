@@ -186,14 +186,17 @@ void garden_5f::load(LOCATION _location)
 
 void garden_5f::setTrigger()
 {
-	if (IntersectRectToRect(&_tiles[NEKO].rc, &_player->getSearchRc()))
+	FloatRect pSRc = _player->getSearchRc();
+	FloatRect pFrc = _player->getPlayerFrc();
+
+	if (IntersectRectToRect(&_tiles[NEKO].rc, &pSRc))
 	{
 		setSave();
 	}
 
 	if (KEYMANAGER->isOnceKeyDown(VK_SPACE))	// 클릭행동 트리거
 	{
-		if (IntersectRectToRect(&_tiles[FLOWER].rc, &_player->getSearchRc()) && 
+		if (IntersectRectToRect(&_tiles[FLOWER].rc, &pSRc) &&
 			STAGEMEMORYMANAGER->getIsPotion() &&
 			STAGEMEMORYMANAGER->getIsRedFlower1() &&
 			STAGEMEMORYMANAGER->getIsRedFlower2() &&
@@ -204,7 +207,7 @@ void garden_5f::setTrigger()
 			_flowerDead = true;
 			STAGEMEMORYMANAGER->setIsFlowerDead(true);
 		}
-		else if (IntersectRectToRect(&_tiles[FLOWER].rc, &_player->getSearchRc()))
+		else if (IntersectRectToRect(&_tiles[FLOWER].rc, &pSRc))
 		{
 			switch (_co)
 			{
@@ -218,18 +221,18 @@ void garden_5f::setTrigger()
 				break;
 			}
 		}
-		if (IntersectRectToRect(&_tiles[TREE].rc, &_player->getSearchRc()) ||
-			IntersectRectToRect(&_tiles[TREE + 1].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[TREE].rc, &pSRc) ||
+			IntersectRectToRect(&_tiles[TREE + 1].rc, &pSRc))
 		{
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_garden_tree.txt");
 			_isStopToRead = true;
 		}
-		if (IntersectRectToRect(&_tiles[TEE].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[TEE].rc, &pSRc))
 		{
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_garden_tee.txt");
 			_isStopToRead = true;
 		}
-		if (IntersectRectToRect(&_tiles[DOORTOGARDENTOBOSS].rc, &_player->getSearchRc()))
+		if (IntersectRectToRect(&_tiles[DOORTOGARDENTOBOSS].rc, &pSRc))
 		{
 			SOUNDMANAGER->play("openDoarShort");
 			_vScript = TEXTMANAGER->loadFile("dialog/5f/5f_garden_door.txt");
@@ -239,7 +242,7 @@ void garden_5f::setTrigger()
 
 
 
-	if (IntersectRectToRect(&_tiles[DOORTOGARDENTOBOSS].rc, &_player->getPlayerFrc()) &&
+	if (IntersectRectToRect(&_tiles[DOORTOGARDENTOBOSS].rc, &pFrc) &&
 		STAGEMEMORYMANAGER->getIsLever())
 	{
 		if (!_sound)
@@ -249,8 +252,8 @@ void garden_5f::setTrigger()
 		_vFrameTile[1].isTrigger = true;
 		sceneChange("gardenToBoss_5f", CHRDIREC_UP, LOCATION_DEFAULT);
 	}
-	if (IntersectRectToRect(&_tiles[DOORTOPRISON].rc, &_player->getPlayerFrc()) ||
-		IntersectRectToRect(&_tiles[DOORTOPRISON + TILEX].rc, &_player->getPlayerFrc()))
+	if (IntersectRectToRect(&_tiles[DOORTOPRISON].rc, &pFrc) ||
+		IntersectRectToRect(&_tiles[DOORTOPRISON + TILEX].rc, &pFrc))
 	{
 		if (!_sound)
 			SOUNDMANAGER->play("철문");
@@ -258,8 +261,8 @@ void garden_5f::setTrigger()
 		_isChangeScene = true;
 		sceneChange("prison_5f", CHRDIREC_RIGHT, LOCATION_DEFAULT);
 	}
-	if (IntersectRectToRect(&_tiles[DOORTODININGROOM].rc, &_player->getPlayerFrc()) ||
-		IntersectRectToRect(&_tiles[DOORTODININGROOM + TILEX].rc, &_player->getPlayerFrc()))
+	if (IntersectRectToRect(&_tiles[DOORTODININGROOM].rc, &pFrc) ||
+		IntersectRectToRect(&_tiles[DOORTODININGROOM + TILEX].rc, &pFrc))
 	{
 		if (!_sound)
 			SOUNDMANAGER->play("openDoarLong");

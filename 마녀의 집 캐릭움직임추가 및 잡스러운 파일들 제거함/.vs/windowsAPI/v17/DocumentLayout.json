@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{E2958D70-CFC8-4A1D-980D-12180D9B541F}|windowsAPI.vcxproj|C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\Figure.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{E2958D70-CFC8-4A1D-980D-12180D9B541F}|windowsAPI.vcxproj|solutionrelative:Figure.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E2958D70-CFC8-4A1D-980D-12180D9B541F}|windowsAPI.vcxproj|C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\Figure.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{E2958D70-CFC8-4A1D-980D-12180D9B541F}|windowsAPI.vcxproj|solutionrelative:Figure.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{E2958D70-CFC8-4A1D-980D-12180D9B541F}|windowsAPI.vcxproj|C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\entrance.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{E2958D70-CFC8-4A1D-980D-12180D9B541F}|windowsAPI.vcxproj|solutionrelative:entrance.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
@@ -13,10 +21,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{E2958D70-CFC8-4A1D-980D-12180D9B541F}|windowsAPI.vcxproj|C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\astarTile.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{E2958D70-CFC8-4A1D-980D-12180D9B541F}|windowsAPI.vcxproj|solutionrelative:astarTile.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E2958D70-CFC8-4A1D-980D-12180D9B541F}|windowsAPI.vcxproj|C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\Figure.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{E2958D70-CFC8-4A1D-980D-12180D9B541F}|windowsAPI.vcxproj|solutionrelative:Figure.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E2958D70-CFC8-4A1D-980D-12180D9B541F}|windowsAPI.vcxproj|C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\Triangle.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -70,11 +74,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 11,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
+              "Title": "Figure.cpp",
+              "DocumentMoniker": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\Figure.cpp",
+              "RelativeDocumentMoniker": "Figure.cpp",
+              "ToolTip": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\Figure.cpp",
+              "RelativeToolTip": "Figure.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-07-22T11:12:58.719Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "entrance.h",
               "DocumentMoniker": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\entrance.h",
               "RelativeDocumentMoniker": "entrance.h",
@@ -87,20 +104,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "playGround.cpp",
-              "DocumentMoniker": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\playGround.cpp",
-              "RelativeDocumentMoniker": "playGround.cpp",
-              "ToolTip": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\playGround.cpp",
-              "RelativeToolTip": "playGround.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAABAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-07-22T10:20:45.99Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "astarTile.cpp",
               "DocumentMoniker": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\astarTile.cpp",
               "RelativeDocumentMoniker": "astarTile.cpp",
@@ -108,12 +112,11 @@
               "RelativeToolTip": "astarTile.cpp",
               "ViewState": "AQIAABYAAAAAAAAAAAAgwC4AAAAmAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-07-22T10:18:00.568Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-22T10:18:00.568Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "Triangle.cpp",
               "DocumentMoniker": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\Triangle.cpp",
               "RelativeDocumentMoniker": "Triangle.cpp",
@@ -121,12 +124,11 @@
               "RelativeToolTip": "Triangle.cpp",
               "ViewState": "AQIAAEYAAAAAAAAAAAAgwGMAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-07-22T10:17:51.706Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-22T10:17:51.706Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "mapTool.cpp",
               "DocumentMoniker": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\mapTool.cpp",
               "RelativeDocumentMoniker": "mapTool.cpp",
@@ -134,12 +136,11 @@
               "RelativeToolTip": "mapTool.cpp",
               "ViewState": "AQIAACACAAAAAAAAAAAgwCMCAAA/AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-07-22T10:15:24.618Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-22T10:15:24.618Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "Line.cpp",
               "DocumentMoniker": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\Line.cpp",
               "RelativeDocumentMoniker": "Line.cpp",
@@ -147,12 +148,11 @@
               "RelativeToolTip": "Line.cpp",
               "ViewState": "AQIAAAcAAAAAAAAAAAAgwBoAAAAjAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-07-22T10:14:57.773Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-22T10:14:57.773Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "garDenUnder.cpp",
               "DocumentMoniker": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\garDenUnder.cpp",
               "RelativeDocumentMoniker": "garDenUnder.cpp",
@@ -160,12 +160,11 @@
               "RelativeToolTip": "garDenUnder.cpp",
               "ViewState": "AQIAAHwAAAAAAAAAAAAgwJUAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-07-22T10:14:36.989Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-22T10:14:36.989Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "garDen.cpp",
               "DocumentMoniker": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\garDen.cpp",
               "RelativeDocumentMoniker": "garDen.cpp",
@@ -173,12 +172,11 @@
               "RelativeToolTip": "garDen.cpp",
               "ViewState": "AQIAAL4AAAAAAAAAAAAgwNAAAAACAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-07-22T10:14:08.963Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-22T10:14:08.963Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "entranceTrap.cpp",
               "DocumentMoniker": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\entranceTrap.cpp",
               "RelativeDocumentMoniker": "entranceTrap.cpp",
@@ -186,12 +184,11 @@
               "RelativeToolTip": "entranceTrap.cpp",
               "ViewState": "AQIAAD8AAAAAAAAAAAAgwFgAAAAEAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-07-22T10:14:00.326Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-22T10:14:00.326Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "entranceFake.cpp",
               "DocumentMoniker": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\entranceFake.cpp",
               "RelativeDocumentMoniker": "entranceFake.cpp",
@@ -199,12 +196,11 @@
               "RelativeToolTip": "entranceFake.cpp",
               "ViewState": "AQIAADgAAAAAAAAAAAAgwFEAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-07-22T10:13:48.639Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-22T10:13:48.639Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "entrance.cpp",
               "DocumentMoniker": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\entrance.cpp",
               "RelativeDocumentMoniker": "entrance.cpp",
@@ -212,25 +208,36 @@
               "RelativeToolTip": "entrance.cpp",
               "ViewState": "AQIAAD4AAAAAAAAAAAAgwFIAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-07-22T10:13:34.446Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-22T10:13:34.446Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "Figure.h",
               "DocumentMoniker": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\Figure.h",
               "RelativeDocumentMoniker": "Figure.h",
               "ToolTip": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\Figure.h",
               "RelativeToolTip": "Figure.h",
-              "ViewState": "AQIAACIAAAAAAAAAAIAwwBMAAAAfAAAA",
+              "ViewState": "AQIAAHIBAAAAAAAAAIAwwIEBAAA3AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2024-07-22T10:07:55.821Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 7,
+              "Title": "playGround.cpp",
+              "DocumentMoniker": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\playGround.cpp",
+              "RelativeDocumentMoniker": "playGround.cpp",
+              "ToolTip": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\playGround.cpp",
+              "RelativeToolTip": "playGround.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-07-22T10:20:45.99Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
               "Title": "castlefront.cpp",
               "DocumentMoniker": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\castlefront.cpp",
               "RelativeDocumentMoniker": "castlefront.cpp",
@@ -238,12 +245,11 @@
               "RelativeToolTip": "castlefront.cpp",
               "ViewState": "AQIAAH4AAAAAAAAAAAAgwJcAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-07-22T10:12:39.469Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-22T10:12:39.469Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "bossStage_2.cpp",
               "DocumentMoniker": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\bossStage_2.cpp",
               "RelativeDocumentMoniker": "bossStage_2.cpp",
@@ -251,12 +257,11 @@
               "RelativeToolTip": "bossStage_2.cpp",
               "ViewState": "AQIAAKkAAAAAAAAAAAAgwMMAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-07-22T10:11:26.975Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-22T10:11:26.975Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "bossStage.cpp",
               "DocumentMoniker": "C:\\Users\\zzana\\Desktop\\\uD3EC\uD2B8\uD3F4\uB9AC\uC624 \uC815\uB9AC\\witch-s-house\\\uB9C8\uB140\uC758 \uC9D1 \uCE90\uB9AD\uC6C0\uC9C1\uC784\uCD94\uAC00 \uBC0F \uC7A1\uC2A4\uB7EC\uC6B4 \uD30C\uC77C\uB4E4 \uC81C\uAC70\uD568\\bossStage.cpp",
               "RelativeDocumentMoniker": "bossStage.cpp",
@@ -264,8 +269,7 @@
               "RelativeToolTip": "bossStage.cpp",
               "ViewState": "AQIAALQAAAAAAAAAAAAgwNEAAAAWAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-07-22T10:09:36.982Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-07-22T10:09:36.982Z"
             }
           ]
         }

@@ -149,12 +149,14 @@ void bossStage_2::activeTrigger()
 	for (int i = 0; i < _vTrigger.size(); i++)
 	{
 		FloatRect temp;
-		if (IntersectRectToRect(&temp, &_player->getPlayerFrc(), &_vTrigger[i].tile))
+		FloatRect pFrc = _player->getPlayerFrc();
+		if (IntersectRectToRect(&temp, &pFrc, &_vTrigger[i].tile))
 		{
 			_vTrigger[i].isTriggerOn = true;
 		}
 	}
-	if ((IntersectRectToRect(&_player->getPlayerFrc(), &_vTrigger[1].tile) || IntersectRectToRect(&_player->getPlayerFrc(), &_vTrigger[4].tile))&&!_isBossAppeal)
+	FloatRect pFrc = _player->getPlayerFrc();
+	if ((IntersectRectToRect(&pFrc, &_vTrigger[1].tile) || IntersectRectToRect(&pFrc, &_vTrigger[4].tile))&&!_isBossAppeal)
 	{
 		_boss->init(bossLocX, bossLocY);
 		_isBossAppeal = true;
@@ -167,7 +169,8 @@ void bossStage_2::activeCorr()
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].obj == OBJ_CORELATION)
+			FloatRect pFrc = _player->getPlayerFrc();
+			if (IntersectRectToRect(&pFrc, &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].obj == OBJ_CORELATION)
 			{
 				_Stop = true;
 				alpha -= 0.01;

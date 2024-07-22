@@ -1,7 +1,9 @@
 #pragma once
 #include "gameNode.h"
-#include"boss.h"
+#include "boss.h"
 #include "DeadManager.h"
+#include<string>
+
 class Player;
 struct Trigger
 {
