@@ -23,7 +23,8 @@ void Figure::FloatLine::Update(const Vector2 & start, const Vector2 & end)
 
 float Figure::FloatLine::Length()
 {
-	return Vector2::Length(&(start - end));
+	Vector2 difference = start - end;
+	return Vector2::Length(&difference);
 }
 
 bool Figure::FloatLine::operator == (const Figure::FloatLine& line)

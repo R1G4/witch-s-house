@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "playGround.h"
+#include<string>
 
 playGround::playGround()
 {

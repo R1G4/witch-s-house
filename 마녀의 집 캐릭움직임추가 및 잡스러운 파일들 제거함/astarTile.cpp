@@ -41,7 +41,7 @@ void astarTile::render()
 	else
 		CAMERAMANAGER->renderFillRc(f_rc, _color, 1.0f);
 
-	CAMERAMANAGER->renderRc(FloatRect(_rc.left, _rc.top, _rc.right, _rc.bottom), D2D1::ColorF::Blue, 1.0f, 1.0f);
+	CAMERAMANAGER->renderRc(/*FloatRect(_rc.left, _rc.top, _rc.right, _rc.bottom)*/FloatRect(_rc), D2D1::ColorF::Blue, 1.0f, 1.0f);
 	/*FillRect(getMemDC(), &_rc, _brush);
 
 	SelectObject(getMemDC(), (HPEN)_pen);

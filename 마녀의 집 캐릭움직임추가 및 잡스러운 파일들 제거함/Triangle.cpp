@@ -86,7 +86,8 @@ Vector2 Figure::FloatTriangle::GetExternalCenter()
 float Figure::FloatTriangle::GetExternalRadius()
 {
 	Vector2 center = this->GetExternalCenter();
-	float result = Vector2::Length(&(center - vertex0));
+	Vector2 radius = (center - vertex0);
+	float result = Vector2::Length(&radius);
 	return result;
 }
 

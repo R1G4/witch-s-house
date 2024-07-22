@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "mapTool.h"
+#include<string>
+
 /////////////////////////////테스트
 #include<iostream>
 #pragma comment (linker, "/entry:WinMainCRTStartup /subsystem:console")
@@ -540,7 +542,8 @@ void mapTool::setMap()
 		{
 			for (int j = 0; j < SAMPLETILEX; j++)
 			{
-				if (Vector2InRect(&_sampleTile[i*SAMPLETILEX + j].rcTile, &Vector2(_ptMouse.x, _ptMouse.y)) && _crtSelect == CTRL_TERRAINDRAW) //&& isterrain) by pju 이넘으로 대체하기 위해
+				Vector2 pM = Vector2(/*_ptMouse.x, _ptMouse.y*/_ptMouse);
+				if (Vector2InRect(&_sampleTile[i*SAMPLETILEX + j].rcTile, &pM) && _crtSelect == CTRL_TERRAINDRAW) //&& isterrain) by pju 이넘으로 대체하기 위해
 				{
 					_currentTile.x = _sampleTile[i*SAMPLETILEX + j].terrainFrameX;
 					_currentTile.y = _sampleTile[i*SAMPLETILEX + j].terrainFrameY;
@@ -557,7 +560,8 @@ void mapTool::setMap()
 			{
 				for (int j = 0; j < TILEX; ++j)
 				{
-					if (Vector2InRect(&_tiles[i*TILEX + j].rc, &CAMERAMANAGER->getWorldMouse()))
+					Vector2 wm = CAMERAMANAGER->getWorldMouse();
+					if (Vector2InRect(&_tiles[i*TILEX + j].rc, &wm))
 					{
 						if (_crtSelect == CTRL_TERRAINDRAW)
 						{
@@ -611,20 +615,21 @@ void mapTool::setCtrl()
 {
 	if (KEYMANAGER->isOnceKeyDown(VK_RBUTTON))
 	{
-		if (Vector2InRect(&Save.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_SAVE;
-		if (Vector2InRect(&Load.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_LOAD;
-		if (Vector2InRect(&Erase.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_ERASER;
-		//if (Vector2InRect(&Prev.frc,&Vector2(_ptMouse)))  _crtSelect = CTRL_PREV;
-		//if (Vector2InRect(&Next.frc,&Vector2(_ptMouse)))  _crtSelect = CTRL_NEXT; 
-		if (Vector2InRect(&terrain.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_TERRAINDRAW;
-		if (Vector2InRect(&Object.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_OBJDRAW;
-		if (Vector2InRect(&Collider.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_COLLIDER;
-		if (Vector2InRect(&FrameObj.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_SETFRAMETILE;
-		if (Vector2InRect(&setCor.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_SETCORRELATION;
-		if (Vector2InRect(&setTri.frc,&Vector2(_ptMouse)))_crtSelect = CTRL_SETTRIGGER;
+		Vector2 pM = Vector2(_ptMouse);
+		if (Vector2InRect(&Save.frc,&pM))_crtSelect = CTRL_SAVE;
+		if (Vector2InRect(&Load.frc,&pM))_crtSelect = CTRL_LOAD;
+		if (Vector2InRect(&Erase.frc,&pM))_crtSelect = CTRL_ERASER;
+		//if (Vector2InRect(&Prev.frc,&pM))  _crtSelect = CTRL_PREV;
+		//if (Vector2InRect(&Next.frc,&pM))  _crtSelect = CTRL_NEXT; 
+		if (Vector2InRect(&terrain.frc,&pM))_crtSelect = CTRL_TERRAINDRAW;
+		if (Vector2InRect(&Object.frc,&pM))_crtSelect = CTRL_OBJDRAW;
+		if (Vector2InRect(&Collider.frc,&pM))_crtSelect = CTRL_COLLIDER;
+		if (Vector2InRect(&FrameObj.frc,&pM))_crtSelect = CTRL_SETFRAMETILE;
+		if (Vector2InRect(&setCor.frc,&pM))_crtSelect = CTRL_SETCORRELATION;
+		if (Vector2InRect(&setTri.frc,&pM))_crtSelect = CTRL_SETTRIGGER;
 
 		//desc : 이전 이후 인덱스 비교 date 2021/2/1 by pju
-		if (Vector2InRect(&prevArrow.frc, &Vector2(_ptMouse)) && tabOpen)
+		if (Vector2InRect(&prevArrow.frc, &pM) && tabOpen)
 		{
 			//버튼 클릭 시 이전 이미지로
 			switch (_crtSelect)
@@ -641,7 +646,7 @@ void mapTool::setCtrl()
 				break;
 			}
 		}
-		if (Vector2InRect(&nextArrow.frc, &Vector2(_ptMouse)) && tabOpen)
+		if (Vector2InRect(&nextArrow.frc, &pM) && tabOpen)
 		{
 			//버튼 클릭 시 이후 이미지로
 			switch (_crtSelect)
@@ -658,7 +663,7 @@ void mapTool::setCtrl()
 				break;
 			}
 		}
-		if(Vector2InRect(&BackGround.frc,&Vector2(_ptMouse)))_crtSelect=CTRL_BACKGROUND;
+		if(Vector2InRect(&BackGround.frc,&pM))_crtSelect=CTRL_BACKGROUND;
 	}
 }
 
@@ -695,7 +700,8 @@ void mapTool::tileSelect()
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (Vector2InRect(&_tiles[i*TILEX + j].rc, &Vector2(_ptMouse)))
+			Vector2 pM = Vector2(_ptMouse);
+			if (Vector2InRect(&_tiles[i*TILEX + j].rc, &pM))
 			{
 				tileSelec = RectMakePivot(Vector2(_tiles[i*TILEX + j].rc.left, _tiles[i*TILEX + j].rc.top), Vector2(TILESIZE, TILESIZE), Pivot::LeftTop);
 			}
@@ -875,7 +881,8 @@ void mapTool::setFrameTile()
 		for (int j = 0; j < TILEX; j++)
 		{
 			//해당 타일의 인덱스가 마우스와 충돌한 경우(타일에 배치 시도한 경우)
-			if (Vector2InRect(&_tiles[i*TILEX + j].rc, &CAMERAMANAGER->getWorldMouse()))
+			Vector2 wm = CAMERAMANAGER->getWorldMouse();
+			if (Vector2InRect(&_tiles[i*TILEX + j].rc, &wm))
 			{
 				//렉트 생성
 				rc = RectMakePivot(Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top + TILESIZE / 2), Vector2(TILESIZE, TILESIZE), Pivot::Center);
@@ -947,7 +954,8 @@ void mapTool::setObjTile()
 		for (int j = 0; j < TILEX; j++)
 		{
 			//해당 타일의 인덱스가 마우스와 충돌한 경우(타일에 배치 시도한 경우)
-			if (Vector2InRect(&_tiles[i*TILEX + j].rc, &CAMERAMANAGER->getWorldMouse()))
+			Vector2 wm = CAMERAMANAGER->getWorldMouse();
+			if (Vector2InRect(&_tiles[i*TILEX + j].rc, &wm))
 			{
 				//렉트 생성
 				//rc = RectMakePivot(Vector2(_tiles[i*TILEX + j].rc.left + TILESIZE / 2, _tiles[i*TILEX + j].rc.top + TILESIZE / 2), Vector2(TILESIZE, TILESIZE), Pivot::Center);

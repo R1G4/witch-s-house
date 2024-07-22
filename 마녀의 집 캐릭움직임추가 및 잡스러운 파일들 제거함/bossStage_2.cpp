@@ -152,7 +152,8 @@ void bossStage_2::tileCollision()
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
+			FloatRect pFrc = _player->getPlayerFrc();
+			if (IntersectRectToRect(&pFrc, &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
 			{
 				switch (_player->getPdirec())
 				{
@@ -176,16 +177,17 @@ void bossStage_2::tileCollision()
 
 void bossStage_2::TriggerOn()
 {
+	FloatRect pFrc = _player->getPlayerFrc();
 	for (int i = 0; i < _vTrigger.size() ; i++)
 	{
 		FloatRect temp;
-		if (IntersectRectToRect(&temp,&_player->getPlayerFrc(), &_vTrigger[i].tile))
+		if (IntersectRectToRect(&temp,&pFrc, &_vTrigger[i].tile))
 		{
 			_vTrigger[i].isTriggerOn = true;
 			cout << _vTrigger[i].isTriggerOn << " " << i<<endl;
 		}
 	}
-	if (IntersectRectToRect(&_player->getPlayerFrc(), &_vTrigger[1].tile) || IntersectRectToRect(&_player->getPlayerFrc(), &_vTrigger[4].tile))
+	if (IntersectRectToRect(&pFrc, &_vTrigger[1].tile) || IntersectRectToRect(&pFrc, &_vTrigger[4].tile))
 	{
 		_boss->init(bossLocX, bossLocY);
 		_isBossAppeal = true;

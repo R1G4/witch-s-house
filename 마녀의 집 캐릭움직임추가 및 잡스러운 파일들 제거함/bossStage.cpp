@@ -149,7 +149,8 @@ void bossStage::tileCollision()
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
+			FloatRect pFrc = _player->getPlayerFrc();
+			if (IntersectRectToRect(&pFrc, &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].isCollider)
 			{
 				switch (_player->getPdirec())
 				{
@@ -177,7 +178,8 @@ void bossStage::activeTrigger()
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getSearchRc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].terrain == TR_TRIGGER&&!_isBossAppeal)
+			FloatRect sRc = _player->getSearchRc();
+			if (IntersectRectToRect(&sRc, &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].terrain == TR_TRIGGER&&!_isBossAppeal)
 			{
 				if (KEYMANAGER->isOnceKeyDown(VK_SPACE))
 				{
@@ -195,7 +197,8 @@ void bossStage::activeCorr()
 	{
 		for (int j = 0; j < TILEX; j++)
 		{
-			if (IntersectRectToRect(&_player->getPlayerFrc(), &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].obj == OBJ_CORELATION)
+			FloatRect sRc = _player->getSearchRc();
+			if (IntersectRectToRect(&sRc, &_tiles[i*TILEX + j].rc) && _tiles[i*TILEX + j].obj == OBJ_CORELATION)
 			{
 				_Stop = true;
 				alpha -= 0.01;
